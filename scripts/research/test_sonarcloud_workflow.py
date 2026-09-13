@@ -1,11 +1,11 @@
 """Security contracts for optional SonarCloud CI; no service access required."""
 
-from copy import deepcopy
-from fnmatch import fnmatchcase
 import json
-from pathlib import Path
 import re
 import unittest
+from copy import deepcopy
+from fnmatch import fnmatchcase
+from pathlib import Path
 
 import yaml
 

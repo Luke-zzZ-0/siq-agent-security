@@ -32,7 +32,7 @@ class SkillDistributionTest(unittest.TestCase):
         return subprocess.run(
             [sys.executable, str(Path(verifier.__file__)), "--source", str(self.source),
              "--installed", str(self.installed), *map(str, args)],
-            capture_output=True, text=True, timeout=5,
+            capture_output=True, text=True, timeout=5, check=False,
         )
 
     def test_exact_copy_passes_with_stable_digest_only_report(self):
@@ -200,15 +200,19 @@ class SkillDistributionTest(unittest.TestCase):
                 (self.source / "SKILL.md").write_bytes(b"different bytes")
             return content
 
-        with mock.patch.object(verifier.os, "read", side_effect=mutate_after_read):
-            with self.assertRaisesRegex(verifier.DistributionError, "tree_changed"):
-                verifier.snapshot_tree(self.source)
+        with (
+            mock.patch.object(verifier.os, "read", side_effect=mutate_after_read),
+            self.assertRaisesRegex(verifier.DistributionError, "tree_changed"),
+        ):
+            verifier.snapshot_tree(self.source)
 
     def test_invalid_limits_are_rejected(self):
         for limits in ({"max_files": 0}, {"max_bytes": -1}, {"max_depth": -1}):
-            with self.subTest(limits=limits):
-                with self.assertRaisesRegex(verifier.DistributionError, "invalid_limit"):
-                    verifier.snapshot_tree(self.source, **limits)
+            with (
+                self.subTest(limits=limits),
+                self.assertRaisesRegex(verifier.DistributionError, "invalid_limit"),
+            ):
+                verifier.snapshot_tree(self.source, **limits)
 
     def test_cli_creates_new_report(self):
         output = self.base / "report.json"

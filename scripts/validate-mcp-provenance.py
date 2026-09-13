@@ -44,11 +44,13 @@ class MCPFixture(BaseHTTPRequestHandler):
             self.end_headers()
             return
         elif method == "tools/call" and self.server.initialized:
-            if message["params"]["name"] != "lookup_report":
+            if (message["params"]["name"] != "read_file"
+                    or message["params"].get("arguments") != {"path": self.server.report_path}):
                 self.send_error(400)
                 return
             self.server.tool_calls += 1
-            result = {"content": [], "structuredContent": {"path": self.server.report_path}, "isError": False}
+            result = {"content": [{"type": "text", "text": Path(self.server.report_path).read_text()}],
+                      "structuredContent": {"path": self.server.report_path}, "isError": False}
         else:
             self.send_error(400)
             return
@@ -96,8 +98,6 @@ def run(h, extended=False, adapter_bridge=False):
                           "clientInfo": {"name": "siq-integration-fixture", "version": "1"}}, 1)
         base.require(initialized["protocolVersion"] == "2025-06-18", "protocol negotiation failed")
         rpc(endpoint, "notifications/initialized")
-        result = rpc(endpoint, "tools/call", {"name": "lookup_report", "arguments": {}}, 2)
-        base.require(mcp.tool_calls == 1 and not result["isError"], "MCP call not executed")
         intent = h.api("/v1/intents/int-native-fixture")
         for key in ("digest", "signature", "signing_schema"):
             intent.pop(key, None)
@@ -112,7 +112,17 @@ def run(h, extended=False, adapter_bridge=False):
         token = (h.state / "token").read_text().strip()
         identity = {"platform": "hermes", "session_id": session, "agent_id": base.AGENT}
         source_id = hashlib.sha256(canonical({"endpoint": endpoint, "server": initialized["serverInfo"],
-                                           "tool": "lookup_report"})).hexdigest()
+                                           "tool": "read_file"})).hexdigest()
+        scope = {**identity, "task_id": intent["task_id"]}
+        expires = (datetime.now(timezone.utc) + timedelta(minutes=10)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        h.api("/v1/provenance-issuers", {"issuer_id": "trusted-form", "local_key_ref": "local-state",
+              "allowed_source_types": ["USER"], "max_trust_level": "authoritative",
+              "scope": scope, "expires_at": expires}, expected=201)
+        trusted = h.api("/v1/provenance-assertions", {"schema_version": "provenance-assertion/v1",
+            "provenance_id": "trusted-path", "source": {"type": "USER", "source_id": "fixture-form",
+            "trust": "authoritative"}, "scope": scope, "content_digest": hashlib.sha256(canonical(target)).hexdigest(),
+            "parents": [], "derivation": "direct", "issued_at": intent["issued_at"],
+            "expires_at": expires, "issuer": "trusted-form"}, expected=201)
         adapter = None
         if adapter_bridge:
             adapter_spec = importlib.util.spec_from_file_location(
@@ -121,11 +131,24 @@ def run(h, extended=False, adapter_bridge=False):
             adapter_spec.loader.exec_module(adapter)
             adapter._CFG.update(endpoint=h.endpoint, token_path=str(h.state / "token"),
                                 enforcement_mode="block", platform="hermes", agent_id=base.AGENT,
-                                mcp_sources={"mcp__fixture__lookup_report": source_id})
+                                mcp_sources={"read_file": source_id})
             adapter._TOKEN = None
-            adapter._post_tool_call("mcp__fixture__lookup_report", result=result,
+            # Host fixture maps the MCP read_file tool to the existing read effect.
+            # Unknown arbitrary MCP tools are not made executable by this fixture.
+            adapter._post_tool_call("read_file", result={"structuredContent": {"path": target}},
+                                    session_id=session, tool_call_id="unmatched-mcp-call")
+            base.require(adapter.provenance_reference(session, "read_file", "unmatched-mcp-call") is None,
+                         "uncorrelated MCP result acquired provenance")
+            accepted = adapter._pre_tool_call("read_file", {"path": target}, session_id=session,
+                tool_call_id="mcp-call-1", parameter_provenance=[{
+                    "parameter_path": "/path", "provenance_refs": [trusted["provenance_id"]]}])
+            base.require(accepted is None, "MCP read was not authorized before execution")
+        result = rpc(endpoint, "tools/call", {"name": "read_file", "arguments": {"path": target}}, 2)
+        base.require(mcp.tool_calls == 1 and not result["isError"], "MCP call not executed")
+        if adapter is not None:
+            adapter._post_tool_call("read_file", {"path": target}, result=result,
                                    session_id=session, tool_call_id="mcp-call-1")
-            reference = adapter.provenance_reference(session, "mcp__fixture__lookup_report", "mcp-call-1")
+            reference = adapter.provenance_reference(session, "read_file", "mcp-call-1")
             base.require(reference is not None, "Hermes hook did not capture actual MCP result")
             report = {"provenance_id": reference}
         else:
@@ -146,16 +169,6 @@ def run(h, extended=False, adapter_bridge=False):
         denied = h.api("/v1/decide", request, token=token)
         base.require(denied["action"] == "deny" and denied["reason_code"] == "provenance_source_not_allowed",
                      "MCP controlled high-impact path")
-        scope = {**identity, "task_id": intent["task_id"]}
-        expires = (datetime.now(timezone.utc) + timedelta(minutes=10)).strftime("%Y-%m-%dT%H:%M:%SZ")
-        h.api("/v1/provenance-issuers", {"issuer_id": "trusted-form", "local_key_ref": "local-state",
-              "allowed_source_types": ["USER"], "max_trust_level": "authoritative",
-              "scope": scope, "expires_at": expires}, expected=201)
-        trusted = h.api("/v1/provenance-assertions", {"schema_version": "provenance-assertion/v1",
-            "provenance_id": "trusted-path", "source": {"type": "USER", "source_id": "fixture-form",
-            "trust": "authoritative"}, "scope": scope, "content_digest": hashlib.sha256(canonical(target)).hexdigest(),
-            "parents": [], "derivation": "direct", "issued_at": intent["issued_at"],
-            "expires_at": expires, "issuer": "trusted-form"}, expected=201)
         request["tool_call_id"] = "trusted-controlled-path"
         request["parameter_provenance"][0]["provenance_refs"] = [trusted["provenance_id"]]
         if adapter is not None:
@@ -375,7 +388,9 @@ def run(h, extended=False, adapter_bridge=False):
                 "coverage": "component_fixture", "mcp_protocol": "2025-06-18", "mcp_tool_calls": mcp.tool_calls,
                 "checks": {"initialized": True, "real_http_tool_result": True, "signed_report": True,
                            "deterministic_selection": True, "untrusted_path_denied": True,
-                           "same_value_trusted_path_allowed": True},
+                           "same_value_trusted_path_allowed": True,
+                           **({"uncorrelated_result_rejected": True,
+                               "authorized_mcp_read_before_capture": True} if adapter_bridge else {})},
                 "source_identity_digest": source_id,
                 "limitations": ["local fixture server", "JSON response transport only",
                                 "no native platform integration", "no independent effect evidence"]}

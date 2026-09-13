@@ -1,11 +1,10 @@
 """Validate nonsecret SonarCloud parameters before a CI scan."""
 
-from collections.abc import Mapping
 import json
 import os
 import re
 import sys
-
+from collections.abc import Mapping
 
 IDENTIFIER = re.compile(r"[A-Za-z0-9_.:-]{1,255}")
 

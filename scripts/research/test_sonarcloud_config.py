@@ -2,14 +2,13 @@
 
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 from sonarcloud_config import cloud_parameters
-
 
 SCRIPT = Path(__file__).with_name("sonarcloud_config.py")
 VALID = {"SONAR_ORGANIZATION": "example-org", "SONAR_PROJECT_KEY": "example:project.v1"}
@@ -24,9 +23,11 @@ class CloudParametersTests(unittest.TestCase):
                     del env[field]
                 else:
                     env[field] = value
-                with self.subTest(field=field, value=value):
-                    with self.assertRaisesRegex(ValueError, f"^{field}$"):
-                        cloud_parameters(env)
+                with (
+                    self.subTest(field=field, value=value),
+                    self.assertRaisesRegex(ValueError, f"^{field}$"),
+                ):
+                    cloud_parameters(env)
 
     def test_rejects_whitespace_control_unicode_and_parameter_injection(self):
         for field in VALID:
@@ -35,21 +36,27 @@ class CloudParametersTests(unittest.TestCase):
                 "a\u200b", "项目", "a/../b", "a\\b", "a=token", 'a"', "a'",
                 "$(id)", "`id`", "a;-Dsonar.host.url=https://evil.invalid", "a" * 256,
             ):
-                with self.subTest(field=field, value=repr(value)):
-                    with self.assertRaisesRegex(ValueError, f"^{field}$"):
-                        cloud_parameters({**VALID, field: value})
+                with (
+                    self.subTest(field=field, value=repr(value)),
+                    self.assertRaisesRegex(ValueError, f"^{field}$"),
+                ):
+                    cloud_parameters({**VALID, field: value})
 
     def test_rejects_invalid_region(self):
         for region in ("EU", "US", "asia", "eu\n", " us", "us -X", "us\x00"):
-            with self.subTest(region=repr(region)):
-                with self.assertRaisesRegex(ValueError, "^SONAR_REGION$"):
-                    cloud_parameters({**VALID, "SONAR_REGION": region})
+            with (
+                self.subTest(region=repr(region)),
+                self.assertRaisesRegex(ValueError, "^SONAR_REGION$"),
+            ):
+                cloud_parameters({**VALID, "SONAR_REGION": region})
 
     def test_rejects_nonempty_host_override(self):
         for host in ("https://sonarcloud.io", "https://evil.invalid", "\n"):
-            with self.subTest(host=repr(host)):
-                with self.assertRaisesRegex(ValueError, "^SONAR_HOST_URL$"):
-                    cloud_parameters({**VALID, "SONAR_HOST_URL": host})
+            with (
+                self.subTest(host=repr(host)),
+                self.assertRaisesRegex(ValueError, "^SONAR_HOST_URL$"),
+            ):
+                cloud_parameters({**VALID, "SONAR_HOST_URL": host})
 
     def test_empty_host_matches_unset_github_variable(self):
         self.assertEqual(cloud_parameters({**VALID, "SONAR_HOST_URL": ""}), cloud_parameters(VALID))

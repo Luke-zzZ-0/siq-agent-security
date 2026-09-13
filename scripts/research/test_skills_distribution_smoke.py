@@ -58,9 +58,11 @@ class SkillsSmokeTests(unittest.TestCase):
             [("package/a", b"a", tarfile.REGTYPE), ("package/a", b"b", tarfile.REGTYPE)],
         ]
         for entries in cases:
-            with self.subTest(entries=entries), tempfile.TemporaryDirectory() as directory:
-                with self.assertRaises(ValueError):
-                    smoke.extract_archive(archive(entries), Path(directory) / "out", "package")
+            with (
+                self.subTest(entries=entries), tempfile.TemporaryDirectory() as directory,
+                self.assertRaises(ValueError),
+            ):
+                smoke.extract_archive(archive(entries), Path(directory) / "out", "package")
 
     def test_archive_extraction_budget(self):
         data = archive([("package/a", b"1234", tarfile.REGTYPE)])
@@ -151,9 +153,11 @@ class SkillsSmokeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             output = root / smoke.SKILL_PATH / "new-report"
-            with patch.object(smoke, "ROOT", root):
-                with self.assertRaisesRegex(ValueError, "source"):
-                    smoke.prepare_output(output)
+            with (
+                patch.object(smoke, "ROOT", root),
+                self.assertRaisesRegex(ValueError, "source"),
+            ):
+                smoke.prepare_output(output)
             self.assertFalse(output.exists())
 
 

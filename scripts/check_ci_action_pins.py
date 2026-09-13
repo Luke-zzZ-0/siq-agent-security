@@ -19,7 +19,6 @@ EXPECTED = {
     "actions/setup-go": "40f1582b2485089dde7abd97c1529aa768e1baff",
     "actions/setup-node": "49933ea5288caeca8642d1e84afbd3f7d6820020",
     "astral-sh/setup-uv": "d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86",
-    "gitleaks/gitleaks-action": "ff98106e4c7b2bc287b24eaf42907196329070c7",
 }
 
 
