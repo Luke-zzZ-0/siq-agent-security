@@ -1,0 +1,44 @@
+{
+  "platform": "linux/arm64",
+  "old_binary_sha256": "074f4fa94c3cba4d7acacec5c58a438e8bacfd77c183de3630f05afab1a36df4",
+  "old_binary_source": "reviewed v1 guard baseline built before this N01 implementation; not a published release",
+  "new_binary_sha256": "07e9f2728f8870284151fccf85882ec7b556a84de75d752187feff187189ba26",
+  "new_binary_version": "n01-validation",
+  "results": [
+    {
+      "case": "real-old-v1-to-new-v2",
+      "status": "passed",
+      "historical_entries_preserved": 33,
+      "backup_entries": 38,
+      "revoked_grant_revision_preserved": 1
+    },
+    {
+      "case": "actual-old-binary-refuses-v2",
+      "command": "init",
+      "zero_writes": true
+    },
+    {
+      "case": "actual-old-binary-refuses-v2",
+      "command": "pubkey",
+      "zero_writes": true
+    },
+    {
+      "case": "actual-old-binary-refuses-v2",
+      "command": "serve",
+      "zero_writes": true
+    },
+    {
+      "case": "actual-old-binary-refuses-v2",
+      "command": "grant",
+      "zero_writes": true
+    },
+    {
+      "case": "new-reader-preserves-revoked-state",
+      "zero_writes": true
+    },
+    {
+      "case": "future-writer-and-recovery-guidance",
+      "zero_writes": true
+    }
+  ]
+}

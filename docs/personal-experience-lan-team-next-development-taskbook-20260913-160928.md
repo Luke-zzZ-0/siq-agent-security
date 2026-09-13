@@ -1,5 +1,7 @@
 # SIQ Agent Security 后续开发任务书：个人闭环与局域网团队管理
 
+> 执行进度更新：N01 已完成开发与 Linux 最低验收，见 [本批报告](evidence/personal-experience/n01-completion-20260913-190637/report.md)。Windows/macOS 原生项仍保留，其他任务状态见 [接续台账](personal-experience-closure-progress-20260913.md)。下方需求及最终目标不变。
+
 > 文档版本：v2.0；编制时间：2026-09-13 16:09:28（Asia/Shanghai）。
 > 仓库：`/home/maoyd/siq/siq-agent-security`；本次主线整合提交：`983b820ce85efe5902f33af6d4bb16f88c83ba82`，PR #32。
 > 执行对象：GLM 开发窗口；实施方式：在现有项目增量开发、验证、留存证据。

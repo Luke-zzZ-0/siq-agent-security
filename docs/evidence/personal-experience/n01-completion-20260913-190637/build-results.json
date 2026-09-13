@@ -1,0 +1,66 @@
+[
+  {
+    "target": "linux/arm64",
+    "command": [
+      "go",
+      "build",
+      "-ldflags",
+      "-X main.Version=n01-validation",
+      "-o",
+      "/tmp/siq-n01-builds/agentshield-linux-arm64",
+      "./cmd/agentshield"
+    ],
+    "CGO_ENABLED": 0,
+    "exit_code": 0,
+    "sha256": "07e9f2728f8870284151fccf85882ec7b556a84de75d752187feff187189ba26",
+    "output": ""
+  },
+  {
+    "target": "linux/amd64",
+    "command": [
+      "go",
+      "build",
+      "-ldflags",
+      "-X main.Version=n01-validation",
+      "-o",
+      "/tmp/siq-n01-builds/agentshield-linux-amd64",
+      "./cmd/agentshield"
+    ],
+    "CGO_ENABLED": 0,
+    "exit_code": 0,
+    "sha256": "9660fcfa1160de9218d0657e82d500660900eca301cf3a20c66c7a3aa0f4b5b9",
+    "output": ""
+  },
+  {
+    "target": "darwin/arm64",
+    "command": [
+      "go",
+      "build",
+      "-ldflags",
+      "-X main.Version=n01-validation",
+      "-o",
+      "/tmp/siq-n01-builds/agentshield-darwin-arm64",
+      "./cmd/agentshield"
+    ],
+    "CGO_ENABLED": 0,
+    "exit_code": 0,
+    "sha256": "b0d4be206a6a3d267bfe2b8945f4401bf118c3ab6ba1adfff6050cfd482ab691",
+    "output": ""
+  },
+  {
+    "target": "windows/amd64",
+    "command": [
+      "go",
+      "build",
+      "-ldflags",
+      "-X main.Version=n01-validation",
+      "-o",
+      "/tmp/siq-n01-builds/agentshield-windows-amd64.exe",
+      "./cmd/agentshield"
+    ],
+    "CGO_ENABLED": 0,
+    "exit_code": 0,
+    "sha256": "ae7c5c7f22c931dcbfdbaff7d68539d49510bb80c6d54ff76c6be4d2d0d9f6f8",
+    "output": ""
+  }
+]

@@ -1,0 +1,280 @@
+{
+  "main": "516ec82ed3b12bacab237868c20729a2d2ccd0b2",
+  "branches": [
+    {
+      "ref": "refs/heads/codex/all-branches-main-20260913",
+      "sha": "cbf44bea1bcf38ff4286bc1ae0a59e17b4ccd670",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/bilingual-research-readme",
+      "sha": "15445f4d015489641a31745f73e9b5623728ee1d",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/dgx-spark-hackathon-v3",
+      "sha": "9b4aaeae1a089b54fbbc50c33cdb72616be2b1b1",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/hackathon-final-hardening-v4",
+      "sha": "4bdf7a46c93a9b6a4a5e872ee42cb919c6186c8e",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/hackathon-final-release-v5",
+      "sha": "e72e8b36a71ae7f7f1fecd587bbe6eb2353f24d2",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/m132-review-fixes-20260913",
+      "sha": "e12b3233b8874f6dc7ebbc6e5e7edb33c866333f",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/next-development-taskbook-20260913",
+      "sha": "e264ab942b6fc9a00f02ccca5f3d7429ac6437ed",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/pages-research-refresh",
+      "sha": "0e4d3f344428a0810d13e1d30f2a4c89ad0852dc",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/personal-client-upgrade-recovery",
+      "sha": "274ed9791df24d5b061c528f1a3769879f5e5ba2",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/personal-k002-platform-readiness",
+      "sha": "63a4843839850968f44a808a3a183a1a9880c7dc",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/personal-macos-stop-recovery",
+      "sha": "274ed9791df24d5b061c528f1a3769879f5e5ba2",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/provenance-bound-effect-v1",
+      "sha": "3ed2d6aa13ef6d96ea7f1bd9422bc228ec2ac3ca",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/readme-personal-status-20260912",
+      "sha": "b6f186df63e60fbe74b0cf32d508eaaf41a2a0de",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/release-signing",
+      "sha": "c6054464395a93f77fd5ec6452c0d323e4dc80f6",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/release-signing-status",
+      "sha": "8591c256d6e4a907680c126a4b97ffda2ef1f53a",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/research-open-source-r1",
+      "sha": "e77fd75808e9e2b518a3b39d47cdf00bb5ae566e",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/research-readme-presentation",
+      "sha": "edfdbf96fc063a52ad5b1e1ca874302aca7cb292",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/research-release-records",
+      "sha": "0e2524b7f6e96524c00221cf7892a41c56380867",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/reviewed-stage-fixes-20260913",
+      "sha": "30b03ca829ae32e0d90c74cdf26b2fd3a71eb2c3",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/siq-shield-font-26",
+      "sha": "2529ec95c208b400a8149ad1d62c81460285882c",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/siq-shield-lettering",
+      "sha": "bf42d090b82f42787d0f4a79ce888bb4f3a66554",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/siq-shield-mark",
+      "sha": "ec6ad2cae45d56c327e80a31cbf0cb4d148006db",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/codex/siq-shield-title-font",
+      "sha": "741fce6ef41f2e60193fe4cfe6ab9e0f921ca696",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/cursor/agentshield-w0-contracts-8eff",
+      "sha": "2c5f79e1cc46f3b5bc2849cf839e1f7538e2c574",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/glm/personal-closure-20260913-161000",
+      "sha": "ff99317450784c9563f5b6a2308c98e8262df98d",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/kimicode/personal-k001-baseline-repair",
+      "sha": "497fb9ca0098812cf1b8c5caf55920c2e4de5cb8",
+      "contained": true
+    },
+    {
+      "ref": "refs/heads/main",
+      "sha": "ff99317450784c9563f5b6a2308c98e8262df98d",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/all-branches-main-20260913",
+      "sha": "cbf44bea1bcf38ff4286bc1ae0a59e17b4ccd670",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/bilingual-research-readme",
+      "sha": "15445f4d015489641a31745f73e9b5623728ee1d",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/dgx-spark-hackathon-v3",
+      "sha": "2fe9ff344f6b653687582cf6717657252aa3676d",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/hackathon-final-hardening-v4",
+      "sha": "4bdf7a46c93a9b6a4a5e872ee42cb919c6186c8e",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/hackathon-final-release-v5",
+      "sha": "e72e8b36a71ae7f7f1fecd587bbe6eb2353f24d2",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/m132-review-fixes-20260913",
+      "sha": "e12b3233b8874f6dc7ebbc6e5e7edb33c866333f",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/next-development-taskbook-20260913",
+      "sha": "e264ab942b6fc9a00f02ccca5f3d7429ac6437ed",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/pages-research-refresh",
+      "sha": "0e4d3f344428a0810d13e1d30f2a4c89ad0852dc",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/personal-client-upgrade-recovery",
+      "sha": "274ed9791df24d5b061c528f1a3769879f5e5ba2",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/personal-k002-platform-readiness",
+      "sha": "63a4843839850968f44a808a3a183a1a9880c7dc",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/provenance-bound-effect-v1",
+      "sha": "3ed2d6aa13ef6d96ea7f1bd9422bc228ec2ac3ca",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/readme-personal-status-20260912",
+      "sha": "b6f186df63e60fbe74b0cf32d508eaaf41a2a0de",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/release-signing",
+      "sha": "c6054464395a93f77fd5ec6452c0d323e4dc80f6",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/release-signing-status",
+      "sha": "8591c256d6e4a907680c126a4b97ffda2ef1f53a",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/research-open-source-r1",
+      "sha": "e77fd75808e9e2b518a3b39d47cdf00bb5ae566e",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/research-readme-presentation",
+      "sha": "edfdbf96fc063a52ad5b1e1ca874302aca7cb292",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/research-release-records",
+      "sha": "0e2524b7f6e96524c00221cf7892a41c56380867",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/reviewed-stage-fixes-20260913",
+      "sha": "30b03ca829ae32e0d90c74cdf26b2fd3a71eb2c3",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/siq-shield-font-26",
+      "sha": "2529ec95c208b400a8149ad1d62c81460285882c",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/siq-shield-lettering",
+      "sha": "bf42d090b82f42787d0f4a79ce888bb4f3a66554",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/siq-shield-mark",
+      "sha": "ec6ad2cae45d56c327e80a31cbf0cb4d148006db",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/siq-shield-title-font",
+      "sha": "741fce6ef41f2e60193fe4cfe6ab9e0f921ca696",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/cursor/agentshield-market-survey-8eff",
+      "sha": "6aee44d7b750574609eed3acf40badad847c8e04",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/cursor/agentshield-w0-contracts-8eff",
+      "sha": "977c5eb34d66b0178c42fed80b1dbe985f1a5056",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/cursor/setup-cloud-agent-env-438b",
+      "sha": "de45ff99b4e8139610154f44bb3c2f9f940b9902",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/gh-pages",
+      "sha": "9a4ebdc6b9b2068efc2a63f6e9b1a01b6ee500b5",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/kimicode/personal-k001-baseline-repair",
+      "sha": "818980d3a768c286dfa21bb139134dda9f03e0d6",
+      "contained": true
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "sha": "516ec82ed3b12bacab237868c20729a2d2ccd0b2",
+      "contained": true
+    }
+  ]
+}

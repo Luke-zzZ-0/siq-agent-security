@@ -1,0 +1,43 @@
+ok  	siq-agent-security/apps/agentshield/cmd/agentshield	8.680s
+?   	siq-agent-security/apps/agentshield/cmd/perfbaseline	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/adapterinstall	4.035s
+ok  	siq-agent-security/apps/agentshield/internal/adapters	0.063s
+ok  	siq-agent-security/apps/agentshield/internal/admission	0.152s
+ok  	siq-agent-security/apps/agentshield/internal/canon	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/clientrelease	0.407s
+ok  	siq-agent-security/apps/agentshield/internal/completion	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/contractvectors	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/controlsync	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/display	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/effectevidence	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/export	0.151s
+?   	siq-agent-security/apps/agentshield/internal/fileopen	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/grant	0.050s
+ok  	siq-agent-security/apps/agentshield/internal/hermeshome	(cached)
+?   	siq-agent-security/apps/agentshield/internal/importsource	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/intent	1.227s
+ok  	siq-agent-security/apps/agentshield/internal/inventory	0.089s
+ok  	siq-agent-security/apps/agentshield/internal/ledger	0.167s
+ok  	siq-agent-security/apps/agentshield/internal/localcontrol	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/notify	0.040s
+ok  	siq-agent-security/apps/agentshield/internal/openshell	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/pending	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/perfbaseline	0.566s
+?   	siq-agent-security/apps/agentshield/internal/product	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/provenance	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/rawcontent	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/receipt	18.779s
+ok  	siq-agent-security/apps/agentshield/internal/rulepack	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/runtimeaction	(cached)
+?   	siq-agent-security/apps/agentshield/internal/runtimeauthz	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/runtimecheck	4.841s
+ok  	siq-agent-security/apps/agentshield/internal/runtimeidentity	0.774s
+ok  	siq-agent-security/apps/agentshield/internal/server	18.821s
+ok  	siq-agent-security/apps/agentshield/internal/signing	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/skillimport	2.297s
+ok  	siq-agent-security/apps/agentshield/internal/skillinstall	37.361s
+ok  	siq-agent-security/apps/agentshield/internal/skillmanifest	(cached)
+ok  	siq-agent-security/apps/agentshield/internal/state	2.858s
+ok  	siq-agent-security/apps/agentshield/internal/threat	(cached)
+?   	siq-agent-security/apps/agentshield/internal/trustedcontext	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/ui	(cached)

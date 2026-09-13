@@ -1,0 +1,45 @@
+ok  	siq-agent-security/apps/agentshield/cmd/agentshield	18.982s
+?   	siq-agent-security/apps/agentshield/cmd/perfbaseline	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/adapterinstall	9.507s
+ok  	siq-agent-security/apps/agentshield/internal/adapters	1.210s
+ok  	siq-agent-security/apps/agentshield/internal/admission	4.732s
+ok  	siq-agent-security/apps/agentshield/internal/canon	1.026s
+ok  	siq-agent-security/apps/agentshield/internal/clientrelease	1.694s
+ok  	siq-agent-security/apps/agentshield/internal/completion	1.249s
+ok  	siq-agent-security/apps/agentshield/internal/contractvectors	1.052s
+ok  	siq-agent-security/apps/agentshield/internal/controlsync	1.056s
+ok  	siq-agent-security/apps/agentshield/internal/display	1.026s
+ok  	siq-agent-security/apps/agentshield/internal/effectevidence	11.977s
+ok  	siq-agent-security/apps/agentshield/internal/export	1.288s
+?   	siq-agent-security/apps/agentshield/internal/fileopen	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/grant	1.298s
+ok  	siq-agent-security/apps/agentshield/internal/hermeshome	1.072s
+?   	siq-agent-security/apps/agentshield/internal/importsource	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/intent	7.553s
+ok  	siq-agent-security/apps/agentshield/internal/inventory	1.319s
+ok  	siq-agent-security/apps/agentshield/internal/ledger	1.276s
+ok  	siq-agent-security/apps/agentshield/internal/localcontrol	1.074s
+ok  	siq-agent-security/apps/agentshield/internal/notify	1.080s
+ok  	siq-agent-security/apps/agentshield/internal/openshell	1.028s
+ok  	siq-agent-security/apps/agentshield/internal/pending	1.085s
+ok  	siq-agent-security/apps/agentshield/internal/perfbaseline	1.897s
+?   	siq-agent-security/apps/agentshield/internal/product	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/provenance	20.847s
+ok  	siq-agent-security/apps/agentshield/internal/rawcontent	1.656s
+ok  	siq-agent-security/apps/agentshield/internal/receipt	33.626s
+ok  	siq-agent-security/apps/agentshield/internal/rulepack	1.122s
+ok  	siq-agent-security/apps/agentshield/internal/runtimeaction	1.055s
+?   	siq-agent-security/apps/agentshield/internal/runtimeauthz	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/runtimecheck	8.432s
+ok  	siq-agent-security/apps/agentshield/internal/runtimeidentity	3.587s
+ok  	siq-agent-security/apps/agentshield/internal/server	40.825s
+ok  	siq-agent-security/apps/agentshield/internal/signing	1.059s
+ok  	siq-agent-security/apps/agentshield/internal/skillimport	8.139s
+ok  	siq-agent-security/apps/agentshield/internal/skillinstall	107.172s
+ok  	siq-agent-security/apps/agentshield/internal/skillmanifest	1.963s
+ok  	siq-agent-security/apps/agentshield/internal/state	41.021s
+ok  	siq-agent-security/apps/agentshield/internal/stateformat	1.015s
+ok  	siq-agent-security/apps/agentshield/internal/statefs	1.087s
+ok  	siq-agent-security/apps/agentshield/internal/threat	1.464s
+?   	siq-agent-security/apps/agentshield/internal/trustedcontext	[no test files]
+ok  	siq-agent-security/apps/agentshield/internal/ui	1.029s

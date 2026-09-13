@@ -1,0 +1,101 @@
+{
+  "schema_version": "personal-experience-verification/v1",
+  "batch": "N01-completion",
+  "created_at": "2026-09-13T11:07:40.740192+00:00",
+  "base_head": "ff99317450784c9563f5b6a2308c98e8262df98d",
+  "branch": "glm/personal-closure-20260913-161000",
+  "uncommitted": true,
+  "task_status": "done_linux_verified",
+  "scope": "state protocol v2, instance-bound read/write guard, v1 metadata migration with recursive backup/recovery, signed release v3 preflight, user recovery instructions",
+  "validation": [
+    {
+      "command": "go test ./...",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "go-final.log"
+    },
+    {
+      "command": "go test -race ./...",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "race.log"
+    },
+    {
+      "command": "go test -race ./internal/state ./cmd/agentshield",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "final-race.log"
+    },
+    {
+      "command": "go vet ./...",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "vet.log"
+    },
+    {
+      "command": "gofmt -l .",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "gofmt.log"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "exit_code": 0,
+      "log": "diff-check.log"
+    },
+    {
+      "command": "pytest app/tests/test_schema_contracts.py",
+      "cwd": "apps/control-api",
+      "exit_code": 0,
+      "log": "python.log"
+    },
+    {
+      "command": "ruff check app/tests/test_schema_contracts.py",
+      "cwd": "apps/control-api",
+      "exit_code": 0,
+      "log": "ruff.log"
+    },
+    {
+      "command": "npm test",
+      "cwd": "apps/web",
+      "exit_code": 0,
+      "log": "web-test.log"
+    },
+    {
+      "command": "npm run build:local",
+      "cwd": "apps/web",
+      "exit_code": 0,
+      "log": "web-build.log"
+    },
+    {
+      "command": "python3 native.py",
+      "cwd": ".",
+      "exit_code": 0,
+      "log": "native.json"
+    },
+    {
+      "command": "SIQ_TEST_SERVE_DIRECTORY=1 SIQ_TEST_SERVE_STOP=1 SIQ_TEST_BINARY=/tmp/siq-n01-builds/agentshield-linux-arm64 go test ./cmd/agentshield -run 'TestNative(ServeExplicitDirectory|ServeSignedStop|StopRequestCLI|StopCLI)$' -count=1 -v",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "native-service.log"
+    }
+  ],
+  "builds": "build-results.json",
+  "source_fingerprints": "changed-source-sha256.json",
+  "old_binary_archive": "/home/maoyd/siq/.review-snapshots/n01-supported-v1-20260913/agentshield-linux-arm64",
+  "native_verified": [
+    "linux/arm64"
+  ],
+  "pending_native": [
+    "darwin",
+    "windows"
+  ],
+  "limits": [
+    "supports initialized v1/unmarked family to v2 only",
+    "metadata migration, business bytes unchanged",
+    "no arbitrary historical binary enforcement or malicious same-UID isolation",
+    "no real power-cut test or OS ACL/xattr backup guarantee",
+    "no production signing, commit, push or deployment"
+  ]
+}

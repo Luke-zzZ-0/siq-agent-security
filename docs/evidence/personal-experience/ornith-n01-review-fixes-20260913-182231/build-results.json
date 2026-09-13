@@ -1,0 +1,30 @@
+[
+  {
+    "target": "linux/amd64",
+    "exit_code": 0,
+    "cgo_enabled": 0,
+    "sha256": "43f6c8b8a7a013a81e93897e39490c32a0745c0c45e0dad0f39ad317e55deb65",
+    "output": ""
+  },
+  {
+    "target": "linux/arm64",
+    "exit_code": 0,
+    "cgo_enabled": 0,
+    "sha256": "074f4fa94c3cba4d7acacec5c58a438e8bacfd77c183de3630f05afab1a36df4",
+    "output": ""
+  },
+  {
+    "target": "darwin/arm64",
+    "exit_code": 0,
+    "cgo_enabled": 0,
+    "sha256": "4387c3fd059091f35be0675f8aa795213dfd509a907fb649dc99435e5fa76c6b",
+    "output": ""
+  },
+  {
+    "target": "windows/amd64",
+    "exit_code": 0,
+    "cgo_enabled": 0,
+    "sha256": "9e54d1906ac88efecb23ffd05015d2e03bc6666004b68c3e55b42269a0af8acf",
+    "output": ""
+  }
+]

@@ -1,0 +1,722 @@
+[
+  {
+    "path": "apps/agentshield/cmd/agentshield/client_install.go",
+    "sha256": "4035d62406128f75c84d02ff36aeed2bd1205c3c47483a11df542b39335ad1fa",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/client_upgrade_check.go",
+    "sha256": "b55d95fc9e050621e575e78f827222a69f1aa46c895c8853761237483e51178f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/codebuddy_hook_test.go",
+    "sha256": "36afa902df9a2868b72499138a7964eb86e94fe66e45eccf0c554adb4199fa6c",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/export.go",
+    "sha256": "ba19d292e4bebba85310f61ffedff3a834a6e6a0102c0c1ca95a7b15d4c59aa6",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_load.go",
+    "sha256": "ef9c2bd38544412fb1b5902bde68b6eb8a6495bdde703507065077aa15cc6c31",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_prepare.go",
+    "sha256": "4faa012a85a4622cef878d61f3aacdc6d048e2a258e1eeda6c3b2c89fb02c788",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_register.go",
+    "sha256": "9d88fd8732d0afcc160c75074f9e32a75d46fb2818f4ac1bd9b02c0a048f44da",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_unregister.go",
+    "sha256": "3fef3ccc893f49290d0a58f630f4238e5780f9cc819f859d6796c8dce7209fd8",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/main.go",
+    "sha256": "693356049aad13cbd5c050336c1aa13f1e77f382105f670b14feb88079b01618",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/p3_cli_test.go",
+    "sha256": "270937540faa09e2e4f111d524e514822a8ee22ad89e98be519465976945331d",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/release.go",
+    "sha256": "54d34aaa3badda73e27d8531b7e25789e21565a9b01b7f7522010e1e89744e47",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_control.go",
+    "sha256": "e014be7425fcbd990baa0822a73832117b05fc866eed1f659b278a73c38f3fce",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_login.go",
+    "sha256": "d02d2ccfc2295e2e9a945b5214521a83d846412dd69c90b4d039f2c309ec1202",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_prepare.go",
+    "sha256": "19d5c3e52ddcbfb7dedcbae97dd374dc0b9ac1d16f9429423ce1e23a5c4d3d03",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_rollback.go",
+    "sha256": "ffdcbb4272d11b280fce6b326fab19dea88492e14070271e5e878e39d14f5776",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_unit.go",
+    "sha256": "24819ffb57bcb88e6d1618b0f6e1556f1ef229a07e51ff3c185fdee13886488c",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_unregister.go",
+    "sha256": "9b1f50954e4f051af16d235a8b0027a4683c75f13e0cf180d4b8012f69dc1f80",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_upgrade.go",
+    "sha256": "607a223a5ead5f168ec14f9ed59767180d48109c05ac2d59370c1e56282a4f79",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_compatibility.go",
+    "sha256": "b8205a9b9b62c18a72142fa542402f2084a2901451cdd45ff28d162300071ea8",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_compatibility_test.go",
+    "sha256": "cd533f09dd87bd22d2741bb21f04c72711e8c77b00752ea96ecee98e4b823023",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_migrate.go",
+    "sha256": "3e0d2597558a130cc79bf10051292f58478ac7955e2d2f4401b5f453c2046838",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_protocol_contract_test.go",
+    "sha256": "37e97c9fe87b718b1eadba6b2eb3d19c48b98e638d81602495ad68d9db516234",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/stop_request.go",
+    "sha256": "f4fdaefbcf360ff685537f14e38742702fe5b557047123b63bd4a3dbd9308568",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/sync.go",
+    "sha256": "e2345b85d77a9d60f30c7a0a35524dbf9f74e9730b93c2c78ea81c2941d1227c",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/teardown.go",
+    "sha256": "13ba80768c52463e834deed2c0a54fae119da21e58bab85bc3f34cc753d3c794",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/teardown_windows_task.go",
+    "sha256": "f794cebc54e72dd2ed7a5feadad66f864c9ae645b370d2a4ba5d223aa942d10c",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_prepare.go",
+    "sha256": "48f92b4f895a2679b3ca36ebb80c416201e4ae38fddf0c54f48798452acf2a69",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_start.go",
+    "sha256": "9ee00ec9807e20b0eab0d770dd4ed7d0045e70a4aba84b23ba5e7c911b12dbe7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_stop.go",
+    "sha256": "3a71f13e78d4fd039d3f301e1fa517a5cf977244456a75dfd38d6c14df6fc518",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_unregister.go",
+    "sha256": "73c641b7fbb0e0241efb3dbc81c23b17122460df234048bccb3218b6388a32d8",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/diagnostics.go",
+    "sha256": "cab1eb6aa490271f95bf29a2197fc49f4f5456340217ad7d24f6473fb00f3d45",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/hermes_native.go",
+    "sha256": "d91c2122f509615d049c30e91116ad04f24898248e16734be68b1f9329909491",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/install.go",
+    "sha256": "01609d0967c9b2fd538b170ddd313528ad9d6c657fb2ffa5c32a7247252beb2d",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/install_test.go",
+    "sha256": "64dfac8c9290fe4274cd2aeeb188309f25f1b83cf78861f54bcf2335b1a421e9",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/plan.go",
+    "sha256": "140f246c39bf301063c45c6e085a96dd0c62e600bb2528740f78ddbdc2b2df75",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/transaction.go",
+    "sha256": "75b55481953665eee9beff1d3e8cc503829e4fca853d01ad0ca1fd146efb9144",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/transaction_test.go",
+    "sha256": "586b9f104ad3803d414651f5efc771bdd7bad6d4dab2c2d160397563e928fe44",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/compatibility.go",
+    "sha256": "60e1ceac42c278b0bd6694061e1b8afe709139cf3a2eb1dc234e863047f3fa41",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/restore.go",
+    "sha256": "df872d730966d733688fb3df632ba5ee3a5c00614ec5d65174bf9be0514fe130",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/retained.go",
+    "sha256": "74434f3ed0b79f18d432e109e9e581e0bf9df9188954a8f14fdbd70c8c116226",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/snapshot.go",
+    "sha256": "5ad881d255851b6431009e32f64600aeaf493575ef7f827f883082be039cdd81",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/stage.go",
+    "sha256": "6ebef34ed1e956e4e13d7821904b1212f562d879aa2b29970523dfa512f1cb43",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/state_compatibility_test.go",
+    "sha256": "ed8ec9298d75249b7cb8516fc83332cfeb689857995ffa2726f42510ab49b59e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/effectevidence/observer_revocation.go",
+    "sha256": "c911bf75831fdb3d00e14c88fddc21cc01a7ec976123fdc9f9a30a82db5ef6e7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/effectevidence/pending.go",
+    "sha256": "4af2e574c383c84a6dc293674da35cac914557d1cc762a7910df4b62d15d7b13",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/effectevidence/recovery_store.go",
+    "sha256": "7784d0ce61d161ab1d05e7a57ea1ee9c93d46f017e7081ab394cf66009273476",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/effectevidence/store.go",
+    "sha256": "757aa8e42b2819ca0bfb9538105cb5319db9c8ab58b094bf52897f5e943c6755",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/fileopen/open_regular_other.go",
+    "sha256": "e480e565128b5b6bef364ef75e233d105ba71c8e2fa5f05eff45478e78e234dd",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/hermeshome/roots.go",
+    "sha256": "1763d8dda3667349dd4d9b82a9500cbeede1023bf44ca74d9a7040d5878095d3",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/intent/store.go",
+    "sha256": "643f311523fb7be1136092389511878d549e9442e63a5fdc5bdbe7c63fd9cd05",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/inventory/discovery.go",
+    "sha256": "292aa1be5b7922ffe5c4db55a1afe1cbb11430fa12473203b37bd3c80da340e7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/openshell/diagnose.go",
+    "sha256": "e34bc8738169073b0cd7a2dcad554cf2c3f56de1e006e7f338098491cebb0dff",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/openshell/policy.go",
+    "sha256": "e2c07afe0ea65205e2cddeaa227fc680e5c398b9b5ffbbf7fabf2c00ea6feaf3",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/pending/pending.go",
+    "sha256": "d3443025c4091bab0c4300c1c69a9510577c0a077a61859ecc711c046a8bbf39",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/pending/promote.go",
+    "sha256": "a5d38b6b166cd798982a2f2c525d626f2d5520f9efec1aa09e2dbb77ed9e9c3e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/perfbaseline/intent.go",
+    "sha256": "e34e56f770244cfb1a048fcde29378f6e28a5636246263f1714f50cec026c53a",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/perfbaseline/perfbaseline.go",
+    "sha256": "5dc44f245e932b50c97f45743d0813c64a09c66c988bcc2c735dded31c8012fa",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/provenance/graph.go",
+    "sha256": "fd8bd066e45f5302c9bf8f75c3ac51c3be9e77cfa260f4fa0a6121120c130d5f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/provenance/store.go",
+    "sha256": "d55aab97bc1f3f53606c19b6817a904375003757683360c82b783d09b5a962f4",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/rawcontent/authority.go",
+    "sha256": "a43f79a96387382c0653d22999dab23855eda6fd6a12970d4ff533e0037b3b55",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/rawcontent/store.go",
+    "sha256": "be691c639b04d68c0e8c7b373bac3028debeab475f33f7722653f2b5a769fab3",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/receipt/chain.go",
+    "sha256": "6057521c242d903f96e310c8869b75299cb04da05893c35386f70eb3bee081ab",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/receipt/checkpoint.go",
+    "sha256": "b7d9f386886190be3478f19cbbbdabc46e91ebbfd4ca2efc32ed12cb8b3844be",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/receipt/read_limited.go",
+    "sha256": "280bf9535623fe2bab243eb55dc965959940c3e7101ddfdf2056da84d67ba3dd",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/rulepack/rulepack.go",
+    "sha256": "aca313cdbdf72943b5159db169fef9b47d125b234105313b18793ebc8ccc9739",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/runtimecheck/authority.go",
+    "sha256": "90e078dabfb18fef31a11f149fc0c06ad0488b8d887002c563732aed4e7ee71f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/runtimecheck/manager.go",
+    "sha256": "8a8596a39032439bdd65a14e6fc462fe23b0b2c6e53dcf1ebda595fd8ab1f416",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/runtimecheck/records.go",
+    "sha256": "9297ab02a906543b4d0b940efe1cee72a29f5540b5826eebd24c03f01cd5f220",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/runtimeidentity/files.go",
+    "sha256": "0bbf1af9c6024bf381f400d85d3f95f806683dd0c9fdf8a2c02956b7a12f6bc2",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/server/raw_task_content.go",
+    "sha256": "71a65200d9400569a7ece5204cf864a7e2eda1c1cc64c0d414883ccfd4db613f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/server/server.go",
+    "sha256": "4e762cd52c1b7240ec22cb341ebc5b7be54f235be0b76d33932d291d3aa261bc",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/server/state_compatibility_test.go",
+    "sha256": "b8ee281dc95c3ecf2f48e1d4d0511cd2c0083cfa5211220ec7cfa682f72e0e8a",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/signing/signing.go",
+    "sha256": "e327948db403b5c550df2d74ab8af992403124a46a5b9c2a92ec52171c09b7f1",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/git.go",
+    "sha256": "5d866963dd4ca421962dd5900fab236dd560fd8ed4a74efac9c4ac74388324a8",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/install_copy.go",
+    "sha256": "23e3b3bc5f0c2ee94cbba2333b3c4e10f276a262aa8fab029c57cc8a8efc93e7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/list.go",
+    "sha256": "c0955b87897d1e3f865771a391d283e3988cfb54ea41ae1ee8ad481302e341d5",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/remote.go",
+    "sha256": "2e2d85174d439cd963697712c153e3e1c86d98afe83d2bda62df2f8b5210e611",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/store.go",
+    "sha256": "66c9adcde3aa5ca9fd03ac9584e92ec8ee024e4d937de2a8bbd646626ea151f0",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/tree.go",
+    "sha256": "4c520455ac793eb92ac2caba29bca034b399bda82bb3d6d7554c555318bae032",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/upstream.go",
+    "sha256": "bbc64fe361e7aee6cabc8261ef267ce75c932cc9750d4fe2746a069619bb11d6",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/zip.go",
+    "sha256": "5d095cfd6057fd5f4cd4f1b9062811b731a4f25ee9bb72386be125e7e6ccea52",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/inspection.go",
+    "sha256": "32aed614fd60c8901f19a96aaf251d24204381eadb5b52a2af96cbb98c614d7f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/operation.go",
+    "sha256": "749b08f6bc157de534285dbc1487d35f59d8e77c3ff3ea15ee8bed7cf67c6a51",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/publication.go",
+    "sha256": "3afc0111abedc76c46db8e8f8e0244b1265352f2b71b319a5e914cfa1945522c",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/record.go",
+    "sha256": "573669603b5ca5dc50acebc61ee3a6fb9d2be676e16d30d0f82fd5ad4dfecacc",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/removal.go",
+    "sha256": "4a6358413628828307a2dce6628e47958ba22d9df342e83b00c73688608cb5d4",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/stage.go",
+    "sha256": "1ddbe924b9e2d67a53a3ff0d435b86da4842a81f1487eff43372f451bd099e86",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/target.go",
+    "sha256": "e3e5e9fe9f11defd8f8d4f4c91a68d31e664bb36ca9dfcb8ec2d95d6b36aafd3",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_operation.go",
+    "sha256": "fff9f3791b2b13bc72242e1753dbda20635e91faa53663ac2490323718d85223",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_stage.go",
+    "sha256": "17a2e37df8742a3ebae7958ba700341dc64e47f78bdf30ab8e9b49f82e0e9f7a",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/bootstrap.go",
+    "sha256": "c8c0f6aca11abf3faf688872dd243a0c7415e060b7cd1361e89b9a540c93c896",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/client_compatibility_test.go",
+    "sha256": "565a8223bc930991e13d9096ead604448ad8c11f9158e79be1a8f0ad7f1546d3",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/fetch.go",
+    "sha256": "e467ebba85d19ec387086f372d5119256e2dd2d0850b6493d0f85604edde6275",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/manifest.go",
+    "sha256": "52c7ab590b6c18c326fed281f173a983be501603e3b651ac9dc9b12eb46ca406",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/paths.go",
+    "sha256": "771e0f7bbade8523d6024f5c2e149ecb8e6fdbfd0fdbbde2ebebfe689b59c973",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/stage.go",
+    "sha256": "acabdb31d05f6451fcfb56b34e69f5c762511c39d25ca1558f530ba547ec86bd",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/skillmanifest/state_protocol_test.go",
+    "sha256": "81ca06dc0fd07057a43fd5212bde5dd28a7ea0b5d0abb85a466812538944b9d4",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/commit.go",
+    "sha256": "a17415a3a6ce4f8d1562e88cc7b9dd51384a1846ce13cc5aa7ca6d4ba68723cc",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility.go",
+    "sha256": "aa60265490e2c0bc8bb3d2a3137750151f3ce66345e1f54a61373146632a3355",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility_review_test.go",
+    "sha256": "db25328d30cb4e160d9bdb226dc9a09fc543377c24884cab0fa66a76f09d5910",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility_test.go",
+    "sha256": "d1af0659574600d1b89d55e936fc4bf490b742ac7805e8ec92caf2df5d9cf66e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/initialize.go",
+    "sha256": "f0e870f38e41d59e54b43d07758464d11c961b1123ff7b412d447ca94c9781a7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/initialize_test.go",
+    "sha256": "3627a703edc7b7a9ba345819910cf1221c26f43d5b1362314a7c997655ba7a5b",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/ledgerstore.go",
+    "sha256": "2c55548dbf41172b34d4ecb5da612a6be24bbe192f90d6e16fa0da2c854fd75e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/migration.go",
+    "sha256": "05263922326db462385fc14ba6ddb563695a91f4c7b2be99310f1da032798159",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/migration_test.go",
+    "sha256": "50c7791d2c264a3cb8dcba5d87883301cfc1fe1ffa65688e5bdd7f477e4bcc16",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/recovery.go",
+    "sha256": "2f6edfe73b4f41876c11bfa5726bfb8d6d51c4e1f2898beb84454b0ea5383779",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/service_switch.go",
+    "sha256": "84470ee33e1f5981af858dec64ad94b128f81e0df88a611a74ae3b2a3761fc88",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/state.go",
+    "sha256": "7abf5d2cd1b3a5b36560901af7eba02e222a761e030a7ed4fab4f0d0ffd488fe",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/state/writer.go",
+    "sha256": "4a3b7ad8996787f4adc750af569c1c2cdb545c450bc6cb01698d4a7fa59c898b",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/stateformat/format.go",
+    "sha256": "64673f8f81d88542e34e250113f0264c0d0d9d427f04438460f0454b1f411123",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/stateformat/format_test.go",
+    "sha256": "dc7a5a86dba25c41e67964dd8e3c8818ccaf07b9d24a5569b4e83e745f67079b",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/statefs/fs.go",
+    "sha256": "8f9d46b8425092b4003492fc51145b28ac02b7a30c9f1f4a43b3a81b5295bace",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/statefs/fs_test.go",
+    "sha256": "fd5bc67ef545d30d9d17c96a5bee588b92f4c0a0f5d373993a95a50c485b4b99",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-BzjZ99Bh.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-oHb2BjJe.js",
+    "sha256": "699f291e35dabc20e52c94bb0937d2019597a681a43ac375e1465a6e90b2ae60",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-9MSv9dof.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-CY8Tu-Tp.js",
+    "sha256": "6ca31b35ddae2fa906de1450d939629e1c41f96305f0a17731a4852ad7a53186",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-BFAZamej.js",
+    "sha256": "0723612f5ae651a0fb1b635064c6b074992693e70f36c974b9872fa8d7bf8582",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-DhPTCYzy.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-BFxVuhGo.js",
+    "sha256": "af358c3300f66fbe88843ffad282869799d1832dafad04b7b66cbff08fe70de7",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-ByIudu7p.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-Bew1j3j_.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-CPToVhir.js",
+    "sha256": "007fbf5dbe45fe4ddfa05a66eb13824010830f13da0ae24873c3ce4bed94eab1",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-CjXQ4F-3.js",
+    "sha256": "9ca65e757aa939ac18848ea4a1eabcd51338bdee9f9c865c5fc33affabb58a35",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-Cr6r4ePa.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/index.local-BZbE-6cU.js",
+    "sha256": null,
+    "deleted": true
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/index.local-CiepBxi9.js",
+    "sha256": "0adf0d88a9f37c440f607b15f6dc6e603eeec494f7e93b6dc6bf774c1d7d1f0e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/index.html",
+    "sha256": "cad659dc424e4c6f4150a56c0fa118ddfb4dbc97144c8e8f67652613caf550c2",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-format-v2.json",
+    "sha256": "b1927cd334fb676aefc182e6f11f5a208fe6927dd401d5caba6cccb970aaefde",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-format.json",
+    "sha256": "681a752b4d85f4fb40cd76eaa4f6d264421fe3daa14cee3c62082db019504c9b",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-migration-plan.json",
+    "sha256": "f1ada8531a4ea7c2f112abfbe04c9c56431eee5640c054556ae471b9e605b19e",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-migration-result.json",
+    "sha256": "088f3ec238d7c2d2a818533ed90e194bd28960bfaa61d90ef39fe5ebed6bb648",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-status.json",
+    "sha256": "0563292c96a3526d3a3ef482a8d64082a4ad08930f0bd883a53ea80b5b7e9d4f",
+    "deleted": false
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/skill-manifest.v3.sample.json",
+    "sha256": "0e6c89337b8e64529c489abc200d2887f9a79f0e4293c23355351d760436f5e5",
+    "deleted": false
+  },
+  {
+    "path": "apps/control-api/app/tests/test_schema_contracts.py",
+    "sha256": "88989b1306664665f889fa7acc3473814a8b8b43adbd1365b9c9c79629cd2b0b",
+    "deleted": false
+  },
+  {
+    "path": "apps/web/src/local/api.test.ts",
+    "sha256": "567f2b4b61b58f184c220a0ace0fc328dd71e8b856896c06a71938d3d4fc344a",
+    "deleted": false
+  },
+  {
+    "path": "apps/web/src/local/api.ts",
+    "sha256": "2c70685575e07ade648128c7c3076c0c2f8a543813facad3102f7113c7cb0638",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/local-state-format.v1.schema.json",
+    "sha256": "94c40ae18489934a845654186ae62aa0404e337b9d2a0275a6d801f41f9438b6",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/local-state-format.v2.schema.json",
+    "sha256": "8eddef8288b0f67109f5bc0fad93f71df1efc993632c59514330956cc03e317c",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/local-state-migration-plan.v1.schema.json",
+    "sha256": "8c6db1c522261e455f87f4bfdb0efeb6678397f75771c543a52f790963912bc6",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/local-state-migration-result.v1.schema.json",
+    "sha256": "8137bf0e2dbdb0773bb8bf42c8655f896aad22d254059df0a8ec7be525fa588e",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/local-state-status.v1.schema.json",
+    "sha256": "525d36f9052299715d507b369cd7e830e0e1a9fef61f02660cd8469235291ac2",
+    "deleted": false
+  },
+  {
+    "path": "packages/contracts/skill-manifest.v3.schema.json",
+    "sha256": "7e744fc4b2289d65a644e249e0d9bbadd24b8e34f5ee7c0e64f840bec82704dd",
+    "deleted": false
+  }
+]

@@ -1,0 +1,168 @@
+{
+  "platform": "linux/arm64",
+  "binary_sha256": "074f4fa94c3cba4d7acacec5c58a438e8bacfd77c183de3630f05afab1a36df4",
+  "cases": [
+    {
+      "case": "future",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "future",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "future",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "old",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "old",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "old",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "corrupt",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "corrupt",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "corrupt",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "duplicate",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "duplicate",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "duplicate",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "trailing",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "trailing",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "trailing",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "symlink",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "symlink",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "symlink",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "unknown",
+      "command": "init",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "unknown",
+      "command": "pubkey",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "unknown",
+      "command": "serve",
+      "exit_code": 1,
+      "rejected": true,
+      "zero_writes": true
+    },
+    {
+      "case": "fresh-init-repeat",
+      "marker_version": 1,
+      "idempotent": true
+    },
+    {
+      "case": "known-unmarked-read",
+      "zero_writes": true,
+      "no_automatic_marker": true
+    },
+    {
+      "case": "explicit-unmarked-init",
+      "only_added_marker": true,
+      "historical_bytes_preserved": true
+    }
+  ]
+}

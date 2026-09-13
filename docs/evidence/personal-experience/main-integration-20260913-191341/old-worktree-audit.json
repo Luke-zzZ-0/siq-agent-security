@@ -1,0 +1,3760 @@
+{
+  "worktree": "/home/maoyd/siq/siq-agent-security",
+  "head": "274ed9791df24d5b061c528f1a3769879f5e5ba2",
+  "against": "516ec82ed3b12bacab237868c20729a2d2ccd0b2",
+  "untracked_expanded": true,
+  "entries": [
+    {
+      "path": "AGENTSHIELD.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "39a3115615eddf7ca9aba9965ad71cafb722fa31a4cc21a99ad2f7f941132652",
+      "main_sha256": "39a3115615eddf7ca9aba9965ad71cafb722fa31a4cc21a99ad2f7f941132652"
+    },
+    {
+      "path": "README.en.md",
+      "status": " M",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "73f163306d79858d27d90986b06831e2701c92d3b25ad6aea62eef54f9b4e474",
+      "main_sha256": "30bb03e7bb52561f9697c54b919c0ad3cea1dc2d923103795195807cb940817d"
+    },
+    {
+      "path": "README.md",
+      "status": " M",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "eaed57c6a962e8ed14755457fd9b647c49397866762be001dd4df4a80cc81ba6",
+      "main_sha256": "641ff1eeb611db48923dd95c1988666af50c911a3a4aa100e01f16a036e3e0ba"
+    },
+    {
+      "path": "adapters/runtime/hermes-agentshield/README.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bb760a4c4492d7feef133b0def75efeefc461f778cc9e57c6a33288a034ceaa2",
+      "main_sha256": "bb760a4c4492d7feef133b0def75efeefc461f778cc9e57c6a33288a034ceaa2"
+    },
+    {
+      "path": "adapters/runtime/hermes-agentshield/__init__.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646",
+      "main_sha256": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646"
+    },
+    {
+      "path": "adapters/runtime/hermes-agentshield/tests/test_adapter.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7a9c6804cf7ac0937076e64347ff91d6c80921dbdeab64ef8d918be3b6f72b86",
+      "main_sha256": "7a9c6804cf7ac0937076e64347ff91d6c80921dbdeab64ef8d918be3b6f72b86"
+    },
+    {
+      "path": "adapters/runtime/hermes-agentshield/tests/test_runtime_identity.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e75bc9af822ef7d2ba90f579030507dd7cc17a46099601a0199c74ab0b739056",
+      "main_sha256": "e75bc9af822ef7d2ba90f579030507dd7cc17a46099601a0199c74ab0b739056"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/README.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "094e88f4b98b36dbc40894f5d9a3de64314f16e227090115cc894465401eadea",
+      "main_sha256": "094e88f4b98b36dbc40894f5d9a3de64314f16e227090115cc894465401eadea"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/index.ts",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449",
+      "main_sha256": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/package.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4a285d01390837dc1e0a4e125d886adca54a45e5899bdba67759026d2ee8cd5b",
+      "main_sha256": "4a285d01390837dc1e0a4e125d886adca54a45e5899bdba67759026d2ee8cd5b"
+    },
+    {
+      "path": "apps/agentshield/AGENTS.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "925e025a8ee4c6ab4f2c43961e1a7186c41478b22590a88ba8ba54339592a675",
+      "main_sha256": "925e025a8ee4c6ab4f2c43961e1a7186c41478b22590a88ba8ba54339592a675"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/main.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3db3bf83cbd75331aacfe19232ffc2ed62601f69f795b95dba6e8686e6e55c96",
+      "main_sha256": "3db3bf83cbd75331aacfe19232ffc2ed62601f69f795b95dba6e8686e6e55c96"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/p3_cli_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5cfe1cde70ec3ac627459320212ff6de6ea51bd7764ac6f414cf572b155c3718",
+      "main_sha256": "5cfe1cde70ec3ac627459320212ff6de6ea51bd7764ac6f414cf572b155c3718"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_lifecycle.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "524704d3e605b713a5651e842fe7534523e826e7e727c8023abd16588afe343b",
+      "main_sha256": "524704d3e605b713a5651e842fe7534523e826e7e727c8023abd16588afe343b"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_lifecycle_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "31ebdec473af8ed7158449681c87b80b82621cb08fbd3021ac3121537c04a0b2",
+      "main_sha256": "31ebdec473af8ed7158449681c87b80b82621cb08fbd3021ac3121537c04a0b2"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/setup.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "54d7633a814f16d4aa26577aadb6793a25ac3b372ce1a9bfa45801b4410ec53b",
+      "main_sha256": "54d7633a814f16d4aa26577aadb6793a25ac3b372ce1a9bfa45801b4410ec53b"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/teardown.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2f36ca9ce7f4c399235220579df4b36558d24bb4e3fb02291be221fb941197e8",
+      "main_sha256": "2f36ca9ce7f4c399235220579df4b36558d24bb4e3fb02291be221fb941197e8"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/assets/hermes/__init__.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646",
+      "main_sha256": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/assets/openclaw/index.ts",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449",
+      "main_sha256": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/assets/openclaw/package.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4a285d01390837dc1e0a4e125d886adca54a45e5899bdba67759026d2ee8cd5b",
+      "main_sha256": "4a285d01390837dc1e0a4e125d886adca54a45e5899bdba67759026d2ee8cd5b"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/diagnostics.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4c0d56581dca76c75e24eb325da6250ef1ef192fe45e854b06fd5448c3190a66",
+      "main_sha256": "4c0d56581dca76c75e24eb325da6250ef1ef192fe45e854b06fd5448c3190a66"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/install_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2744f8fd5128dcab7930e8565b3c26bb336e07c816387424f1929e747104dce8",
+      "main_sha256": "2744f8fd5128dcab7930e8565b3c26bb336e07c816387424f1929e747104dce8"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/instance.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "44170d6fbd31abd2b3b261665c78e0f86979cb32e7866c3fe04734730373f662",
+      "main_sha256": "44170d6fbd31abd2b3b261665c78e0f86979cb32e7866c3fe04734730373f662"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/openclaw_config_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c5868cdb164fd92902c53bc8331fc159a69d495c199bc709706726206c3423bd",
+      "main_sha256": "c5868cdb164fd92902c53bc8331fc159a69d495c199bc709706726206c3423bd"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/plan.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ce7236aaf3f9e55c845ae07dbd23ce3b620c2481630267f54e0b943110f9084f",
+      "main_sha256": "ce7236aaf3f9e55c845ae07dbd23ce3b620c2481630267f54e0b943110f9084f"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/plan_uninstall.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ade4473507435671e0fb4aea41377f3201bbaf765d75341da527f8298b69461a",
+      "main_sha256": "ade4473507435671e0fb4aea41377f3201bbaf765d75341da527f8298b69461a"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/runtime_identity.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e9ebe1ffc77d4a1056804f105e651d8a57c9aa61fedd60fb47b4f438ae4ce076",
+      "main_sha256": "e9ebe1ffc77d4a1056804f105e651d8a57c9aa61fedd60fb47b4f438ae4ce076"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/runtime_identity_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6746e696f671c27b9eee7819ce0e334fe5b8cb391931d4ce5efa38483b224c2a",
+      "main_sha256": "6746e696f671c27b9eee7819ce0e334fe5b8cb391931d4ce5efa38483b224c2a"
+    },
+    {
+      "path": "apps/agentshield/internal/completion/evaluate_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8541e6bd8578561db7f483a0c1ca01125a8d9786b8af5c067e9a8ab3d9ef60d7",
+      "main_sha256": "8541e6bd8578561db7f483a0c1ca01125a8d9786b8af5c067e9a8ab3d9ef60d7"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/grant.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "01fa77f7897eb5b2efbc305e11014a2accd8c6894daa16c21039306ecec80b62",
+      "main_sha256": "01fa77f7897eb5b2efbc305e11014a2accd8c6894daa16c21039306ecec80b62"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/patch.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ce26695d4228d644a6d4af3e8c16e17ec1f9623a8e6693685e0d71e90cb0819f",
+      "main_sha256": "ce26695d4228d644a6d4af3e8c16e17ec1f9623a8e6693685e0d71e90cb0819f"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/runtime_tools.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "63d6fd0bb2795e2248bd1be575997381ff9d9ec1847624d2068eb18aeab6b30d",
+      "main_sha256": "63d6fd0bb2795e2248bd1be575997381ff9d9ec1847624d2068eb18aeab6b30d"
+    },
+    {
+      "path": "apps/agentshield/internal/inventory/inventory.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ba02c07e881158bf2aff0fdf8cf439f69bd19f01c9472a2d17a2fed83d0e148b",
+      "main_sha256": "ba02c07e881158bf2aff0fdf8cf439f69bd19f01c9472a2d17a2fed83d0e148b"
+    },
+    {
+      "path": "apps/agentshield/internal/inventory/inventory_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4611d5d77a5c5a8fe9f4fc2f39f6ba08967c857f2966af407c24a02dd1243d6a",
+      "main_sha256": "4611d5d77a5c5a8fe9f4fc2f39f6ba08967c857f2966af407c24a02dd1243d6a"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/engine.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6f95f5e210b26891ac494b39e09324b90507b51fd8aa44da530e190e7a4ecfee",
+      "main_sha256": "6f95f5e210b26891ac494b39e09324b90507b51fd8aa44da530e190e7a4ecfee"
+    },
+    {
+      "path": "apps/agentshield/internal/runtimeidentity/session.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cd66456e14c90ad3d6979346e5b2e3d2b7f5218a4bd54742565b0b0f9b52284e",
+      "main_sha256": "cd66456e14c90ad3d6979346e5b2e3d2b7f5218a4bd54742565b0b0f9b52284e"
+    },
+    {
+      "path": "apps/agentshield/internal/runtimeidentity/session_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b12240ace0e5ffef9d15d2df499798f1e75529347f161c3c0a4b3dcce228fda3",
+      "main_sha256": "b12240ace0e5ffef9d15d2df499798f1e75529347f161c3c0a4b3dcce228fda3"
+    },
+    {
+      "path": "apps/agentshield/internal/runtimeidentity/store.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3256ceac6b6d44072f733ddea1231ef8093b043e8ee4a8792c85a4b3ca8e606b",
+      "main_sha256": "3256ceac6b6d44072f733ddea1231ef8093b043e8ee4a8792c85a4b3ca8e606b"
+    },
+    {
+      "path": "apps/agentshield/internal/runtimeidentity/store_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a21ecb424754ab6f8626c8bfa719a5db9ecb6ac0feda39acb43bdde34d88598c",
+      "main_sha256": "a21ecb424754ab6f8626c8bfa719a5db9ecb6ac0feda39acb43bdde34d88598c"
+    },
+    {
+      "path": "apps/agentshield/internal/server/adapter_diagnostics.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2d88c3d26fc2ba8c59105a7d46c4f3988412f39830669dedcf2627c9e32dff16",
+      "main_sha256": "2d88c3d26fc2ba8c59105a7d46c4f3988412f39830669dedcf2627c9e32dff16"
+    },
+    {
+      "path": "apps/agentshield/internal/server/adapter_http.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5c706df7a24035e25bf0bcacce293db5d117a3c52b6bd1f277b2ea106d15baf1",
+      "main_sha256": "5c706df7a24035e25bf0bcacce293db5d117a3c52b6bd1f277b2ea106d15baf1"
+    },
+    {
+      "path": "apps/agentshield/internal/server/adapter_instances.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0ae12cc360f6294996e55c38458024bf76cfd410e732c9c59a8a4eb266e53b3a",
+      "main_sha256": "0ae12cc360f6294996e55c38458024bf76cfd410e732c9c59a8a4eb266e53b3a"
+    },
+    {
+      "path": "apps/agentshield/internal/server/file_observation_http_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "de39fa1c95a8ff900b6e7305f0b8656bed4ed6473ef20f575a1d5efeb8bbf068",
+      "main_sha256": "de39fa1c95a8ff900b6e7305f0b8656bed4ed6473ef20f575a1d5efeb8bbf068"
+    },
+    {
+      "path": "apps/agentshield/internal/server/runtime_identity.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "eae4d04e4b88493c67bb55d0d7efc7c71c34a8c6ea8b54b93e789485349b311b",
+      "main_sha256": "eae4d04e4b88493c67bb55d0d7efc7c71c34a8c6ea8b54b93e789485349b311b"
+    },
+    {
+      "path": "apps/agentshield/internal/server/server.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "84b8c715a4656efd22e9cccc226953b367ea8ff6e2530a4c52ae855a5acd54e9",
+      "main_sha256": "84b8c715a4656efd22e9cccc226953b367ea8ff6e2530a4c52ae855a5acd54e9"
+    },
+    {
+      "path": "apps/agentshield/internal/server/server_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cdb6ec47c193948153f617e021ef39553f2d8269883864cf2583aa61b3554f5f",
+      "main_sha256": "cdb6ec47c193948153f617e021ef39553f2d8269883864cf2583aa61b3554f5f"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_import.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "65381271dbfaddcf54f19510f51a605c42ed0d759ea2e4a4930d9623e666e5a8",
+      "main_sha256": "65381271dbfaddcf54f19510f51a605c42ed0d759ea2e4a4930d9623e666e5a8"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_import_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d466ecdbb68b57261f86760650711d992bffb342aade5d1cb2ed67cb720780f9",
+      "main_sha256": "d466ecdbb68b57261f86760650711d992bffb342aade5d1cb2ed67cb720780f9"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_install.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "baef4015f7496726020f52def0c2b7d814920c4b473edb1c193bfd8e91e35771",
+      "main_sha256": "baef4015f7496726020f52def0c2b7d814920c4b473edb1c193bfd8e91e35771"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/remote.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fb4a8cac394469f2a11c98cce32117b854e75599567b03cc60246944129d707a",
+      "main_sha256": "fb4a8cac394469f2a11c98cce32117b854e75599567b03cc60246944129d707a"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/store.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b54f0482f4999a8c68d446b59e0470145dca2b5bb7b079772e6af437081bf563",
+      "main_sha256": "b54f0482f4999a8c68d446b59e0470145dca2b5bb7b079772e6af437081bf563"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/removal_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "da0676ea21bb2c7db630efc30f8a59c0ce93fb147799b6eb2375c633c8e4a3dd",
+      "main_sha256": "da0676ea21bb2c7db630efc30f8a59c0ce93fb147799b6eb2375c633c8e4a3dd"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/runtime_test.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c9e28c435fbae3f2ee2f3554c81af611666708ad5733abed4c7dc63589006548",
+      "main_sha256": "c9e28c435fbae3f2ee2f3554c81af611666708ad5733abed4c7dc63589006548"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/stage.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c437783878a513a0e90795b0e40e9ccdf1a8e73dfd8e59b3e64abb2b79197bfd",
+      "main_sha256": "c437783878a513a0e90795b0e40e9ccdf1a8e73dfd8e59b3e64abb2b79197bfd"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_compare.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c5d1b168da30ad498fd0d11554f0e2a98a303aa76c6695fdc4d89525149e2524",
+      "main_sha256": "c5d1b168da30ad498fd0d11554f0e2a98a303aa76c6695fdc4d89525149e2524"
+    },
+    {
+      "path": "apps/agentshield/internal/state/state.go",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fbb376d7d6baa32fdb5f0ddcbaae36140285d44ac6017502d693fc4d5df58af8",
+      "main_sha256": "fbb376d7d6baa32fdb5f0ddcbaae36140285d44ac6017502d693fc4d5df58af8"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-Chxc5UKO.js",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-DC6ddJGR.js",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-CuhB3tic.js",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-BuNVcgML.js",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index-DUdoRFb6.css",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index.local-kXNWAe59.js",
+      "status": " D",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": null,
+      "main_sha256": null
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/index.html",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e5014deab00f05004e1a9f2461f33ae93085d912703b64436988379e24156900",
+      "main_sha256": "e5014deab00f05004e1a9f2461f33ae93085d912703b64436988379e24156900"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/grant-draft-created.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "59728bf23e5ba4d99073332b88a0f7121cb1ff0ca8030f41d3933682f760a583",
+      "main_sha256": "59728bf23e5ba4d99073332b88a0f7121cb1ff0ca8030f41d3933682f760a583"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/inventory.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6bfddb60ffbad4d93378aee1daa26801d3763af402feac242736d2b6d61eb9ed",
+      "main_sha256": "6bfddb60ffbad4d93378aee1daa26801d3763af402feac242736d2b6d61eb9ed"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-import-permission-created.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c1d8470976352f5b3b3cddb800251cab0abdb81a280d11369d712b951206290e",
+      "main_sha256": "c1d8470976352f5b3b3cddb800251cab0abdb81a280d11369d712b951206290e"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-install-runtime-readiness.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a594f66e2e51ee89a4629e96b9cf7bf65b88622c922d5901bdd270572d460070",
+      "main_sha256": "a594f66e2e51ee89a4629e96b9cf7bf65b88622c922d5901bdd270572d460070"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-claim.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e7ddf9f00e563d29a463a71ca6c9e77e1488de4bf6e6b799fb0259c6d862ef92",
+      "main_sha256": "e7ddf9f00e563d29a463a71ca6c9e77e1488de4bf6e6b799fb0259c6d862ef92"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-commit.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f4d559939dc8aa1278dfeef214c71f42621a246810a360921c9d3aeb92be89d0",
+      "main_sha256": "f4d559939dc8aa1278dfeef214c71f42621a246810a360921c9d3aeb92be89d0"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-compare.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bb70cbb2cc0f6112a5a9ed6e964d577b080832cbce5708c293f07b29c5202f57",
+      "main_sha256": "bb70cbb2cc0f6112a5a9ed6e964d577b080832cbce5708c293f07b29c5202f57"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-comparison.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c1d23af97f42751681bd41e16155697129309ce53e9188d8ef4b0ca1f0dbe33f",
+      "main_sha256": "c1d23af97f42751681bd41e16155697129309ce53e9188d8ef4b0ca1f0dbe33f"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-plan-created.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e9b4aa9a46fc32bfd474ab4ffc2b51fa45bedf99e646b7a3823c740d4488a8ea",
+      "main_sha256": "e9b4aa9a46fc32bfd474ab4ffc2b51fa45bedf99e646b7a3823c740d4488a8ea"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-plan.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a0bba93beae66df817b4998ce6f5ee916859955a4023af24238d05f5f02ab5e7",
+      "main_sha256": "a0bba93beae66df817b4998ce6f5ee916859955a4023af24238d05f5f02ab5e7"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-recover.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b7b789b2d39b9db23f0e3bae0f35b6c2f2265654453b8408899e387c1f663444",
+      "main_sha256": "b7b789b2d39b9db23f0e3bae0f35b6c2f2265654453b8408899e387c1f663444"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-result.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d0b9e1fec4f79c12345be3783465c46b861c0b9acfad71e1ca0daf8ac97a6489",
+      "main_sha256": "d0b9e1fec4f79c12345be3783465c46b861c0b9acfad71e1ca0daf8ac97a6489"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-stage-create.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1799904db2c7137a507dc311b8c94103ee715d1b25edddb4a7b472dd9efd275b",
+      "main_sha256": "1799904db2c7137a507dc311b8c94103ee715d1b25edddb4a7b472dd9efd275b"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-view.v1.sample.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "04c1f5ea001e3ce233767cbd8f20d2d1faebc022ec9838931013dea79333546d",
+      "main_sha256": "04c1f5ea001e3ce233767cbd8f20d2d1faebc022ec9838931013dea79333546d"
+    },
+    {
+      "path": "apps/control-api/app/tests/test_schema_contracts.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bd866fd274bde6aa437cbabf2488291d039c73f85c66d21ab6932a2967f5f26e",
+      "main_sha256": "bd866fd274bde6aa437cbabf2488291d039c73f85c66d21ab6932a2967f5f26e"
+    },
+    {
+      "path": "apps/web/src/index.css",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0c62d46d68ee2b3a535691f8519dd5f6873a079dd052ccf57de8ee3267b4d834",
+      "main_sha256": "0c62d46d68ee2b3a535691f8519dd5f6873a079dd052ccf57de8ee3267b4d834"
+    },
+    {
+      "path": "apps/web/src/local/App.tsx",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "16c0c3c6f28cc8ee81c8b69e797bdf79a7127251098cee56987dcfbc4632e8c8",
+      "main_sha256": "16c0c3c6f28cc8ee81c8b69e797bdf79a7127251098cee56987dcfbc4632e8c8"
+    },
+    {
+      "path": "apps/web/src/local/Layout.tsx",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2579c4fae338f053624d94c1fcfb330cabd75bf6d056a384d4cc57d518eb8bdd",
+      "main_sha256": "2579c4fae338f053624d94c1fcfb330cabd75bf6d056a384d4cc57d518eb8bdd"
+    },
+    {
+      "path": "apps/web/src/local/api.ts",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f9dcd08cd8620a304114b6ccfbc1ae0db0f9df56e3b608b586aa5eaffd870742",
+      "main_sha256": "f9dcd08cd8620a304114b6ccfbc1ae0db0f9df56e3b608b586aa5eaffd870742"
+    },
+    {
+      "path": "apps/web/src/local/pages/InstalledSkillsPage.tsx",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8b639070903964471975f89eca0e3bcd0c3633c3aa1618aec5f2767208764ffd",
+      "main_sha256": "8b639070903964471975f89eca0e3bcd0c3633c3aa1618aec5f2767208764ffd"
+    },
+    {
+      "path": "apps/web/src/local/pages/SettingsPage.tsx",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6e08989090d9567e034ef46152c0fa3d966c57b0a37d3ffa265ba77aaceef3ec",
+      "main_sha256": "6e08989090d9567e034ef46152c0fa3d966c57b0a37d3ffa265ba77aaceef3ec"
+    },
+    {
+      "path": "docs/agentshield-dev-spec-v1.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8ba928f38a8179df02ee45de32c5a36d481b62d14ea3328090c0270aaf69f13d",
+      "main_sha256": "8ba928f38a8179df02ee45de32c5a36d481b62d14ea3328090c0270aaf69f13d"
+    },
+    {
+      "path": "docs/personal-experience-current.md",
+      "status": " M",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "7effd5310f20926f37f211c4f5d7dc0a4bde3c0fe89d863613f57a6e47c3372b",
+      "main_sha256": "091193bbeeda93a42bc067fdb9d9277e8ad93b049f3535144b85ffec8e67438a"
+    },
+    {
+      "path": "docs/personal-experience-development-progress-20260910.md",
+      "status": " M",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "cdc6dea2a0c2951d0b202d1abbfcb5847515e38cf98fdcf9f74c28963cf55bbe",
+      "main_sha256": "5a13caac98232de73e401f20fcb48b7a770d872c94a50a428579f8f5fdecee76"
+    },
+    {
+      "path": "docs/personal-experience-lan-team-development-taskbook-20260910-145507.md",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9039471e80a01d886cc08fdf6929db34c5577c0c39aa65c6768a0c804292936f",
+      "main_sha256": "9039471e80a01d886cc08fdf6929db34c5577c0c39aa65c6768a0c804292936f"
+    },
+    {
+      "path": "packages/contracts/grant.schema.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "df119060dee0f90f3e7f1c9c942ade6a93cafd7ac2ed4bbab8273ce4af94cbff",
+      "main_sha256": "df119060dee0f90f3e7f1c9c942ade6a93cafd7ac2ed4bbab8273ce4af94cbff"
+    },
+    {
+      "path": "packages/contracts/local-runtime-identity-issued.v1.schema.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ad4c978259ff026646c6ff5277be6d78c8d13272d2bb93103404746a9ac5847a",
+      "main_sha256": "ad4c978259ff026646c6ff5277be6d78c8d13272d2bb93103404746a9ac5847a"
+    },
+    {
+      "path": "packages/contracts/local-runtime-identity.v1.schema.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b6d9a71b887b52d80635747e1ded95b164f8218674808e6d9de2ad6a1e17ba48",
+      "main_sha256": "b6d9a71b887b52d80635747e1ded95b164f8218674808e6d9de2ad6a1e17ba48"
+    },
+    {
+      "path": "packages/contracts/local-runtime-session-enrolled.v1.schema.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3839513fcdc0e551b322dab942df33faa487050b4e2ecc9f916ba3e209a3563e",
+      "main_sha256": "3839513fcdc0e551b322dab942df33faa487050b4e2ecc9f916ba3e209a3563e"
+    },
+    {
+      "path": "packages/contracts/receipt.schema.json",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8ff49b29e482d6247c547c853c5bc6cb4956cce71b550c885c02a145f29f51b6",
+      "main_sha256": "8ff49b29e482d6247c547c853c5bc6cb4956cce71b550c885c02a145f29f51b6"
+    },
+    {
+      "path": "scripts/personal-experience/managed-instance-native-smoke.py",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8e586e70ae97b1291062269b3e087bfe55b29d2158defdc9f95e95202cd4d807",
+      "main_sha256": "8e586e70ae97b1291062269b3e087bfe55b29d2158defdc9f95e95202cd4d807"
+    },
+    {
+      "path": "scripts/test-openclaw-adapter.cjs",
+      "status": " M",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a24e8d654b3c7e7f32db24fdc3d213c3917486761385e5e5627e48082491905e",
+      "main_sha256": "a24e8d654b3c7e7f32db24fdc3d213c3917486761385e5e5627e48082491905e"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/tests/managed-bridge.test.mjs",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "58ee6d68bcc999b2e9283648dd8649b07657df560eefc7d945d8121ca87788c7",
+      "main_sha256": "58ee6d68bcc999b2e9283648dd8649b07657df560eefc7d945d8121ca87788c7"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/tests/plugin-entry-stub.mjs",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6be3b5144ea382efde1243d54e37301a867d6b6a74cffcefb56c64f4471da365",
+      "main_sha256": "6be3b5144ea382efde1243d54e37301a867d6b6a74cffcefb56c64f4471da365"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/tests/resolve-hook.mjs",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2db10e83067a4756036c1d36776e51986f5e7026d31dcfe5620baa5982091077",
+      "main_sha256": "2db10e83067a4756036c1d36776e51986f5e7026d31dcfe5620baa5982091077"
+    },
+    {
+      "path": "adapters/runtime/openclaw-agentshield/tests/scenarios.mjs",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "05360d8784c618afeccb4afc018592f38a382669d44f6dfe843cf660ab3088b9",
+      "main_sha256": "05360d8784c618afeccb4afc018592f38a382669d44f6dfe843cf660ab3088b9"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/desktop_notify.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "20b218910f1bcf089bb21379c4a39c96830b6398d954f9a7bb8cf6caa2839498",
+      "main_sha256": "20b218910f1bcf089bb21379c4a39c96830b6398d954f9a7bb8cf6caa2839498"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/desktop_notify_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "69754da16a73d2ec4ca8f194fe2e76fecd9b63f904c2512e39a0265274ca709e",
+      "main_sha256": "69754da16a73d2ec4ca8f194fe2e76fecd9b63f904c2512e39a0265274ca709e"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/launch_agent_stop.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6f9d6767809d748430ce2754814d7e8a52fae223be44f74b0e6f664b6af48938",
+      "main_sha256": "6f9d6767809d748430ce2754814d7e8a52fae223be44f74b0e6f664b6af48938"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/launch_agent_stop_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d748b0c3a990d85994894d36aebffb6b5507202d35a01d623347f0308564eb32",
+      "main_sha256": "d748b0c3a990d85994894d36aebffb6b5507202d35a01d623347f0308564eb32"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/launch_agent_unregister.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "395e7cfef29d9c567f2137fc0e3cd01612697b8c31d384163772a30823960d53",
+      "main_sha256": "395e7cfef29d9c567f2137fc0e3cd01612697b8c31d384163772a30823960d53"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/launch_agent_unregister_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cd5e41e5cb9773af5a14f55fb759602d15ae46c91959d93836734122fb24111e",
+      "main_sha256": "cd5e41e5cb9773af5a14f55fb759602d15ae46c91959d93836734122fb24111e"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_control_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4b00fe2c24f3d4eb658d1be2dcf41261b2b162786a38014e6a6d744d723a7f35",
+      "main_sha256": "4b00fe2c24f3d4eb658d1be2dcf41261b2b162786a38014e6a6d744d723a7f35"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_state_directory.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6b54c9ad58770f0bf9763fc625dec39de723220be8c305e3d992cbb8404dce30",
+      "main_sha256": "6b54c9ad58770f0bf9763fc625dec39de723220be8c305e3d992cbb8404dce30"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_state_directory_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0722df0905154a89721b08be571d6558f6c01dfb5d77b80b6d3c0be85d740897",
+      "main_sha256": "0722df0905154a89721b08be571d6558f6c01dfb5d77b80b6d3c0be85d740897"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/setup_launch_agent.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1f7ef5a6d8d5391719b171dc6e7d581241790bde8dff74fb27cf8d2d77021af4",
+      "main_sha256": "1f7ef5a6d8d5391719b171dc6e7d581241790bde8dff74fb27cf8d2d77021af4"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/setup_launch_agent_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dea998aa1f1a9ba809d1922f5de11bc1cc70837ddda9b20104390ab05f71260d",
+      "main_sha256": "dea998aa1f1a9ba809d1922f5de11bc1cc70837ddda9b20104390ab05f71260d"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/setup_windows_task.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "54732c31dfb0a1e64fa6be5af92f202a9b6fd186b0b1dd9b422b3a7aa9312f3c",
+      "main_sha256": "54732c31dfb0a1e64fa6be5af92f202a9b6fd186b0b1dd9b422b3a7aa9312f3c"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/stop.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "80de5818b4339642cc72328f5db15085f459b16fe50eab0661743ffde858df7c",
+      "main_sha256": "80de5818b4339642cc72328f5db15085f459b16fe50eab0661743ffde858df7c"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/stop_request.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0394e41cb8e94cf6f6c8e8fe3a4baa419219cb3b4d7a47b7057c41d8ed7706aa",
+      "main_sha256": "0394e41cb8e94cf6f6c8e8fe3a4baa419219cb3b4d7a47b7057c41d8ed7706aa"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/stop_request_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "092cc53b1e92769f56d33dbc395ea5f5f6cb5fe96757e7737adad64d20d26a6e",
+      "main_sha256": "092cc53b1e92769f56d33dbc395ea5f5f6cb5fe96757e7737adad64d20d26a6e"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/stop_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "65f4abbeedebae9651f93eb64e6d05c2eacd406c4618ecda9d677cdad109bfd8",
+      "main_sha256": "65f4abbeedebae9651f93eb64e6d05c2eacd406c4618ecda9d677cdad109bfd8"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/teardown_launch_agent.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ba5d754d9bcfdf9bcb1180243e2cc90ea40beac43a13c5a4d6c194a606be1512",
+      "main_sha256": "ba5d754d9bcfdf9bcb1180243e2cc90ea40beac43a13c5a4d6c194a606be1512"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/teardown_launch_agent_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c64171af94135fd4bafc98971ac931fe3646f859fc5f53e07096bef7149bf3db",
+      "main_sha256": "c64171af94135fd4bafc98971ac931fe3646f859fc5f53e07096bef7149bf3db"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/teardown_windows_task.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fd8973ba8582b6439684692d7cd0e5d20eefedf96fa351e5ed71295e76deb33a",
+      "main_sha256": "fd8973ba8582b6439684692d7cd0e5d20eefedf96fa351e5ed71295e76deb33a"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/teardown_windows_task_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cbceb5f63c635cadcd874d315c67d2433966856b31ac28a82d27ca7a199e1416",
+      "main_sha256": "cbceb5f63c635cadcd874d315c67d2433966856b31ac28a82d27ca7a199e1416"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2fc9c781e3d253aa3fe9d80b04724c46dceab190276e9b84fe3b94659c471dd0",
+      "main_sha256": "2fc9c781e3d253aa3fe9d80b04724c46dceab190276e9b84fe3b94659c471dd0"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_exec_other.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1024c9d1551bf9eed94b003fd71a1fd5300eed47c219475c14e0fe0984ebdb39",
+      "main_sha256": "1024c9d1551bf9eed94b003fd71a1fd5300eed47c219475c14e0fe0984ebdb39"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_exec_windows.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "76ff8cc4b2649ce2798f8b28c3c9113c6a9024997a19695e1e83068fa67ece2b",
+      "main_sha256": "76ff8cc4b2649ce2798f8b28c3c9113c6a9024997a19695e1e83068fa67ece2b"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_preflight.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "be02e64abfd98aff4f514a38d7359ad7d5edafbacbcfed3e35afa98595e55500",
+      "main_sha256": "be02e64abfd98aff4f514a38d7359ad7d5edafbacbcfed3e35afa98595e55500"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_prepare.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4c86a01a76356b56514efcf56b916b4a0e8d8372f92013446bbb3a3ebec2a042",
+      "main_sha256": "4c86a01a76356b56514efcf56b916b4a0e8d8372f92013446bbb3a3ebec2a042"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_presence.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a45afec0fd6ca20c5aa27e6105116b2a07d2c13682f95677d4a10a7c008fd5f7",
+      "main_sha256": "a45afec0fd6ca20c5aa27e6105116b2a07d2c13682f95677d4a10a7c008fd5f7"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_presence.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "12478a2698347b843818d4ed2ee73bee8676afb438ce05d96bf25addee1efa87",
+      "main_sha256": "12478a2698347b843818d4ed2ee73bee8676afb438ce05d96bf25addee1efa87"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_presence_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0715bc0f1aff07b9832af0379b3113d73f6c1c0bff0b9c1fad1cf8cb40b0e6fc",
+      "main_sha256": "0715bc0f1aff07b9832af0379b3113d73f6c1c0bff0b9c1fad1cf8cb40b0e6fc"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_query.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a811cc17c6565346fa475bd1765c84e5a788b50459ef46b821542b5de797ef96",
+      "main_sha256": "a811cc17c6565346fa475bd1765c84e5a788b50459ef46b821542b5de797ef96"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_query_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7ef59b9e17ae282be5fa90cc57bf0079f24bb4a22ca19124d8d74d880581ab7e",
+      "main_sha256": "7ef59b9e17ae282be5fa90cc57bf0079f24bb4a22ca19124d8d74d880581ab7e"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_register.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d2d66967b0302e76a8847bd713db2263535ac0cb3ab00706fc88124818f54b40",
+      "main_sha256": "d2d66967b0302e76a8847bd713db2263535ac0cb3ab00706fc88124818f54b40"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_register.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dc8e22e740ff612765a2bc0ac92b4a0a2d3390b69d9f91e6c32bf89ebfa29e9f",
+      "main_sha256": "dc8e22e740ff612765a2bc0ac92b4a0a2d3390b69d9f91e6c32bf89ebfa29e9f"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_register_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8d3ccf526df905d21ec6c72187eceb5655f63e22d3494e4d3f94644cd5c6f01f",
+      "main_sha256": "8d3ccf526df905d21ec6c72187eceb5655f63e22d3494e4d3f94644cd5c6f01f"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_runtime.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "40c987f8c69bcbd8c45a00dbeb553d0ead5f471bbdb93dfe663b9260b0f9c05a",
+      "main_sha256": "40c987f8c69bcbd8c45a00dbeb553d0ead5f471bbdb93dfe663b9260b0f9c05a"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_runtime.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "60c9c675e4314325c950701065cecc917c7f852e30a4834f1db2d55615366a3d",
+      "main_sha256": "60c9c675e4314325c950701065cecc917c7f852e30a4834f1db2d55615366a3d"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_runtime_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1bb9bbd2185fe01ecc4e36218167e04fb68dcf97a8f4c8642fe6c9004ed93265",
+      "main_sha256": "1bb9bbd2185fe01ecc4e36218167e04fb68dcf97a8f4c8642fe6c9004ed93265"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_start.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f8f7db0b26467112718b07c2c8e25e348d7df1c4b152a8adbde9e0680316c188",
+      "main_sha256": "f8f7db0b26467112718b07c2c8e25e348d7df1c4b152a8adbde9e0680316c188"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_start.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0437afae3bd55709ad66f213c2daa18d66516b18d99a2aeef387444f83b8b618",
+      "main_sha256": "0437afae3bd55709ad66f213c2daa18d66516b18d99a2aeef387444f83b8b618"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_start_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "94240fd42e02a1ec68ad3d344467271fa63f84ff87fc5f4fcf8afacfabd7d60b",
+      "main_sha256": "94240fd42e02a1ec68ad3d344467271fa63f84ff87fc5f4fcf8afacfabd7d60b"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_stop.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "293eefacf39905008b093cacffa8fe5e436c7e016bac916ce389e2c5fd614804",
+      "main_sha256": "293eefacf39905008b093cacffa8fe5e436c7e016bac916ce389e2c5fd614804"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_stop_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e5bacd4cbb2efbc201219fac9dec8273f7638dba24315e4dfa4565a0dcf9b799",
+      "main_sha256": "e5bacd4cbb2efbc201219fac9dec8273f7638dba24315e4dfa4565a0dcf9b799"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "85bf351e0a9bf73bad8bde17ac25d6cb6878ec074673d3c82c0ecbd88389c3e3",
+      "main_sha256": "85bf351e0a9bf73bad8bde17ac25d6cb6878ec074673d3c82c0ecbd88389c3e3"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_unregister.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7e2ea5fcaeb4ff6d7d48fbbccca7a3d0e7a011298c0231f30572023a3b342650",
+      "main_sha256": "7e2ea5fcaeb4ff6d7d48fbbccca7a3d0e7a011298c0231f30572023a3b342650"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_unregister.ps1",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "998439fccf07b27d4f3644ea5fce8bf8c3a4c3baa69f568624ecc854aadf9792",
+      "main_sha256": "998439fccf07b27d4f3644ea5fce8bf8c3a4c3baa69f568624ecc854aadf9792"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_unregister_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8790e9ac0adacadebe6c8191dfa6db221d4eb1f5e603f01633c40290c106c2bf",
+      "main_sha256": "8790e9ac0adacadebe6c8191dfa6db221d4eb1f5e603f01633c40290c106c2bf"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_verify.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5af09bc2671e2669fa01978ecb157d9a3a0a336eb45294634938c46719037ed4",
+      "main_sha256": "5af09bc2671e2669fa01978ecb157d9a3a0a336eb45294634938c46719037ed4"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/windows_task_verify_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c2c1312ffff70be810139baa7a17fb43c47b3fc9326786a36946036fd169f693",
+      "main_sha256": "c2c1312ffff70be810139baa7a17fb43c47b3fc9326786a36946036fd169f693"
+    },
+    {
+      "path": "apps/agentshield/internal/completion/subject.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e70e69f709fe9d06e16eaf9c79fd53ecb67b98915b351ba76cc012b352924fc9",
+      "main_sha256": "e70e69f709fe9d06e16eaf9c79fd53ecb67b98915b351ba76cc012b352924fc9"
+    },
+    {
+      "path": "apps/agentshield/internal/export/task_activity.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0510b8f44a19c79ad9589fbc5b1f16e83fcb8a324e4606c10838ca98afac21b2",
+      "main_sha256": "0510b8f44a19c79ad9589fbc5b1f16e83fcb8a324e4606c10838ca98afac21b2"
+    },
+    {
+      "path": "apps/agentshield/internal/export/task_activity_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cb6a9cc628b515396fae756f75adde5905275f7f32a1177dbcfa20b11abe23b6",
+      "main_sha256": "cb6a9cc628b515396fae756f75adde5905275f7f32a1177dbcfa20b11abe23b6"
+    },
+    {
+      "path": "apps/agentshield/internal/export/task_document.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "971f58a2893dff5ce39da103723358bcf006da461edc1b66b67a566d571ba255",
+      "main_sha256": "971f58a2893dff5ce39da103723358bcf006da461edc1b66b67a566d571ba255"
+    },
+    {
+      "path": "apps/agentshield/internal/export/trace_document.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4e2f87bda4cc56c39a622d68f081376ebe7515b469cb749394a0b790f5f3f93b",
+      "main_sha256": "4e2f87bda4cc56c39a622d68f081376ebe7515b469cb749394a0b790f5f3f93b"
+    },
+    {
+      "path": "apps/agentshield/internal/export/trace_document_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2b01e3a8c0e5ff9b911a67b690ff7373059f9d770da0e64b95893a469060cb11",
+      "main_sha256": "2b01e3a8c0e5ff9b911a67b690ff7373059f9d770da0e64b95893a469060cb11"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/scenario.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c84c162de60549bc1c07e0e80285bad4d59741854370ae6688c3b9a722e39762",
+      "main_sha256": "c84c162de60549bc1c07e0e80285bad4d59741854370ae6688c3b9a722e39762"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/scenario_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "97369aa4c6925a09eb4d70a16aca74aa26702f3c3e3d800e4334be107c486a0b",
+      "main_sha256": "97369aa4c6925a09eb4d70a16aca74aa26702f3c3e3d800e4334be107c486a0b"
+    },
+    {
+      "path": "apps/agentshield/internal/grant/skill_ref_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "673a0d42ecba667bba4a4144c08904241ea77c18b11632719036592e25856053",
+      "main_sha256": "673a0d42ecba667bba4a4144c08904241ea77c18b11632719036592e25856053"
+    },
+    {
+      "path": "apps/agentshield/internal/intent/historical_grant.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3bbaf6c1d218ad731ddcb72674d0dd15c159c0bbaf4fe6d331e7f83ed81c5648",
+      "main_sha256": "3bbaf6c1d218ad731ddcb72674d0dd15c159c0bbaf4fe6d331e7f83ed81c5648"
+    },
+    {
+      "path": "apps/agentshield/internal/intent/historical_grant_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0b08c3aee6b71b8ce641ad1bcd9a17a306924b381b43328562cfbfd5bb8fdda9",
+      "main_sha256": "0b08c3aee6b71b8ce641ad1bcd9a17a306924b381b43328562cfbfd5bb8fdda9"
+    },
+    {
+      "path": "apps/agentshield/internal/intent/historical_skill.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9979359a9c318a3951c7f46578492ba97459ea452712429c7dcafb92bae23199",
+      "main_sha256": "9979359a9c318a3951c7f46578492ba97459ea452712429c7dcafb92bae23199"
+    },
+    {
+      "path": "apps/agentshield/internal/intent/historical_skill_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0c677a2ca35977923a326096c25eeaf1d2115a1cf3f9eecfbf15d902192b45db",
+      "main_sha256": "0c677a2ca35977923a326096c25eeaf1d2115a1cf3f9eecfbf15d902192b45db"
+    },
+    {
+      "path": "apps/agentshield/internal/localcontrol/control.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "38d65822e312e7281f275feadc6b7807821f60c6f5eaade895ae9d83e4bcbbf5",
+      "main_sha256": "38d65822e312e7281f275feadc6b7807821f60c6f5eaade895ae9d83e4bcbbf5"
+    },
+    {
+      "path": "apps/agentshield/internal/localcontrol/control_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "290f964762b1c18322e68ab8416f8c7c57dccda3d9be8b0f5b0065893c6167bc",
+      "main_sha256": "290f964762b1c18322e68ab8416f8c7c57dccda3d9be8b0f5b0065893c6167bc"
+    },
+    {
+      "path": "apps/agentshield/internal/notify/notify.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "455cac1dedc49980c218ca51085f6963aad2398d462818fa2c2a356ff6350324",
+      "main_sha256": "455cac1dedc49980c218ca51085f6963aad2398d462818fa2c2a356ff6350324"
+    },
+    {
+      "path": "apps/agentshield/internal/notify/notify_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8416047d1c892ab43b774480c2ab9fcd71820fbaea017c1d23659ee26c7fd0a6",
+      "main_sha256": "8416047d1c892ab43b774480c2ab9fcd71820fbaea017c1d23659ee26c7fd0a6"
+    },
+    {
+      "path": "apps/agentshield/internal/notify/reviewer_notify_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2092cbed28d94ffba3cc33948552039dd02db5706d84b7f727d4980baf92a023",
+      "main_sha256": "2092cbed28d94ffba3cc33948552039dd02db5706d84b7f727d4980baf92a023"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/activation.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "36a809f5e2093659591e7554846b816f0d4547d8442169b157c9acfc8198a04c",
+      "main_sha256": "36a809f5e2093659591e7554846b816f0d4547d8442169b157c9acfc8198a04c"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/activation_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "79a941983af417709076ba87a4bcb7332f257c8bffd8513614aed01a928c12a0",
+      "main_sha256": "79a941983af417709076ba87a4bcb7332f257c8bffd8513614aed01a928c12a0"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/authority.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a905460b13b3f18e2beb4ac352ce09d6df0de2bd2918951ef01057dae88de40b",
+      "main_sha256": "a905460b13b3f18e2beb4ac352ce09d6df0de2bd2918951ef01057dae88de40b"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/authority_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "cd0f98af788d1ac92a572756cac0d973768debd4f949116e89bc74ec4025e202",
+      "main_sha256": "cd0f98af788d1ac92a572756cac0d973768debd4f949116e89bc74ec4025e202"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/management_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "92483cc9a61bcfe061b6e7f531a6ee06314401ece7d1e721dcafd83c0d4c4405",
+      "main_sha256": "92483cc9a61bcfe061b6e7f531a6ee06314401ece7d1e721dcafd83c0d4c4405"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/permit.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f13cf88e974c5231e60664d8077a97ead6edca6885ca43013bee8595e705281e",
+      "main_sha256": "f13cf88e974c5231e60664d8077a97ead6edca6885ca43013bee8595e705281e"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/permit_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "edc9b0e8b054fdbad8a74e7e646dbdbbc050adbd7c7245b5dd255170d3da0ed6",
+      "main_sha256": "edc9b0e8b054fdbad8a74e7e646dbdbbc050adbd7c7245b5dd255170d3da0ed6"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/store.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b958d888017bf61c88d45d622c615c5c5fd7e9c3da020a73c7569b8819859900",
+      "main_sha256": "b958d888017bf61c88d45d622c615c5c5fd7e9c3da020a73c7569b8819859900"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/store_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "76fcf09a3c9e8507e0fa4d375bf3d27ca8852a48d3357cd1bfdb6e0b40a63715",
+      "main_sha256": "76fcf09a3c9e8507e0fa4d375bf3d27ca8852a48d3357cd1bfdb6e0b40a63715"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/reviewer_scenario_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1686eccab97f0c5837e0c4bef6f478e32987b114b56337d868df4eb4841ba4bd",
+      "main_sha256": "1686eccab97f0c5837e0c4bef6f478e32987b114b56337d868df4eb4841ba4bd"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/skill_attribution_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9df221ce8eefb7ebecad3cda9ecd1b37328c10e18f4f53af054bcf1c4e474400",
+      "main_sha256": "9df221ce8eefb7ebecad3cda9ecd1b37328c10e18f4f53af054bcf1c4e474400"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/task_activity.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e6c3b6b9ca3e390e035b3cf3a8a469b52f736e06a4856ad8805f636b3d5d82f7",
+      "main_sha256": "e6c3b6b9ca3e390e035b3cf3a8a469b52f736e06a4856ad8805f636b3d5d82f7"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/task_activity_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "428cd6450350fc01ac76773daf9fe0163485abe8f06ef7150620adde26c4d0a9",
+      "main_sha256": "428cd6450350fc01ac76773daf9fe0163485abe8f06ef7150620adde26c4d0a9"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/task_snapshot.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "10abe54d08bcdee782be009ad614ffda359114e51b7ec076dfc63a6281b95434",
+      "main_sha256": "10abe54d08bcdee782be009ad614ffda359114e51b7ec076dfc63a6281b95434"
+    },
+    {
+      "path": "apps/agentshield/internal/server/grant_scenarios_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "080cfb2c643757bc3e846eacea94aca0ad121f773db57507ac4650ddfb584f0d",
+      "main_sha256": "080cfb2c643757bc3e846eacea94aca0ad121f773db57507ac4650ddfb584f0d"
+    },
+    {
+      "path": "apps/agentshield/internal/server/raw_task_content.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e0b4d239caf3f86bed04f58888d18c4ae5bde6cc77b9cc0a425b3771fca8b990",
+      "main_sha256": "e0b4d239caf3f86bed04f58888d18c4ae5bde6cc77b9cc0a425b3771fca8b990"
+    },
+    {
+      "path": "apps/agentshield/internal/server/raw_task_content_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c467c0fff0b6bd5221483da917dbdd27b7cf8f9f605acd46c98a576fa279710b",
+      "main_sha256": "c467c0fff0b6bd5221483da917dbdd27b7cf8f9f605acd46c98a576fa279710b"
+    },
+    {
+      "path": "apps/agentshield/internal/server/reviewer_scenario_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8345ca3e6acc191912012d9d17f2f9e74a3b6e64c9cf6b1b4b4b4e78be4f0a34",
+      "main_sha256": "8345ca3e6acc191912012d9d17f2f9e74a3b6e64c9cf6b1b4b4b4e78be4f0a34"
+    },
+    {
+      "path": "apps/agentshield/internal/server/runtime_identity_openclaw_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b04bc4d32d3a32c1b28ff75ab06b1c1b06ccf1a999b391c2025aefc9c686bf40",
+      "main_sha256": "b04bc4d32d3a32c1b28ff75ab06b1c1b06ccf1a999b391c2025aefc9c686bf40"
+    },
+    {
+      "path": "apps/agentshield/internal/server/service_control.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "09217f109b2ccce483997cd17f272d21731a4d6a74b13fd1b4964b1f0fc58f8d",
+      "main_sha256": "09217f109b2ccce483997cd17f272d21731a4d6a74b13fd1b4964b1f0fc58f8d"
+    },
+    {
+      "path": "apps/agentshield/internal/server/service_control_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b6d8715fdd707e85fd98d2a7624f79fea885f6ea2fbe27c8a39b65547fad2811",
+      "main_sha256": "b6d8715fdd707e85fd98d2a7624f79fea885f6ea2fbe27c8a39b65547fad2811"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_update_check_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4095259dc8d6884ed6d05b3af3c815fc2b52f4511793ebcb11b654298bb68b98",
+      "main_sha256": "4095259dc8d6884ed6d05b3af3c815fc2b52f4511793ebcb11b654298bb68b98"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activities.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ccdc026eb6ddea7240e3b212066303b0e4b362b1704020b13e9d7e91f454146c",
+      "main_sha256": "ccdc026eb6ddea7240e3b212066303b0e4b362b1704020b13e9d7e91f454146c"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activities_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "eb398d5315fadd02df457ced2cf5dba99e98dfe06e17b47a25446573120ce67f",
+      "main_sha256": "eb398d5315fadd02df457ced2cf5dba99e98dfe06e17b47a25446573120ce67f"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_completion.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "af3453ac443368c659ff57f1eea7a10f85bd9e48ce1268b45d1cfe711e9605b5",
+      "main_sha256": "af3453ac443368c659ff57f1eea7a10f85bd9e48ce1268b45d1cfe711e9605b5"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_completion_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a5061ab75deb46e9b7708db33fadcc579d7b4b62c5c188e4cecd6de78eef7c56",
+      "main_sha256": "a5061ab75deb46e9b7708db33fadcc579d7b4b62c5c188e4cecd6de78eef7c56"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_detail.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "00f6a47ae18d4141b1dc0f823c545842fe343f310e1e7728e61cff044342f185",
+      "main_sha256": "00f6a47ae18d4141b1dc0f823c545842fe343f310e1e7728e61cff044342f185"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_detail_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "322009397b037212cba8d02c55df81c3f80c48c6ebee78f4f438da6e998efe8e",
+      "main_sha256": "322009397b037212cba8d02c55df81c3f80c48c6ebee78f4f438da6e998efe8e"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_export.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "97d8ef17618fd8ffdde8251e7d726d15256edc89509e3da8e440a6b0e3b3305e",
+      "main_sha256": "97d8ef17618fd8ffdde8251e7d726d15256edc89509e3da8e440a6b0e3b3305e"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_export_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9f18c040150759e5b247bfcdc4cb3ff2f93febbb93eb4bddfa8bc4f9994d2de2",
+      "main_sha256": "9f18c040150759e5b247bfcdc4cb3ff2f93febbb93eb4bddfa8bc4f9994d2de2"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_search.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "26a293d9095815d1f99341b9546124bd1ab696d817f6f34d6798ed6cecc3dff1",
+      "main_sha256": "26a293d9095815d1f99341b9546124bd1ab696d817f6f34d6798ed6cecc3dff1"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_search_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "171fa59baea332e5ff6cd85bd448a6518eae393fb6e2384a0a63d22edc7f9668",
+      "main_sha256": "171fa59baea332e5ff6cd85bd448a6518eae393fb6e2384a0a63d22edc7f9668"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_sources.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a120ac56f9f690adb32d60e9a10bbb8742062e8a1c5b2c69d303d87d6a4a8e1c",
+      "main_sha256": "a120ac56f9f690adb32d60e9a10bbb8742062e8a1c5b2c69d303d87d6a4a8e1c"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_sources_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3926aba9a7b461f9e153272d36d5f75fb00858fbaa42705a4f5438edd1891531",
+      "main_sha256": "3926aba9a7b461f9e153272d36d5f75fb00858fbaa42705a4f5438edd1891531"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_trace_export.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9746b8f5c5167b981d40e84ce2feee5ffc538fc592fb544fceda567e79f3bfbe",
+      "main_sha256": "9746b8f5c5167b981d40e84ce2feee5ffc538fc592fb544fceda567e79f3bfbe"
+    },
+    {
+      "path": "apps/agentshield/internal/server/task_activity_trace_export_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "25cb8a77061858dac3616a1119c0ffdbaea4f9ab9ade58c61f51e746d4497f35",
+      "main_sha256": "25cb8a77061858dac3616a1119c0ffdbaea4f9ab9ade58c61f51e746d4497f35"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/git.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "92d89bb964bca816ad2245704cdbbf70ba808378e607e6d12c63a1e18529bd4a",
+      "main_sha256": "92d89bb964bca816ad2245704cdbbf70ba808378e607e6d12c63a1e18529bd4a"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/git_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "954cdea6eee9f3fb36d10655f872abf65a03f9c60003b4135664bbb4f3647e57",
+      "main_sha256": "954cdea6eee9f3fb36d10655f872abf65a03f9c60003b4135664bbb4f3647e57"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/reviewer_upstream_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1dfb31a34352e1a339c9480334e2909aee67b2c4df4e2735b8bfc65a3d80b2e1",
+      "main_sha256": "1dfb31a34352e1a339c9480334e2909aee67b2c4df4e2735b8bfc65a3d80b2e1"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/upstream.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "41c0027104f4ff0f6e172654168ab3e59ff4a5f9a09b95109f31cb3f9b4d7dd2",
+      "main_sha256": "41c0027104f4ff0f6e172654168ab3e59ff4a5f9a09b95109f31cb3f9b4d7dd2"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/upstream_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6efc8951091f7bf4bf521298be7cb1c17c951a82dddeb5e1628273e5a1e18c15",
+      "main_sha256": "6efc8951091f7bf4bf521298be7cb1c17c951a82dddeb5e1628273e5a1e18c15"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/reviewer_update_check_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "47d82b7b56fbd6ed7aae02a7ccbf86de7e71d7c34d60184de3702442679c1b19",
+      "main_sha256": "47d82b7b56fbd6ed7aae02a7ccbf86de7e71d7c34d60184de3702442679c1b19"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_check.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d36ffa332310b5c822d12587e2d01b0f6d4ce0387dbea557676487645063e645",
+      "main_sha256": "d36ffa332310b5c822d12587e2d01b0f6d4ce0387dbea557676487645063e645"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_check_regression_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fe7de26b73b3eefefd8f8be437bae46855cd8ed4de07a5739ca209de9f7cfe60",
+      "main_sha256": "fe7de26b73b3eefefd8f8be437bae46855cd8ed4de07a5739ca209de9f7cfe60"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_check_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "59a1229a773154d40631e508e561b9c3bc58efb3511d3baeb015ff583e39aad3",
+      "main_sha256": "59a1229a773154d40631e508e561b9c3bc58efb3511d3baeb015ff583e39aad3"
+    },
+    {
+      "path": "apps/agentshield/internal/state/historical_admission.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9453dc5db43c56743f366af93c09f4769b3d253520b1de639f425610978bf116",
+      "main_sha256": "9453dc5db43c56743f366af93c09f4769b3d253520b1de639f425610978bf116"
+    },
+    {
+      "path": "apps/agentshield/internal/state/historical_admission_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "44da7e9881623c36b026985f5e41341e06c7952413a6cb418878de310a534c9e",
+      "main_sha256": "44da7e9881623c36b026985f5e41341e06c7952413a6cb418878de310a534c9e"
+    },
+    {
+      "path": "apps/agentshield/internal/state/service_stop.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4e7a26725950fd7953a9c7351e9249fb1cb7c429bf613ae4db6d406cfb9b4b04",
+      "main_sha256": "4e7a26725950fd7953a9c7351e9249fb1cb7c429bf613ae4db6d406cfb9b4b04"
+    },
+    {
+      "path": "apps/agentshield/internal/state/service_stop_result.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "12a5b84636add4543c0b85d1502a303fb9771357ec4ac1c61f8e27d28a6c64ae",
+      "main_sha256": "12a5b84636add4543c0b85d1502a303fb9771357ec4ac1c61f8e27d28a6c64ae"
+    },
+    {
+      "path": "apps/agentshield/internal/state/service_stop_result_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9c245886f0da07294c772a091c9038b881e13a25f3273aef4fe3cfb415c78c0e",
+      "main_sha256": "9c245886f0da07294c772a091c9038b881e13a25f3273aef4fe3cfb415c78c0e"
+    },
+    {
+      "path": "apps/agentshield/internal/state/service_stop_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6369e8d14606ff7acb575f3f82190ea21422918943d30a3d910fa517e3453df6",
+      "main_sha256": "6369e8d14606ff7acb575f3f82190ea21422918943d30a3d910fa517e3453df6"
+    },
+    {
+      "path": "apps/agentshield/internal/state/skill_attribution_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6c019ae68c7280a2640d7ae44d4a5970ed92d5293a65baf8c91002a7ebd32e2a",
+      "main_sha256": "6c019ae68c7280a2640d7ae44d4a5970ed92d5293a65baf8c91002a7ebd32e2a"
+    },
+    {
+      "path": "apps/agentshield/internal/state/windows_task.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "755aa38f1db712e034db7c8fb762989921366498e7ceaec78188a7ed44760a20",
+      "main_sha256": "755aa38f1db712e034db7c8fb762989921366498e7ceaec78188a7ed44760a20"
+    },
+    {
+      "path": "apps/agentshield/internal/state/windows_task_test.go",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "16cd25410a0cb7e22d37f5861758169eec27482c75c7923165a0c66e8a268434",
+      "main_sha256": "16cd25410a0cb7e22d37f5861758169eec27482c75c7923165a0c66e8a268434"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-BzjZ99Bh.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c0f4538655e17d8778ca4e3d77d24579be48bdc5a79e1c9037c05a804f59a3fb",
+      "main_sha256": "c0f4538655e17d8778ca4e3d77d24579be48bdc5a79e1c9037c05a804f59a3fb"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-9MSv9dof.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "286d76f34ceec36b050b1e5a7cf81fc2b4116ec268186b43a5ec88a92a4d158b",
+      "main_sha256": "286d76f34ceec36b050b1e5a7cf81fc2b4116ec268186b43a5ec88a92a4d158b"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-DhPTCYzy.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "41ec423c522245444461bc90b25054297ded661b0ddafadf38509c66f945a4b5",
+      "main_sha256": "41ec423c522245444461bc90b25054297ded661b0ddafadf38509c66f945a4b5"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-ByIudu7p.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fc1966108f81bbf9ae7af3639599b04feea5f831f4c2e1614d199ff9b81b2198",
+      "main_sha256": "fc1966108f81bbf9ae7af3639599b04feea5f831f4c2e1614d199ff9b81b2198"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-Bew1j3j_.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "637852310f9cd113176940e0bd43fd4a04248094be5de6a76679f3d434bb9758",
+      "main_sha256": "637852310f9cd113176940e0bd43fd4a04248094be5de6a76679f3d434bb9758"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-Cr6r4ePa.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ed604e9903a3b1e8c7dc7d367fa1d6b15fd1bdfdf2eec3750b29d7b7f7268d27",
+      "main_sha256": "ed604e9903a3b1e8c7dc7d367fa1d6b15fd1bdfdf2eec3750b29d7b7f7268d27"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index-BdnMeJJ-.css",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8e29f5ea8d2395548a628b320d44d2253ebb94d6bd38344ed77526ff60c626ee",
+      "main_sha256": "8e29f5ea8d2395548a628b320d44d2253ebb94d6bd38344ed77526ff60c626ee"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index.local-BZbE-6cU.js",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "59ecc9298dec8519bad38a50f184f71f9a024d66e42b616efb704086dbeaa749",
+      "main_sha256": "59ecc9298dec8519bad38a50f184f71f9a024d66e42b616efb704086dbeaa749"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-activate.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "388e8386ba4b2cbac55349d023b3305173ba9cf3d81cf0c7d2fb4f27f15879a6",
+      "main_sha256": "388e8386ba4b2cbac55349d023b3305173ba9cf3d81cf0c7d2fb4f27f15879a6"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-activation.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5b8655b0e3a7141adb3d1261dce3b34e25a018f0fce35b3721bcc153198fd8a9",
+      "main_sha256": "5b8655b0e3a7141adb3d1261dce3b34e25a018f0fce35b3721bcc153198fd8a9"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-capture-permit-create.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e127b4150bb9148464f22807a862b41a61199f8abbe5cf75a2bfb86bfb05350d",
+      "main_sha256": "e127b4150bb9148464f22807a862b41a61199f8abbe5cf75a2bfb86bfb05350d"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-capture-permit.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "56289d0f96243220b8129cb2a970643072788038da004f3bcd18f1dac4a8d615",
+      "main_sha256": "56289d0f96243220b8129cb2a970643072788038da004f3bcd18f1dac4a8d615"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-capture-result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6fc0661067dd02aef7f2c383496c8f3c1acc55fb2670a56da0add635b2869bb3",
+      "main_sha256": "6fc0661067dd02aef7f2c383496c8f3c1acc55fb2670a56da0add635b2869bb3"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-capture.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c07dd305beb8bc622554e5bc233dd5bb876ef9025bf8cd93bb49cfd33bd39253",
+      "main_sha256": "c07dd305beb8bc622554e5bc233dd5bb876ef9025bf8cd93bb49cfd33bd39253"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-envelope.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8df7d412cc78696037569836a9dd0da78acd4faad901fb00dcf299f02fccd9fb",
+      "main_sha256": "8df7d412cc78696037569836a9dd0da78acd4faad901fb00dcf299f02fccd9fb"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-grant-create.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "18b202dfe68044de7f8566d1d482844d42387e69b9cfad6906b98a9e2b6cba1f",
+      "main_sha256": "18b202dfe68044de7f8566d1d482844d42387e69b9cfad6906b98a9e2b6cba1f"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-grant-view.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e098ecb84c727be7a614de848601d0708f5a478272882aca075aa652aa91aa69",
+      "main_sha256": "e098ecb84c727be7a614de848601d0708f5a478272882aca075aa652aa91aa69"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-grant.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "aa26d89a9bf9b04568c3802c43a36b789cfa29e2a85ce734c0540c209692154d",
+      "main_sha256": "aa26d89a9bf9b04568c3802c43a36b789cfa29e2a85ce734c0540c209692154d"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-grants.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4b61d66b6d616ef99de6931e52a49cd5d2e1193d7ef7848e750ae207c3e0394e",
+      "main_sha256": "4b61d66b6d616ef99de6931e52a49cd5d2e1193d7ef7848e750ae207c3e0394e"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-native-capture.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "708b3b345c1eba84ac51a97b4b6efcf2a2dd3b92f237adbd05342ac5fd35d85d",
+      "main_sha256": "708b3b345c1eba84ac51a97b4b6efcf2a2dd3b92f237adbd05342ac5fd35d85d"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-purge-expired.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "39e5f35a7297f0684f89a2698abf9419e41c2c0d9a389c07b0c6ec9469a3434c",
+      "main_sha256": "39e5f35a7297f0684f89a2698abf9419e41c2c0d9a389c07b0c6ec9469a3434c"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-purge-result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a23171a3c5297ce59cc3837d13dcad4d2b2e8411762d2652276788c10eaee5a0",
+      "main_sha256": "a23171a3c5297ce59cc3837d13dcad4d2b2e8411762d2652276788c10eaee5a0"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-record-content.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b18195fc9d1990646695ca07b7d5890917b8a89621840ae8a40d48142d7f99cd",
+      "main_sha256": "b18195fc9d1990646695ca07b7d5890917b8a89621840ae8a40d48142d7f99cd"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-record-delete.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f0fee46dfe12746b20deca1453dd22392f8a2571ae527ff7ce38d150715f9dc7",
+      "main_sha256": "f0fee46dfe12746b20deca1453dd22392f8a2571ae527ff7ce38d150715f9dc7"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-record-deleted.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "033b97dde34227fa6d31b788a4fc7c8860e31a9f9cc58528d5baaa7f6a732552",
+      "main_sha256": "033b97dde34227fa6d31b788a4fc7c8860e31a9f9cc58528d5baaa7f6a732552"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-record-list.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "717f58c1dea04e0553d2f547bf527de7019d3bf0bfaf4dcfa1e5fc1ca759b857",
+      "main_sha256": "717f58c1dea04e0553d2f547bf527de7019d3bf0bfaf4dcfa1e5fc1ca759b857"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-record-read.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "360735c0207a4fe477684dd8e902378e7f7e5ec8224c6df13a483fd80ae1700b",
+      "main_sha256": "360735c0207a4fe477684dd8e902378e7f7e5ec8224c6df13a483fd80ae1700b"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-records.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9820d36366aa5ca52b7917c307b05baef7b4c4150eb90abedbf7ac3d441a20a0",
+      "main_sha256": "9820d36366aa5ca52b7917c307b05baef7b4c4150eb90abedbf7ac3d441a20a0"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-revocation.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9c03a82c94363e3b581984b7833ae4645bc7e764cbcc808e4c0013bb84a519b2",
+      "main_sha256": "9c03a82c94363e3b581984b7833ae4645bc7e764cbcc808e4c0013bb84a519b2"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-revoke.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "97e0a9bf1ef7b208e27e60774611d87c3277e9621cfeda8709a640ab3c2d97b7",
+      "main_sha256": "97e0a9bf1ef7b208e27e60774611d87c3277e9621cfeda8709a640ab3c2d97b7"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-raw-task-content-status.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ba23f45f4fd7015145e812ab023f044235e0da7bc537b646ef80f3627186ec16",
+      "main_sha256": "ba23f45f4fd7015145e812ab023f044235e0da7bc537b646ef80f3627186ec16"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-service-control-challenge.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f559969c212491e7162b0b426171b26fda5aa4c2f7088ea28957dce9ee260065",
+      "main_sha256": "f559969c212491e7162b0b426171b26fda5aa4c2f7088ea28957dce9ee260065"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-service-stop-acceptance.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fd78cb276654f0e3fb056edd2a396320246a69fd28832366f62ce31381b203b8",
+      "main_sha256": "fd78cb276654f0e3fb056edd2a396320246a69fd28832366f62ce31381b203b8"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-service-stop-request.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0dadf0db1a8496edb6eb54da35d62905f8bb3cb8ede89dcf8dba5e4e82bf51fc",
+      "main_sha256": "0dadf0db1a8496edb6eb54da35d62905f8bb3cb8ede89dcf8dba5e4e82bf51fc"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-service-stop-result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4c73208d490a136a362fefd57c96f64332407417733d026d9793bb51a6eda2a6",
+      "main_sha256": "4c73208d490a136a362fefd57c96f64332407417733d026d9793bb51a6eda2a6"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-import-git-create.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ebfd7029a3b3442663de96426cfc639ef52b19c24adf1cfd327797864570325f",
+      "main_sha256": "ebfd7029a3b3442663de96426cfc639ef52b19c24adf1cfd327797864570325f"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-check-result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bf2f29a4f17f82b57d6ba464c016c72d42538a55785212624ebdd5759c9c2938",
+      "main_sha256": "bf2f29a4f17f82b57d6ba464c016c72d42538a55785212624ebdd5759c9c2938"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-check.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fbe133eeba529168e73fcb376a4922b4387c634bff169f1feb176947d20f0a4f",
+      "main_sha256": "fbe133eeba529168e73fcb376a4922b4387c634bff169f1feb176947d20f0a4f"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activities.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "443b7a73e91017c833a95bd5e0237df700deff896f5fe4ea930e759c7f70ecc2",
+      "main_sha256": "443b7a73e91017c833a95bd5e0237df700deff896f5fe4ea930e759c7f70ecc2"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activity-completion.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "95afac33b1e0325dccb241385f059701e4cfa0c1afacde1a2de273b8dfd808b5",
+      "main_sha256": "95afac33b1e0325dccb241385f059701e4cfa0c1afacde1a2de273b8dfd808b5"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activity-detail.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5e80c66f09459c122a4c0a70945fc7b0a38529cc0b1e9093aad73de2bc70ddd7",
+      "main_sha256": "5e80c66f09459c122a4c0a70945fc7b0a38529cc0b1e9093aad73de2bc70ddd7"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activity-export.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "773fc299a9c37cccc87bafa3d53647333b078baf427b4c93b91e9ca134ca4be6",
+      "main_sha256": "773fc299a9c37cccc87bafa3d53647333b078baf427b4c93b91e9ca134ca4be6"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activity-search.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "99b8bbc4513508035596ea5a64ab1e1e0bf86ac984bb14d39eb4f4a99b1c4ee7",
+      "main_sha256": "99b8bbc4513508035596ea5a64ab1e1e0bf86ac984bb14d39eb4f4a99b1c4ee7"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-activity-sources.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "99cc524e6083f77ad1cd7fa8c9d7349a8faca236bbb8c4879e382214db9cf349",
+      "main_sha256": "99cc524e6083f77ad1cd7fa8c9d7349a8faca236bbb8c4879e382214db9cf349"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-task-trace-export.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "98e14c5265585b896cf579da6885bc4a550d06d2f3c2da443912ae7ea83e7e1d",
+      "main_sha256": "98e14c5265585b896cf579da6885bc4a550d06d2f3c2da443912ae7ea83e7e1d"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-windows-task-record.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e2413a812b0d8418d573ca3210c7c84fcc2bfd81105553b19774c59e5fad80d8",
+      "main_sha256": "e2413a812b0d8418d573ca3210c7c84fcc2bfd81105553b19774c59e5fad80d8"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/windows-task.sample.xml",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3f3e49d3095a3f698857914b6e51b86a6620d60e61d8985422e99ff287adb0fe",
+      "main_sha256": "3f3e49d3095a3f698857914b6e51b86a6620d60e61d8985422e99ff287adb0fe"
+    },
+    {
+      "path": "apps/web/src/local/components/ActivityCompletionPanel.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "13f398aeee27f3091ed271526c57735cd91d46073dfeda0d85b1232c050c774a",
+      "main_sha256": "13f398aeee27f3091ed271526c57735cd91d46073dfeda0d85b1232c050c774a"
+    },
+    {
+      "path": "apps/web/src/local/components/ActivityExportButton.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dd5daf37b24cf5d1ab0801479cd0cfed10bbb9be99dd1a77758e9c54ce1951f5",
+      "main_sha256": "dd5daf37b24cf5d1ab0801479cd0cfed10bbb9be99dd1a77758e9c54ce1951f5"
+    },
+    {
+      "path": "apps/web/src/local/components/ActivitySourcesPanel.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3ddd412af159aa1f80bc24c835738124a2fabc805a88c808496f457ec7068eca",
+      "main_sha256": "3ddd412af159aa1f80bc24c835738124a2fabc805a88c808496f457ec7068eca"
+    },
+    {
+      "path": "apps/web/src/local/components/ActivityTraceExportButton.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b418f3c8b99552fb70bd739b7927582e091d90ab58479db679df7d4db6a6cb0f",
+      "main_sha256": "b418f3c8b99552fb70bd739b7927582e091d90ab58479db679df7d4db6a6cb0f"
+    },
+    {
+      "path": "apps/web/src/local/components/EffectEvidenceDetails.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1526dc487db113412ac5d61762dd8051066c5b717ace67b787b8462c343c4d20",
+      "main_sha256": "1526dc487db113412ac5d61762dd8051066c5b717ace67b787b8462c343c4d20"
+    },
+    {
+      "path": "apps/web/src/local/components/RawContentPrivacyPanel.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1a732239c01a613a4e6e66a00201c4b5248b02b7edad49bce79c9af613c9ab8d",
+      "main_sha256": "1a732239c01a613a4e6e66a00201c4b5248b02b7edad49bce79c9af613c9ab8d"
+    },
+    {
+      "path": "apps/web/src/local/components/RawContentStatusIndicator.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "503a56b65b8b4296aa6a0f4ac230c5280c1e330052fea16f6756e820b9006e9a",
+      "main_sha256": "503a56b65b8b4296aa6a0f4ac230c5280c1e330052fea16f6756e820b9006e9a"
+    },
+    {
+      "path": "apps/web/src/local/components/RawContentTaskPanel.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "42914b6277d600caaebad8c1f42d73bda3aac8ba0b3837e79c177a5f9131c22e",
+      "main_sha256": "42914b6277d600caaebad8c1f42d73bda3aac8ba0b3837e79c177a5f9131c22e"
+    },
+    {
+      "path": "apps/web/src/local/components/SkillUpdateCheckPanel.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "848cb91708bbc6eeaafa5cf7de83a7e7e5904ebcd123c9075454a8088700e2ea",
+      "main_sha256": "848cb91708bbc6eeaafa5cf7de83a7e7e5904ebcd123c9075454a8088700e2ea"
+    },
+    {
+      "path": "apps/web/src/local/effectEvidence.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9d1e25b6a607f030a11ef1a9d5f48bc1d5ee7a3712c9bce7dbac3d1b972502d7",
+      "main_sha256": "9d1e25b6a607f030a11ef1a9d5f48bc1d5ee7a3712c9bce7dbac3d1b972502d7"
+    },
+    {
+      "path": "apps/web/src/local/effectEvidence.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "860e8fe9b49f01a07308baf3876482d352a9f4b56de84be846b509463055f1e8",
+      "main_sha256": "860e8fe9b49f01a07308baf3876482d352a9f4b56de84be846b509463055f1e8"
+    },
+    {
+      "path": "apps/web/src/local/pages/TaskActivitiesPage.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e77b03f2e1e9fcec84a4746617088b99478de613f37d8c42180ec335897ff694",
+      "main_sha256": "e77b03f2e1e9fcec84a4746617088b99478de613f37d8c42180ec335897ff694"
+    },
+    {
+      "path": "apps/web/src/local/pages/TaskActivityDetailPage.tsx",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5dfec828349a3c8c9607a8158560857ba35e7b705f9999b96eed4f105cd337e4",
+      "main_sha256": "5dfec828349a3c8c9607a8158560857ba35e7b705f9999b96eed4f105cd337e4"
+    },
+    {
+      "path": "apps/web/src/local/rawTaskContent.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8d6adcd4b6b6f71db662bcac8600d1343c0507313deeb0ba66243baedbc1c093",
+      "main_sha256": "8d6adcd4b6b6f71db662bcac8600d1343c0507313deeb0ba66243baedbc1c093"
+    },
+    {
+      "path": "apps/web/src/local/rawTaskContent.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ddcc36dca29c207296ed40966186574ef0daa085fcd12d43bca4e1c3b3b0ced0",
+      "main_sha256": "ddcc36dca29c207296ed40966186574ef0daa085fcd12d43bca4e1c3b3b0ced0"
+    },
+    {
+      "path": "apps/web/src/local/rawTaskContentManagement.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8541ffa932a1b6b1fa2242728a3509cfb7eaf1585e66d8f10a1de5f2ca9691ac",
+      "main_sha256": "8541ffa932a1b6b1fa2242728a3509cfb7eaf1585e66d8f10a1de5f2ca9691ac"
+    },
+    {
+      "path": "apps/web/src/local/rawTaskContentManagement.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "306d5c2ce01b06b4f33fca53442fbe9f92016fefa5ea107cc2af6f0ff52e68ce",
+      "main_sha256": "306d5c2ce01b06b4f33fca53442fbe9f92016fefa5ea107cc2af6f0ff52e68ce"
+    },
+    {
+      "path": "apps/web/src/local/skillUpdateCheck.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c445cf3e935e95c83076b98060b60bb4ca65d9c3bc67c30ba3a144120c259de3",
+      "main_sha256": "c445cf3e935e95c83076b98060b60bb4ca65d9c3bc67c30ba3a144120c259de3"
+    },
+    {
+      "path": "apps/web/src/local/skillUpdateCheck.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "71accf39f590cc1e348d8234556684c11cd23fe66fc4f5676f77110bb888bdd5",
+      "main_sha256": "71accf39f590cc1e348d8234556684c11cd23fe66fc4f5676f77110bb888bdd5"
+    },
+    {
+      "path": "apps/web/src/local/taskActivities.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c651449d4e7f7ab47ab45e6e674d544bf473d781608c31b6521bbf2a1f65de45",
+      "main_sha256": "c651449d4e7f7ab47ab45e6e674d544bf473d781608c31b6521bbf2a1f65de45"
+    },
+    {
+      "path": "apps/web/src/local/taskActivities.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f19123065586609d4466b8632cf9d34d292d6d91a31003bd3c2eebd3f0caf311",
+      "main_sha256": "f19123065586609d4466b8632cf9d34d292d6d91a31003bd3c2eebd3f0caf311"
+    },
+    {
+      "path": "apps/web/src/local/taskCompletion.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "74aab6f80ad7dd19dd78d33bcca82a0a05327529a066f6a409bc0ff1583f1687",
+      "main_sha256": "74aab6f80ad7dd19dd78d33bcca82a0a05327529a066f6a409bc0ff1583f1687"
+    },
+    {
+      "path": "apps/web/src/local/taskCompletion.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fd13c69bbd8e55854c2430fdf3ed8c3c2c27b4df2296696ce251e04fdfe8f2a0",
+      "main_sha256": "fd13c69bbd8e55854c2430fdf3ed8c3c2c27b4df2296696ce251e04fdfe8f2a0"
+    },
+    {
+      "path": "apps/web/src/local/taskExport.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "60495e8a0e9048bca3172f9745496b843168cfd93248a2ade499aa2d6a3c536e",
+      "main_sha256": "60495e8a0e9048bca3172f9745496b843168cfd93248a2ade499aa2d6a3c536e"
+    },
+    {
+      "path": "apps/web/src/local/taskExport.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3bb41d77f683966a26180db04b0da286421b70d5240fc2a20e4a2b42d0425e9d",
+      "main_sha256": "3bb41d77f683966a26180db04b0da286421b70d5240fc2a20e4a2b42d0425e9d"
+    },
+    {
+      "path": "apps/web/src/local/taskSources.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f1bf07f6e0523c19a2d6e7f6fd42db4b34ea390eefdfb69830c89a98a26ba474",
+      "main_sha256": "f1bf07f6e0523c19a2d6e7f6fd42db4b34ea390eefdfb69830c89a98a26ba474"
+    },
+    {
+      "path": "apps/web/src/local/taskSources.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "679b58289e15c2b360bf877332dbd8c74865ae7073064b294a41457187f4b90f",
+      "main_sha256": "679b58289e15c2b360bf877332dbd8c74865ae7073064b294a41457187f4b90f"
+    },
+    {
+      "path": "apps/web/src/local/taskTraceExport.test.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5a6fe8d26f5a4ae2378db32d90a1d0eb60458d16ab6bf237fd3e42d4fc754c5d",
+      "main_sha256": "5a6fe8d26f5a4ae2378db32d90a1d0eb60458d16ab6bf237fd3e42d4fc754c5d"
+    },
+    {
+      "path": "apps/web/src/local/taskTraceExport.ts",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ab73618c66bdf98769db8767ed75d895399f81e8799e24bb0ed4f46276ae3c1f",
+      "main_sha256": "ab73618c66bdf98769db8767ed75d895399f81e8799e24bb0ed4f46276ae3c1f"
+    },
+    {
+      "path": "docs/evidence/personal-experience/desktop-notify-background-launcher-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "62437d833766ed13588a63497700a1bfabda24039d5557e836130a67c51c2ada",
+      "main_sha256": "62437d833766ed13588a63497700a1bfabda24039d5557e836130a67c51c2ada"
+    },
+    {
+      "path": "docs/evidence/personal-experience/effect-evidence-detail-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "db870f490be125760ecc9ed767b81f91899f264e9f59df2a3c355675f005927d",
+      "main_sha256": "db870f490be125760ecc9ed767b81f91899f264e9f59df2a3c355675f005927d"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/cli.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "369ea7a36dc8aeb24ff536a86b48fef51d7aec11c40b3afeb48b95c5d02f5c01",
+      "main_sha256": "369ea7a36dc8aeb24ff536a86b48fef51d7aec11c40b3afeb48b95c5d02f5c01"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/contracts.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1d4bae90fffd4c0142616dad4ebaa6b296c054cb41744baf498fdf68474ce8e8",
+      "main_sha256": "1d4bae90fffd4c0142616dad4ebaa6b296c054cb41744baf498fdf68474ce8e8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/go.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4044f6993daeadb8c523016d1e81b8759e69807c2f216532ef03abfe632316f3",
+      "main_sha256": "4044f6993daeadb8c523016d1e81b8759e69807c2f216532ef03abfe632316f3"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/integrated-go.log",
+      "status": "??",
+      "worktree_matches_main": false,
+      "index_matches_main": true,
+      "worktree_sha256": "c356e8b6a0dc5392f9f51b4e982b0ccc4c5d8ea28ad5087051e61ccbda0ca256",
+      "main_sha256": null
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/race.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f5f49f38c828218c04156a9574d04e618a4c838ccc64ac6c20beab70c8774490",
+      "main_sha256": "f5f49f38c828218c04156a9574d04e618a4c838ccc64ac6c20beab70c8774490"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/verification.json",
+      "status": "??",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "93ab13f9a7b485807523e92524ae320d08a334f6cb76f9d1d24e94f70e3e1756",
+      "main_sha256": "256eccd3dcbabf96aab3909d8ffa0d46ec25e44bd0cc262059fb41f0650ac796"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m129-m130-20260913/vet.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "main_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/browser.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "main_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/browser/desktop.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a77819f88089d5f2f3518f80bdeb4035e70f4425d26060313831a41638321549",
+      "main_sha256": "a77819f88089d5f2f3518f80bdeb4035e70f4425d26060313831a41638321549"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/browser/mobile.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "76070274510e222fcc7dd337771c22bd25f7a4ecc74afbe735ce99fe5d8e33cb",
+      "main_sha256": "76070274510e222fcc7dd337771c22bd25f7a4ecc74afbe735ce99fe5d8e33cb"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/browser/verification.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "eb0ef12547df0e46d617a959b4be141c9fe6dbad9249b15fcf1d00302b36c205",
+      "main_sha256": "eb0ef12547df0e46d617a959b4be141c9fe6dbad9249b15fcf1d00302b36c205"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/full.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8b5b83f368a47c445d6aea2f02270e5ccf642d1aa602b2ad9679050e1042bc32",
+      "main_sha256": "8b5b83f368a47c445d6aea2f02270e5ccf642d1aa602b2ad9679050e1042bc32"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/go.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7d7abc54a55d909b6098441f730553ea6d9ef4ca9e921266079d5808b2c4a090",
+      "main_sha256": "7d7abc54a55d909b6098441f730553ea6d9ef4ca9e921266079d5808b2c4a090"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/local-build.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "746a2d7131cf2ec4514812feb11b9bf7c5040dd2808e036b2c03659e3ae27f62",
+      "main_sha256": "746a2d7131cf2ec4514812feb11b9bf7c5040dd2808e036b2c03659e3ae27f62"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/npm.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bf4c17ca399910c1c5ab20b379797b9ea5713811b218fa4c3aa350bf7ffbdd0c",
+      "main_sha256": "bf4c17ca399910c1c5ab20b379797b9ea5713811b218fa4c3aa350bf7ffbdd0c"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/race.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "63a9aac4949978089ecad89d5bf09ecc00e14f2b6f89dafaf8d5286004b5112e",
+      "main_sha256": "63a9aac4949978089ecad89d5bf09ecc00e14f2b6f89dafaf8d5286004b5112e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/regressions.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b852e86c333e3d727a50d1817b5c028eef428cf869d15970103f38502fcdfc43",
+      "main_sha256": "b852e86c333e3d727a50d1817b5c028eef428cf869d15970103f38502fcdfc43"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/schema.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8a1c93987ab01bcbf7a5fa73241fd4adcd12c26a4a2c9eaf1a170cf502fd35d6",
+      "main_sha256": "8a1c93987ab01bcbf7a5fa73241fd4adcd12c26a4a2c9eaf1a170cf502fd35d6"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/verification.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "72345a94b186fecf41878d74a1d047b9e76bc7566cd2707b8324a900c0f13b96",
+      "main_sha256": "72345a94b186fecf41878d74a1d047b9e76bc7566cd2707b8324a900c0f13b96"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/vet.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "main_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/web-build.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "294d9739d890e15bfa8980481f9b80f05a885135d7429045fbca57297bb769d5",
+      "main_sha256": "294d9739d890e15bfa8980481f9b80f05a885135d7429045fbca57297bb769d5"
+    },
+    {
+      "path": "docs/evidence/personal-experience/fix-m132-20260913/web.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "71471e7ad67e7e0637debb2a5420fb27ea084c9c905e7969fcc995f394b6c77e",
+      "main_sha256": "71471e7ad67e7e0637debb2a5420fb27ea084c9c905e7969fcc995f394b6c77e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/git-skill-import-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b8e7f1a124c5a97c29593accdc49bf33eb63fc8e6e92ca762f51c0d35d157aea",
+      "main_sha256": "b8e7f1a124c5a97c29593accdc49bf33eb63fc8e6e92ca762f51c0d35d157aea"
+    },
+    {
+      "path": "docs/evidence/personal-experience/hermes-native-e2e-raw-content-20260913.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e4fe08cab5b28aa19089ffd323a97c4bfd2b329c2bc2bfd080b82911cce42d13",
+      "main_sha256": "e4fe08cab5b28aa19089ffd323a97c4bfd2b329c2bc2bfd080b82911cce42d13"
+    },
+    {
+      "path": "docs/evidence/personal-experience/hermes-native-e2e-raw-content-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "76f86676f98ff6665ac759b94d27a21b8fc4e7ae5fc102e87fd8965e675ae11e",
+      "main_sha256": "76f86676f98ff6665ac759b94d27a21b8fc4e7ae5fc102e87fd8965e675ae11e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/hermes-raw-content-bridge-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9376b732b14e0cb1214419b709eb6a02d8fe418acd78d9564e700a9e059b2a40",
+      "main_sha256": "9376b732b14e0cb1214419b709eb6a02d8fe418acd78d9564e700a9e059b2a40"
+    },
+    {
+      "path": "docs/evidence/personal-experience/launch-agent-stop-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2a288bd13e0108ac488edf490bf835da4acb42b481eadca9f7f225f630bfec7e",
+      "main_sha256": "2a288bd13e0108ac488edf490bf835da4acb42b481eadca9f7f225f630bfec7e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/launch-agent-unregister-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5279d86eef67ebbcae7a4663f17f42cb3d2ac60e99af409444cf437dfc064317",
+      "main_sha256": "5279d86eef67ebbcae7a4663f17f42cb3d2ac60e99af409444cf437dfc064317"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "50413caccac55237fbb4e9fec748b262a4785d8de3a5cdcc3efbb20c58d2acfe",
+      "main_sha256": "50413caccac55237fbb4e9fec748b262a4785d8de3a5cdcc3efbb20c58d2acfe"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/branch-inventory.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f3f236787ab74adaecb8593df570b41a77a48d7c04c0f37d580336a5b19bf6fd",
+      "main_sha256": "f3f236787ab74adaecb8593df570b41a77a48d7c04c0f37d580336a5b19bf6fd"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/go-tests.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ad6c3c10aca75bfa37a7743ab63612e9db8ed65da1ae4fae7c03d30e4eb5192e",
+      "main_sha256": "ad6c3c10aca75bfa37a7743ab63612e9db8ed65da1ae4fae7c03d30e4eb5192e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/hermes-mcp-bridge.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "be8dc225c49e0be2e1732943995ad546cf9dcbf9445f925898a61aa265833c3e",
+      "main_sha256": "be8dc225c49e0be2e1732943995ad546cf9dcbf9445f925898a61aa265833c3e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/history-scan.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "123bcf1cbb4c5ceacb325e649a174165123c66a9823d03bc0c616e75ab304e9c",
+      "main_sha256": "123bcf1cbb4c5ceacb325e649a174165123c66a9823d03bc0c616e75ab304e9c"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/pr32-final.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9caa89e3f5c12772ca7f89f3cb7a022e3d3e26595688a09301f33e7efc5c55e8",
+      "main_sha256": "9caa89e3f5c12772ca7f89f3cb7a022e3d3e26595688a09301f33e7efc5c55e8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/python-tests.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d43a94346168c7649386b4a7e7ce75e155ffdd15a04ed8b2b33680a0613d079b",
+      "main_sha256": "d43a94346168c7649386b4a7e7ce75e155ffdd15a04ed8b2b33680a0613d079b"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/research-recheck.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "43d5baaff8cdf1a6de2da8cad4d53396c2694b04236b68702a947e3acb5c4ede",
+      "main_sha256": "43d5baaff8cdf1a6de2da8cad4d53396c2694b04236b68702a947e3acb5c4ede"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/research-tests.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4c0343b8d21b145965309ac2f89367b1536335153325331067b70a4ea8cdeab3",
+      "main_sha256": "4c0343b8d21b145965309ac2f89367b1536335153325331067b70a4ea8cdeab3"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/uncommitted-remainder.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c2c82a072f9cf4fd4438d3ad59c891b113608c7b8780862bb6e6aca29bbc269c",
+      "main_sha256": "c2c82a072f9cf4fd4438d3ad59c891b113608c7b8780862bb6e6aca29bbc269c"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/web-build.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "64b44ec1cc79b22546174515d00fe620a53e517f42207267b858f87acb1ed88f",
+      "main_sha256": "64b44ec1cc79b22546174515d00fe620a53e517f42207267b858f87acb1ed88f"
+    },
+    {
+      "path": "docs/evidence/personal-experience/main-integration-20260913/web-tests.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dff9f50caf4a21bedfd9d3829b57153e304922b59de8049cc20903e4a0724f94",
+      "main_sha256": "dff9f50caf4a21bedfd9d3829b57153e304922b59de8049cc20903e4a0724f94"
+    },
+    {
+      "path": "docs/evidence/personal-experience/openclaw-managed-native-smoke-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2d037001ed7c0109490d0f420d8601493b6dfb641d168f5b5e4f5ca56f9d6f6a",
+      "main_sha256": "2d037001ed7c0109490d0f420d8601493b6dfb641d168f5b5e4f5ca56f9d6f6a"
+    },
+    {
+      "path": "docs/evidence/personal-experience/openclaw-managed-native-smoke-m127-original-20260913.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3b4ac4b337c1ae7ca24ffbb0816fc20ad806e4e7d86f09a23dfe20486f5e5ae4",
+      "main_sha256": "3b4ac4b337c1ae7ca24ffbb0816fc20ad806e4e7d86f09a23dfe20486f5e5ae4"
+    },
+    {
+      "path": "docs/evidence/personal-experience/openclaw-managed-native-smoke-reviewed-20260913.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "364359c5a109cd5c048260857c6b12f45a21ad07990a3088bcec285abe82f0cc",
+      "main_sha256": "364359c5a109cd5c048260857c6b12f45a21ad07990a3088bcec285abe82f0cc"
+    },
+    {
+      "path": "docs/evidence/personal-experience/openclaw-managed-plugin-bridge-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0fd92aaa5cb5702a03fba3c3ac46c429b69ed13ccf06160a13d8a8812bf8872c",
+      "main_sha256": "0fd92aaa5cb5702a03fba3c3ac46c429b69ed13ccf06160a13d8a8812bf8872c"
+    },
+    {
+      "path": "docs/evidence/personal-experience/openclaw-managed-runtime-identity-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "56d19e38b29c5f7e20c1932ddb3bdc6fb9fb2e9e67febafcae0cd971960addac",
+      "main_sha256": "56d19e38b29c5f7e20c1932ddb3bdc6fb9fb2e9e67febafcae0cd971960addac"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-activation-api-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "67e91810a0e8e78654092fb2ca493bfb67c3e4d6287cf6b71ba5bb2bd77952bd",
+      "main_sha256": "67e91810a0e8e78654092fb2ca493bfb67c3e4d6287cf6b71ba5bb2bd77952bd"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-authority-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "60d26836e54c17bb13f8a96adff0666ce06450cb769348d2eabc468e30286537",
+      "main_sha256": "60d26836e54c17bb13f8a96adff0666ce06450cb769348d2eabc468e30286537"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-automatic-cleanup-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0a1e674cfc02bcf97db8a2c1af1ca84be54cd450a013ff2e67c334e4e57d6086",
+      "main_sha256": "0a1e674cfc02bcf97db8a2c1af1ca84be54cd450a013ff2e67c334e4e57d6086"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-export-isolation-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0df6bf22060732e3a3a823202c54b69205efa33484ca8e3359143b62f56a555c",
+      "main_sha256": "0df6bf22060732e3a3a823202c54b69205efa33484ca8e3359143b62f56a555c"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-grant-api-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1f9d79f5680c5b3987bad7b26cb44d252468ab1c84e46f2aa055d6636ce39349",
+      "main_sha256": "1f9d79f5680c5b3987bad7b26cb44d252468ab1c84e46f2aa055d6636ce39349"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-management-api-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9551870bc3d6d4e400d5610a532a0c3f2fb9ff3ed41efc25a46535a0724eb6de",
+      "main_sha256": "9551870bc3d6d4e400d5610a532a0c3f2fb9ff3ed41efc25a46535a0724eb6de"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-runtime-capture-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8eff23ce6445d2e9b529fdb481794b9905e788689431d072978f002bd3ac1755",
+      "main_sha256": "8eff23ce6445d2e9b529fdb481794b9905e788689431d072978f002bd3ac1755"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-settings-20260913/browser/raw-content-panel-desktop.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f4d6af9b1ce68e1ab5ce157740f52bdd6faad45f6352fb09670764a34242e09f",
+      "main_sha256": "f4d6af9b1ce68e1ab5ce157740f52bdd6faad45f6352fb09670764a34242e09f"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-settings-20260913/browser/raw-content-ready-desktop.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2639d8d437359fb5c26e29352e5b312df8fc0109db3eaca4f51b7c6207aeba22",
+      "main_sha256": "2639d8d437359fb5c26e29352e5b312df8fc0109db3eaca4f51b7c6207aeba22"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-settings-20260913/browser/raw-content-ready-mobile.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e9cdeb7b2bf1be688c0f1bef61b1eb78d47971c9c18cc82b01c28ef0551b761e",
+      "main_sha256": "e9cdeb7b2bf1be688c0f1bef61b1eb78d47971c9c18cc82b01c28ef0551b761e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-settings-20260913/browser/result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9747c65a589085e52416cfde90716792f84a0ef8eb94c36d5b37631b06d387f8",
+      "main_sha256": "9747c65a589085e52416cfde90716792f84a0ef8eb94c36d5b37631b06d387f8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-settings-ui-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7195ce7b61fd31d85a43795bfaefdffff0c809a38ceb7ff5e75e26abfcdeaa9d",
+      "main_sha256": "7195ce7b61fd31d85a43795bfaefdffff0c809a38ceb7ff5e75e26abfcdeaa9d"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-store-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "477aadf8254699570f312feade47bba43d4da9d485319a7eef820c16b5331581",
+      "main_sha256": "477aadf8254699570f312feade47bba43d4da9d485319a7eef820c16b5331581"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-task-ui-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f9102bc1051d1ff492eaaa0d27eaeb9afe47e019b6b88711f9c22f367ec5a836",
+      "main_sha256": "f9102bc1051d1ff492eaaa0d27eaeb9afe47e019b6b88711f9c22f367ec5a836"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-task-ui-20260913/browser/raw-task-panel-desktop.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d49855f43a639976578eb42d0a0b44e8da8a659f99a06bbfbf667e6f1ba47b66",
+      "main_sha256": "d49855f43a639976578eb42d0a0b44e8da8a659f99a06bbfbf667e6f1ba47b66"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-task-ui-20260913/browser/raw-task-panel-mobile.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "174b3069e9db4739f5cbb7d4296273c0d6ee62e94a79180a083a5c1241669784",
+      "main_sha256": "174b3069e9db4739f5cbb7d4296273c0d6ee62e94a79180a083a5c1241669784"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-task-ui-20260913/browser/raw-task-records-mobile.png",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "fb61515dfe866dbae32de2f7d31997c5acd2b63e29aaadafa5b650f790718348",
+      "main_sha256": "fb61515dfe866dbae32de2f7d31997c5acd2b63e29aaadafa5b650f790718348"
+    },
+    {
+      "path": "docs/evidence/personal-experience/raw-task-content-task-ui-20260913/browser/result.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b52ec5334f4ddb5b936229b752bdf4a20b9cf10f02ed68754e599a369bf733d1",
+      "main_sha256": "b52ec5334f4ddb5b936229b752bdf4a20b9cf10f02ed68754e599a369bf733d1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/baseline.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3a9b604ebee1bfd25b3d338e102a2cc17d129493dd7dffb61833caaaf8ddd95a",
+      "main_sha256": "3a9b604ebee1bfd25b3d338e102a2cc17d129493dd7dffb61833caaaf8ddd95a"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/integration.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4548a12896152bbdfdb937f82c20e168248d4284817096bb1808837935ec5fdc",
+      "main_sha256": "4548a12896152bbdfdb937f82c20e168248d4284817096bb1808837935ec5fdc"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/negative-server.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ab104413605eab944f2d7a80667bddcbb939ebcc15817f96f6aff44d9b025429",
+      "main_sha256": "ab104413605eab944f2d7a80667bddcbb939ebcc15817f96f6aff44d9b025429"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/negative.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "255b41d3e205e91df15f1bfeab9d90b66dce8cf78e66ec8bfcc1b39a1386b3f9",
+      "main_sha256": "255b41d3e205e91df15f1bfeab9d90b66dce8cf78e66ec8bfcc1b39a1386b3f9"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/race.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b33c720aec238e6ac4528eab7cb86844ec75fc6f7c1d94f6fe698663edc6b8ea",
+      "main_sha256": "b33c720aec238e6ac4528eab7cb86844ec75fc6f7c1d94f6fe698663edc6b8ea"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/reviewer-negative-tests.patch",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ac008f8482740f9d86c30f085a43867e3026ec4bd707084b41c9afdd77d2c673",
+      "main_sha256": "ac008f8482740f9d86c30f085a43867e3026ec4bd707084b41c9afdd77d2c673"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/verification.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bd762db1f3b2b7ddc0d1150c3078d6297a9bf51f4b717d1ddbb022c3f2bd8d61",
+      "main_sha256": "bd762db1f3b2b7ddc0d1150c3078d6297a9bf51f4b717d1ddbb022c3f2bd8d61"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m129-m130-20260913/vet.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "main_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/full.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6e36888767cfe67bd5f4778b2bff511cf88c2b375ff42ee9e64140bcfbbe06ac",
+      "main_sha256": "6e36888767cfe67bd5f4778b2bff511cf88c2b375ff42ee9e64140bcfbbe06ac"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/negative.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "be1b43f170fec4288e8a98053c54d4eb420ec88a5a55e8a123b112546b665dc1",
+      "main_sha256": "be1b43f170fec4288e8a98053c54d4eb420ec88a5a55e8a123b112546b665dc1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/reviewer-negative-tests.patch",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1a453e4944eb9c29bddbc6a13172a6d105bfe50158ad69c6afea534ade702fc8",
+      "main_sha256": "1a453e4944eb9c29bddbc6a13172a6d105bfe50158ad69c6afea534ade702fc8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/tests.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8dd9793efc2e7b4d5b52fd559f98f361b510ab2bec734296edcbad1c1887f0db",
+      "main_sha256": "8dd9793efc2e7b4d5b52fd559f98f361b510ab2bec734296edcbad1c1887f0db"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/verification.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "51afd48667d55a3f65acfe090399b69410be13750c14a7b531194e4bc6f724eb",
+      "main_sha256": "51afd48667d55a3f65acfe090399b69410be13750c14a7b531194e4bc6f724eb"
+    },
+    {
+      "path": "docs/evidence/personal-experience/review-m132-20260913/vet.log",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "main_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/scenario-templates-multi-skill-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "167de5999549958b0369ffd8fe93c1cc0acc47e1925cd933e24f3523772afcc6",
+      "main_sha256": "167de5999549958b0369ffd8fe93c1cc0acc47e1925cd933e24f3523772afcc6"
+    },
+    {
+      "path": "docs/evidence/personal-experience/serve-explicit-directory-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c2d5f1d6fb9dc8fdf62424bb86ba9eec4e2072bd036f3adac6612d784f93d24a",
+      "main_sha256": "c2d5f1d6fb9dc8fdf62424bb86ba9eec4e2072bd036f3adac6612d784f93d24a"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-acceptance-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c6366b2b0fc7af339529f253c774befe1c9c5edd137cefdf05b55b8c7c8c2aac",
+      "main_sha256": "c6366b2b0fc7af339529f253c774befe1c9c5edd137cefdf05b55b8c7c8c2aac"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-authority-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "67dd3ad569d726a6549093725a97e0120b61cc47dcd7cecf5502fd272823540a",
+      "main_sha256": "67dd3ad569d726a6549093725a97e0120b61cc47dcd7cecf5502fd272823540a"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-completion-cli-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dca887cbf93683eecb87f27c26181bbdde61af9ddffc100efd2e72a0095deb49",
+      "main_sha256": "dca887cbf93683eecb87f27c26181bbdde61af9ddffc100efd2e72a0095deb49"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-http-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "232b3690a7cd2a68516973ed3f01360f0416ffab6d5ee2dc91eda73eb752fc29",
+      "main_sha256": "232b3690a7cd2a68516973ed3f01360f0416ffab6d5ee2dc91eda73eb752fc29"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-request-cli-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d10af09576247fc0d896972f6f751ef69bf220e745fb8d880eda602e77540dce",
+      "main_sha256": "d10af09576247fc0d896972f6f751ef69bf220e745fb8d880eda602e77540dce"
+    },
+    {
+      "path": "docs/evidence/personal-experience/service-stop-result-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "952f9d2a3519db142745db9081fce7e7892dee502371fe66ed0eebff4d7e59f8",
+      "main_sha256": "952f9d2a3519db142745db9081fce7e7892dee502371fe66ed0eebff4d7e59f8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/setup-macos-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9e1999afb5d5968e116d616bb95a977de45e8cc52f397be31c702284da012214",
+      "main_sha256": "9e1999afb5d5968e116d616bb95a977de45e8cc52f397be31c702284da012214"
+    },
+    {
+      "path": "docs/evidence/personal-experience/setup-windows-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ca2a53eb4961fa3d0ea856b23e4e7ec1fa2dbad7a5441d967ed71e2c5d052a93",
+      "main_sha256": "ca2a53eb4961fa3d0ea856b23e4e7ec1fa2dbad7a5441d967ed71e2c5d052a93"
+    },
+    {
+      "path": "docs/evidence/personal-experience/skill-runtime-attribution-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "19ba5421f0c38881ec0908ded16e97938f459d922513bdb2571b3a1c897f96b6",
+      "main_sha256": "19ba5421f0c38881ec0908ded16e97938f459d922513bdb2571b3a1c897f96b6"
+    },
+    {
+      "path": "docs/evidence/personal-experience/skill-update-check-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7f58d07c9798e143e1a99587657196c7bb4a5a530f9b15e33fb66823c867de4d",
+      "main_sha256": "7f58d07c9798e143e1a99587657196c7bb4a5a530f9b15e33fb66823c867de4d"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-acceptance-m129-m130-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3a8f69532b6c173da0abbac599dac3f87a2072fcb8fdbb4ea968da7c8c616178",
+      "main_sha256": "3a8f69532b6c173da0abbac599dac3f87a2072fcb8fdbb4ea968da7c8c616178"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-acceptance-m132-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "48bc611babe29cccb7a26b72ac73d7893ed3b9a843fbd666efe415b6753d5fe7",
+      "main_sha256": "48bc611babe29cccb7a26b72ac73d7893ed3b9a843fbd666efe415b6753d5fe7"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-fixes-m129-m130-20260913.md",
+      "status": "??",
+      "worktree_matches_main": false,
+      "index_matches_main": false,
+      "worktree_sha256": "7db73c38c195962fe953e918297cf7af1f5491cae8916390958ad864c762f195",
+      "main_sha256": "4ce99f26e3abb180b610af8a6bb77e067420a115cf29f67af5a1fd99084e31b3"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-fixes-m132-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2eb9c348e896e4668f192c0393730088401fd1e158d73f65557a31db45224ef1",
+      "main_sha256": "2eb9c348e896e4668f192c0393730088401fd1e158d73f65557a31db45224ef1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-review-fixes-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dfeb8d421264d47d7c0dfa7b0228b7eaf36527203584c108bd42050ae2498943",
+      "main_sha256": "dfeb8d421264d47d7c0dfa7b0228b7eaf36527203584c108bd42050ae2498943"
+    },
+    {
+      "path": "docs/evidence/personal-experience/stage-review-verification-20260913.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7daf7c2ebc9619f6843463bcb81c3fc119de43ba42712246ca3d62145bbadf59",
+      "main_sha256": "7daf7c2ebc9619f6843463bcb81c3fc119de43ba42712246ca3d62145bbadf59"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activities-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5bcba3e8e6f6349c33191b26c6667451e8647277a2f725bc5ffc6691ae707fcd",
+      "main_sha256": "5bcba3e8e6f6349c33191b26c6667451e8647277a2f725bc5ffc6691ae707fcd"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activities-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f4881c03ad9df5c4c350bd77d51f2155bdd6d401a704185829af70d0e21ab421",
+      "main_sha256": "f4881c03ad9df5c4c350bd77d51f2155bdd6d401a704185829af70d0e21ab421"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-completion-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "22fe6ba1ec49ba37cfd8699f7485b0d6671bc9948b64d402eafbab13afddb0a1",
+      "main_sha256": "22fe6ba1ec49ba37cfd8699f7485b0d6671bc9948b64d402eafbab13afddb0a1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-completion-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "25d1ed098bd39382cf49f4c619d13f3eb6765cb6032941784b6fb8a012ed78b8",
+      "main_sha256": "25d1ed098bd39382cf49f4c619d13f3eb6765cb6032941784b6fb8a012ed78b8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-detail-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "12c64a5b51360b8c3a30e8ee29b66e290c7bc27ec092092ecb7d452ab22c4dbf",
+      "main_sha256": "12c64a5b51360b8c3a30e8ee29b66e290c7bc27ec092092ecb7d452ab22c4dbf"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-detail-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "88e86cafd53daae8b55d8d24360cf15e48a47f038c0610439c4d679e368e6cd1",
+      "main_sha256": "88e86cafd53daae8b55d8d24360cf15e48a47f038c0610439c4d679e368e6cd1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-export-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6fbdee6e2dd47b263abe9aa413b0ec6053049f7a0235f67a6e896e5df07e96a9",
+      "main_sha256": "6fbdee6e2dd47b263abe9aa413b0ec6053049f7a0235f67a6e896e5df07e96a9"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-export-core-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "77455cc90d89374a60c9ab61c198014a4ea3b79b9a05626090bf9322e896932f",
+      "main_sha256": "77455cc90d89374a60c9ab61c198014a4ea3b79b9a05626090bf9322e896932f"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-export-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1892a23ee1bd9f15285518ce79bc3c86ea9f2957fe7a71adb1ea4c3720d05c77",
+      "main_sha256": "1892a23ee1bd9f15285518ce79bc3c86ea9f2957fe7a71adb1ea4c3720d05c77"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-historical-admission-read-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2a2f48b1958cf8b3190cd4e9cc51606bf7794b53cebc2bc02f9334f1b225e6be",
+      "main_sha256": "2a2f48b1958cf8b3190cd4e9cc51606bf7794b53cebc2bc02f9334f1b225e6be"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-historical-grant-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "efbfcf42b04139ca6c33b8c8d162fc096a4ead918a2908b4954f3eae10bde521",
+      "main_sha256": "efbfcf42b04139ca6c33b8c8d162fc096a4ead918a2908b4954f3eae10bde521"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-historical-skill-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1ace4bdb686a63eac9d463e1ea6be97de5f91f9d14dd50de05ae63f0e0837f80",
+      "main_sha256": "1ace4bdb686a63eac9d463e1ea6be97de5f91f9d14dd50de05ae63f0e0837f80"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-projection-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4dad99abf545841274078277c3f6969a74845527e1bf1cb9e1c09947eff518a6",
+      "main_sha256": "4dad99abf545841274078277c3f6969a74845527e1bf1cb9e1c09947eff518a6"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-search-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "05f1ae5c4c145618c890581e6118c1873108cb8c647267a60aa860dffb67a8d7",
+      "main_sha256": "05f1ae5c4c145618c890581e6118c1873108cb8c647267a60aa860dffb67a8d7"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-search-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "eb0254fe2b55958b9be1ec88891c7a2d0debbb9736115dfce8f4c8a08cdb1411",
+      "main_sha256": "eb0254fe2b55958b9be1ec88891c7a2d0debbb9736115dfce8f4c8a08cdb1411"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-sources-api-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "4185d415f751541ef43d2052e323e40558c42179908b5adb2e0856d04f3ebe07",
+      "main_sha256": "4185d415f751541ef43d2052e323e40558c42179908b5adb2e0856d04f3ebe07"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-activity-sources-ui-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "45e3ddcea0495332e8a1ee57450f0849409ee573c6eb8d71f8fcbeb9489e0d37",
+      "main_sha256": "45e3ddcea0495332e8a1ee57450f0849409ee573c6eb8d71f8fcbeb9489e0d37"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-completion-subject-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bec0773a3fb4472db669a696f39ba008020b94c39e8830e30b5771d2402330d1",
+      "main_sha256": "bec0773a3fb4472db669a696f39ba008020b94c39e8830e30b5771d2402330d1"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-trace-export-api-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1d3810ccf1d2a9659d318a45a2ddb41112b409baa69ba77e823acc2213533c60",
+      "main_sha256": "1d3810ccf1d2a9659d318a45a2ddb41112b409baa69ba77e823acc2213533c60"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-trace-export-core-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d0be2d1e9777620be46506601cf59838731f13f1b409a328a205367682b30f5f",
+      "main_sha256": "d0be2d1e9777620be46506601cf59838731f13f1b409a328a205367682b30f5f"
+    },
+    {
+      "path": "docs/evidence/personal-experience/task-trace-export-ui-20260913.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e63e19abefda9323bca9d19bae01bb2fe740874047de98a7bf39945e54b1b552",
+      "main_sha256": "e63e19abefda9323bca9d19bae01bb2fe740874047de98a7bf39945e54b1b552"
+    },
+    {
+      "path": "docs/evidence/personal-experience/teardown-macos-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5fb945bd25fccb980174eec271c7e5e7f60e230e6b9a9185f02dd0198c779795",
+      "main_sha256": "5fb945bd25fccb980174eec271c7e5e7f60e230e6b9a9185f02dd0198c779795"
+    },
+    {
+      "path": "docs/evidence/personal-experience/teardown-windows-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "5e296982abf5e2daf2905586c6af8515f0fdc12aca9acc0ace3553af8dc9d6b8",
+      "main_sha256": "5e296982abf5e2daf2905586c6af8515f0fdc12aca9acc0ace3553af8dc9d6b8"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-ownership-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c7d71355a4b6740e930788293c1bbc1d9a51da1d4b3947e1ef6e1931f2466c26",
+      "main_sha256": "c7d71355a4b6740e930788293c1bbc1d9a51da1d4b3947e1ef6e1931f2466c26"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-presence-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e8b26041722d04d79d1f1d9268dc87441b17ac0fd69c966aa665ea6d69b23b21",
+      "main_sha256": "e8b26041722d04d79d1f1d9268dc87441b17ac0fd69c966aa665ea6d69b23b21"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-query-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1cbde6455f22a79cda72a4b6f542b17e7f15426905fbe065d5d010ddac26f557",
+      "main_sha256": "1cbde6455f22a79cda72a4b6f542b17e7f15426905fbe065d5d010ddac26f557"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-readback-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d28366c1e8ae2c1ee6f8c8c79982e278065196dee3f0a1d421cd9baad8b6fdbe",
+      "main_sha256": "d28366c1e8ae2c1ee6f8c8c79982e278065196dee3f0a1d421cd9baad8b6fdbe"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-registration-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "f1c3d75e7ba85f100b00f0091813ce31758958234b26b98be21c0948960deb98",
+      "main_sha256": "f1c3d75e7ba85f100b00f0091813ce31758958234b26b98be21c0948960deb98"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-runtime-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1a8361587ce96e2318ec19adc689d5037ca72eadda32dad2aec50fe4001414b6",
+      "main_sha256": "1a8361587ce96e2318ec19adc689d5037ca72eadda32dad2aec50fe4001414b6"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-start-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "01d2ddc09211b3e64a54c534bf24181a0e2df91daf7f1e0e4008419695d94bfc",
+      "main_sha256": "01d2ddc09211b3e64a54c534bf24181a0e2df91daf7f1e0e4008419695d94bfc"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-stop-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3e70c81e97258c6bc53783d93aba76d678ff44175717404832aea3088eff0f71",
+      "main_sha256": "3e70c81e97258c6bc53783d93aba76d678ff44175717404832aea3088eff0f71"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-unregister-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ed13331e93310f16143c05f646368acb9f87953888f2dfe6e6e49d136760f307",
+      "main_sha256": "ed13331e93310f16143c05f646368acb9f87953888f2dfe6e6e49d136760f307"
+    },
+    {
+      "path": "docs/evidence/personal-experience/windows-task-xml-20260912.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c88949c6e79af8f21c8cd272ea02c426ff8ae1158178823504f12a2e43eb9c5e",
+      "main_sha256": "c88949c6e79af8f21c8cd272ea02c426ff8ae1158178823504f12a2e43eb9c5e"
+    },
+    {
+      "path": "docs/personal-experience-lan-team-next-development-taskbook-20260913-160928.md",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "18eda21f2208b0350f02ce9a267b433e1398a1f941b337f1db5bba66dea1ca44",
+      "main_sha256": "18eda21f2208b0350f02ce9a267b433e1398a1f941b337f1db5bba66dea1ca44"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-activate.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "38ccb33d73952883d941c517aa774cdeaa4816ca396e81ab7bfa62a03842a79b",
+      "main_sha256": "38ccb33d73952883d941c517aa774cdeaa4816ca396e81ab7bfa62a03842a79b"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-activation.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d7037082ac11ebb9a4caee68a622dc2ab828af0b61b2b0171de2f5c8ce5a6967",
+      "main_sha256": "d7037082ac11ebb9a4caee68a622dc2ab828af0b61b2b0171de2f5c8ce5a6967"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-capture-permit-create.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "8bf13c39b6a547bad932b01a5a4b14aee4205b394f1a65feddd5192e91be495e",
+      "main_sha256": "8bf13c39b6a547bad932b01a5a4b14aee4205b394f1a65feddd5192e91be495e"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-capture-permit.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "54c726d46733254b749e20c7d317be1dfaad860431865791e57a40632a16cc09",
+      "main_sha256": "54c726d46733254b749e20c7d317be1dfaad860431865791e57a40632a16cc09"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-capture-result.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "ca4b2ba8dabc2ca9027d76fd145f812504a7eb6e1295bd2c20b7b5b890daea96",
+      "main_sha256": "ca4b2ba8dabc2ca9027d76fd145f812504a7eb6e1295bd2c20b7b5b890daea96"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-capture.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "62eae4ec3b27bb262f33384b63a68184cba7fb29da33a98869c1578548db0801",
+      "main_sha256": "62eae4ec3b27bb262f33384b63a68184cba7fb29da33a98869c1578548db0801"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-envelope.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "26452a5b9db1d609b2695abad8c75f5150e99480c259c91536c6e4ef5b061a5a",
+      "main_sha256": "26452a5b9db1d609b2695abad8c75f5150e99480c259c91536c6e4ef5b061a5a"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-grant-create.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "876fa1de9ad17a89f97122ca68a4bd873968f6930356ac2aa1a95c3d5b21fc16",
+      "main_sha256": "876fa1de9ad17a89f97122ca68a4bd873968f6930356ac2aa1a95c3d5b21fc16"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-grant-view.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bc96764e2f6bab75cbab90e258a0a480bb01db013894f06d1092343882b0609d",
+      "main_sha256": "bc96764e2f6bab75cbab90e258a0a480bb01db013894f06d1092343882b0609d"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-grant.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b5d7564b0bb005410f1061ed096531313996a3642424bb53c111ee95f37f5ec5",
+      "main_sha256": "b5d7564b0bb005410f1061ed096531313996a3642424bb53c111ee95f37f5ec5"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-grants.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "6fedbf34d358d48a5af6e6d875d101b5a315310eb572c31aa076737b842b4f26",
+      "main_sha256": "6fedbf34d358d48a5af6e6d875d101b5a315310eb572c31aa076737b842b4f26"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-native-capture.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "c83a7a4999c87c2ce1c5f6c23ae5661bddf14b8b9ce3a8a0f3656ebc8ee8e602",
+      "main_sha256": "c83a7a4999c87c2ce1c5f6c23ae5661bddf14b8b9ce3a8a0f3656ebc8ee8e602"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-purge-expired.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9c525766a43e01c78252b7ba13e83365678dc1757b8408a38318ffd03220baa3",
+      "main_sha256": "9c525766a43e01c78252b7ba13e83365678dc1757b8408a38318ffd03220baa3"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-purge-result.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "e20e4748ca8eba184b1453d9d02a30ab8262fcbc54960ab3cb440c0b3a4073ff",
+      "main_sha256": "e20e4748ca8eba184b1453d9d02a30ab8262fcbc54960ab3cb440c0b3a4073ff"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record-content.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7aa1fb67d5d64070273796616cedfba39791606141c9df45de131d31815496d3",
+      "main_sha256": "7aa1fb67d5d64070273796616cedfba39791606141c9df45de131d31815496d3"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record-delete.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a7d34ffb053742026ddffd90fc10ee1a2c2c7ea8ad9d54fd26f0a5d052cd0ff0",
+      "main_sha256": "a7d34ffb053742026ddffd90fc10ee1a2c2c7ea8ad9d54fd26f0a5d052cd0ff0"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record-deleted.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7990e21610c928e2ed71349a693ade018137b48c161ee91fefe29b614df6876c",
+      "main_sha256": "7990e21610c928e2ed71349a693ade018137b48c161ee91fefe29b614df6876c"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record-list.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "193634e2021707e3c33df9b9935f01999ad88189f3c6e16ffcede1983283c7fc",
+      "main_sha256": "193634e2021707e3c33df9b9935f01999ad88189f3c6e16ffcede1983283c7fc"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record-read.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7a8702b3f24bd8b84869cfba5467eb510ab0b4b68f10629b011a3d8574cbc7a8",
+      "main_sha256": "7a8702b3f24bd8b84869cfba5467eb510ab0b4b68f10629b011a3d8574cbc7a8"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-record.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1485f7c13228c361743c1e22be99117bd7eb4905fb5f027cc381383b6716e595",
+      "main_sha256": "1485f7c13228c361743c1e22be99117bd7eb4905fb5f027cc381383b6716e595"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-records.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "1227d6c2b7b8823529fb3b23c2425902a30b4553125aceb4dc4f87e25c938a2d",
+      "main_sha256": "1227d6c2b7b8823529fb3b23c2425902a30b4553125aceb4dc4f87e25c938a2d"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-revocation.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "181bccce2c43892c7be9fa236827f724236d9c6ee254489754f5ee6571d86e65",
+      "main_sha256": "181bccce2c43892c7be9fa236827f724236d9c6ee254489754f5ee6571d86e65"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-revoke.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "db09dc5cbb52a5b7899d445b92e8aed80fd2d52190d4655e5be9af79cf99c240",
+      "main_sha256": "db09dc5cbb52a5b7899d445b92e8aed80fd2d52190d4655e5be9af79cf99c240"
+    },
+    {
+      "path": "packages/contracts/local-raw-task-content-status.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "edde457c457488aa645cb4315e226de9ed07d72a3258272bb6fdbb461e61077b",
+      "main_sha256": "edde457c457488aa645cb4315e226de9ed07d72a3258272bb6fdbb461e61077b"
+    },
+    {
+      "path": "packages/contracts/local-service-control-challenge.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "72f2fc9bc5d8d4ce0484c00c7e3a372e6e84df6ff0edf3d17ecadb4489f884ce",
+      "main_sha256": "72f2fc9bc5d8d4ce0484c00c7e3a372e6e84df6ff0edf3d17ecadb4489f884ce"
+    },
+    {
+      "path": "packages/contracts/local-service-stop-acceptance.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "bed167b32dcd9a0f52b131d528c85eba4ad4b579d3ded892318e169678f0417a",
+      "main_sha256": "bed167b32dcd9a0f52b131d528c85eba4ad4b579d3ded892318e169678f0417a"
+    },
+    {
+      "path": "packages/contracts/local-service-stop-request.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "0ab15924bc0351ee5cecd558f561c27fd35c7c22bc3e921201bef418ffdcc564",
+      "main_sha256": "0ab15924bc0351ee5cecd558f561c27fd35c7c22bc3e921201bef418ffdcc564"
+    },
+    {
+      "path": "packages/contracts/local-service-stop-result.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "039a751b4ab7111878f4bffb8fcdb9ce3e202001798d40d24cafa1a68d0d0c85",
+      "main_sha256": "039a751b4ab7111878f4bffb8fcdb9ce3e202001798d40d24cafa1a68d0d0c85"
+    },
+    {
+      "path": "packages/contracts/local-skill-import-git-create.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "873d89edca9b65cc581411adde118d88526f3b99fe65ae7a810a186fafd11a3e",
+      "main_sha256": "873d89edca9b65cc581411adde118d88526f3b99fe65ae7a810a186fafd11a3e"
+    },
+    {
+      "path": "packages/contracts/local-skill-update-check-result.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "aa1d69ec275bf8f295ffa318ccc6c83960dacd459b54caf5cdc5372146fdea7b",
+      "main_sha256": "aa1d69ec275bf8f295ffa318ccc6c83960dacd459b54caf5cdc5372146fdea7b"
+    },
+    {
+      "path": "packages/contracts/local-skill-update-check.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "9acd11714951a646b2ac678247923ff9a5f3088636b8fb25bf7b65671b5a1d29",
+      "main_sha256": "9acd11714951a646b2ac678247923ff9a5f3088636b8fb25bf7b65671b5a1d29"
+    },
+    {
+      "path": "packages/contracts/local-task-activities.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b56b0c6309a3853c099e928a535ac01ec25e5b1cb23d25cce9e8f0c2cfa73296",
+      "main_sha256": "b56b0c6309a3853c099e928a535ac01ec25e5b1cb23d25cce9e8f0c2cfa73296"
+    },
+    {
+      "path": "packages/contracts/local-task-activity-completion.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b5b838dd60eb6c426d105a1c28d0403f1f77fa452b1d0265c60ddcb5893aae92",
+      "main_sha256": "b5b838dd60eb6c426d105a1c28d0403f1f77fa452b1d0265c60ddcb5893aae92"
+    },
+    {
+      "path": "packages/contracts/local-task-activity-detail.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "769a0b67e9372a9ce4ee68d23664b75f395029cd6074577027ea35d3d0e81988",
+      "main_sha256": "769a0b67e9372a9ce4ee68d23664b75f395029cd6074577027ea35d3d0e81988"
+    },
+    {
+      "path": "packages/contracts/local-task-activity-export.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "a58242d946381e2d9beb52a8caf82a85212273937ea3e495493b0bd6685b6f1f",
+      "main_sha256": "a58242d946381e2d9beb52a8caf82a85212273937ea3e495493b0bd6685b6f1f"
+    },
+    {
+      "path": "packages/contracts/local-task-activity-search.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "dbddd925d92ac12fb9798228f03fca7c7527a369ed92ae16a43c73b4ae65239f",
+      "main_sha256": "dbddd925d92ac12fb9798228f03fca7c7527a369ed92ae16a43c73b4ae65239f"
+    },
+    {
+      "path": "packages/contracts/local-task-activity-sources.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "d4ea8e8974185675c0a6179172d5d259f2db3b406388a2d2d7e7253643426fc5",
+      "main_sha256": "d4ea8e8974185675c0a6179172d5d259f2db3b406388a2d2d7e7253643426fc5"
+    },
+    {
+      "path": "packages/contracts/local-task-trace-export.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "b950ee91f5d71fb83d08e196e4a2cd77ec893063d0278b62fb3f2656f5610799",
+      "main_sha256": "b950ee91f5d71fb83d08e196e4a2cd77ec893063d0278b62fb3f2656f5610799"
+    },
+    {
+      "path": "packages/contracts/local-windows-task-record.v1.schema.json",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "7fbeb897512f9cb024e972d46a5767d430f77295f0ec4543130e2e89a135ccb4",
+      "main_sha256": "7fbeb897512f9cb024e972d46a5767d430f77295f0ec4543130e2e89a135ccb4"
+    },
+    {
+      "path": "scripts/personal-experience/openclaw-managed-native-smoke.py",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "2d2cf7262ef630dfb989ddb9f376a3ff215cffc6151ab3c204bfe390a83af9f1",
+      "main_sha256": "2d2cf7262ef630dfb989ddb9f376a3ff215cffc6151ab3c204bfe390a83af9f1"
+    },
+    {
+      "path": "scripts/personal-experience/raw-content-settings-browser-smoke.py",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3eb7369714310dcd4ccf3fbfbfe8aa6e218f6d9fa2eb2cb8a1d2b4678103aa06",
+      "main_sha256": "3eb7369714310dcd4ccf3fbfbfe8aa6e218f6d9fa2eb2cb8a1d2b4678103aa06"
+    },
+    {
+      "path": "scripts/personal-experience/raw-content-task-browser-smoke.py",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "21e7340b4f53d7ce00cd13b9620cf6e2d2e3be0b4d80f837c86b95311f9d660d",
+      "main_sha256": "21e7340b4f53d7ce00cd13b9620cf6e2d2e3be0b4d80f837c86b95311f9d660d"
+    },
+    {
+      "path": "scripts/personal-experience/task-activities-browser-smoke.py",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3afd75cb8dbd2e8f8115de238fd31aec40a78714698e1091355f004f19879009",
+      "main_sha256": "3afd75cb8dbd2e8f8115de238fd31aec40a78714698e1091355f004f19879009"
+    },
+    {
+      "path": "scripts/personal-experience/update-check-browser-smoke.py",
+      "status": "??",
+      "worktree_matches_main": true,
+      "index_matches_main": false,
+      "worktree_sha256": "3acad88ca861dee6dda6ca982da38d87ae160617e50189b60c04c6406654bc19",
+      "main_sha256": "3acad88ca861dee6dda6ca982da38d87ae160617e50189b60c04c6406654bc19"
+    }
+  ]
+}
