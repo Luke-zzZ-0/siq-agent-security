@@ -1,0 +1,129 @@
+--- /dev/null
++++ b/apps/agentshield/internal/receipt/reviewer_scenario_test.go
+@@ -0,0 +1,49 @@
++package receipt
++
++import (
++	"siq-agent-security/apps/agentshield/internal/admission"
++	"siq-agent-security/apps/agentshield/internal/grant"
++	"siq-agent-security/apps/agentshield/internal/signing"
++	"strings"
++	"testing"
++)
++
++// Acceptance tests added only to the isolated reviewer snapshot.
++func TestReviewerScenarioActuallyDeniesExec(t *testing.T) {
++	for _, platform := range []string{"hermes", "openclaw"} {
++		for _, scenario := range []string{"", "no-exec", "sandboxed"} {
++			t.Run(platform+"/"+scenario, func(t *testing.T) {
++				tool := "terminal"
++				if platform == "openclaw" {
++					tool = "exec"
++				}
++				adm := admission.Admission{AdmissionID: "adm-review", ContentHash: strings.Repeat("a", 64), Verdict: "admit_with_conditions", EvidenceIDs: []string{"ev-1"}, DeclaredFacts: []admission.DeclaredFact{
++					{Domain: "tool", Action: "tool.invoke", Resource: admission.Resource{Type: "tool", Value: tool}, Effect: "allow", State: "declared", Authority: "skill_manifest", EvidenceIDs: []string{"ev-1"}},
++					{Domain: "process", Action: "process.exec", Resource: admission.Resource{Type: "tool", Value: "shell"}, Effect: "allow", State: "declared", Authority: "skill_manifest", EvidenceIDs: []string{"ev-1"}},
++				}}
++				k, _ := signing.FromSeed([]byte(strings.Repeat("r", 32)))
++				result, err := grant.Build(adm, grant.Options{Platform: platform, Subject: grant.Subject{Type: "agent_instance", ID: "inst_1"}, Key: k, Scenario: grant.ScenarioByID(scenario)})
++				if err != nil {
++					t.Fatal(err)
++				}
++				g, err := grant.Approve(result.Grant, grant.Approval{ActorType: "human", ActorID: "reviewer", ApprovedAt: "2026-09-13T00:00:00Z"}, k)
++				if err != nil {
++					t.Fatal(err)
++				}
++				g, err = grant.MarkDeployed(g, k)
++				if err != nil {
++					t.Fatal(err)
++				}
++				fx := newFixture(t, "block", &g, false)
++				decision, err := fx.eng.Decide(req(platform, tool, map[string]any{"command": "printf review-marker"}))
++				if err != nil {
++					t.Fatal(err)
++				}
++				t.Logf("scenario=%q action=%s reason=%s", scenario, decision.Action, decision.Reason)
++				if scenario != "" && decision.Action != ActionDeny {
++					t.Fatalf("scenario %s permits process execution: %s", scenario, decision.Action)
++				}
++			})
++		}
++	}
++}
+--- /dev/null
++++ b/apps/agentshield/internal/notify/reviewer_notify_test.go
+@@ -0,0 +1,37 @@
++package notify
++
++import (
++	"errors"
++	"os"
++	"strings"
++	"testing"
++	"time"
++)
++
++func TestReviewerFailedNotifyRespectsRetryWindow(t *testing.T) {
++	attempts := 0
++	d := NewDispatcher(func() int { return 1 }, &stubNotifier{failN: 100, failEr: errors.New("offline")}, DispatcherOptions{PollInterval: 5 * time.Second, CoalesceInterval: 15 * time.Second, Log: func(error) { attempts++ }})
++	now := time.Now()
++	d.Tick(now)
++	d.Tick(now.Add(5 * time.Second))
++	d.Tick(now.Add(10 * time.Second))
++	if attempts != 1 {
++		t.Fatalf("within 15s coalesce window got %d failed delivery attempts, want 1", attempts)
++	}
++}
++
++func TestReviewerNotifierOutputDoesNotReachLog(t *testing.T) {
++	if os.Getenv("SIQ_REVIEW_NOTIFY_CHILD") == "1" {
++		os.Stderr.WriteString("review-secret-marker")
++		os.Exit(1)
++	}
++	t.Setenv("SIQ_REVIEW_NOTIFY_CHILD", "1")
++	command := CommandNotifier{Bin: os.Args[0], Args: []string{"-test.run=^TestReviewerNotifierOutputDoesNotReachLog$"}, Timeout: time.Second}
++	err := command.Notify(Notification{Title: "SIQ", Body: "count 1"})
++	if err == nil {
++		t.Fatal("expected child failure")
++	}
++	if strings.Contains(err.Error(), "review-secret-marker") {
++		t.Fatal("notifier stderr is returned verbatim and forwarded to daemon logs")
++	}
++}
+--- /dev/null
++++ b/apps/agentshield/internal/server/reviewer_scenario_test.go
+@@ -0,0 +1,34 @@
++package server
++
++import (
++	"path/filepath"
++	"testing"
++)
++
++func TestReviewerChangingScenarioIsNotSilentlyIgnored(t *testing.T) {
++	s, _ := newServer(t, "block")
++	skill, _ := filepath.Abs(filepath.Join("..", "admission", "testdata", "skills", "benign", "pure-doc"))
++	code, admitted := call(t, s, "POST", "/v1/admit", token, map[string]any{"path": skill})
++	if code != 200 {
++		t.Fatal(code, admitted)
++	}
++	admID := admitted["admission"].(map[string]any)["admission_id"].(string)
++	body := map[string]any{"admission_id": admID, "platform": "hermes", "subject_id": "same-agent"}
++	code, plain := call(t, s, "POST", "/v1/grants", token, body)
++	if code != 200 {
++		t.Fatal(code, plain)
++	}
++	body["scenario_id"] = "no-exec"
++	code, restricted := call(t, s, "POST", "/v1/grants", token, body)
++	if code == 409 {
++		return
++	} // Explicit conflict is safe; silent reuse is not.
++	if code != 200 {
++		t.Fatal(code, restricted)
++	}
++	g := restricted["grant"].(map[string]any)
++	sc, _ := g["scenario"].(map[string]any)
++	if sc == nil || sc["id"] != "no-exec" {
++		t.Fatalf("requested no-exec but got reused=%v scenario=%v status=%v", restricted["reused"], g["scenario"], g["status"])
++	}
++}

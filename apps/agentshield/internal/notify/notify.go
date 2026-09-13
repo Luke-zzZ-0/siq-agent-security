@@ -15,9 +15,9 @@ package notify
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os/exec"
-	"strings"
 	"sync"
 	"time"
 )
@@ -45,6 +45,9 @@ type CommandNotifier struct {
 // current platform and none was configured.
 var ErrUnsupported = fmt.Errorf("notify: no desktop notification mechanism on this platform")
 
+var ErrDeliveryFailed = errors.New("notify: command failed")
+var ErrDeliveryTimeout = errors.New("notify: command timed out")
+
 // DefaultCommand returns the platform default notifier argv. The bool is
 // false on platforms with no supported default: callers must not fabricate
 // delivery there.
@@ -65,7 +68,7 @@ func (c CommandNotifier) Notify(n Notification) error {
 		return ErrUnsupported
 	}
 	timeout := c.Timeout
-	if timeout <= 0 {
+	if timeout <= 0 || timeout > 5*time.Second {
 		timeout = 5 * time.Second
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -74,11 +77,13 @@ func (c CommandNotifier) Notify(n Notification) error {
 	// can start with "-" and no option-terminator is needed.
 	argv := append(append([]string{}, c.Args...), n.Title, n.Body)
 	cmd := exec.CommandContext(ctx, c.Bin, argv...)
-	if out, err := cmd.CombinedOutput(); err != nil {
+	// Nil stdout/stderr go directly to the null device: no output buffer,
+	// inherited terminal or pipe can expose notifier diagnostics to our logs.
+	if err := cmd.Run(); err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
-			return fmt.Errorf("notify: command timed out: %w", err)
+			return ErrDeliveryTimeout
 		}
-		return fmt.Errorf("notify: command failed: %w: %s", err, strings.TrimSpace(string(out)))
+		return ErrDeliveryFailed
 	}
 	return nil
 }
@@ -104,6 +109,7 @@ type Dispatcher struct {
 	mu         sync.Mutex
 	lastCount  int
 	lastNotify time.Time
+	retryAfter time.Time
 }
 
 // NewDispatcher builds a dispatcher over a pending-count source.
@@ -157,15 +163,19 @@ func (d *Dispatcher) Tick(now time.Time) bool {
 		// unreported increase still fires once the coalesce window elapses.
 		return false
 	}
+	if now.Before(d.retryAfter) {
+		return false
+	}
 	body := fmt.Sprintf("有 %d 项待确认操作，请在本地控制台处理", count)
 	err := d.notifier.Notify(Notification{Title: d.opts.Title, Body: body})
 	if err != nil {
+		d.retryAfter = now.Add(d.opts.CoalesceInterval)
 		d.opts.Log(err)
-		// Do not stamp lastNotify: bounded retry after the next coalesce
-		// interval instead of silently dropping the reminder forever.
+		// Retain the unreported count, but back off failed attempts separately.
 		return false
 	}
 	d.lastCount = count
 	d.lastNotify = now
+	d.retryAfter = time.Time{}
 	return true
 }

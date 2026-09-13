@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -28,25 +27,21 @@ func TestDesktopNotifierConfiguredCommandWins(t *testing.T) {
 }
 
 func TestDesktopNotifierUnsupportedPlatformWithoutOverrideStaysSilent(t *testing.T) {
+	t.Setenv("PATH", t.TempDir())
 	// On a platform whose DefaultCommand reports false and with no configured
 	// override, the honest result is nil (no notifier), never a fake one.
-	if _, ok := notify.DefaultCommand(runtime.GOOS); ok {
-		t.Skip("platform has a native default notifier; nothing to assert")
-	}
 	if n := desktopNotifier(state.Config{}); n != nil {
 		t.Fatalf("unsupported platform must yield nil notifier, got %T", n)
 	}
 }
 
 func TestStartDesktopNotifyDisabledAndUnsupportedAreNoOps(t *testing.T) {
+	t.Setenv("PATH", t.TempDir())
 	var lines []string
 	logf := func(format string, args ...any) { lines = append(lines, strings.TrimSpace(format)) }
 	if cancel := startDesktopNotify(state.Config{}, nil, logf); cancel != nil {
 		cancel()
 		t.Fatal("default config (off) must not start the dispatcher")
-	}
-	if _, ok := notify.DefaultCommand(runtime.GOOS); ok {
-		t.Skip("platform has a native default notifier; nothing to assert")
 	}
 	cancel := startDesktopNotify(state.Config{DesktopNotify: true}, nil, logf)
 	if cancel != nil {

@@ -1,9 +1,78 @@
 package grant
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 )
+
+func TestScenarioRuntimeToolsRejectAliasesAndOldGrantLists(t *testing.T) {
+	for _, id := range []string{"no-exec", "no-network", "sandboxed"} {
+		for _, platform := range []string{"hermes", "openclaw"} {
+			g := build(t, platform, sampleAdmission()).Grant
+			g.Scenario = &ScenarioRef{ID: id, Version: 1} // Old signed shape with permissive lists.
+			for _, tool := range []string{"exec", "terminal", "bash", "python", "powershell", "custom-tool"} {
+				g.Facts = append(g.Facts, Fact{Domain: "tool", Effect: "allow", State: "declared", Resource: fact("tool", "tool.invoke", "tool", tool).Resource})
+			}
+			allow, approve := RuntimeToolSets(&g)
+			for _, tool := range []string{"exec", "terminal", "bash", "python", "powershell", "custom-tool"} {
+				if allow[tool] || approve[tool] {
+					t.Fatalf("%s/%s retained %s", id, platform, tool)
+				}
+			}
+			if !allow["read_file"] {
+				t.Fatal("read tool lost")
+			}
+		}
+	}
+}
+
+func TestScenarioCatalogCopiesCannotChangePolicy(t *testing.T) {
+	sc := ScenarioByID("no-exec")
+	sc.DropDomains[0] = "other"
+	all := Scenarios()
+	all[0].DropDomains[0] = "other"
+	if !reflect.DeepEqual(ScenarioByID("no-exec").DropDomains, []string{"process", "resource"}) {
+		t.Fatal("catalog mutated through lookup")
+	}
+	if ScenarioByID("no-network").DropDomains[0] != "network" {
+		t.Fatal("catalog mutated through listing")
+	}
+}
+
+func TestScenarioEffectBoundaries(t *testing.T) {
+	for _, tc := range []struct {
+		id, effect string
+		allow      bool
+	}{
+		{"no-exec", "file.read", true}, {"no-exec", "network.request", true}, {"no-exec", "process.exec", false},
+		{"no-network", "file.write", true}, {"no-network", "network.request", false}, {"no-network", "message.send", false},
+		{"sandboxed", "file.read", true}, {"sandboxed", "file.write", false}, {"sandboxed", "file.delete", false},
+		{"sandboxed", "database.write", false}, {"sandboxed", "secret.read", false},
+	} {
+		if got := ScenarioAllowsEffects(&ScenarioRef{ID: tc.id, Version: 1}, []string{tc.effect}); got != tc.allow {
+			t.Errorf("%s/%s: %v", tc.id, tc.effect, got)
+		}
+	}
+	for _, id := range []string{"no-exec", "no-network", "sandboxed", "invalid"} {
+		if ScenarioAllowsEffects(&ScenarioRef{ID: id, Version: 1}, []string{"unknown"}) || ScenarioAllowsEffects(&ScenarioRef{ID: id, Version: 1}, []string{"future.effect"}) {
+			t.Fatal("unknown effect allowed")
+		}
+		if ScenarioAllowsEffects(&ScenarioRef{ID: id, Version: 99}, []string{"file.read"}) {
+			t.Fatal("unknown version allowed")
+		}
+	}
+}
+
+func TestScenarioDraftEditCannotReintroduceExecution(t *testing.T) {
+	g := buildScenario(t, "no-exec").Grant
+	if _, _, err := PatchDesired(g, DesiredPatch{HasTools: true, Tools: []string{"read_file", "exec"}}, key(t)); err == nil {
+		t.Fatal("draft edit reintroduced exec")
+	}
+	if _, _, err := PatchDesired(g, DesiredPatch{HasTools: true, Tools: []string{"read_file"}}, key(t)); err != nil {
+		t.Fatal("valid read tool edit failed", err)
+	}
+}
 
 // scenarioFacts returns the "domain|action" pairs kept in a built grant.
 func scenarioFacts(res *Result) map[string]bool {

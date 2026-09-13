@@ -225,6 +225,7 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	ocAllow, ocReq := map[string]bool{}, map[string]bool{}
 	var netRules []any
 	fsRW := map[string]bool{}
+	fsRO := map[string]bool{}
 	var models []any
 	var tools []any
 	needsProcess := false
@@ -243,7 +244,11 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 		case "network":
 			netRules = append(netRules, map[string]any{"endpoint": d.Resource.Value, "effect": "allow"})
 		case "filesystem":
-			fsRW[d.Resource.Value] = true
+			if d.Action == "fs.read" {
+				fsRO[d.Resource.Value] = true
+			} else {
+				fsRW[d.Resource.Value] = true
+			}
 		case "process":
 			needsProcess = true
 			hermes["terminal"] = true
@@ -274,9 +279,9 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	if len(netRules) > 0 {
 		dp["network"] = netRules
 	}
-	if len(fsRW) > 0 {
+	if len(fsRW) > 0 || len(fsRO) > 0 {
 		rw := keysSorted(fsRW)
-		dp["filesystem"] = map[string]any{"read_only": []any{}, "read_write": toAny(rw)}
+		dp["filesystem"] = map[string]any{"read_only": toAny(keysSorted(fsRO)), "read_write": toAny(rw)}
 	}
 	if len(models) > 0 {
 		dp["model_routing"] = map[string]any{"allowed_models": models}
@@ -294,11 +299,11 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 
 	switch opts.Platform {
 	case "hermes":
-		al := keysSorted(hermes)
+		al := restrictScenarioTools(g.Scenario, keysSorted(hermes))
 		g.HermesToolsetAllowlist = &al
 	case "openclaw":
-		oc.Allow = keysSorted(ocAllow)
-		oc.RequireApproval = keysSorted(ocReq)
+		oc.Allow = restrictScenarioTools(g.Scenario, keysSorted(ocAllow))
+		oc.RequireApproval = restrictScenarioTools(g.Scenario, keysSorted(ocReq))
 		g.OpenClawToolPolicy = &oc
 	}
 

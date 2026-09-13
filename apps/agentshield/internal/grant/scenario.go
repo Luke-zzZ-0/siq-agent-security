@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"siq-agent-security/apps/agentshield/internal/admission"
+	"siq-agent-security/apps/agentshield/internal/runtimeaction"
 )
 
 // Scenario templates (UX-007): a closed catalog of named restriction presets
@@ -31,17 +32,15 @@ type Scenario struct {
 	DropActions []string
 }
 
-// scenarios is the closed built-in catalog. Filesystem reads are implicit
-// (never declared), so dropping fs.write plus exec/network domains yields a
-// read-only shape. Tool and model facts are kept in every scenario: a
-// read-only analysis still needs its declared tools and model access.
+// Scenarios restrict both declared capabilities and executable tool effects.
+// Resource authorization still applies; none of these presets is OS isolation.
 var scenarios = []Scenario{
 	{
 		ID:          "no-network",
 		Version:     1,
 		Name:        "无网络",
-		Description: "移除全部网络声明（http.request / socket.connect），其余保持 admission 声明。",
-		DropDomains: []string{"network"},
+		Description: "禁止网络请求和消息发送，同时禁用无法保证不出网的通用执行与未知工具。",
+		DropDomains: []string{"network", "process", "resource"},
 	},
 	{
 		ID:          "no-exec",
@@ -53,8 +52,8 @@ var scenarios = []Scenario{
 	{
 		ID:          "sandboxed",
 		Version:     1,
-		Name:        "沙箱只读",
-		Description: "移除网络、执行、包安装与文件写入声明；仅保留工具与模型声明和隐式只读访问。",
+		Name:        "只读权限",
+		Description: "仅允许已识别的只读工具；禁止执行、写入、删除、出网和未知操作，不代表 OS 沙箱。",
 		DropDomains: []string{"network", "process", "resource"},
 		DropActions: []string{"fs.write"},
 	},
@@ -65,6 +64,8 @@ func ScenarioByID(id string) *Scenario {
 	for i := range scenarios {
 		if scenarios[i].ID == id {
 			sc := scenarios[i]
+			sc.DropDomains = append([]string(nil), sc.DropDomains...)
+			sc.DropActions = append([]string(nil), sc.DropActions...)
 			return &sc
 		}
 	}
@@ -74,12 +75,17 @@ func ScenarioByID(id string) *Scenario {
 // Scenarios returns the closed catalog (order fixed; no user-defined entries).
 func Scenarios() []Scenario {
 	out := make([]Scenario, len(scenarios))
-	copy(out, scenarios)
+	for i := range scenarios {
+		out[i] = *ScenarioByID(scenarios[i].ID)
+	}
 	return out
 }
 
 // scenarioDropped reports whether a declared fact is excluded by the scenario.
 func scenarioDropped(sc Scenario, d admission.DeclaredFact) bool {
+	if d.Domain == "tool" && !scenarioToolAllowed(&ScenarioRef{ID: sc.ID, Version: sc.Version}, d.Resource.Value) {
+		return true
+	}
 	for _, domain := range sc.DropDomains {
 		if d.Domain == domain {
 			return true
@@ -91,6 +97,65 @@ func scenarioDropped(sc Scenario, d admission.DeclaredFact) bool {
 		}
 	}
 	return false
+}
+
+// ScenarioAllowsEffects applies signed scenario restrictions to normalized
+// runtime effects, including grants created before projection filtering existed.
+// Unknown effects cannot prove compliance with a restrictive scenario.
+func ScenarioAllowsEffects(ref *ScenarioRef, effects []string) bool {
+	if ref == nil {
+		return true
+	}
+	sc := ScenarioByID(ref.ID)
+	if sc == nil || sc.Version != ref.Version || len(effects) == 0 {
+		return false
+	}
+	for _, effect := range effects {
+		switch effect {
+		case runtimeaction.EffectToolInvoke, runtimeaction.EffectFileRead, runtimeaction.EffectFileWrite,
+			runtimeaction.EffectFileDelete, runtimeaction.EffectNetworkRequest, runtimeaction.EffectProcessExec,
+			runtimeaction.EffectMessageSend, runtimeaction.EffectDatabaseRead, runtimeaction.EffectDatabaseWrite,
+			runtimeaction.EffectSecretRead:
+		default:
+			return false
+		}
+		switch ref.ID {
+		case "no-exec":
+			if effect == runtimeaction.EffectProcessExec {
+				return false
+			}
+		case "no-network":
+			if effect == runtimeaction.EffectNetworkRequest || effect == runtimeaction.EffectMessageSend || effect == runtimeaction.EffectProcessExec {
+				return false
+			}
+		case "sandboxed":
+			if effect != runtimeaction.EffectFileRead && effect != runtimeaction.EffectDatabaseRead && effect != runtimeaction.EffectToolInvoke {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func scenarioToolAllowed(ref *ScenarioRef, tool string) bool {
+	if ref == nil {
+		return true
+	}
+	_, effects := runtimeaction.Normalize(tool, nil)
+	return ScenarioAllowsEffects(ref, effects)
+}
+
+func restrictScenarioTools(ref *ScenarioRef, tools []string) []string {
+	if ref == nil {
+		return tools
+	}
+	kept := make([]string, 0, len(tools))
+	for _, tool := range tools {
+		if scenarioToolAllowed(ref, tool) {
+			kept = append(kept, tool)
+		}
+	}
+	return kept
 }
 
 // ApplyScenario filters an admission's declared facts down to the scenario

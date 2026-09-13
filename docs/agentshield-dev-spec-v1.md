@@ -1120,6 +1120,14 @@ OpenClaw 托管实例沿用 §3.12.32 的 Runtime Identity/session 与原文桥�
 
 SkillClaim 中的 Skill ID、摘要、Grant ID 是调用方声明；即使匹配本机已批准权限，也不单独构成“当前执行来自该 Skill”的证据。缺少可信运行时执行来源绑定时不得标记 verified 或满足要求 verified 的门禁。
 
+### 3.12.34 场景模板与后台通知的阶段验收修复
+
+场景 ID/版本签入 Grant。场景约束必须在声明过滤、平台工具投影、Runtime Identity 的工具/效果包络以及逐调用规范化效果检查中一致生效。no-exec 拒绝 process.exec 和 unknown；no-network 拒绝 network.request、message.send、process.exec 和 unknown（无法从任意解释器命令证明不出网）；sandboxed 仅允许已识别的只读/工具调用效果，拒绝未知、执行、写入、删除、出网和凭据读取。名称不宣称 OS 沙箱。模板只收紧权限，不能把原审批工具变成直接允许；已有 v1 场景 Grant 也在读回/裁决时适用这些约束。无场景的既有行为保留；普通 policy 的 warn/audit_only 仍遵循原 advisory 合同。
+
+POST /v1/grants 只有既有 live Grant 的场景 ID/版本与本次请求一致时才能返回 reused。不同场景（包括基线与场景互换）返回 409 grant_scenario_conflict、当前版本及场景，指引显式处理既有授权；不改变现有状态、签名、DesiredPolicy 或审计序列，不自动覆盖/撤销有效权限。未知场景仍为 400。场景目录接口为管理面只读 GET，返回既有 scenarios 数组形状。只读工具仍须满足原有路径授权，选择场景不会隐式增加文件读取权限。
+
+桌面通知默认关闭；正文只含待确认数量。失败投递维护独立的下次重试时刻，15 秒内不重复启动通知子进程；成功合并、归零和失败重试分别处理，归零不能清除尚未到期的失败退避。命令直接 argv 执行、最长 5 秒，stdout/stderr 直接丢弃，不收集进内存，不把命令路径、参数、输出或底层异常写日志。日志仅可使用固定失败/超时/不可用类别。Linux notify-send 是当前默认通知器，其他 OS 和真实桌面投递继续独立验收。
+
 ## 4. 平台适配器规格
 
 ### 4.1 OpenClaw（P0）

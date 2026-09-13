@@ -1,0 +1,292 @@
+TAP version 13
+# Subtest: legacy-no-enrollment-no-capture
+ok 1 - legacy-no-enrollment-no-capture
+  ---
+  duration_ms: 212.247642
+  type: 'test'
+  ...
+# Subtest: managed-allow-enrolls-and-captures-params
+ok 2 - managed-allow-enrolls-and-captures-params
+  ---
+  duration_ms: 195.621939
+  type: 'test'
+  ...
+# Subtest: managed-ignores-host-agent-id
+ok 3 - managed-ignores-host-agent-id
+  ---
+  duration_ms: 223.226291
+  type: 'test'
+  ...
+# Subtest: managed-enroll-failure-fails-closed
+ok 4 - managed-enroll-failure-fails-closed
+  ---
+  duration_ms: 150.470133
+  type: 'test'
+  ...
+# Subtest: managed-foreign-platform-enrollment-rejected
+ok 5 - managed-foreign-platform-enrollment-rejected
+  ---
+  duration_ms: 130.251841
+  type: 'test'
+  ...
+# Subtest: managed-legacy-token-rejected
+ok 6 - managed-legacy-token-rejected
+  ---
+  duration_ms: 122.012462
+  type: 'test'
+  ...
+# Subtest: managed-observe-with-reference-captures-output
+ok 7 - managed-observe-with-reference-captures-output
+  ---
+  duration_ms: 215.501764
+  type: 'test'
+  ...
+# Subtest: managed-output-capture-skips-undefined-leaves
+ok 8 - managed-output-capture-skips-undefined-leaves
+  ---
+  duration_ms: 208.080664
+  type: 'test'
+  ...
+# Subtest: managed-capture-timeout-is-best-effort
+ok 9 - managed-capture-timeout-is-best-effort
+  ---
+  duration_ms: 1645.842311
+  type: 'test'
+  ...
+# Subtest: managed-deny-blocks-with-receipt
+ok 10 - managed-deny-blocks-with-receipt
+  ---
+  duration_ms: 218.021224
+  type: 'test'
+  ...
+# Subtest: boundary-block-enroll
+ok 11 - boundary-block-enroll
+  ---
+  duration_ms: 121.919965
+  type: 'test'
+  ...
+# Subtest: boundary-block-decide
+ok 12 - boundary-block-decide
+  ---
+  duration_ms: 182.741162
+  type: 'test'
+  ...
+# Subtest: boundary-block-missing-reference
+ok 13 - boundary-block-missing-reference
+  ---
+  duration_ms: 244.771937
+  type: 'test'
+  ...
+# Subtest: boundary-block-bad-identity
+ok 14 - boundary-block-bad-identity
+  ---
+  duration_ms: 119.014885
+  type: 'test'
+  ...
+# Subtest: boundary-block-bad-config
+ok 15 - boundary-block-bad-config
+  ---
+  duration_ms: 122.257087
+  type: 'test'
+  ...
+# Subtest: boundary-block-no-session
+ok 16 - boundary-block-no-session
+  ---
+  duration_ms: 129.954622
+  type: 'test'
+  ...
+# Subtest: boundary-block-remote
+ok 17 - boundary-block-remote
+  ---
+  duration_ms: 145.084584
+  type: 'test'
+  ...
+# Subtest: boundary-block-credentials-url
+ok 18 - boundary-block-credentials-url
+  ---
+  duration_ms: 134.442722
+  type: 'test'
+  ...
+# Subtest: boundary-block-query-url
+ok 19 - boundary-block-query-url
+  ---
+  duration_ms: 129.521338
+  type: 'test'
+  ...
+# Subtest: boundary-block-redirect
+ok 20 - boundary-block-redirect
+  ---
+  duration_ms: 143.827774
+  type: 'test'
+  ...
+# Subtest: boundary-block-expired
+ok 21 - boundary-block-expired
+  ---
+  duration_ms: 145.846863
+  type: 'test'
+  ...
+# Subtest: boundary-warn-enroll
+ok 22 - boundary-warn-enroll
+  ---
+  duration_ms: 143.647773
+  type: 'test'
+  ...
+# Subtest: boundary-warn-decide
+ok 23 - boundary-warn-decide
+  ---
+  duration_ms: 178.714313
+  type: 'test'
+  ...
+# Subtest: boundary-warn-missing-reference
+ok 24 - boundary-warn-missing-reference
+  ---
+  duration_ms: 202.846509
+  type: 'test'
+  ...
+# Subtest: boundary-warn-bad-identity
+ok 25 - boundary-warn-bad-identity
+  ---
+  duration_ms: 120.117246
+  type: 'test'
+  ...
+# Subtest: boundary-warn-bad-config
+ok 26 - boundary-warn-bad-config
+  ---
+  duration_ms: 138.212288
+  type: 'test'
+  ...
+# Subtest: boundary-warn-no-session
+ok 27 - boundary-warn-no-session
+  ---
+  duration_ms: 108.162109
+  type: 'test'
+  ...
+# Subtest: boundary-warn-remote
+ok 28 - boundary-warn-remote
+  ---
+  duration_ms: 134.127951
+  type: 'test'
+  ...
+# Subtest: boundary-warn-credentials-url
+ok 29 - boundary-warn-credentials-url
+  ---
+  duration_ms: 138.888437
+  type: 'test'
+  ...
+# Subtest: boundary-warn-query-url
+ok 30 - boundary-warn-query-url
+  ---
+  duration_ms: 126.32896
+  type: 'test'
+  ...
+# Subtest: boundary-warn-redirect
+ok 31 - boundary-warn-redirect
+  ---
+  duration_ms: 119.049525
+  type: 'test'
+  ...
+# Subtest: boundary-warn-expired
+ok 32 - boundary-warn-expired
+  ---
+  duration_ms: 132.611555
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-enroll
+ok 33 - boundary-audit_only-enroll
+  ---
+  duration_ms: 127.803404
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-decide
+ok 34 - boundary-audit_only-decide
+  ---
+  duration_ms: 203.58949
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-missing-reference
+ok 35 - boundary-audit_only-missing-reference
+  ---
+  duration_ms: 199.612625
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-bad-identity
+ok 36 - boundary-audit_only-bad-identity
+  ---
+  duration_ms: 133.817436
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-bad-config
+ok 37 - boundary-audit_only-bad-config
+  ---
+  duration_ms: 129.558554
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-no-session
+ok 38 - boundary-audit_only-no-session
+  ---
+  duration_ms: 122.385519
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-remote
+ok 39 - boundary-audit_only-remote
+  ---
+  duration_ms: 132.149902
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-credentials-url
+ok 40 - boundary-audit_only-credentials-url
+  ---
+  duration_ms: 124.291967
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-query-url
+ok 41 - boundary-audit_only-query-url
+  ---
+  duration_ms: 122.897348
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-redirect
+ok 42 - boundary-audit_only-redirect
+  ---
+  duration_ms: 142.034094
+  type: 'test'
+  ...
+# Subtest: boundary-audit_only-expired
+ok 43 - boundary-audit_only-expired
+  ---
+  duration_ms: 131.596986
+  type: 'test'
+  ...
+# Subtest: correlation-duplicate-post
+ok 44 - correlation-duplicate-post
+  ---
+  duration_ms: 158.867128
+  type: 'test'
+  ...
+# Subtest: correlation-duplicate-pre
+ok 45 - correlation-duplicate-pre
+  ---
+  duration_ms: 193.825586
+  type: 'test'
+  ...
+# Subtest: correlation-blocked-hold
+ok 46 - correlation-blocked-hold
+  ---
+  duration_ms: 206.021365
+  type: 'test'
+  ...
+# Subtest: correlation-approved-hold
+ok 47 - correlation-approved-hold
+  ---
+  duration_ms: 175.861424
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8862.614339

@@ -800,6 +800,13 @@ func (s *Server) grants(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if existing, seq, err := s.d.Store.GetGrantWithSeq(res.Grant.GrantID); err == nil && grant.IsLiveStatus(existing.Status) {
+			if (existing.Scenario == nil) != (res.Grant.Scenario == nil) ||
+				(existing.Scenario != nil && res.Grant.Scenario != nil && *existing.Scenario != *res.Grant.Scenario) {
+				writeJSON(w, http.StatusConflict, map[string]any{"error": "grant_scenario_conflict", "grant_id": existing.GrantID,
+					"state_revision": seq, "current_scenario": existing.Scenario,
+					"hint": "Review the existing grant before changing its scenario; current permissions are unchanged."})
+				return
+			}
 			writeJSON(w, 200, map[string]any{"grant": existing, "reused": true, "state_revision": seq})
 			return
 		}

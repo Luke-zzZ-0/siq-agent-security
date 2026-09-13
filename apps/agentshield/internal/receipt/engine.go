@@ -794,6 +794,9 @@ func (e *Engine) evaluate(req Request, s *session, descriptor runtimeaction.Desc
 		return ActionDeny, "skill attribution does not verify for grant (default deny)"
 	}
 
+	if !grant.ScenarioAllowsEffects(g.Scenario, descriptor.Effects) {
+		return ActionDeny, "operation not granted by scenario"
+	}
 	allow, requireApproval := toolSets(g)
 	switch {
 	case requireApproval[req.Tool]:

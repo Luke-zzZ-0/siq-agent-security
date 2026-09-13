@@ -36,6 +36,12 @@ func permissionEnvelope(r Record, session string, g *grant.Grant, at time.Time) 
 		tools = append(tools, tool)
 	}
 	sort.Strings(tools)
+	effects := []string{}
+	for _, effect := range []string{"tool.invoke", "file.read", "file.write", "file.delete", "network.request", "process.exec", "message.send", "database.read", "database.write", "secret.read"} {
+		if grant.ScenarioAllowsEffects(g.Scenario, []string{effect}) {
+			effects = append(effects, effect)
+		}
+	}
 	expires := at.Add(time.Duration(r.SessionTTLSeconds) * time.Second)
 	if g.ExpiresAt != nil {
 		end, e := time.Parse(time.RFC3339Nano, *g.ExpiresAt)
@@ -49,7 +55,7 @@ func permissionEnvelope(r Record, session string, g *grant.Grant, at time.Time) 
 		Purpose: permissionPurpose, AllowedTools: tools,
 		// This envelope selects instance permissions, not inferred task intent.
 		// Grant still checks each resource and condition; unknown effects remain denied.
-		AllowedEffects:      []string{"tool.invoke", "file.read", "file.write", "file.delete", "network.request", "process.exec", "message.send", "database.read", "database.write", "secret.read"},
+		AllowedEffects:      effects,
 		ResourceConstraints: []intent.ResourceConstraint{}, ParameterConstraints: []intent.ParameterConstraint{},
 		IssuedAt: at.UTC().Format(time.RFC3339Nano), ValidFrom: at.UTC().Format(time.RFC3339Nano), ExpiresAt: expires.UTC().Format(time.RFC3339Nano),
 		Authority: intent.Authority{Issuer: "local-runtime-identity", Revision: recordDigest(r), EvidenceIDs: []string{}},

@@ -50,5 +50,15 @@ func RuntimeToolSets(g *Grant) (allow, requireApproval map[string]bool) {
 			denyTool(f.Resource.Value)
 		}
 	}
+	for tool := range allow {
+		if !scenarioToolAllowed(g.Scenario, tool) {
+			denyTool(tool)
+		}
+	}
+	for tool := range requireApproval {
+		if !scenarioToolAllowed(g.Scenario, tool) {
+			denyTool(tool)
+		}
+	}
 	return allow, requireApproval
 }
