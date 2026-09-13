@@ -2677,3 +2677,30 @@ def test_raw_task_content_grant_views_go_samples() -> None:
     assert list(view_validator.iter_errors(view | {"grant": view["grant"] | {"task_id": "PRIVATE"}}))
     assert list(collection_validator.iter_errors(collection | {"items": [view] * 4097}))
     assert list(collection_validator.iter_errors(collection | {"cursor": "secret"}))
+
+
+@pytest.mark.parametrize(
+    "name", ["local-skill-update-check", "local-skill-update-check-result", "local-skill-import-git-create"]
+)
+def test_update_check_contracts(name: str) -> None:
+    schema = json.loads((CONTRACTS / f"{name}.v1.schema.json").read_text())
+    data = json.loads((GO_SAMPLES / f"{name}.json").read_text())
+    validator = Draft7Validator(schema, format_checker=Draft7Validator.FORMAT_CHECKER)
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    assert list(validator.iter_errors(data | {"unknown": True}))
+    if name.endswith("-result"):
+        for patch in [{"requires_confirmation": False}, {"status": "up_to_date"},
+                      {"content_changes": []}, {"content_changes_total": 0},
+                      {"content_changes_truncated": True}, {"upstream_commit_sha": "a" * 40},
+                      {"checked_at": "not a date"}, {"permission_comparison": "approved"}]:
+            assert list(validator.iter_errors(data | patch))
+        clean = data | {"status": "up_to_date", "content_changes": [], "content_changes_total": 0,
+                        "requires_confirmation": False}
+        validator.validate(clean)
+        validator.validate(data | {"content_changes": data["content_changes"] * 200,
+                                  "content_changes_total": 201, "content_changes_truncated": True})
+        assert list(validator.iter_errors(data | {"content_changes": data["content_changes"] * 201}))
+    else:
+        assert list(validator.iter_errors(data | {"actor_id": " "}))

@@ -1,0 +1,25 @@
+{
+  "schema_version": "local-skill-update-check-result/v1",
+  "install_id": "sin-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "checked_at": "2026-09-13T00:00:00Z",
+  "status": "new_version",
+  "source_kind": "https_zip",
+  "upstream_archive_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "content_changes": [
+    {
+      "path_display": "CHANGE.md",
+      "path_digest": "de99e6c70ce5a1f59a2ed14dcfeddd6872891d65532ce2bdc6bc91c26bf78b49",
+      "before": null,
+      "after": {
+        "kind": "file",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "bytes": 8,
+        "executable": false
+      }
+    }
+  ],
+  "content_changes_total": 1,
+  "content_changes_truncated": false,
+  "requires_confirmation": true,
+  "permission_comparison": "deferred_to_update_comparison"
+}

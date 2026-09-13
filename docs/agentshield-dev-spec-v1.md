@@ -1128,6 +1128,18 @@ POST /v1/grants 只有既有 live Grant 的场景 ID/版本与本次请求一致
 
 桌面通知默认关闭；正文只含待确认数量。失败投递维护独立的下次重试时刻，15 秒内不重复启动通知子进程；成功合并、归零和失败重试分别处理，归零不能清除尚未到期的失败退避。命令直接 argv 执行、最长 5 秒，stdout/stderr 直接丢弃，不收集进内存，不把命令路径、参数、输出或底层异常写日志。日志仅可使用固定失败/超时/不可用类别。Linux notify-send 是当前默认通知器，其他 OS 和真实桌面投递继续独立验收。
 
+### 3.12.35 M131/M132 获取边界与新版检查合同
+
+Git CLI 克隆暂不具备经验证的连接地址固定、逐跳地址约束及完整获取预算；生产 CreateGit/CheckUpstream 必须在启动 Git 前拒绝，返回独立 git_transport_unavailable 类别（503），不能仅凭 HTTPS URL 校验宣称公网安全。保留无运行配置入口的本地 fixture 获取缝用于算法测试，不代表生产 Git 获取可用。恢复该能力须重新完成安全传输与真实平台验收。HTTPS ZIP 继续复用有界下载、完整 DNS 结果校验、连接地址固定和重定向验证。
+
+管理员 POST `/v1/skill-installations/operations/{id}/update-check` 使用 `local-skill-update-check/v1`；schema_version、remote_url、actor_id 是必填平铺键，未知/重复键拒绝。remote_url 最多 4096 字符，与导入一致；git 必须为空，ZIP 必须为原导入 URL 且摘要绑定，本地来源不支持。请求不增加权限、不写持久业务记录；允许私有一次性暂存并在成功/失败/取消后清理。
+
+结果 `local-skill-update-check-result/v1` 绑定 install_id，携带检查时间、git 提交或 ZIP 摘要、内容差异与总数。总数为零时 up_to_date、requires_confirmation=false、空差异；总数大于零时 new_version、requires_confirmation=true。差异最多 200，超出时明确 truncated；权限差异固定 deferred_to_update_comparison。该结果只描述检查时的上游快照，不授予安装或执行权；后续导入与更新确认须重新验证，不能把检查响应作为授权。
+
+新版检查使用独立错误映射，不改变旧安装流程：Git 传输未支持 → 503 skill_update_source_unavailable；获取/存储不可用 → 503 skill_install_unavailable；URL 策略拒绝 → 400 skill_update_url_blocked；来源绑定变化 → 409 skill_install_changed；限额 → 413；取消/超时 → 408。UI 不显示底层异常或原始链接，错误不产生“已是最新”结果。
+
+个人控制台从已安装 Skill 发起显式新版检查，ZIP 需输入原链接（不持久保存），展示检查中、失败、无差异或需要确认及截断差异。切换安装/离开组件取消请求并清空旧结果。发现变化后链接至现有更新审阅流程，仍需重新导入候选和用户确认，不自动安装。后台定期自动检查与真实 OS 更新旅程继续独立验收。
+
 ## 4. 平台适配器规格
 
 ### 4.1 OpenClaw（P0）
