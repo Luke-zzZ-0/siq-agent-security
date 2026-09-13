@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-revoke.v1.schema.json",
+  "title": "Terminal raw content grant revocation request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "expected_grant_signature", "actor_id"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-revoke/v1" },
+    "expected_grant_signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+    "actor_id": { "type": "string", "minLength": 1, "maxLength": 256 }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "local-task-activity-detail/v1",
+  "snapshot": "e751b11b7ba5b7aa462d9d6750e9e70a632e0da8454cf5fc82a01fd61edf20d2",
+  "view": "tasks",
+  "offset": 0,
+  "total": 2,
+  "next_offset": 1,
+  "prefix_valid": true,
+  "history_integrity": "unknown",
+  "evidence_freshness": "unknown",
+  "activity": {
+    "activity_id": "878ed8c5cd2b10428d64cd64a7c8d233282a78f973a6ec53d6451c20344516b1",
+    "attribution": "bound",
+    "binding": {
+      "agent_id": "agent-a",
+      "chain_id": "local",
+      "intent_digest": "digest",
+      "intent_id": "i",
+      "platform": "hermes",
+      "session_id": "s",
+      "task_id": "t"
+    },
+    "receipt_count": 2,
+    "first_seq": 0,
+    "last_seq": 2
+  },
+  "receipts": [
+    {
+      "receipt_id": "r0",
+      "seq": 0,
+      "hash": "cdd646b03edec7b91965c9882c15d377987a3801f20507854ad08e24153f346c",
+      "issued_at": "",
+      "platform": "hermes",
+      "session_id": "s",
+      "agent_id": "agent-a",
+      "action": "allow",
+      "reason": "",
+      "tool": "read_file",
+      "record_type": "",
+      "action_id": "",
+      "decision_receipt_id": "",
+      "matched_grant_id": "grant-a"
+    }
+  ]
+}

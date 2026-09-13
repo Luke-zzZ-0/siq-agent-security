@@ -1,0 +1,6 @@
+{
+  "schema_version": "local-raw-task-content-activate/v1",
+  "actor_id": "fixture-operator",
+  "retention_seconds": 86400,
+  "budget_bytes": 67108864
+}

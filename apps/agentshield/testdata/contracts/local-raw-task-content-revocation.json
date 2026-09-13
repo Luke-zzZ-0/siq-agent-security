@@ -1,0 +1,10 @@
+{
+  "schema_version": "local-raw-task-content-revocation/v1",
+  "grant_id": "rawgrant-09090909090909090909090909090909",
+  "expected_grant_signature": "a15068fd82bfca732d8c2690084850d9176d05a2a587609cb604996adebfee9e50cfdbd2ceb22eb708e1e581b04352e2a55f082ea9cbe546da6377b38d7f9f09",
+  "actor_ref": "sha256:6273ab1cd1a212484fd378c377b22e835381a73959f6a498dedf81856ce538d7",
+  "revoked_at": "2026-09-13T03:15:00Z",
+  "reason_code": "raw_content_capture_revoked",
+  "signing_schema": "local_canonical/v1",
+  "signature": "c57fb85f97a518f092b4216bd8e0e3cea4d9fb38ea53bf6fd83b4cb794694c6c10046a4fd9520d5fd7bc2e9f2335d7d9b10e9fea3fb586958b59e6cc90c13f0f"
+}

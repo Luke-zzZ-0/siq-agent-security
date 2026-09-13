@@ -1,0 +1,8 @@
+{
+  "schema_version": "local-service-stop-request/v1",
+  "action": "stop",
+  "boot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_directory_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "expires_at": 1700000030,
+  "signature": "51a0be4f936d1e680cf7f521e33b97d68ebe332ab539f065e02b7264bee46146344d87b3e0dede6697512d40bc0ca17b4df3f78601ded5fa302b2b76e529cc0b"
+}

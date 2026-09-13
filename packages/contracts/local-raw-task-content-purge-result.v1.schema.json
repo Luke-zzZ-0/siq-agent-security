@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-purge-result.v1.schema.json",
+  "title": "Expired raw task content purge result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "deleted_records", "released_bytes"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-purge-result/v1" },
+    "deleted_records": { "type": "integer", "minimum": 0, "maximum": 4096 },
+    "released_bytes": { "type": "integer", "minimum": 0, "maximum": 1073741824 }
+  }
+}

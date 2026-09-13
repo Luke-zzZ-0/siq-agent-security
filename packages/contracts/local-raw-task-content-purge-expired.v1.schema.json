@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-purge-expired.v1.schema.json",
+  "title": "Explicit expired raw task content purge request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "confirm_expired_only"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-purge-expired/v1" },
+    "confirm_expired_only": { "const": true }
+  }
+}

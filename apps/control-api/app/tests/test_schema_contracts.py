@@ -2040,3 +2040,640 @@ def test_launch_agent_record_go_fixture() -> None:
     for field in ("instance_id", "state_directory_id", "plist_sha256", "label", "signature"):
         assert list(validator.iter_errors({**record, field: "invalid"}))
     assert list(validator.iter_errors({**record, "unit_name": "linux.service"}))
+
+
+def test_windows_task_go_xml_fixture() -> None:
+    import xml.etree.ElementTree as et
+
+    root = et.fromstring((GO_SAMPLES / "windows-task.sample.xml").read_bytes())
+    ns = {"t": "http://schemas.microsoft.com/windows/2004/02/mit/task"}
+    assert root.tag == f"{{{ns['t']}}}Task"
+    assert root.attrib == {"version": "1.3"}
+    assert [child.tag.split("}")[-1] for child in root] == [
+        "RegistrationInfo", "Principals", "Settings", "Actions"
+    ]
+    assert root.findtext("t:RegistrationInfo/t:URI", namespaces=ns) == (
+        "\\SIQ-Agent-Security-" + "a" * 64
+    )
+    principal = root.find("t:Principals/t:Principal", ns)
+    assert principal is not None and principal.attrib == {"id": "LocalUser"}
+    assert {node.tag.split("}")[-1]: node.text for node in principal} == {
+        "UserId": "S-1-5-21-100-200-300-1001",
+        "LogonType": "InteractiveToken",
+        "RunLevel": "LeastPrivilege",
+    }
+    settings = root.find("t:Settings", ns)
+    assert settings is not None
+    assert {node.tag.split("}")[-1]: node.text for node in settings if len(node) == 0} == {
+        "MultipleInstancesPolicy": "IgnoreNew",
+        "DisallowStartIfOnBatteries": "false",
+        "StopIfGoingOnBatteries": "false",
+        "AllowHardTerminate": "false",
+        "StartWhenAvailable": "false",
+        "RunOnlyIfNetworkAvailable": "false",
+        "AllowStartOnDemand": "true",
+        "Enabled": "true",
+        "Hidden": "false",
+        "RunOnlyIfIdle": "false",
+        "WakeToRun": "false",
+        "ExecutionTimeLimit": "PT0S",
+        "Priority": "7",
+    }
+    idle = settings.find("t:IdleSettings", ns)
+    assert idle is not None
+    assert {node.tag.split("}")[-1]: node.text for node in idle} == {
+        "StopOnIdleEnd": "false", "RestartOnIdle": "false"
+    }
+    actions = root.find("t:Actions", ns)
+    assert actions is not None and actions.attrib == {"Context": "LocalUser"}
+    assert len(actions) == 1
+    assert {node.tag.split("}")[-1]: node.text for node in actions[0]} == {
+        "Command": r"C:\Program Files\SIQ & tools\siq.exe",
+        "Arguments": 'serve --state-dir "C:\\Users\\example\\SIQ 中文"',
+    }
+
+
+def test_windows_task_record_go_fixture() -> None:
+    import hashlib
+    import xml.etree.ElementTree as et
+
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    schema = json.loads((CONTRACTS / "local-windows-task-record.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    record = json.loads((GO_SAMPLES / "local-windows-task-record.json").read_text())
+    validator.validate(record)
+    raw = (GO_SAMPLES / "windows-task.sample.xml").read_bytes()
+    task = et.fromstring(raw)
+    ns = {"t": "http://schemas.microsoft.com/windows/2004/02/mit/task"}
+    assert record["xml_sha256"] == hashlib.sha256(raw).hexdigest()
+    assert record["task_name"] == task.findtext("t:RegistrationInfo/t:URI", namespaces=ns)
+    assert record["task_name"] == "\\SIQ-Agent-Security-" + record["instance_id"]
+    assert record["user_sid"] == task.findtext("t:Principals/t:Principal/t:UserId", namespaces=ns)
+    unsigned = {k: v for k, v in record.items() if k != "signature"}
+    canonical = json.dumps(unsigned, sort_keys=True, separators=(",", ":")).encode()
+    key = Ed25519PrivateKey.from_private_bytes(bytes([7]) * 32).public_key()
+    key.verify(bytes.fromhex(record["signature"]), canonical)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in record.items() if k != field}))
+    for sid in ("", "SYSTEM", "S-1-5-18", "S-1-5-19", "S-1-5-20", "S-1-05-21"):
+        assert list(validator.iter_errors({**record, "user_sid": sid}))
+    for field in ("instance_id", "state_directory_id", "xml_sha256", "task_name", "signature"):
+        assert list(validator.iter_errors({**record, field: "invalid"}))
+    assert list(validator.iter_errors({**record, "label": "macOS"}))
+
+
+@pytest.mark.parametrize("kind", ["local-service-control-challenge", "local-service-stop-request"])
+def test_local_service_control_go_fixture(kind: str) -> None:
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    schema = json.loads((CONTRACTS / f"{kind}.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    record = json.loads((GO_SAMPLES / f"{kind}.json").read_text())
+    validator.validate(record)
+    unsigned = {k: v for k, v in record.items() if k != "signature"}
+    canonical = json.dumps(unsigned, sort_keys=True, separators=(",", ":")).encode()
+    key = Ed25519PrivateKey.from_private_bytes(bytes([7]) * 32).public_key()
+    key.verify(bytes.fromhex(record["signature"]), canonical)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in record.items() if k != field}))
+    for field in ("boot_id", "state_directory_id", "signature"):
+        assert list(validator.iter_errors({**record, field: "invalid"}))
+    for value in (0, -1, 1.5, "1700000030", True):
+        assert list(validator.iter_errors({**record, "expires_at": value}))
+    assert list(validator.iter_errors({**record, "action": "allow"}))
+    assert list(validator.iter_errors({**record, "token": "not-accepted"}))
+    challenge = json.loads((GO_SAMPLES / "local-service-control-challenge.json").read_text())
+    request = json.loads((GO_SAMPLES / "local-service-stop-request.json").read_text())
+    for field in ("boot_id", "state_directory_id", "expires_at"):
+        assert challenge[field] == request[field]
+    assert challenge["signature"] != request["signature"]
+
+
+def test_service_stop_acceptance_go_fixture() -> None:
+    import hashlib
+
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    schema = json.loads((CONTRACTS / "local-service-stop-acceptance.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    record = json.loads((GO_SAMPLES / "local-service-stop-acceptance.json").read_text())
+    request = json.loads((GO_SAMPLES / "local-service-stop-request.json").read_text())
+    validator.validate(record)
+    request_bytes = json.dumps(request, sort_keys=True, separators=(",", ":")).encode()
+    assert record["request_sha256"] == hashlib.sha256(request_bytes).hexdigest()
+    for field in ("boot_id", "state_directory_id"):
+        assert record[field] == request[field]
+    assert request["expires_at"] - 30 <= record["accepted_at"] < request["expires_at"]
+    unsigned = {k: v for k, v in record.items() if k != "signature"}
+    key = Ed25519PrivateKey.from_private_bytes(bytes([7]) * 32).public_key()
+    key.verify(bytes.fromhex(record["signature"]), json.dumps(unsigned, sort_keys=True, separators=(",", ":")).encode())
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in record.items() if k != field}))
+    for field in ("boot_id", "state_directory_id", "request_sha256", "signature"):
+        assert list(validator.iter_errors({**record, field: "invalid"}))
+    assert list(validator.iter_errors({**record, "action": "stopped"}))
+    assert list(validator.iter_errors({**record, "accepted_at": 0}))
+    assert list(validator.iter_errors({**record, "exited": True}))
+
+
+def test_service_stop_result_go_fixture() -> None:
+    import hashlib
+
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    schema = json.loads((CONTRACTS / "local-service-stop-result.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    result = json.loads((GO_SAMPLES / "local-service-stop-result.json").read_text())
+    accepted = json.loads((GO_SAMPLES / "local-service-stop-acceptance.json").read_text())
+    validator.validate(result)
+    validator.validate({**result, "status": "drain_failed"})
+    canonical = json.dumps(accepted, sort_keys=True, separators=(",", ":")).encode()
+    assert result["acceptance_sha256"] == hashlib.sha256(canonical).hexdigest()
+    for field in ("boot_id", "state_directory_id"):
+        assert result[field] == accepted[field]
+    assert result["finished_at"] >= accepted["accepted_at"]
+    unsigned = {k: v for k, v in result.items() if k != "signature"}
+    key = Ed25519PrivateKey.from_private_bytes(bytes([7]) * 32).public_key()
+    key.verify(bytes.fromhex(result["signature"]), json.dumps(unsigned, sort_keys=True, separators=(",", ":")).encode())
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in result.items() if k != field}))
+    assert list(validator.iter_errors({**result, "status": "exited"}))
+    assert list(validator.iter_errors({**result, "finished_at": 0}))
+    assert list(validator.iter_errors({**result, "writer_released": True}))
+
+
+def test_task_activity_page_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activities.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    fixture = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts" / "local-task-activities.json"
+    data = json.loads(fixture.read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    assert list(validator.iter_errors({**data, "prefix_valid": False}))
+    assert list(validator.iter_errors({**data, "token": "secret"}))
+    item = data["items"][0]
+    for patch in [{"binding": None}, {"attribution": "unknown"}, {"receipt_count": 0}]:
+        assert list(validator.iter_errors({**data, "items": [{**item, **patch}]}))
+    unknown = {**item, "attribution": "unknown", "binding": None, "receipt_count": 1}
+    validator.validate({**data, "view": "unassigned", "items": [unknown]})
+
+
+def test_task_activity_detail_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activity-detail.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    fixture_root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    fixture = fixture_root / "local-task-activity-detail.json"
+    data = json.loads(fixture.read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    for secret_field in ["params", "params_excerpt", "token"]:
+        assert list(validator.iter_errors({**data, "receipts": [{**data["receipts"][0], secret_field: "secret"}]}))
+    assert list(validator.iter_errors({**data, "prefix_valid": False}))
+
+
+def test_activity_completion_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activity-completion.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-activity-completion.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    assert list(validator.iter_errors({**data, "result": None}))
+    assert list(validator.iter_errors({**data, "reason_code": "intent_missing"}))
+    validator.validate({**data, "reason_code": "intent_missing", "result": None})
+    assert list(validator.iter_errors({**data, "result": {**data["result"], "status": "completed"}}))
+
+
+def test_activity_export_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activity-export.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-activity-export.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    for patch in [{"prefix_valid": False}, {"attestation_scope": "raw_receipt_chain"}, {"receipts": []}]:
+        assert list(validator.iter_errors({**data, **patch}))
+    for field in ["params", "params_excerpt", "reason", "token"]:
+        row = {**data["receipts"][0], field: "PRIVATE"}
+        assert list(validator.iter_errors({**data, "receipts": [row]}))
+
+
+def test_activity_export_signature_go_python() -> None:
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-activity-export.json").read_text())
+    # Fixed test seed matches newServer; do not trust the downloaded key as authority.
+    public = Ed25519PrivateKey.from_private_bytes(bytes([3]) * 32).public_key()
+    unsigned = {k: v for k, v in data.items() if k != "signature"}
+
+    def canonical(value):
+        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+
+    public.verify(bytes.fromhex(data["signature"]), canonical(unsigned))
+    for patch in [{"snapshot": "0" * 64}, {"receipts": []}, {"attestation_scope": "raw_receipt_chain"}]:
+        with pytest.raises(InvalidSignature):
+            public.verify(bytes.fromhex(data["signature"]), canonical(unsigned | patch))
+
+
+def test_activity_sources_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activity-sources.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-activity-sources.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    item = data["items"][0]
+    for patch in [{"source": None}, {"status": "completed"}, {"params": "secret"}]:
+        assert list(validator.iter_errors({**data, "items": [{**item, **patch}]}))
+    for status in ["unavailable", "unattributed"]:
+        validator.validate({**data, "items": [{**item, "status": status, "source": None}]})
+        assert list(validator.iter_errors({**data, "items": [{**item, "status": status}]}))
+
+
+def test_activity_search_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-activity-search.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-activity-search.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    for patch in [{"q": "x" * 257}, {"params": "secret"}]:
+        assert list(validator.iter_errors({**data, "filters": {**data["filters"], **patch}}))
+    assert list(validator.iter_errors({**data, "prefix_valid": False}))
+
+
+def test_task_trace_export_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-task-trace-export.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-trace-export.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    for field in ["task_id", "params", "reason", "result_body"]:
+        assert list(validator.iter_errors({**data, field: "PRIVATE"}))
+    receipt = data["receipts"][0]
+    source = data["sources"][0]
+    effect = data["effects"][0]
+    assert list(validator.iter_errors({**data, "receipts": [{**receipt, "params": "PRIVATE"}]}))
+    assert list(validator.iter_errors({**data, "sources": [{**source, "source": None}]}))
+    assert list(validator.iter_errors({**data, "effects": [{**effect, "observation": "PRIVATE"}]}))
+    assert list(validator.iter_errors({**data, "incomplete": False}))
+    missing_source = {**source, "status": "unavailable", "source": None}
+    validator.validate({**data, "sources": [missing_source]})
+    assert list(validator.iter_errors({**data, "sources": [missing_source], "incomplete": False}))
+    verified_requirement = {
+        **data["completion"]["requirements"][0],
+        "status": "verified",
+        "reason_code": "effect_evidence_verified",
+    }
+    verified_completion = {
+        **data["completion"],
+        "status": "verified",
+        "reason_code": "all_effects_verified",
+        "requirements": [verified_requirement],
+        "incident_refs": [],
+    }
+    validator.validate({**data, "completion": verified_completion, "incomplete": False})
+    assert list(
+        validator.iter_errors(
+            {
+                **data,
+                "completion": {
+                    **verified_completion,
+                    "requirements": [{**verified_requirement, "evidence_refs": []}],
+                },
+                "incomplete": False,
+            }
+        )
+    )
+    assert list(
+        validator.iter_errors(
+            {
+                **data,
+                "completion": {**verified_completion, "incident_refs": [effect["evidence_ref"]]},
+                "incomplete": False,
+            }
+        )
+    )
+
+
+def test_task_trace_export_signature_go_python() -> None:
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-task-trace-export.json").read_text())
+    # Fixed test seed matches traceFixture; the embedded key is data, not a trust anchor.
+    public = Ed25519PrivateKey.from_private_bytes(bytes([7]) * 32).public_key()
+    unsigned = {k: v for k, v in data.items() if k != "signature"}
+
+    def canonical(value):
+        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+
+    public.verify(bytes.fromhex(data["signature"]), canonical(unsigned))
+    for patch in [
+        {"incomplete": False},
+        {"effects": []},
+        {"attestation_scope": "raw_task_trace"},
+    ]:
+        with pytest.raises(InvalidSignature):
+            public.verify(bytes.fromhex(data["signature"]), canonical(unsigned | patch))
+
+
+def test_raw_task_content_envelope_go_sample() -> None:
+    schema = json.loads((CONTRACTS / "local-raw-task-content-envelope.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / "local-raw-task-content-envelope.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+    for patch in [
+        {"task_id": "PRIVATE_TASK"},
+        {"plaintext": "PRIVATE_CONTENT"},
+        {"algorithm": "plaintext/v1"},
+        {"plaintext_bytes": 1048577},
+        {"nonce_base64": "short"},
+    ]:
+        assert list(validator.iter_errors(data | patch))
+
+
+@pytest.mark.parametrize("kind", ["activation", "grant", "revocation", "capture-permit"])
+def test_raw_task_content_authority_go_samples(kind: str) -> None:
+    schema = json.loads((CONTRACTS / f"local-raw-task-content-{kind}.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / f"local-raw-task-content-{kind}.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({key: value for key, value in data.items() if key != field}))
+    for patch in [
+        {"task_id": "PRIVATE_TASK"},
+        {"actor_id": "PRIVATE_ACTOR"},
+        {"signing_schema": "unknown/v1"},
+        {"signature": "A" * 128},
+    ]:
+        assert list(validator.iter_errors(data | patch))
+    if kind == "activation":
+        for patch in [
+            {"enabled": False},
+            {"retention_seconds": 3599},
+            {"budget_bytes": 1048575},
+            {"key_fingerprint": "sha256:" + "A" * 64},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+    elif kind == "grant":
+        for patch in [
+            {"kinds": []},
+            {"kinds": ["input", "input"]},
+            {"retention_seconds": 3599},
+            {"max_plaintext_bytes": 1048577},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+    elif kind == "revocation":
+        assert list(validator.iter_errors(data | {"reason_code": "expired"}))
+    else:
+        for patch in [
+            {"permit_id": "rawpermit-" + "A" * 32},
+            {"runtime_identity_ref": "ri-private"},
+            {"kind": "unknown"},
+            {"expected_grant_signature": "A" * 128},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+
+
+def test_raw_task_content_authority_signatures_go_python() -> None:
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    activation = json.loads((root / "local-raw-task-content-activation.json").read_text())
+    grant = json.loads((root / "local-raw-task-content-grant.json").read_text())
+    revocation = json.loads((root / "local-raw-task-content-revocation.json").read_text())
+    permit = json.loads((root / "local-raw-task-content-capture-permit.json").read_text())
+    public = Ed25519PrivateKey.from_private_bytes(bytes([9]) * 32).public_key()
+
+    def canonical(value: dict) -> bytes:
+        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()
+
+    for document in [activation, grant, revocation, permit]:
+        unsigned = {key: value for key, value in document.items() if key != "signature"}
+        public.verify(bytes.fromhex(document["signature"]), canonical(unsigned))
+        with pytest.raises(InvalidSignature):
+            public.verify(
+                bytes.fromhex(document["signature"]),
+                canonical(unsigned | {"signing_schema": "task_envelope/v1"}),
+            )
+    assert revocation["grant_id"] == grant["grant_id"]
+    assert revocation["expected_grant_signature"] == grant["signature"]
+
+
+@pytest.mark.parametrize(
+    "kind", ["capture-permit-create", "capture", "native-capture", "capture-result"]
+)
+def test_raw_task_content_capture_protocol_go_samples(kind: str) -> None:
+    from referencing import Registry, Resource
+
+    schema = json.loads((CONTRACTS / f"local-raw-task-content-{kind}.v1.schema.json").read_text())
+    permit_schema = json.loads(
+        (CONTRACTS / "local-raw-task-content-capture-permit.v1.schema.json").read_text()
+    )
+    Draft7Validator.check_schema(schema)
+    registry = Registry().with_resource(permit_schema["$id"], Resource.from_contents(permit_schema))
+    validator = Draft7Validator(schema, registry=registry)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / f"local-raw-task-content-{kind}.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({key: value for key, value in data.items() if key != field}))
+    assert list(validator.iter_errors(data | {"plaintext": "PRIVATE_CONTENT"}))
+    if kind == "capture-permit-create":
+        for patch in [
+            {"ttl_seconds": 9},
+            {"ttl_seconds": 301},
+            {"ttl_seconds": True},
+            {"expected_grant_signature": "A" * 128},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+    elif kind in {"capture", "native-capture"}:
+        if kind == "capture":
+            assert data["permit"] == json.loads(
+                (root / "local-raw-task-content-capture-permit.json").read_text()
+            )
+        assert list(validator.iter_errors(data | {"fields": []}))
+        assert list(
+            validator.iter_errors(
+                data | {"fields": [{"path": "/prompt", "value": "value"}]}
+            )
+        )
+        assert list(
+            validator.iter_errors(
+                data
+                | {
+                    "fields": [
+                        {"path": "/prompt", "value": "value", "secret": False, "token": "bad"}
+                    ]
+                }
+            )
+        )
+    else:
+        assert "ciphertext_base64" not in data
+        assert "nonce_base64" not in data
+        assert list(validator.iter_errors(data | {"plaintext_bytes": 1048577}))
+
+
+@pytest.mark.parametrize(
+    "kind",
+    [
+        "record-list",
+        "records",
+        "record-read",
+        "record-content",
+        "record-delete",
+        "record-deleted",
+        "purge-expired",
+        "purge-result",
+    ],
+)
+def test_raw_task_content_management_access_go_samples(kind: str) -> None:
+    from referencing import Registry, Resource
+
+    schema = json.loads((CONTRACTS / f"local-raw-task-content-{kind}.v1.schema.json").read_text())
+    record_schema = json.loads((CONTRACTS / "local-raw-task-content-record.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    registry = Registry().with_resource(record_schema["$id"], Resource.from_contents(record_schema))
+    validator = Draft7Validator(schema, registry=registry)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / f"local-raw-task-content-{kind}.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({key: value for key, value in data.items() if key != field}))
+    assert list(validator.iter_errors(data | {"credential": "must-not-appear"}))
+    if kind == "record-list" or kind == "record-read":
+        assert list(validator.iter_errors(data | {"task_id": ""}))
+    elif kind == "records":
+        assert data["items"][0]["status"] == "active"
+        validator.validate(data | {"items": [{**data["items"][0], "status": "expired"}]})
+        assert list(validator.iter_errors(data | {"items": data["items"] * 4097}))
+    elif kind == "record-content":
+        assert data["contains_plaintext"] is True
+        assert list(validator.iter_errors(data | {"contains_plaintext": False}))
+        assert list(
+            validator.iter_errors(
+                data | {"fields": [{"path": "/prompt", "value": "value", "secret": False}]}
+            )
+        )
+    elif kind == "record-delete":
+        assert list(validator.iter_errors(data | {"confirm_record_id": "raw-invalid"}))
+    elif kind == "record-deleted":
+        assert list(validator.iter_errors(data | {"deleted": False}))
+    elif kind == "purge-expired":
+        assert list(validator.iter_errors(data | {"confirm_expired_only": False}))
+    elif kind == "purge-result":
+        assert list(validator.iter_errors(data | {"deleted_records": 4097}))
+
+
+@pytest.mark.parametrize("kind", ["activate", "status", "grant-create", "revoke"])
+def test_raw_task_content_management_go_samples(kind: str) -> None:
+    schema = json.loads((CONTRACTS / f"local-raw-task-content-{kind}.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema)
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    data = json.loads((root / f"local-raw-task-content-{kind}.json").read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({key: value for key, value in data.items() if key != field}))
+    assert list(validator.iter_errors(data | {"capture_by_default": True}))
+    if kind == "activate":
+        for patch in [
+            {"actor_id": ""},
+            {"actor_id": "x" * 257},
+            {"retention_seconds": 3599},
+            {"retention_seconds": True},
+            {"budget_bytes": 1073741825},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+    elif kind == "status":
+        assert list(validator.iter_errors(data | {"default_capture": True}))
+        assert list(validator.iter_errors(data | {"status": "ready", "retention_seconds": None}))
+        for status in ["disabled", "error"]:
+            validator.validate(
+                data
+                | {
+                    "status": status,
+                    "retention_seconds": None,
+                    "budget_bytes": None,
+                    "activated_at": None,
+                }
+            )
+            assert list(validator.iter_errors(data | {"status": status}))
+    elif kind == "grant-create":
+        for patch in [
+            {"task_id": ""},
+            {"kinds": []},
+            {"kinds": ["input", "input"]},
+            {"duration_seconds": 59},
+            {"retention_seconds": 2592001},
+            {"max_plaintext_bytes": True},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+    else:
+        for patch in [
+            {"actor_id": ""},
+            {"actor_id": "x" * 257},
+            {"expected_grant_signature": "A" * 128},
+        ]:
+            assert list(validator.iter_errors(data | patch))
+
+
+def test_raw_task_content_grant_views_go_samples() -> None:
+    from referencing import Registry, Resource
+
+    names = ["grant", "revocation", "grant-view", "grants"]
+    schemas = {
+        name: json.loads((CONTRACTS / f"local-raw-task-content-{name}.v1.schema.json").read_text())
+        for name in names
+    }
+    registry = Registry().with_resources(
+        [(schema["$id"], Resource.from_contents(schema)) for schema in schemas.values()]
+    )
+    root = CONTRACTS.parents[1] / "apps" / "agentshield" / "testdata" / "contracts"
+    view = json.loads((root / "local-raw-task-content-grant-view.json").read_text())
+    collection = json.loads((root / "local-raw-task-content-grants.json").read_text())
+    view_validator = Draft7Validator(schemas["grant-view"], registry=registry)
+    collection_validator = Draft7Validator(schemas["grants"], registry=registry)
+    view_validator.validate(view)
+    collection_validator.validate(collection)
+    assert collection["items"] == [view]
+    for field in schemas["grant-view"]["required"]:
+        assert list(view_validator.iter_errors({key: value for key, value in view.items() if key != field}))
+    assert list(view_validator.iter_errors(view | {"revocation": None}))
+    for status in ["active", "expired"]:
+        view_validator.validate(view | {"status": status, "revocation": None})
+        assert list(view_validator.iter_errors(view | {"status": status}))
+    assert list(view_validator.iter_errors(view | {"grant": view["grant"] | {"task_id": "PRIVATE"}}))
+    assert list(collection_validator.iter_errors(collection | {"items": [view] * 4097}))
+    assert list(collection_validator.iter_errors(collection | {"cursor": "secret"}))

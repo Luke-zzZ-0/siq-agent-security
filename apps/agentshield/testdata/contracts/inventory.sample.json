@@ -200,7 +200,6 @@
       "framework": "openclaw",
       "artifact_digest": "5e798e3c4bbd556818dbe381158f18cdf1302714780d1a55d145d496890d0f62",
       "attributes": {
-        "agentshield_install_gate": "true",
         "agentshield_tool_hook": "true",
         "bytes": "290",
         "config": ".openclaw/openclaw.json",
@@ -555,24 +554,6 @@
       "authority": "agentshield",
       "evidence_ids": [
         "ev-2e94a758dfe45116"
-      ]
-    },
-    {
-      "subject": {
-        "type": "agent_asset",
-        "id": "openclaw://.openclaw/openclaw.json"
-      },
-      "domain": "control_plane",
-      "action": "install.gate",
-      "resource": {
-        "type": "platform",
-        "value": "openclaw"
-      },
-      "effect": "allow",
-      "state": "observed",
-      "authority": "agentshield",
-      "evidence_ids": [
-        "ev-b5d42fc63d1ccff7"
       ]
     },
     {

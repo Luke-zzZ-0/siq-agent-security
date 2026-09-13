@@ -1,0 +1,29 @@
+{
+  "schema_version": "local-raw-task-content-capture/v1",
+  "platform": "hermes",
+  "agent_id": "hri-11111111111111111111111111111111",
+  "session_id": "fixture-session",
+  "task_id": "fixture-runtime-task",
+  "permit": {
+    "schema_version": "local-raw-task-content-capture-permit/v1",
+    "permit_id": "rawpermit-0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
+    "grant_id": "rawgrant-0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
+    "expected_grant_signature": "5f05d688206b127498413647f481a598503cee3bda4760f6efc96895d1dce57f08dc4bf9185220e81103fb848064ca73e1dc5a2e3211a5be741b9d9923678905",
+    "runtime_identity_ref": "sha256:5aa0653cd4225a1761ec3cad57e47e301ba9ba09c9c36add5c75ff4b312c4608",
+    "session_ref": "sha256:d6440983c454c2e5999fdb66bbe9cf5f89a8f5847d6c9578ef14afd26eee122c",
+    "binding_ref": "sha256:fc510045c5a45efad0fdf3b0d3b05cb9113702544dc117ad8d7f754fc7ec2884",
+    "task_ref": "sha256:ecc98de3925e6b929a78e54fb5741c83e0059efd34411f768c795c4659186ebe",
+    "kind": "input",
+    "issued_at": "2026-09-13T13:00:00Z",
+    "expires_at": "2026-09-13T13:01:00Z",
+    "signing_schema": "local_canonical/v1",
+    "signature": "054c4f758b02cece5f9fdd8a614dc4ffd285fe1030d38b51a9388f18eea7fa9ffa3a0e194145f805db89446bd0cabfb9828aa72977d926c4ef2c57cecc033401"
+  },
+  "fields": [
+    {
+      "path": "/prompt",
+      "value": "fixture prompt",
+      "secret": false
+    }
+  ]
+}

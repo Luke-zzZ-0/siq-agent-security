@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-capture-permit.v1.schema.json",
+  "title": "Short-lived runtime-bound raw task content capture permit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "permit_id",
+    "grant_id",
+    "expected_grant_signature",
+    "runtime_identity_ref",
+    "session_ref",
+    "binding_ref",
+    "task_ref",
+    "kind",
+    "issued_at",
+    "expires_at",
+    "signing_schema",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-capture-permit/v1" },
+    "permit_id": { "type": "string", "pattern": "^rawpermit-[a-f0-9]{32}$" },
+    "grant_id": { "type": "string", "pattern": "^rawgrant-[a-f0-9]{32}$" },
+    "expected_grant_signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+    "runtime_identity_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "session_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "binding_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "task_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "kind": { "enum": ["input", "parameters", "output", "note"] },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "signing_schema": { "const": "local_canonical/v1" },
+    "signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" }
+  }
+}

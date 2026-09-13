@@ -1,0 +1,25 @@
+{
+  "schema_version": "local-task-activity-sources/v1",
+  "activity_id": "a127aecdd764efe7c01f86e5d6d3b9b93f28c96532e274b9c4b00727e9fca07c",
+  "snapshot": "7563aef8bae42bc9be0af4183234dae3b8d409fb7eaf512f7f1201e90119ea7d",
+  "view": "tasks",
+  "offset": 0,
+  "total": 2,
+  "next_offset": 1,
+  "items": [
+    {
+      "seq": 0,
+      "receipt_hash": "17f4e11131a3923839d4bcb8e78c1d8a668fe0bf90befb29b3fae8a853bf1ffa",
+      "status": "verified_source",
+      "source": {
+        "grant_id": "grt-history",
+        "admission_id": "adm-history",
+        "permission_digest": "592c238d05883c729f2aee8677992647d9c15bb7073e30ffb6d801e368985ba5",
+        "skill_name": "history-skill",
+        "declared_version": "1.2.3",
+        "content_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "import": null
+      }
+    }
+  ]
+}
