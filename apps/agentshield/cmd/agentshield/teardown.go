@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
 )
@@ -14,6 +15,20 @@ import (
 func cmdTeardown(args []string, out io.Writer) error {
 	if len(args) != 1 || args[0] != "--confirm-teardown" {
 		return errors.New("停止后台服务后 block 模式受控操作将拒绝；请使用 teardown --confirm-teardown，配置与历史数据将保留")
+	}
+	if runtime.GOOS == "darwin" {
+		if err := withLaunchAgentCommand(args, "--confirm-teardown", teardownLaunchAgent); err != nil {
+			return fmt.Errorf("teardown: macOS 退出未完成，保留现场供检查重试: %w", err)
+		}
+		_, err := fmt.Fprintln(out, "当前实例后台入口已移除，服务已停止。程序、配置、身份与历史已保留；智能体钩子未卸载，block 模式受控操作将拒绝。")
+		return err
+	}
+	if runtime.GOOS == "windows" {
+		if err := cmdWindowsTeardown(); err != nil {
+			return fmt.Errorf("teardown: Windows 退出未完成，保留现场供检查重试: %w", err)
+		}
+		_, err := fmt.Fprintln(out, "当前实例后台入口已移除，服务已停止。程序、配置、身份与历史已保留；智能体钩子未卸载，block 模式受控操作将拒绝。")
+		return err
 	}
 	var unit bytes.Buffer
 	if err := cmdServiceUnit(nil, &unit); err != nil {

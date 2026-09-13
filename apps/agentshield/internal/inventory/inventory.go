@@ -268,15 +268,8 @@ func adapterInstalled(platform string, raw []byte) (installGate, toolHook bool) 
 	}
 	switch platform {
 	case "openclaw":
-		if sec, ok := doc["security"].(map[string]any); ok {
-			if ip, ok := sec["installPolicy"].(map[string]any); ok {
-				if ex, ok := ip["exec"].(map[string]any); ok {
-					if cmd, _ := ex["command"].(string); product.Mentions(cmd) {
-						installGate = true
-					}
-				}
-			}
-		}
+		// Top-level security.installPolicy is unsupported by the verified
+		// public host. Its presence cannot prove an active installation gate.
 		if plugins, ok := doc["plugins"].(map[string]any); ok {
 			b, _ := json.Marshal(plugins)
 			toolHook = product.Mentions(string(b))

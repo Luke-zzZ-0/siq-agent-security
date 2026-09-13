@@ -19,6 +19,25 @@ func WithHermesInstance(opts Options, root hermeshome.Root) Options {
 	opts.Instance = &InstanceTarget{ID: root.ID, Name: root.Name, ConfigDir: root.Path}
 	return opts
 }
+
+// WithOpenClawInstance pins the platform's single default config root.
+// OpenClaw has no multi-root discovery, so the root is the only input.
+func WithOpenClawInstance(opts Options, root string) Options {
+	opts.Instance = &InstanceTarget{ID: hermeshome.Identifier(root), Name: "default", ConfigDir: root}
+	return opts
+}
+
+// DefaultConfigDir exposes the platform's default config root to trusted
+// server code; multi-root discovery (Hermes) resolves roots independently.
+func DefaultConfigDir(home, platform string) string {
+	return configDir(home, platform)
+}
+
+// DefaultInstanceID is the content-derived instance ID of the platform's
+// default config root, used when no explicit instance target is pinned.
+func DefaultInstanceID(home, platform string) string {
+	return hermeshome.Identifier(configDir(home, platform))
+}
 func (o Options) configRoot() string {
 	if o.Instance != nil {
 		return o.Instance.ConfigDir
@@ -41,7 +60,10 @@ func validateInstance(o Options) error {
 	if o.Instance == nil {
 		return nil
 	}
-	if o.Platform != Hermes || !filepath.IsAbs(o.Instance.ConfigDir) || o.Instance.ID != hermeshome.Identifier(o.Instance.ConfigDir) || o.Instance.Name == "" {
+	if o.Platform != Hermes && o.Platform != OpenClaw {
+		return errors.New("adapter: invalid instance target")
+	}
+	if !filepath.IsAbs(o.Instance.ConfigDir) || o.Instance.ID != hermeshome.Identifier(o.Instance.ConfigDir) || o.Instance.Name == "" {
 		return errors.New("adapter: invalid instance target")
 	}
 	return nil

@@ -70,3 +70,13 @@ M63 按规格 §3.11.25 允许 macOS launch-agent-register 向当前用户 Libra
 M66 按规格 §3.11.28 允许明确 launch-agent-load --confirm-load 后在当前 GUI 用户域 bootstrap 已签名且精确注册的单个实例。当前域/同标签状态与源链接必须复验，未知配置拒绝；不 enable/kickstart/bootout，不操作其他任务。无 macOS 时只测试临时目录和模拟控制器，不执行真实系统加载。
 
 M67 按规格 §3.11.29 允许 launch-agent-start --confirm-start 经归属复验后 kickstart 当前 GUI 实例，不带强制重启参数；释放主 Writer 后启动，健康失败保留现场。仅模拟控制器验证，不宣称 macOS 原生通过。
+
+M68 按规格 §3.11.30 允许 launch-agent-stop --confirm-stop 在当前 GUI 域和完整归属复验后 stop 精确实例，读回退出状态并确认 Writer 可用；不 bootout/disable/删配置，不对 PID 直接发信号。无 macOS 实机时仅测试模拟控制器。
+
+M69 按规格 §3.11.31 允许明确 launch-agent-unregister 后，持双锁复验已停止实例并 bootout 精确 GUI 任务；完整枚举确认缺席后仅删除精确归属注册链接并同步目录。未知文件/其他任务不得删除，源配置、密钥、历史保留；无 macOS 时仅模拟验证。
+
+M78 按规格 §3.11.40 允许 `task-register --confirm-register` 在当前用户本机 Task Scheduler 根目录，以 TASK_CREATE 排他创建签名绑定的单个实例任务；双锁与完整归属复验，不覆盖、不启动、不自动清理失败现场。无 Windows 时只测试模拟控制器，不操作真实系统任务。
+
+M79 按规格 §3.11.41 允许 `task-start --confirm-start` 在生命周期锁、完整签名/系统配置核对后按需 Run 当前用户已注册实例；主 Writer 检查后先释放再启动，不传动作参数，不强制重启、改配置或自动删除。无 Windows 宿主只测试模拟控制器。
+
+M88 按规格 §3.11.50 允许明确 task-unregister --confirm-unregister 在双 Writer、签名/完整配置与空闲状态复验后，删除当前用户精确实例任务并读回缺席；保留本地源配置、密钥和历史。无 Windows 宿主只测试模拟控制器，不执行真实系统删除。

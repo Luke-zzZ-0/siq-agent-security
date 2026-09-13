@@ -244,11 +244,11 @@ func TestDifferentInstancesCannotBorrowEachOthersSessions(t *testing.T) {
 		t.Fatal(err)
 	}
 	s.intents = authority
-	s.resolve = func(id string) error {
+	s.resolve = func(id string) (string, error) {
 		if id == req.InstanceID || id == otherInstance {
-			return nil
+			return "hermes", nil
 		}
-		return ErrUnavailable
+		return "", ErrUnavailable
 	}
 	first, firstToken := create(t, s, req)
 	otherReq := req

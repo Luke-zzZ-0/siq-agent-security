@@ -122,18 +122,27 @@ func bindingMatches(r Record, session string, c *intent.Contract, b *intent.Bind
 // AuthorizeSession is the required credential + session boundary for middleware.
 // Authenticating the bearer alone must never authorize another session or agent.
 func (s *Store) AuthorizeSession(token, platform, agent, session string) (intent.Binding, error) {
+	_, binding, err := s.AuthorizeSessionContext(token, platform, agent, session)
+	return binding, err
+}
+
+// AuthorizeSessionContext returns the authenticated identity and its current
+// signed binding from one read-locked validation. Callers that bind additional
+// short-lived authority must use this result instead of authenticating the
+// identity and resolving the session in separate steps.
+func (s *Store) AuthorizeSessionContext(token, platform, agent, session string) (Record, intent.Binding, error) {
 	writeMu.RLock()
 	defer writeMu.RUnlock()
 	if !textValid(session, 256) {
-		return intent.Binding{}, ErrInvalid
+		return Record{}, intent.Binding{}, ErrInvalid
 	}
 	r, err := s.authenticate(token)
 	if err != nil || r.Platform != platform || r.AgentID != agent {
-		return intent.Binding{}, ErrUnavailable
+		return Record{}, intent.Binding{}, ErrUnavailable
 	}
 	c, b, err := s.intents.ResolveBinding(platform, session, agent)
 	if err != nil || !bindingMatches(r, session, c, b) {
-		return intent.Binding{}, ErrUnavailable
+		return Record{}, intent.Binding{}, ErrUnavailable
 	}
-	return *b, nil
+	return r, *b, nil
 }

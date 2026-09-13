@@ -1,3 +1,24 @@
+import { isActivitySources } from './taskSources';
+import { isRawContentActivation, isRawContentPurgeResult, isRawContentStatus } from './rawTaskContent';
+import {
+  isRawContentGrant,
+  isRawContentRecordContent,
+  isRawContentRecordDeleted,
+  isRawContentRevocation,
+  rawContentTaskRef,
+  readRawContentGrants,
+  readRawContentRecords,
+  type RawContentGrantRequest,
+  type RawContentGrantView,
+  type RawContentRecord,
+} from './rawTaskContentManagement';
+import type { TaskActivityDetail } from './taskActivities';
+import { isTaskExport } from './taskExport';
+import { isTaskTraceExport } from './taskTraceExport';
+import { readEffectEvidence } from './effectEvidence';
+import { isActivityCompletion } from './taskCompletion';
+import type { TaskActivityItem } from './taskActivities';
+import { isTaskActivityDetail, isTaskActivityPage, isTaskActivitySearch, type ActivityFilters, type ActivityView } from './taskActivities';
 import { isSkillUpdateComparison, isSkillUpdateCreated, isSkillUpdatePlan, isSkillUpdateView } from './skillUpdate';
 import type { SkillUpdateCompareRequest, SkillUpdateStageRequest, SkillUpdateCommit, SkillUpdateRecover } from './types';
 import { isSkillRemovalView } from './skillRemoval';
@@ -204,6 +225,22 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 }
 
 export const localApi = {
+  taskActivitySources: async (detail: TaskActivityDetail, signal?: AbortSignal) => {
+    const query = new URLSearchParams({ view: detail.view, offset: String(detail.offset), limit: '50', snapshot: detail.snapshot });
+    const data = await request<unknown>(`/v1/task-activities/${encodeURIComponent(detail.activity.activity_id)}/sources?${query}`, { signal, cache: 'no-store' });
+    if (!isActivitySources(data, detail)) throw new LocalApiError(502, 'task_activity_sources_invalid');
+    return data;
+  },
+  taskActivityExport: async (activity: TaskActivityItem, snapshot: string, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/task-activities/${encodeURIComponent(activity.activity_id)}/export?snapshot=${encodeURIComponent(snapshot)}`, { signal, cache: 'no-store' });
+    if (!isTaskExport(data, activity, snapshot)) throw new LocalApiError(502, 'task_activity_export_invalid');
+    return data;
+  },
+  taskActivityTraceExport: async (activity: TaskActivityItem, snapshot: string, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/task-activities/${encodeURIComponent(activity.activity_id)}/trace-export?snapshot=${encodeURIComponent(snapshot)}`, { signal, cache: 'no-store' });
+    if (!isTaskTraceExport(data, activity, snapshot)) throw new LocalApiError(502, 'task_activity_trace_export_invalid');
+    return data;
+  },
   compareSkillUpdate: (id: string, body: SkillUpdateCompareRequest, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/update-comparison`, { method: 'POST', body: JSON.stringify(body), signal }).then((data) => {
     if (!isSkillUpdateComparison(data, id, body)) throw new LocalApiError(502, 'skill_install_incompatible_response');
     return data;
@@ -300,6 +337,90 @@ export const localApi = {
   discoveryPreview: (input: DiscoveryInput) => request<DiscoveryPreview>('/v1/discovery/preview', { method: 'POST', body: JSON.stringify(input) }),
   discoveryScan: (input: DiscoveryInput) => request<DiscoveryStatus>('/v1/discovery/scan', { method: 'POST', body: JSON.stringify(input) }),
   status: () => request<Status>('/v1/status'),
+  rawContentStatus: (signal?: AbortSignal) => request<unknown>('/v1/raw-task-content/status', { signal, cache: 'no-store' }).then((data) => {
+    if (!isRawContentStatus(data)) throw new LocalApiError(502, 'raw_task_content_status_invalid');
+    return data;
+  }),
+  rawContentActivation: (signal?: AbortSignal) => request<unknown>('/v1/raw-task-content/activation', { signal, cache: 'no-store' }).then((data) => {
+    if (!isRawContentActivation(data)) throw new LocalApiError(502, 'raw_task_content_activation_invalid');
+    return data;
+  }),
+  activateRawContent: (actorId: string, retentionSeconds: number, budgetBytes: number, signal?: AbortSignal) =>
+    request<unknown>('/v1/raw-task-content/activation', {
+      method: 'POST',
+      body: JSON.stringify({ schema_version: 'local-raw-task-content-activate/v1', actor_id: actorId, retention_seconds: retentionSeconds, budget_bytes: budgetBytes }),
+      signal,
+    }).then((data) => {
+      if (!isRawContentActivation(data) || data.retention_seconds !== retentionSeconds || data.budget_bytes !== budgetBytes) {
+        throw new LocalApiError(502, 'raw_task_content_activation_invalid');
+      }
+      return data;
+    }),
+  rawContentGrants: async (taskId: string, signal?: AbortSignal) => {
+    const taskRef = await rawContentTaskRef(taskId);
+    const data = await request<unknown>('/v1/raw-task-content/grants', { signal, cache: 'no-store' });
+    const items = readRawContentGrants(data);
+    if (!items) throw new LocalApiError(502, 'raw_task_content_grants_invalid');
+    return items.filter((item) => item.grant.task_ref === taskRef);
+  },
+  createRawContentGrant: async (input: RawContentGrantRequest, signal?: AbortSignal) => {
+    const taskRef = await rawContentTaskRef(input.taskId);
+    const data = await request<unknown>('/v1/raw-task-content/grants', {
+      method: 'POST',
+      body: JSON.stringify({
+        schema_version: 'local-raw-task-content-grant-create/v1', task_id: input.taskId,
+        kinds: input.kinds, actor_id: input.actorId, duration_seconds: input.durationSeconds,
+        retention_seconds: input.retentionSeconds, max_plaintext_bytes: input.maxPlaintextBytes,
+      }),
+      signal,
+    });
+    if (!isRawContentGrant(data, taskRef, input)) throw new LocalApiError(502, 'raw_task_content_grant_invalid');
+    return data;
+  },
+  revokeRawContentGrant: async (view: RawContentGrantView, actorId: string, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/raw-task-content/grants/${encodeURIComponent(view.grant.grant_id)}/revoke`, {
+      method: 'POST',
+      body: JSON.stringify({
+        schema_version: 'local-raw-task-content-revoke/v1',
+        expected_grant_signature: view.grant.signature,
+        actor_id: actorId,
+      }),
+      signal,
+    });
+    if (!isRawContentRevocation(data, view.grant)) throw new LocalApiError(502, 'raw_task_content_revocation_invalid');
+    return data;
+  },
+  rawContentRecords: async (taskId: string, signal?: AbortSignal) => {
+    const taskRef = await rawContentTaskRef(taskId);
+    const data = await request<unknown>('/v1/raw-task-content/records/search', {
+      method: 'POST', body: JSON.stringify({ schema_version: 'local-raw-task-content-record-list/v1', task_id: taskId }), signal,
+    });
+    const items = readRawContentRecords(data, taskRef);
+    if (!items) throw new LocalApiError(502, 'raw_task_content_records_invalid');
+    return items;
+  },
+  readRawContentRecord: async (taskId: string, record: RawContentRecord, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/raw-task-content/records/${encodeURIComponent(record.record_id)}/read`, {
+      method: 'POST', body: JSON.stringify({ schema_version: 'local-raw-task-content-record-read/v1', task_id: taskId }), signal,
+    });
+    if (!isRawContentRecordContent(data, record)) throw new LocalApiError(502, 'raw_task_content_record_content_invalid');
+    return data;
+  },
+  deleteRawContentRecord: async (taskId: string, record: RawContentRecord, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/raw-task-content/records/${encodeURIComponent(record.record_id)}/delete`, {
+      method: 'POST', body: JSON.stringify({
+        schema_version: 'local-raw-task-content-record-delete/v1', task_id: taskId, confirm_record_id: record.record_id,
+      }), signal,
+    });
+    if (!isRawContentRecordDeleted(data, record.record_id)) throw new LocalApiError(502, 'raw_task_content_record_delete_invalid');
+    return data;
+  },
+  purgeExpiredRawContent: (signal?: AbortSignal) => request<unknown>('/v1/raw-task-content/purge-expired', {
+    method: 'POST', body: JSON.stringify({ schema_version: 'local-raw-task-content-purge-expired/v1', confirm_expired_only: true }), signal,
+  }).then((data) => {
+    if (!isRawContentPurgeResult(data)) throw new LocalApiError(502, 'raw_task_content_purge_invalid');
+    return data;
+  }),
   assets: (cwd?: string) => {
     const q = cwd ? `?cwd=${encodeURIComponent(cwd)}` : '';
     return request<{ assets: LedgerAsset[]; overview: LedgerOverview }>(`/v1/assets${q}`);
@@ -410,6 +531,39 @@ export const localApi = {
         decision_receipt_id: item.decision_receipt_id, decision_hash: item.decision_hash,
         params_digest: item.params_digest, approve, actor_id: actorId }),
     }),
+  effectEvidence: async (id: string, taskId: string, signal?: AbortSignal) => {
+    const data = await request<unknown>(`/v1/effect-evidence/${encodeURIComponent(id)}`, { signal, cache: 'no-store' });
+    const summary = readEffectEvidence(data, id, taskId);
+    if (!summary) throw new Error('证据响应与当前任务不匹配或不完整。');
+    return summary;
+  },
+  taskActivityCompletion: async (activity: TaskActivityItem, view: ActivityView, snapshot: string, signal?: AbortSignal) => {
+    const query = new URLSearchParams({ view, snapshot });
+    const data = await request<unknown>(`/v1/task-activities/${encodeURIComponent(activity.activity_id)}/completion?${query}`, { signal });
+    if (!isActivityCompletion(data, activity, snapshot, view)) throw new Error('效果核验响应不完整，请刷新重试。');
+    return data;
+  },
+  taskActivityDetail: async (id: string, view: ActivityView, offset = 0, snapshot?: string, signal?: AbortSignal) => {
+    const query = new URLSearchParams({ view, offset: String(offset), limit: '50' });
+    if (snapshot) query.set('snapshot', snapshot);
+    const data = await request<unknown>(`/v1/task-activities/${encodeURIComponent(id)}?${query}`, { signal });
+    if (!isTaskActivityDetail(data, id, view, offset, snapshot)) throw new Error('活动详情响应不完整，请刷新重试。');
+    return data;
+  },
+  taskActivities: async (view: ActivityView, offset = 0, snapshot?: string, signal?: AbortSignal) => {
+    const query = new URLSearchParams({ view, offset: String(offset), limit: '50' });
+    if (snapshot) query.set('snapshot', snapshot);
+    const data = await request<unknown>(`/v1/task-activities?${query}`, { signal });
+    if (!isTaskActivityPage(data, view, offset, snapshot)) throw new Error('任务活动响应不完整，请刷新重试。');
+    return data;
+  },
+  taskActivitySearch: async (view: ActivityView, offset: number, filters: ActivityFilters, snapshot?: string, signal?: AbortSignal) => {
+    const query = new URLSearchParams({ view, offset: String(offset), limit: '50', ...filters });
+    if (snapshot) query.set('snapshot', snapshot);
+    const data = await request<unknown>(`/v1/task-activities/search?${query}`, { signal, cache: 'no-store' });
+    if (!isTaskActivitySearch(data, view, offset, filters, snapshot)) throw new Error('活动筛选响应不完整，请刷新重试。');
+    return data;
+  },
   receipts: () => request<{ receipts: Receipt[]; verified: boolean }>('/v1/receipts?since_seq=-1'),
   resolveHold: (id: string, approve: boolean, actorId: string) =>
     request(`/v1/hold/${id}`, {

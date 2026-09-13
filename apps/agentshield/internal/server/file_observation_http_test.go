@@ -150,6 +150,13 @@ func TestFileObservationHTTPReadsRealState(t *testing.T) {
 			if complete["status"] != wantStatus {
 				t.Fatal(complete)
 			}
+			activities := effectCall(t, s, "GET", "/v1/task-activities", s.bootAdmin, nil, 200)
+			item := activities["items"].([]any)[0].(map[string]any)
+			scoped := effectCall(t, s, "GET", "/v1/task-activities/"+item["activity_id"].(string)+"/completion?snapshot="+activities["snapshot"].(string), s.bootAdmin, nil, 200)
+			if scoped["reason_code"] != "evaluated" || scoped["result"].(map[string]any)["status"] != wantStatus {
+				t.Fatal("scoped material result differs", scoped)
+			}
+
 			if err = os.Remove(path); err != nil {
 				t.Fatal(err)
 			}

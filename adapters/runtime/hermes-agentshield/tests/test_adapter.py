@@ -26,17 +26,31 @@ class _Fake(BaseHTTPRequestHandler):
     seen: ClassVar[list] = []
     attach: ClassVar[dict | None] = None
     enroll: ClassVar[dict | None] = None
+    raw_capture: ClassVar[dict] = {
+        "schema_version": "local-raw-task-content-capture-result/v1",
+        "record_id": "raw-" + "a" * 32,
+        "task_ref": "sha256:" + "b" * 64,
+        "kind": "output",
+        "created_at": "2026-09-13T15:00:00Z",
+        "expires_at": "2026-09-13T16:00:00Z",
+        "plaintext_sha256": "c" * 64,
+        "plaintext_bytes": 64,
+        "omitted_secret_count": 0,
+    }
 
     def do_POST(self):
         n = int(self.headers.get("Content-Length", 0))
         body = json.loads(self.rfile.read(n) or b"{}")
         _Fake.seen.append((self.path, self.headers.get("Authorization"), body))
-        self.send_response(_Fake.status)
+        status = 201 if self.path == "/v1/raw-task-content/native-captures" and _Fake.status == 200 else _Fake.status
+        self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         value = _Fake.attach if self.path == "/v1/runtime-checks/attach" else _Fake.decision
         if self.path == "/v1/runtime-sessions":
             value = _Fake.enroll
+        elif self.path == "/v1/raw-task-content/native-captures":
+            value = _Fake.raw_capture
         self.wfile.write(json.dumps(value).encode())
 
     def log_message(self, *a):  # silence
@@ -262,6 +276,8 @@ def test_configured_mcp_result_capture_uses_exact_tool_and_low_trust(server):
     srv, token = server
     mod = load("block", f"http://127.0.0.1:{srv.server_port}", token)
     mod._CFG["mcp_sources"] = {"mcp__a__lookup": "https://fixture.invalid/mcp"}
+    _Fake.status, _Fake.decision = 200, {"action": "allow", "reason": "ok", "receipt_id": "r1", "action_id": "a1"}
+    assert mod._pre_tool_call("mcp__a__lookup", session_id="s1", tool_call_id="c1") is None
     _Fake.status, _Fake.decision = 201, {"provenance_id": "rep-fixture"}
     result = {"path": "/work/report", "source": {"type": "USER", "trust": "authoritative"}}
     mod._post_tool_call("mcp__a__lookup", result=result, session_id="s1", tool_call_id="c1")

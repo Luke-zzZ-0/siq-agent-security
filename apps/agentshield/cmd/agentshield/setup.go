@@ -30,8 +30,20 @@ func cmdSetup(args []string, out io.Writer) error {
 	if !*confirm || fs.NArg() != 0 || *port < 0 || *port > 65535 || (explicit && *port == 0) {
 		return errors.New("请使用 setup --confirm-setup [--port 1..65535] [--runtime] 初始化并启动本机管理服务")
 	}
+	if runtime.GOOS == "darwin" {
+		if *runtimeOnly {
+			return errors.New("setup: macOS 暂不支持 --runtime；用户目录注册请省略该选项")
+		}
+		return setupLaunchAgent(*port, explicit, *openUI, out, nativeLaunchSetup())
+	}
+	if runtime.GOOS == "windows" {
+		if *runtimeOnly {
+			return errors.New("setup: Windows 暂不支持 --runtime；请省略该选项")
+		}
+		return setupWindowsTask(*port, explicit, *openUI, out, nativeWindowsSetup())
+	}
 	if runtime.GOOS != "linux" {
-		return errors.New("setup: 当前后台整合入口仅支持 Linux；可使用 start 前台运行")
+		return errors.New("setup: 当前后台整合入口支持 Linux/macOS/Windows；当前系统可使用 start 前台运行")
 	}
 	if _, err := runUserSystemctl("show", "--property=Version"); err != nil {
 		return errors.New("setup: systemd 用户服务不可用；请在用户登录会话中重试，或使用 start 前台运行")

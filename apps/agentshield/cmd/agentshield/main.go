@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -75,16 +76,42 @@ func main() {
 		err = cmdSetup(os.Args[2:], os.Stdout)
 	case "init":
 		err = cmdInitialize(os.Args[2:], os.Stdout)
+	case "stop":
+		err = cmdStop(os.Args[2:], os.Stdout)
+	case "stop-request":
+		err = cmdStopRequest(os.Args[2:], os.Stdout)
 	case "start":
 		err = startLocal(os.Args[2:], os.Stdout, cmdServe)
 	case "service-login":
 		err = cmdServiceLogin(os.Args[2:], os.Stdout)
 	case "launch-agent-status":
 		err = cmdLaunchAgentStatus(os.Args[2:], os.Stdout)
+	case "task-xml":
+		err = cmdTaskXML(os.Args[2:], os.Stdout)
+	case "task-unregister":
+		err = cmdWindowsTaskUnregister(os.Args[2:], os.Stdout)
+	case "task-stop":
+		err = cmdWindowsTaskStop(os.Args[2:], os.Stdout)
+	case "task-runtime":
+		err = cmdWindowsTaskRuntime(os.Args[2:], os.Stdout)
+	case "task-start":
+		err = cmdWindowsTaskStart(os.Args[2:], os.Stdout)
+	case "task-register":
+		err = cmdWindowsTaskRegister(os.Args[2:], os.Stdout)
+	case "task-presence":
+		err = cmdWindowsTaskRead(os.Args[2:], os.Stdout, true)
+	case "task-query":
+		err = cmdWindowsTaskQuery(os.Args[2:], os.Stdout)
+	case "task-prepare":
+		err = cmdWindowsTaskPrepare(os.Args[2:], os.Stdout)
 	case "launch-agent-load":
 		err = cmdLaunchAgentLoad(os.Args[2:], os.Stdout)
 	case "launch-agent-start":
 		err = cmdLaunchAgentStart(os.Args[2:], os.Stdout)
+	case "launch-agent-stop":
+		err = cmdLaunchAgentStop(os.Args[2:], os.Stdout)
+	case "launch-agent-unregister":
+		err = cmdLaunchAgentUnregister(os.Args[2:], os.Stdout)
 	case "launch-agent-register":
 		err = cmdLaunchAgentRegister(os.Args[2:], os.Stdout)
 	case "launch-agent-prepare":
@@ -176,7 +203,7 @@ func usage() {
   %[1]s openshell doctor    # diagnose CLI/gateway; never starts a gateway
   %[1]s openshell apply --target NAME [--allow host:port] [--deny host:port]
                                   # L3: CLI-only network policy set + readback (never create_generation)
-  %[1]s setup --confirm-setup [--port N] [--runtime] [--open-ui] # initialize, register and start Linux user service
+  %[1]s setup --confirm-setup [--port N] [--runtime] [--open-ui] # Linux/macOS/Windows user service; --runtime is Linux-only
   %[1]s client-install --manifest FILE --binary FILE --confirm-install [--port N] [--runtime] [--open-ui]
   %[1]s teardown --confirm-teardown # disable startup, stop, unregister; preserve data
   %[1]s ui [--print]       # open verified local management page, or print its URL
@@ -184,8 +211,21 @@ func usage() {
   %[1]s start [--port N]    # initialize and serve in foreground, or reuse a matching running instance
   %[1]s service-login --enable --confirm-enable | --disable # control user login startup
   %[1]s launch-agent-status # verify loaded macOS configuration and local API
+  %[1]s task-xml # export current Windows user task configuration; read-only
+  %[1]s stop --confirm-stop [--recover <boot_id>] # verify drain result and writer release
+  %[1]s stop-request --confirm-stop # request graceful stop; output confirms acceptance only
+  %[1]s task-unregister --confirm-unregister # remove the idle owned Windows task; preserve data
+  %[1]s task-stop --confirm-stop # gracefully stop owned Windows task and verify idle state
+  %[1]s task-runtime # inspect owned task state, visible instances and last result
+  %[1]s task-start --confirm-start # start an owned registered Windows task and check health
+  %[1]s task-register --confirm-register # exclusively register the owned Windows task
+  %[1]s task-presence # inspect owned Windows task presence without registration
+  %[1]s task-query   # read and verify the owned Windows system task configuration
+  %[1]s task-prepare # prepare signed Windows task configuration without system registration
   %[1]s launch-agent-load --confirm-load # load registered macOS configuration without starting
   %[1]s launch-agent-start --confirm-start # start owned macOS task and verify local API
+  %[1]s launch-agent-stop --confirm-stop # stop owned macOS task and preserve configuration
+  %[1]s launch-agent-unregister --confirm-unregister # remove stopped macOS registration, retain data
   %[1]s launch-agent-register # publish owned macOS user configuration; does not load/start
   %[1]s launch-agent-prepare # prepare signed macOS configuration without loading it
   %[1]s launch-agent-plist # export macOS LaunchAgent configuration; read-only
@@ -396,12 +436,22 @@ func runCodeBuddyHook(in io.Reader, out io.Writer) error {
 
 func cmdServe(args []string) error {
 	fs := flag.NewFlagSet("serve", flag.ContinueOnError)
+	selectedDir := fs.String("state-dir", "", "explicit canonical initialized state directory (overrides environment)")
 	port := fs.Int("port", 0, "listen port (default from config.json, 47611)")
 	mode := fs.String("mode", "", "enforcement mode override: audit_only|warn|block")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
-	dir, err := stateDir()
+	explicitDir := false
+	fs.Visit(func(f *flag.Flag) {
+		if f.Name == "state-dir" {
+			explicitDir = true
+		}
+	})
+	if fs.NArg() != 0 {
+		return errors.New("serve: unexpected positional arguments")
+	}
+	dir, err := serveStateDirectory(*selectedDir, explicitDir)
 	if err != nil {
 		return err
 	}
@@ -477,10 +527,12 @@ func cmdServe(args []string) error {
 	eng, err := receipt.New(receipt.Options{
 		Pack: pack, Chain: chain, Grants: st.ActiveGrant, EnforcementMode: cfg.EnforcementMode,
 		Version: Version, HoldChannel: cfg.HoldChannel, SessionIdleTTL: cfg.SessionIdleTTL(),
-		IntentLookup:      receipt.ResolveStore(intentStore),
-		ProvenanceCheck:   provenanceStore.MatchParameters,
-		ContextLookup:     intentStore.GetContext,
-		IntentEnforcement: cfg.IntentEnforcement,
+		IntentLookup:             receipt.ResolveStore(intentStore),
+		ProvenanceCheck:          provenanceStore.MatchParameters,
+		ContextLookup:            intentStore.GetContext,
+		IntentEnforcement:        cfg.IntentEnforcement,
+		SkillAttribution:         st.SkillAttribution,
+		SkillAttributionEnforced: cfg.SkillAttributionEnforcement,
 	})
 	if err != nil {
 		return err
@@ -499,7 +551,14 @@ func cmdServe(args []string) error {
 		bin, _ = filepath.Abs(bin)
 	}
 	addr := fmt.Sprintf("127.0.0.1:%d", cfg.Port)
+	stop := make(chan os.Signal, 1)
 	srv, err := server.New(server.Deps{
+		StopWriter: writer, RequestStop: func() {
+			select {
+			case stop <- os.Interrupt:
+			default:
+			}
+		},
 		Store: st, Engine: eng, Chain: chain, Pack: pack, Key: key, Token: tok, RecoveryToken: recovery,
 		Version: Version, Mode: cfg.EnforcementMode, UI: ui.Handler(),
 		Home: home, Binary: bin, Endpoint: "http://" + addr,
@@ -511,11 +570,13 @@ func cmdServe(args []string) error {
 		return err
 	}
 	ln, err := net.Listen("tcp", addr)
-	defer func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-		_ = srv.CloseRuntimeChecks(ctx)
-	}()
+	var closeChecksOnce sync.Once
+	var closeChecksErr error
+	closeChecks := func() error {
+		closeChecksOnce.Do(func() { closeChecksErr = closeLocalRuntimeChecks(srv.CloseRuntimeChecks, 5*time.Second) })
+		return closeChecksErr
+	}
+	defer func() { _ = closeChecks() }()
 	if err != nil {
 		return err
 	}
@@ -526,7 +587,6 @@ func cmdServe(args []string) error {
 		fmt.Fprintf(os.Stderr, "desktop profile is same-UID: this code does not stop a same-user Agent from reading the state directory or running CLI.\n")
 	}
 	hs := &http.Server{Handler: srv.Handler(), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 15 * time.Second}
-	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 	defer signal.Stop(stop)
 	refreshCtx, refreshCancel := context.WithCancel(context.Background())
@@ -537,18 +597,31 @@ func cmdServe(args []string) error {
 	}()
 	go func() {
 		defer close(refreshDone)
-		ticker := time.NewTicker(5 * time.Minute)
-		defer ticker.Stop()
-		for {
-			select {
-			case <-ticker.C:
-				_ = srv.Refresh("")
-			case <-refreshCtx.Done():
-				return
-			}
-		}
+		refreshTicker := time.NewTicker(5 * time.Minute)
+		defer refreshTicker.Stop()
+		rawContentPurgeTicker := time.NewTicker(15 * time.Minute)
+		defer rawContentPurgeTicker.Stop()
+		runServeMaintenance(refreshCtx, refreshTicker.C, rawContentPurgeTicker.C, func() error {
+			return srv.Refresh("")
+		}, srv.PurgeExpiredRawContent)
 	}()
-	return serveLocalHTTP(hs, ln, stop, 3*time.Second)
+	// UX-008 background launcher layer: opt-in desktop notifications with a
+	// count-only body; delivery failure never affects decisions or the inbox.
+	notifyCancel := startDesktopNotify(cfg, eng, func(format string, args ...any) {
+		fmt.Fprintf(os.Stderr, "%s: "+format+"\n", append([]any{product.Name}, args...)...)
+	})
+	if notifyCancel != nil {
+		defer notifyCancel()
+	}
+	serveErr := serveLocalHTTP(hs, ln, stop, 3*time.Second)
+	refreshCancel()
+	<-refreshDone
+	serveErr = errors.Join(serveErr, closeChecks())
+	if boot := srv.AcceptedStopBootID(); boot != "" {
+		_, recordErr := st.RecordServiceStopResult(writer, key, boot, serveErr == nil, time.Now())
+		serveErr = errors.Join(serveErr, recordErr)
+	}
+	return serveErr
 }
 
 func cmdVerify(args []string) error {

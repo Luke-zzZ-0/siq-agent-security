@@ -1,6 +1,8 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './Layout';
+const TaskActivityDetailPage = lazy(() => import('./pages/TaskActivityDetailPage'));
+const TaskActivitiesPage = lazy(() => import('./pages/TaskActivitiesPage'));
 const SkillUpdatesPage = lazy(() => import('./pages/SkillUpdatesPage'));
 const InstalledSkillsPage = lazy(() => import('./pages/InstalledSkillsPage'));
 const SkillImportsPage = lazy(() => import('./pages/SkillImportsPage'));
@@ -212,6 +214,8 @@ function LocalAdminApp() {
           <Route path="/installed-skills" element={<Suspense fallback={<p role="status">正在打开安装记录…</p>}><InstalledSkillsPage /></Suspense>} />
           <Route path="/skill-imports" element={<Suspense fallback={<p role="status">正在打开 Skill 导入…</p>}><SkillImportsPage /></Suspense>} />
           <Route path="/grants" element={<GrantsPage />} />
+          <Route path="/activities/:id" element={<Suspense fallback={<p role="status">正在打开活动详情…</p>}><TaskActivityDetailPage /></Suspense>} />
+          <Route path="/activities" element={<Suspense fallback={<p role="status">正在打开任务活动…</p>}><TaskActivitiesPage /></Suspense>} />
           <Route path="/receipts" element={<ReceiptsPage />} />
           <Route path="/bindings" element={<BindingsPage />} />
           <Route path="/settings" element={<SettingsPage />} />

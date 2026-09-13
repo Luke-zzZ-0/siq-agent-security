@@ -1,5 +1,11 @@
 # 个人体验当前交接（K002，2026-09-11）
 
+## 2026-09-13 已完成阶段的审查修复
+
+最新审查覆盖 M124–M128，修复内容及本地验证见 [阶段修复记录](evidence/personal-experience/stage-review-fixes-20260913.md)。OpenClaw 不再注入不受支持的安装配置，托管凭据仅限 loopback 且失败硬拒绝；Hermes/OpenClaw 输出关联只能消费一次；Skill 元数据匹配保持 unknown，可信执行来源绑定仍待开发。后续应先解决可信绑定和真实审批恢复，再补跨 OS/WorkBuddy 验收；另一窗口正在开发的阶段另行审查。
+
+下文为历史交接，不代表最新远端合并状态。本批保留当前分支、用户服务及另一窗口修改，只落盘修复，未提交或推送。
+
 ## 2026-09-12 持续开发接续
 
 M38 已修复停止时 HTTP 尚未排空就释放写锁的窗口，验证见 [停止排空记录](evidence/personal-experience/stop-drain-20260912.md)。下一步继续系统后台注册与可恢复卸载；本增量不等同后台服务安装完成。
@@ -105,3 +111,117 @@ M65 已补齐只读未加载判定：完整用户域列表确认缺席与查询�
 M66 已实现 macOS 显式加载及完整配置读回；已加载复用、未知配置拒绝、失败保留现场。Go 全量/vet/race、四目标构建和模拟场景通过；macOS 实机、启动与退出仍待完成。[证据](evidence/personal-experience/launch-agent-load-20260912.md)。
 
 M67 已接通 macOS 显式启动与目录健康验证，已有进程不强制重启，失败保留现场；Go/合同/构建验证通过，原生 macOS 验收仍缺。用户已要求先提交合并当前已实现的 M48–M67，实际合入状态见 Git/PR。[证据](evidence/personal-experience/launch-agent-start-20260912.md)。
+
+M68 已新增 macOS 显式停止、正常退出和 Writer 读回；Go 全量/vet/race、四目标构建与模拟场景通过，macOS 实机仍待验收。M48–M67 已提交/推送 PR #31（36 通过、2 跳过）并合入本地 main，远端因代码所有者审查未合入；M68 在独立后继分支本地落盘。[证据](evidence/personal-experience/launch-agent-stop-20260912.md)。
+
+M69 已补齐 macOS 精确配置注销与重复重试，保留状态/历史且不接管未知任务。Go 全量/vet/race、四目标构建及模拟场景通过；真实 macOS 注销/重装仍待验收。后继 M68–M69 尚未提交。[证据](evidence/personal-experience/launch-agent-unregister-20260912.md)。
+
+M70 已接通 macOS setup 编排、复用与失败短路，Go 全量/vet/race、四目标构建及最终 Linux 原生回归通过；macOS 实机仍待验收。下一步整合 teardown，后续继续 Windows。[证据](evidence/personal-experience/setup-macos-20260912.md)。
+
+M71 已整合 macOS teardown 停止/注销与重复恢复；Go 全量/vet/race、四目标构建和 Linux 原生回归通过。8 项模拟集成场景检查原状态数据保留；macOS 实机仍待验收。后续优先补 Windows 生命周期。[证据](evidence/personal-experience/teardown-macos-20260912.md)。
+
+M72 已新增 serve 显式状态目录绑定，为 Windows 后台避免依赖缓存环境变量做准备。Go 全量/vet/race、四目标构建与 Linux 原生错环境目录隔离通过；Windows 任务注册与原生生命周期尚未完成。[证据](evidence/personal-experience/serve-explicit-directory-20260912.md)。
+
+M73 新增 Windows task-xml 只读配置导出与当前用户绑定，Go 全量/vet/race、160 项合同/样例及四目标构建通过。Windows 系统注册与原生运行仍未实现/验收。[证据](evidence/personal-experience/windows-task-xml-20260912.md)。
+
+M74 已完成 Windows 任务签名准备、归属核验与缺失 XML 恢复；Go/合同/构建验证通过，续开发时已复验定向测试、161 项合同与实际构建摘要。Windows 系统查询/注册/启动与实机验收仍待完成，UX-003 不标完成。[证据](evidence/personal-experience/windows-task-ownership-20260912.md)。中英文 README 已补齐个人源码入口和当前支持边界；后继增量仍本地未提交。
+
+M75 完成 Windows 任务完整配置核对核心，Go 全量/vet/race、四目标构建与追加解析边界定向测试通过。系统查询、编码传输与 CLI 接入仍待实现，没有 Windows 原生读回证据。[记录](evidence/personal-experience/windows-task-readback-20260912.md)。README 已在独立文档分支推送为 b6f186d；功能增量保持本地。
+
+M76 已接通 Windows `task-query`，核对系统返回配置与本地签名源，查询失败不判定缺席。Go 全量/vet/race、四目标构建及模拟查询/编码测试通过；没有 Windows 原生证据。[记录](evidence/personal-experience/windows-task-query-20260912.md)。下一步缺席判定与排他注册，功能仍仅本地落盘。
+
+M77 已接通 Windows `task-presence` 与失败分类、存在时完整归属复验。Go 全量/vet/race、四目标构建和模拟编排通过；PowerShell/COM 原生运行未验证。[记录](evidence/personal-experience/windows-task-presence-20260912.md)。下一步以系统排他创建实现注册，不将查询缺席等同于覆盖授权。
+
+M78 已接通 Windows `task-register --confirm-register` 排他注册与创建后完整读回；九项模拟编排、Go 全量/vet/race 和四目标构建通过。未原生执行 PowerShell/COM 注册，Windows 启停与综合验收待完成。[记录](evidence/personal-experience/windows-task-registration-20260912.md)。本批仅本地落盘。
+
+M79 已接通 Windows `task-start --confirm-start` 与目录健康检查；八项模拟编排、Go 全量/vet/race 和四目标构建通过。新增动作模板路径拒绝；Windows 原生 Run、退出和注销待验收/实施。[记录](evidence/personal-experience/windows-task-start-20260912.md)。未提交或推送功能增量。
+
+M80 已补 `task-runtime` 的运行/排队/空闲状态和返回码读回；六项模拟编排、协议边界及 Go 全量/vet/race、四目标构建通过。下一步当前运行绑定的正常退出请求，不用历史零结果替代本次退出证明。[记录](evidence/personal-experience/windows-task-runtime-20260912.md)。Windows 原生验收仍待完成。
+
+M81 完成当前运行绑定的退出授权核心与两份签名合同；Go 全量/vet/race、163 项合同及四目标全包编译通过。尚未接 HTTP/CLI 和实际排空，正常退出继续待实现。[记录](evidence/personal-experience/service-stop-authority-20260912.md)。目标与本地后继开发保持进行中。
+
+M82 完成退出接受记录的排他发布与幂等恢复；Go 全量/vet/race、164 项合同及四目标全包构建通过。记录不代表已退出，尚待接服务端请求与排空。[记录](evidence/personal-experience/service-stop-acceptance-20260912.md)。功能继续本地保留。
+
+M83 已接本机签名退出 HTTP、接受记录与排空通知，隔离 Linux 真实进程正常退出、记录留存和 Writer 释放通过；Go 全量/vet/race、四目标构建通过。尚缺停止 CLI 与 Windows 原生任务退出验证。[记录](evidence/personal-experience/service-stop-http-20260912.md)。功能增量本地保留。
+
+M84 已实现 stop-request CLI 与接受记录核对/响应丢失恢复；Go 全量/vet/race、四目标构建和隔离 Linux 真实 CLI/HTTP 停止通过。命令仍只报告接受，最终排空结果与 Windows 停止闭环待补。[记录](evidence/personal-experience/service-stop-request-cli-20260912.md)。功能仅本地保留。
+
+M85 已接本次排空签名结果与后台收尾等待；Go 全量/vet/race、165 项合同、四目标构建和隔离 Linux 最终候选退出/结果/Writer 验证通过。停止完成客户端及 Windows 原生任务确认继续待办。[记录](evidence/personal-experience/service-stop-result-20260912.md)。
+
+M86 完成 stop 与 --recover 的签名结果/Writer 联合核对，Go 全量/vet/race、四目标构建及隔离 Linux 三条退出与恢复 CLI 通过。下一步 Windows task-stop 与注销编排，原生跨 OS 验收仍待完成。[记录](evidence/personal-experience/service-stop-completion-cli-20260912.md)。
+
+M87 已实现 Windows task-stop，10 项模拟场景、Go 全量/vet/race 与四目标构建通过。真实签名状态记录与写锁用于模拟编排，未执行 Windows 系统任务，不计原生验收。下一步注销及 setup/teardown。[证据](evidence/personal-experience/windows-task-stop-20260912.md)。
+
+M88 已接 Windows task-unregister，10 项模拟场景、Go 全量/vet/race 与四目标构建通过；注销后保留源配置和历史。PowerShell/COM 原生执行仍待验收，下一步 Windows setup/teardown。[证据](evidence/personal-experience/windows-task-unregister-20260912.md)。
+
+M89 已接 Windows setup，复用用户后台编排与健康检查，Windows/macOS 共 22 项模拟场景和 Go 全量/vet/race、四目标构建通过。Windows 原生完整旅程待验收，下一步 teardown。[证据](evidence/personal-experience/setup-windows-20260912.md)。
+
+M90 已接 Windows teardown，停止失败阻断注销，删除响应丢失后可重试恢复。7 项模拟场景、Go 全量/vet/race、四目标构建通过；Windows 原生完整生命周期仍待验收。[证据](evidence/personal-experience/teardown-windows-20260912.md)。UX-003 和总体目标继续进行中。
+
+M90 补充完成运行实例正常排空到注销的串联验证，以及 drain_failed 阻断删除，退出编排累计 9 项模拟场景。生产候选未改变，Windows 原生证据仍缺。
+
+M91 开始 UX-011：已落盘任务活动只读聚合核心，严格隔离主体、会话和意图版本；缺失绑定进入未归属，不把链验签当作效果核验。API、详情与结果证据关联仍待接入。[证据](evidence/personal-experience/task-activity-projection-20260912.md)。
+
+M92 已补任务结果核验的完整主体范围，不借用其他会话/智能体/意图版本的成功效果证据；现有结果核验判定复用。当前仅内部核心，API 与任务详情继续待办。[证据](evidence/personal-experience/task-completion-subject-20260912.md)。
+
+M93 已接管理鉴权的任务活动列表与未归属视图 API，支持快照分页、完整性范围报告及读取失败区分；Go/Python 合同与检查通过。前端和结果详情仍待开发。[证据](evidence/personal-experience/task-activities-api-20260912.md)。
+
+M94 任务活动已接个人前端，双视图、分页和刷新错误状态通过浏览器验证；49 项 Web 测试与两种构建通过。当前仍是活动列表，详情和结果证据未接，不标完整追溯完成。[证据](evidence/personal-experience/task-activities-ui-20260912.md)。
+
+M95 已接活动详情回执 API，快照分页与交错会话隔离验证通过，未归属活动可单条查看；不返回参数摘录。Go/Python 合同与构建检查通过，详情前端和结果核验继续待办。[证据](evidence/personal-experience/task-activity-detail-api-20260912.md)。
+
+M96 活动详情已接前端与列表跳转，响应范围校验、失效提示、返回路径及桌面/移动布局验证通过；50 项 Web 测试和两种构建通过。结果核验与 Skill 版本仍待接入。[证据](evidence/personal-experience/task-activity-detail-ui-20260912.md)。
+
+M97 已接活动范围结果核验 API，签名意图/主体范围/效果证据联合验证，末尾复验链快照。真实文件材料 verified/conflicting 与未知边界通过测试；168 项合同和 Go 检查通过。结果前端及 Skill 版本继续待开发。[证据](evidence/personal-experience/task-activity-completion-api-20260912.md)。
+
+M98 活动详情已展示独立效果核验、要求与证据引用；同快照/绑定校验和失败去除旧成功状态通过浏览器验证，52 项 Web 测试及两种构建通过。Skill 版本、证据详情和导出仍待完成。[证据](evidence/personal-experience/task-activity-completion-ui-20260912.md)。
+
+M99 已接证据引用的按需元数据查看，复用服务端签名校验并检查任务/证据 ID。54 项 Web 测试、两种构建和浏览器错误/焦点旅程通过；证据详情不展示原文或自行提升任务结果。[证据](evidence/personal-experience/effect-evidence-detail-ui-20260912.md)。
+
+M100：单活动脱敏导出核心已落盘并通过 Go 全量、vet、race 和四目标构建。下载 API/签名封装/UI 尚待接入；本批未提交或推送，不提升原生平台支持声明。
+
+M101：任务活动的管理下载接口和独立签名合同已实现，固定 Go 样例通过 Python 合同/验签；支持当前快照内的整组脱敏摘要导出，前端入口待接。未提升原生支持声明，未提交推送。
+
+M102：个人活动详情已接整组摘要下载，56 项前端测试、两种构建和隔离浏览器下载/冲突验证通过；未将浏览器 fixture 计为真实平台证据。效果材料/Skill 版本仍待补齐。
+
+M103：历史授权来源关联核心已落盘，范围/签名/撤销/缺失选择验证通过。只证明历史授权来源；Skill 内容版本、执行归属及 API/UI 继续待开发。
+
+M104：历史授权引用的 Skill 内容来源核验核心已落盘，普通/导入准入分别保留声明版本与各自摘要；服务端查询及界面仍待接入，不提升原生支持或执行证明声明。
+
+M105：历史准入磁盘读取已增加 8 MiB 限额、文件/目录链接和身份检查、严格 JSON 与文档 ID 核对。查询 API/UI 仍待接入，未提交推送。
+
+M106：活动历史 Skill 来源查询 API 和共享合同已落盘，可返回签名授权引用的声明版本与内容摘要；来源核验不等于实际执行证明。前端来源面板继续待接，未提交推送。
+
+M107：活动详情已接按需历史 Skill 来源面板，59 项 Web 测试及两种构建、隔离浏览器验证通过。声明版本不等于执行证明；未提交推送。
+
+M108：活动 search API 已提供全快照的精确条件与标识关键词筛选，先筛选再分页。未归属事实保持原状态，前端查询入口待接；未提交推送。
+
+M109：任务活动页已接标识筛选与 URL 状态恢复，61 项 Web 测试、两种构建和隔离浏览器旅程通过；筛选不搜索参数原文或 Skill 内容。本批未提交推送。
+
+M110：完整脱敏追溯包核心与 `local-task-trace-export/v1` 合同已落盘，组合回执摘要、历史 Skill 来源、完成结论及实际引用的效果证据元数据。固定 Go 样例通过 Python 合同/Ed25519 互验，Go 全量/vet/race 和四目标构建通过；来源或结论缺失明确标记 incomplete。API/UI 和真实平台样例仍待完成，未提交推送。[证据](evidence/personal-experience/task-trace-export-core-20260913.md)。
+
+M111：管理端完整追溯包下载 API 已接通，服务端组合已验签回执、历史 Skill 来源、主体范围完成结论和签名效果记录，签名后复验回执快照及效果集合。Go 全量/vet/race、174 项合同/Ruff和四目标构建通过；前端入口与真实平台样例待完成，未提交推送。[证据](evidence/personal-experience/task-trace-export-api-20260913.md)。
+
+M112：活动详情已增加完整脱敏追溯包下载并与回执摘要区分，前端验证活动/快照、来源、完成状态、incomplete 及证据引用关系。63 项 Web 测试、两种构建和隔离 embed 浏览器旅程通过；浏览器不声称完成签名验真，真实平台样例仍待补，未提交推送。[证据](evidence/personal-experience/task-trace-export-ui-20260913.md)。
+
+M113：默认关闭的独立 AES-256-GCM 原文仓核心已落盘，使用独立密钥、任务摘要、AAD、24 小时/64 MiB 默认限制及整项凭据过滤；删除/过期清理不修改事实链。Go 定向/race/vet和 175 项合同/Ruff通过；任务授权与 API/UI 待接，未提交推送。[证据](evidence/personal-experience/raw-task-content-store-20260913.md)。
+
+M114：逐任务原文采集授权与撤销核心已落盘，新增签名 Grant/Revocation 合同，绑定任务/操作者摘要、种类、窗口、保留期和大小；存储写入口已收紧，初始化仓不能绕过授权。撤销以授权签名作 CAS 并与采集串行，既有密文保持独立。Go 定向/race/vet、178 项合同/Ruff和四目标构建通过；管理 API/UI 待接，默认仍不采集原文，未提交推送。[证据](evidence/personal-experience/raw-task-content-authority-20260913.md)。
+
+M115：原文仓不可变签名 Activation 及 status/activation 管理 API 已落盘，绑定操作者摘要、限制和独立密钥指纹；重启从磁盘恢复，部分状态保持 disabled，篡改显示 error 且不覆盖。管理会话与决策凭据隔离，严格请求和默认不采集已验证。Go 全量/vet/race、181 项合同/Ruff和四目标构建通过；逐任务 Grant/Revoke、采集与前端待接，未提交推送。[证据](evidence/personal-experience/raw-task-content-activation-api-20260913.md)。
+
+M116：逐任务 Grant/Revoke 管理 API 已落盘，提供严格创建、完整验签列表/单项和 CAS 撤销；只返回任务/操作者摘要，稳定区分 active/expired/revoked，损坏不返回部分列表。管理鉴权、决策凭据越权、幂等撤销和磁盘隐私已验证。Go 全量/vet/race、184 项合同/Ruff和四目标构建通过；运行时采集凭据/API及前端待接，未提交推送。[证据](evidence/personal-experience/raw-task-content-grant-api-20260913.md)。
+
+M117：原文仓已增加与 Runtime Identity、原生会话、签名 Binding、服务端任务和原文 Grant 同时绑定的短时签名许可，以及许可签发/结构化采集 API。每次采集复验两套权限与撤销，secret 整项过滤，响应不含明文或密文载荷。Go 全量/vet/race、188 项合同/Ruff和四目标构建通过；尚未接原生适配器及原文管理 UI，不提升平台支持声明，未提交推送。[证据](evidence/personal-experience/raw-task-content-runtime-capture-20260913.md)。
+
+M118：原文记录管理 search/read/delete 与过期清理 API 已落盘。列表在返回前认证完整密文目录，显式读取才返回已过滤明文并标记 contains_plaintext；删除要求记录 ID 确认且不改事实链。Go 全量/vet/race、196 项合同/Ruff和四目标构建通过；管理 UI、持续提示、诊断包检查与真实平台采集仍待接，未提交推送。[证据](evidence/personal-experience/raw-task-content-management-api-20260913.md)。
+
+M119：个人控制台已接原文仓持续顶栏状态和设置页显式启用/到期清理；ready 明确保持按任务授权、默认不采集。精确响应校验、设置后即时同步、刷新恢复、异常撤下旧状态和浏览器不持久化已由真实隔离 daemon/embed 旅程验证。66 项 Web、Go 全量/vet/race、196 项合同/Ruff及四目标构建通过；任务级授权/明文管理 UI、自动清理、诊断包检查与原生平台采集仍待完成，未提交推送。[证据](evidence/personal-experience/raw-task-content-settings-ui-20260913.md)。
+
+M120：可信任务详情已接逐任务 Grant 创建/撤销、原文元数据、二次确认读取和完整 ID 删除。前端核对 task_ref 与所选记录关系，切换、关闭、刷新或错误撤下明文，且不写浏览器存储。70 项 Web、Go 全量/vet/race、196 项合同/Ruff、四目标构建及 9 项实际 Grant/Revoke 与记录 UI 旅程通过；原生适配器采集、自动清理、诊断包排除和真实平台端到端仍待完成，未提交推送。[证据](evidence/personal-experience/raw-task-content-task-ui-20260913.md)。
+
+M121：CLI/HTTP 全局导出、任务回执摘要和完整脱敏追溯包已增加原文目录哨兵回归，四条白名单投影均不读取、泄漏或引用 `raw-task-content`。Go 全量/vet及定向 race 通过。仓库当前没有通用诊断包，未来新增收集入口仍需独立排除测试；原生适配器采集和自动清理待完成，未提交推送。[证据](evidence/personal-experience/raw-task-content-export-isolation-20260913.md)。
+
+M122：`serve` 已接原文到期自动清理，启动即执行并每 15 分钟重试，退出随维护协程收尾。禁用不创建状态，启用时完整认证后只删到期密文；篡改使清理失败但不阻断默认服务。Go 全量/vet/race和四目标构建通过；原生适配器采集与真实平台端到端待完成，未提交推送。[证据](evidence/personal-experience/raw-task-content-automatic-cleanup-20260913.md)。
+
+M123：新增 Runtime Identity 专用原文采集桥，服务端从签名 Binding 恢复任务并只接受唯一 active Grant；Hermes 已管理插件在允许后提交参数、观察后提交结果，嵌套 JSON 以有界指针字段供 secret 过滤，250ms 辅助失败不影响执行。105 项适配器测试、Go 全量/vet/race、合同/Ruff和四目标构建通过；真实 Hermes 会话及 OpenClaw/WorkBuddy 接入待完成，未提交推送。[证据](evidence/personal-experience/hermes-raw-content-bridge-20260913.md)。

@@ -1,5 +1,7 @@
 # 个人体验与局域网团队开发台账
 
+> 2026-09-13 阶段复核：M124–M128 的审查修复与验证见 [阶段修复记录](evidence/personal-experience/stage-review-fixes-20260913.md)。OpenClaw 安装兼容性已修复并重跑原生会话；Skill 元数据匹配不能证明执行来源，M128 的 verified 口径已收紧。另一窗口的后续开发不计入本次验收。
+
 - 开始时间：2026-09-10，Asia/Shanghai。
 - 持续目标：[开发任务书](personal-experience-lan-team-development-taskbook-20260910-145507.md)。
 - 基线：`a2f95c6fad1a04c776d57c4d4b9fd89b85c69b33`，当前 `main` 工作区。
@@ -13,12 +15,13 @@
 - 本轮开始仅任务书有未提交修改，保持原样；未合并 PR、切换分支、提交、推送或发布。在当前 K002 后继工作区先完成可审阅增量；任务书 §11.1 的主线合入步骤尚未执行。
 - 最新批次 M36：状态目录健康绑定、配置初始化与稳定本地实例 ID 已实现并通过隔离 Linux arm64 实测；团队设备身份、安装包和三系统用户级后台仍待完成，UX-003 不标完成。
 
-### 当前落盘基线（2026-09-12，M67）
+### 历史落盘基线（2026-09-13，M116 时点）
 
 - main 已合入 PR #28，合并提交 69d9c59，包含截至 M47 的验证增量。
-- 当前分支 codex/personal-client-upgrade-recovery，M48–M67 为本批待提交合入增量；用户已于本轮授权提交并合并 main，实际远端结果以 Git/PR 为准。
+- M48–M67 已提交为 5ceea0a、274ed97，已推送 PR #31 并快进合入本地 main；36 项远端 CI 通过、2 项跳过。远端 main 仍在 69d9c59，PR 需要代码所有者批准，管理员合并授权问题尚待回复。
+- 当前后继分支 codex/personal-macos-stop-recovery，基于 274ed97；M68–M116 为本地未提交增量，不加入等待合并的 PR #31。
 - Linux 生命周期已具备升级/恢复/回退、快照恢复、setup/ui/自启/teardown；其原生证据仅隔离 Linux arm64，正式发行安装与真实重新登录仍未闭环。
-- macOS 已完成 plist 导出、签名准备、用户目录链接注册及只读加载状态查询；launchctl 加载/启动与实机证据尚未完成。Windows 后台生命周期待实现。
+- macOS 已实现 plist/签名准备、注册、加载/启动、停止/注销与 setup/teardown 编排，已通过模拟测试，实机证据仍缺。Windows 已实现任务 XML、签名准备与只读系统查询入口；仅模拟与交叉编译验证，定点存在性查询已实现但脚本/COM 原生执行未验证，排他注册已实现并通过模拟编排，按需启动与目录健康已实现并模拟验证；正常退出和注销编排已通过模拟测试，setup/teardown 编排已实现，全部 Windows 原生验收仍待完成。
 
 ## 任务状态
 
@@ -27,19 +30,19 @@
 | 任务 | 状态 | 当前结果/下一步 |
 | --- | --- | --- |
 | UX-000 | complete | [需求验收映射与基线](personal-experience-requirements-baseline-20260910.md)覆盖 D01–D11、实施位置、证据、未知项和阶段边界；具体功能状态继续逐任务跟踪 |
-| UX-001 | doing / native subset verified | Linux arm64：OpenClaw 原生链路 14 项、Hermes 经实例安装后的原生链路 15 项检查通过；完整会话/审批、Windows/macOS 与 WorkBuddy 桌面仍待验收 |
+| UX-001 | doing / native subset verified | Linux arm64：M124 Hermes 原生完整会话已有证据；OpenClaw 安装配置修复后公共 CLI 会话 17 项检查通过。真实用户审批、Windows/macOS 与 WorkBuddy 桌面仍待验收 |
 | UX-002 | doing | ADR-019–047 覆盖会话、发现、诊断、接入变更、Hermes 实例、自检、资源编辑和固定授权选择；安装预览/提交/恢复合同已接通；可信 Skill 运行归属仍需完成 |
-| UX-003 | doing / Linux native subset verified | Linux 初始化、后台注册/控制、setup、ui、自启链接管理和 teardown 已实现，隔离 runtime 全链复用/恢复通过；macOS plist 与签名准备已落盘，launchctl 接入/实机、Windows 后台及正式安装器仍待完成 |
+| UX-003 | doing / Linux native subset verified | Linux 初始化、后台注册/控制、setup、ui、自启链接管理和 teardown 已实现，隔离 runtime 全链复用/恢复通过；macOS 注册/启停/注销及 setup 编排已落盘，实机、Windows 后台及正式安装器仍待完成 |
 | UX-004 | implemented / Linux verified | 会话恢复、注销、到期重新配对、CLI 配对恢复及错误分类已落盘；Linux Chromium 11 项检查通过，跨 OS 运行验证归 UX-015 |
 | UX-005 | doing / core implemented | 显式扫描、范围预览、手动目录、稳定安装身份和共享关系已实现；Hermes 自定义根与 profile 使用同一实例解析器。同名实例隔离通过；其他平台根、过滤优先级、全量覆盖与跨 OS 实机仍待验证 |
 | UX-006 | doing / Hermes runtime check implemented | 接入预览、确认、恢复、卸载、Hermes 实例选择/原生启用及产品运行自检已落盘；Linux 独立 profile 的 UI/API/真实 CLI 通过。其他平台自检、自动重启和跨 OS 恢复仍待完成 |
-| UX-007 | doing / managed Hermes activation verified | 已实现期限、资源边界、编辑、固定授权和实例凭据；Hermes 普通会话自动接入在隔离 profile 实测通过。权限起草/批准/实例接入和日常换发已在隔离 Hermes profile 验证；实际 Skill 版本归属、完整场景模板和跨 OS 验收仍待完成 |
+| UX-007 | doing / managed instance integration verified | Hermes/OpenClaw 托管会话已在隔离 Linux arm64 验证。M128 已具备 Skill 元数据与门禁框架，但精确匹配仍为 unknown，可信执行来源绑定未完成；强制开关默认关闭。场景模板及其他窗口后继工作另行验收 |
 | UX-008 | doing / Web inbox and notification logic verified | 统一待办、单次处理、长期授权定位和浏览器通知的开启/合并/跨窗口去重已落盘；Linux Chromium 测试替身验证通过。OS 实际投递、后台启动器、任务内授权与原生恢复执行仍待完成 |
 | UX-009 | doing / Hermes installation UI verified in isolated profile | 本地目录/ZIP、HTTPS ZIP、固定副本审阅、来源绑定批准、安装预览、明确安装确认与失败恢复已接通；隔离 Linux Chromium 和目标文件操作验证通过。安装后实例权限准备、原生清单识别与实例范围的 CLI 保护已验证；Git 来源、浏览器文件选择、平台安装入口拦截、可信 Skill 归属与其他平台仍待完成 |
 | UX-010 | doing / update UI verified in isolated Linux browser | 记录、内容检查、移除与恢复 UI/API 已验证；更新比较、独立副本准备、明确切换和中断恢复核心/API 已实现。差异/确认/恢复 UI 已在隔离 Linux 浏览器验证；新版检查、原生更新验收与通用旧状态写入拒绝仍待完成 |
-| UX-011 | todo | 任务聚合与结果证据 |
-| UX-012 | doing | 随 M1 改进连接与配对状态，后续继续整合页面 |
-| UX-013 | todo | 隐私、保留期和独立原文存储 |
+| UX-011 | doing / local trace flow implemented | 已实现任务活动列表/详情/检索、结果证据与历史 Skill 来源查看，以及回执摘要和完整脱敏追溯包的 API/UI 下载流程；真实平台样例、保留期联动和最终验收待完成 |
+| UX-012 | doing / raw-content status integrated | 本地顶栏已持续区分原文仓关闭、按任务授权启用、异常与不可用，并在焦点/设置变更时刷新；其余页面状态、安装与故障恢复整合继续推进 |
+| UX-013 | doing / Hermes and OpenClaw native subset verified | 独立加密原文仓、显式任务授权、撤销、管理读取、默认导出隔离与清理已实现；Hermes/OpenClaw 原生参数和结果采集已有 Linux arm64 证据，输出关联已限制为单次消费。WorkBuddy 与跨系统验收仍待完成 |
 | UX-014 | doing / Linux core implemented | 发行 v2 兼容验证、稳定路径暂存、升级/回退/快照恢复、清单复用与 client-install 已实现；正式发行安装成功路径、不同版本与跨 OS 制品验收仍待完成 |
 | UX-015 | todo | 真实组合综合验收 |
 | LAN-001–006 | todo | 个人阶段完成后推进，未创建额外团队服务 |
@@ -609,3 +612,474 @@
 - 新 launch-agent-start --confirm-start，复用加载和生命周期锁、签名/链接/XML 归属，释放主 Writer 后只对未报告 PID 的任务 kickstart；已有进程不重启，正 PID 与目录 API 健康一致才成功。
 - Go 全量/vet、CLI/state/clientrelease race、159 项 Python 合同、Ruff 和四目标构建通过。8 项启动场景及确认参数负向通过。[证据](evidence/personal-experience/launch-agent-start-20260912.md)。
 - macOS 实机、退出/恢复及其他个人任务仍待完成。用户要求先将已开发内容提交并合入 main，本轮按此授权收拢 M48–M67，不扩展到其他窗口的独立远端 PR。
+
+## M68：macOS 停止与退出复验（UX-003）
+
+- 新 launch-agent-stop --confirm-stop，当前 GUI 域/签名源/精确注册链接/完整 XML 归属核对后，仅对正 PID 实例发 stop。保留配置，主动停止须无 PID、正常退出状态和 Writer 可用才成功；缺席与已闲置状态不编造退出事实。
+- Go 全量/vet/CLI race、四目标构建通过；10 项模拟停止场景及确认参数负向覆盖成功、复用、异配置、失联、异常退出、超时与锁冲突。[证据](evidence/personal-experience/launch-agent-stop-20260912.md)。
+- 没有 macOS 实机，不将测试计为原生停止/排空验收。退出后系统注销、恢复整合及 Windows 生命周期仍待完成。PR #31 保持原提交，后继开发不修改其待批准内容。
+
+## M69：macOS 配置注销与重复恢复（UX-003）
+
+- 新 launch-agent-unregister --confirm-unregister：完整归属核对、无 PID 且双锁下复验后 bootout 精确实例；完整枚举确认缺席后才移除精确用户注册链接。源配置/密钥/历史保留；运行进程、未知文件、链接缺失但仍加载均拒绝。
+- Go 全量/vet/CLI race、四目标构建通过；12 项模拟注销/恢复场景及确认参数负向通过。[证据](evidence/personal-experience/launch-agent-unregister-20260912.md)。
+- 当前无 macOS 实机，仍不标原生注销/重装通过。后续整合 macOS setup/teardown 与运行恢复，再推进 Windows 生命周期；PR #31 未更改，个人/LAN 目标保持进行中。
+
+## M70：macOS setup 与首次入口整合（UX-003）
+
+- setup 在 macOS 先验证 GUI 用户域，再串联 init/注册/加载启动/目录健康；健康实例复用，显式端口冲突拒绝。阶段失败停止后续调用，浏览器仅在最终健康后打开，--runtime 保留 Linux 专属语义。
+- Go 全量/vet/CLI race、四目标构建通过；11 项模拟编排场景通过。最终候选 Linux setup/复用/ui/自启管理/teardown 原生隔离回归通过（2.84 秒）。[证据](evidence/personal-experience/setup-macos-20260912.md)。
+- Mac 编排测试不代替 GUI 用户域/系统目录/launchctl 原生旅程；macOS teardown 整合、安装制品、跨 OS 实机与 Windows 生命周期继续待办。未修改 PR #31，后继增量本地保留。
+
+## M71：macOS teardown 编排与数据保留（UX-003）
+
+- teardown 在 macOS 持同一生命周期锁串联正常停止和精确注销；停止失败不卸载，注销中断可重复恢复，已移除链接走缺席复验而不重新注册。pending 配置切换拒绝。
+- Go 全量/vet/CLI race、四目标构建通过；8 项带真实临时状态/签名/链接的模拟集成场景验证阶段顺序、Writer 释放与原状态逐字节保留。最终 Linux 原生 setup/teardown 回归通过（2.92 秒）。[证据](evidence/personal-experience/teardown-macos-20260912.md)。
+- macOS setup→退出→重新使用已有编排实现，仍缺实机证据；不能标 UX-003 完成。后续优先 Windows 用户级后台生命周期，再补正式制品与真实平台验收。PR #31 保持不变，本地后继增量未提交。
+
+## M72：Windows 后台前置——serve 显式目录绑定（UX-003）
+
+- serve --state-dir 直接绑定本次服务的 Store/Writer/密钥/健康目录，优先环境变量但不修改环境；空值/相对路径/非规范/符号链接/不存在目录和多余位置参数在写入前拒绝。
+- Go 全量/vet/CLI race、四目标构建通过；真实 Linux 子进程在环境指向另一不存在目录时，按显式实例成功健康并正常退出，另一目录未创建（0.07 秒）。[证据](evidence/personal-experience/serve-explicit-directory-20260912.md)。
+- 这是 Windows Task Scheduler Exec 的必要前置，不是 Windows 生命周期已完成；下一步任务 XML、用户身份与归属配置。后继增量仍本地未提交，PR #31 不变。
+
+## M73：Windows 用户任务 XML 导出（UX-003）
+
+- 新 task-xml 只读导出当前用户 SID/实例 ID/程序/显式目录绑定的 Task Scheduler 1.3 配置；InteractiveToken、LeastPrivilege、无触发器、拒绝强制终止，参数不经 shell 或环境展开。
+- Go 全量/vet/CLI race、160 项 Python 合同/样例及 Ruff、四目标构建通过。共用 XML 检查身份、Exec、设置与转义；路径/SID/实例和长度边界负向通过。[证据](evidence/personal-experience/windows-task-xml-20260912.md)。
+- 尚未注册/启动计划任务，没有 Windows 实机证据；下一步签名任务归属与配置准备，再系统读回/注册/启停。未改变 PR #31，本批仍本地未提交。
+
+## M74：Windows 任务签名归属与准备恢复（UX-003）
+
+- 新 `task-prepare` 与 `local-windows-task-record/v1`，绑定 SID/实例/目录/任务名/XML 摘要；持双锁先签名意图后排他发布 XML，允许原签名内容缺失恢复，拒绝未知文件、漂移、克隆和签名篡改。
+- Go 全量/vet/CLI 与状态 race、161 项 Python 合同及 Ruff、四目标构建通过；续开发时重跑 Windows 定向和合同测试、重新核对构建摘要。[证据](evidence/personal-experience/windows-task-ownership-20260912.md)。
+- 尚无 Windows 系统注册/原生运行证据。下一步只读任务查询与完整配置核对，再推进注册/启停；UX-003 与整体目标保持进行中。README 中英文已同步个人入口、分支/发行差异及真实支持边界。
+
+## M75：Windows 任务配置读回核对核心（UX-003）
+
+- 新增完整 XML 结构核对，拒绝身份、参数、权限与设置变化及未知字段；有限额严格解析，允许不改变配置语义的格式与顺序差异。
+- Go 全量/vet/CLI race、四目标构建通过；补充命名空间/编码与三类限额边界后，Windows 定向测试通过。[证据](evidence/personal-experience/windows-task-readback-20260912.md)。
+- 尚未接入系统查询/CLI，不能将模拟 XML 输入计为 Windows 任务实际读回。下一步接系统查询传输、编码与失败分类，再注册/启停；UX-003 保持进行中。
+- 中英文 README 已单独推送文档分支 `codex/readme-personal-status-20260912`（`b6f186d`），功能增量仍留本地。
+
+## M76：Windows 系统任务只读查询（UX-003）
+
+- `task-query` 已接入 CLI：系统目录定位 schtasks、精确任务只读查询、有界输出/超时、严格 UTF-8/UTF-16 转换、完整配置与查询后本地签名复验。失败不推断缺席，不产生成功输出。
+- Windows 定向、Go 全量/vet/CLI race 与四目标构建通过；六项临时状态/签名模拟查询及编码正负向通过。[证据](evidence/personal-experience/windows-task-query-20260912.md)。
+- 未执行真实 Windows 系统查询；配置兼容与原生验收保持待办。下一步任务缺席判定、排他注册、启停与健康闭环，不改变远端 PR 或其他窗口工作。
+
+## M77：Windows 定点存在性查询（UX-003）
+
+- `task-presence` 使用固定系统 PowerShell/COM 查询，限定 GetTask 的文件不存在错误分支；当前 SID、本地签名、存在时完整配置与最终源复验串联，失败不推断缺席。
+- 七项模拟编排、内部响应负向及编码向量通过；Go 全量/vet/race、四目标构建通过。[证据](evidence/personal-experience/windows-task-presence-20260912.md)。
+- 当前没有 Windows 或 pwsh，脚本未原生解析/运行，不计为 Windows 支持验收。下一步排他 TASK_CREATE 注册和读回；存在性观察不能授权覆盖。所有功能增量继续本地保留。
+
+## M78：Windows 用户任务排他注册（UX-003）
+
+- `task-register --confirm-register` 接通双锁准备、归属/存在性查询、TASK_CREATE 创建与独立配置读回；已有匹配仅复用，竞争失败不覆盖，不自动启动或清理现场。
+- 九项模拟编排和确认负向、Go 全量/vet/race、四目标构建通过。[证据](evidence/personal-experience/windows-task-registration-20260912.md)。
+- PowerShell/COM 注册未原生验证，账户/ACL/序列化/真实竞争与恢复旅程保持待办。下一步 Windows 按需启动、健康和正常退出，再注销与 setup/teardown 编排；UX-003 不提升为完成。
+
+## M79：Windows 按需启动与目录健康（UX-003）
+
+- `task-start --confirm-start` 接通生命周期锁、完整归属复验、Writer 可用检查与释放、Run(null)、健康轮询与最终配置复验；健康实例复用，失败保留任务与状态。
+- 八项模拟编排、确认和任务动作模板路径负向、Go 全量/vet/race 与四目标构建通过。[证据](evidence/personal-experience/windows-task-start-20260912.md)。
+- 没有原生 Windows/PowerShell 执行证据；成功输出不声称任务引擎 PID 等于服务 PID。下一步正常退出、运行状态与注销，再 setup/teardown，UX-003 保持 doing。
+
+## M80：Windows 运行状态读回（UX-003）
+
+- `task-runtime` 接通当前用户任务 State、可见实例数和上次结果，完整归属前后复验；严格解析并拒绝明显矛盾快照，不把历史返回码当本次退出证明。
+- 六项模拟读回与协议边界、Go 全量/vet/race、四目标构建通过。[证据](evidence/personal-experience/windows-task-runtime-20260912.md)。
+- 现有 serve 正常退出依赖信号，Windows 后台还需本次运行绑定的退出请求，再核对 Writer/任务与退出结果；PowerShell/COM 原生旅程仍待验收，UX-003 不提升为完成。
+
+## M81：当前运行绑定的退出授权核心（UX-003）
+
+- 新 localcontrol 挑战/stop 签名域、随机 boot_id、目录/30 秒时限、单次接受状态机；必要记录回调失败不消费，16 并发只接受一次。
+- Go 全量/vet/控制与 CLI race、163 项 Python 合同/Ruff、四目标全包编译通过。[证据](evidence/personal-experience/service-stop-authority-20260912.md)。
+- 核心尚未接入 HTTP/CLI，不是退出功能已完成。下一步接受记录、受限本机端点与现有排空流程，再 Windows 停止/注销闭环；不提升原生验收状态。
+
+## M82：退出请求接受记录（UX-003）
+
+- 新签名接受记录绑定完整请求摘要、boot/目录和首次时间，持主 Writer 排他发布；同请求幂等，跨目录复制、冲突与未知文件拒绝。
+- Go 全量/vet/控制与状态 race、164 项合同/Ruff、四目标全包构建通过。[证据](evidence/personal-experience/service-stop-acceptance-20260912.md)。
+- 尚未接入 HTTP/CLI，仅接受记录落盘能力，不代表服务已退出。下一步服务端验签、记录成功后通知排空，再核对退出结果与 Writer；UX-003 保持 doing。
+
+## M83：本机退出 HTTP 与排空联动（UX-003）
+
+- 服务端 challenge/stop、严格请求边界、签名接受与主 Writer 记录联动；只有记录成功才通知既有排空流程，202 不冒充退出完成。
+- HTTP 安全/记录失败重试测试、Go 全量/vet/server 与 CLI race、四目标构建通过。隔离 Linux 最终候选真实 HTTP 退出、记录留存与 Writer 释放验证通过（0.104 秒）。[证据](evidence/personal-experience/service-stop-http-20260912.md)。
+- 仍缺停止 CLI、Windows task-stop/注销和原生后台验证；下一步客户端验签、请求与最终退出确认。UX-003 不提升为完成，未修改远端。
+
+## M84：本机签名退出请求 CLI（UX-003）
+
+- `stop-request --confirm-stop` 接通目录健康、挑战验签、签署退出请求及响应/本地接受记录核对；响应丢失时核验原请求记录，不重发，输出仅表示接受。
+- 六项 HTTP 模拟与响应/确认边界、Go 全量/vet/race、四目标构建通过。隔离 Linux 真实 CLI 及 HTTP 两条停止路径正常退出、记录留存和 Writer 释放通过（合计 0.197 秒）。[证据](evidence/personal-experience/service-stop-request-cli-20260912.md)。
+- 下一步排空结果记录与最终停止确认、Windows 任务停止/注销；当前请求 CLI 不承诺完成退出，跨 OS 原生验收不提升。
+
+## M85：本次排空结果与后台收尾（UX-003）
+
+- 新签名排空结果绑定接受记录，待 HTTP/刷新/运行检查收尾后持 Writer 排他写入；超时保留失败且继续等待后台结束，不能提前释放 Writer。
+- Go 全量/vet/控制/状态/CLI race、165 项合同/Ruff、四目标构建通过；隔离 Linux 两条真实退出旅程新增结果核验通过（0.219 秒）。[证据](evidence/personal-experience/service-stop-result-20260912.md)。
+- 下一步停止完成客户端将结果与 Writer/Windows 任务状态结合；drained 不单独证明进程退出，跨 OS 原生验收保持待办。
+
+## M86：停止完成确认与恢复 CLI（UX-003）
+
+- `stop --confirm-stop` 结合本次签名结果与 Writer，持锁复验后完成；`--recover` 只核对原接受记录，不发送新请求，超时保留恢复身份。
+- 六项完成状态/确认负向、Go 全量/vet/race、四目标构建通过。隔离 Linux 三条真实退出及停机后完整恢复 CLI 通过（0.415 秒）。[证据](evidence/personal-experience/service-stop-completion-cli-20260912.md)。
+- Windows task-stop 需继续任务运行状态前后复验、注销及 setup/teardown；跨 OS 原生验收未提升，UX-003 保持 doing。
+
+## M87：Windows 任务正常停止编排（UX-003）
+
+已接 task-stop --confirm-stop：运行时要求本次签名 drained、写锁释放和任务 ready/零返回码；原本空闲只确认空闲，不借历史结果宣称本次退出。排队拒绝，最终持主锁复验配置、运行状态及退出记录。10 项模拟场景、确认参数负向、Go 全量/vet/CLI race 和四目标构建通过。Windows 原生停止未验收，注销与 setup/teardown 继续待开发。
+
+证据：[windows-task-stop-20260912.md](evidence/personal-experience/windows-task-stop-20260912.md)。功能仍本地未提交。
+
+## M88：Windows 任务注销（UX-003）
+
+已接 task-unregister --confirm-unregister，双锁与签名归属、完整配置、空闲状态校验后删除精确任务并读回缺席。保留本地配置和数据；已缺席幂等，查询/删除失败不伪报成功。10 项模拟场景、参数负向、Go 全量/vet/race 与四目标构建通过。固定 PowerShell 删除脚本未在 Windows 解析或执行；条件删除非事务的并发边界已登记。下一步 setup/teardown；UX-003 仍未完成。
+
+证据：[windows-task-unregister-20260912.md](evidence/personal-experience/windows-task-unregister-20260912.md)。功能仅本地落盘。
+
+## M89：Windows 一步初始化（UX-003）
+
+setup 已复用用户后台阶段编排，新增 Windows 当前用户 Task Scheduler 只读预检，再串联初始化、注册、启动和最终健康。健康实例复用仍核对任务归属；--runtime 拒绝，浏览器按需打开。Windows/macOS 各 11 项模拟编排、Go 全量/vet/race 与四目标构建通过；Windows 原生 COM/浏览器未验收。下一步 teardown。
+
+证据：[setup-windows-20260912.md](evidence/personal-experience/setup-windows-20260912.md)。本批未提交或推送。
+
+## M90：Windows 保留数据退出（UX-003）
+
+teardown 已接 Windows 正常停止和注销，生命周期锁贯穿两阶段，停止未确认不会注销；已缺席可幂等恢复，主 Writer 忙拒绝。7 项模拟场景覆盖空闲、已缺席、查询失败、停止失败、删除响应丢失恢复及两类锁忙，验证重复调用、删除次数和锁释放。Go 全量/vet/race、四目标构建通过。Windows 原生完整生命周期仍缺，UX-003 不标完成。
+
+证据：[teardown-windows-20260912.md](evidence/personal-experience/teardown-windows-20260912.md)。功能继续本地保留。
+
+M90 补充：teardown 已增加运行成功与排空失败的串联测试，累计 9 项。用真实签名状态记录和 Writer 验证停止完成先于注销；排空失败禁止删除。联合定向 race 通过，系统任务仍为模拟回调，不增加原生支持范围。
+
+## M91：任务活动聚合核心（UX-011）
+
+已在 receipt 复用链校验报告实现只读聚合，以链/平台/会话/主体/任务/意图/意图摘要为复合键；缺少绑定保留未归属，前缀验签失败不产可信分组。只返回原快照索引，不新增参数持久化，不从 allow 推导结果核验。尚未接用户 API、详情、可信 Skill 版本与效果证据，UX-011 仅进入 doing。
+
+证据：[task-activity-projection-20260912.md](evidence/personal-experience/task-activity-projection-20260912.md)。
+
+## M92：任务结果核验的主体隔离（UX-011）
+
+新增内部 EvaluateForSubject，先验签候选证据、拒绝重复/矛盾引用，经可信历史行动按平台、会话、主体、任务与意图版本筛选，再复用 completion.Evaluate。其他分组成功证据不补足本组缺失；不改变已有 API 范围。10 项范围测试覆盖匹配、跨平台/会话/主体/意图/摘要、行动引用错误、篡改、重复和空主体。任务 API/页面及 Skill 版本仍待接入。
+
+证据：[task-completion-subject-20260912.md](evidence/personal-experience/task-completion-subject-20260912.md)。
+
+## M93：任务活动列表 API（UX-011）
+
+新增管理鉴权 /v1/task-activities，tasks/unassigned 双视图，稳定活动身份及快照分页。Engine 锁内限额读取并核对链头，校验失败/超限不返回部分可信列表；独立输出前缀、历史完整性和新鲜度。新增版本合同及 Go API 固定样例，166 项 Python 合同、Ruff、Go 全量/vet/定向 race 和四目标全包构建通过。结果证据详情、Skill 版本与前端仍待接入。
+
+证据：[task-activities-api-20260912.md](evidence/personal-experience/task-activities-api-20260912.md)。功能仅本地落盘。
+
+## M94：个人任务活动页面（UX-011/012）
+
+新增 /activities 和任务活动导航，保留回执入口，任务/未归属双视图、快照分页与 URL 状态恢复。响应按请求范围验证，取消旧请求并隐藏过时内容，错误不伪装为空列表。Web 49 项测试、企业和本地构建通过；隔离 Linux Go embed + Chromium 完成真实配对/空列表及模拟内容、未知归属、刷新、快照失效、读取错误验证，桌面/移动截图已检查。任务详情、结果证据和 Skill 版本继续待开发。
+
+证据：[task-activities-ui-20260912.md](evidence/personal-experience/task-activities-ui-20260912.md)。
+
+## M95：任务活动详情回执 API（UX-011）
+
+新增活动详情 API 与版本合同，按活动身份和快照分页，只返回该组回执的裁决/工具/授权引用等摘要。交错会话隔离、未归属详情、鉴权、未知活动、错误视图及快照冲突测试通过；参数原文和摘录不进入响应。Go 全量/vet/定向 race、167 项合同/Ruff 和四目标全包构建通过。前端详情与结果核验联动仍待完成。
+
+证据：[task-activity-detail-api-20260912.md](evidence/personal-experience/task-activity-detail-api-20260912.md)。
+
+## M96：个人任务活动详情页面（UX-011/012）
+
+列表已可进入 /activities/:id，展示本组回执的裁决、工具、原因与授权引用，支持分页、快照、刷新和返回列表。响应核对活动 ID/范围、回执主体/会话/平台、序号和参数字段，错误隐藏旧内容。50 项 Web 测试、企业/本地构建及隔离 embed 浏览器旅程通过，桌面和移动详情截图已检查。实际结果核验及 Skill 版本仍待接入。
+
+证据：[task-activity-detail-ui-20260912.md](evidence/personal-experience/task-activity-detail-ui-20260912.md)。
+
+## M97：活动范围结果核验 API（UX-011）
+
+新增 /v1/task-activities/:id/completion 与合同，按活动绑定读取签名意图和效果证据，复用完整主体范围核验；结果返回前复验链快照。未知归属/缺少意图返回明确原因和空结果，无要求保持 unknown。真实文件观测覆盖 verified/conflicting，Go 全量/vet/定向 race、168 项合同/Ruff 和四目标构建通过。前端结果展示与 Skill 版本仍待接入。
+
+证据：[task-activity-completion-api-20260912.md](evidence/personal-experience/task-activity-completion-api-20260912.md)。
+
+## M98：活动详情实际效果核验展示（UX-011）
+
+前端独立结果面板已接同活动/快照的 completion API，展示要求、状态、证据引用及核验时间。验证完整绑定、非空 verified 证据与无冲突，不从放行推导实际效果。52 项 Web 测试、两种构建和 embed 浏览器旅程通过；效果接口失败移除旧成功结论并保留回执详情。浏览器效果内容是明确 fixture，真实材料核验见 M97。Skill 版本与导出仍待开发。
+
+证据：[task-activity-completion-ui-20260912.md](evidence/personal-experience/task-activity-completion-ui-20260912.md)。
+
+## M99：效果证据元数据详情（UX-011）
+
+核验面板已可按需查看证据，复用现有服务端验签接口，核对证据 ID/任务后仅展示元数据；不展示原始文件/网络材料，不从单份 completed 推导任务完成。54 项 Web 测试、两种构建与 embed 浏览器验证通过，包括无点击不请求、来源可见、失败提示与关闭焦点返回。Skill 版本与脱敏导出仍待完成。
+
+证据：[effect-evidence-detail-ui-20260912.md](evidence/personal-experience/effect-evidence-detail-ui-20260912.md)。
+
+## M100：单活动脱敏导出核心（UX-011）
+
+新增内部导出投影，完整验签后按七字段绑定选择，限额不足拒绝部分输出。标识/工具用摘要，原因与参数不复制，非法时间和裁决不透传。交错会话隔离、隐私、预算、缺失活动和组外篡改测试通过；Go 全量/vet、导出 race 和四目标全包构建通过。尚未接下载合同/API、独立签名封装与前端入口，不计为完整导出功能。
+
+证据：[task-activity-export-core-20260912.md](evidence/personal-experience/task-activity-export-core-20260912.md)。
+
+## M101：单活动签名下载 API（UX-011）
+
+新增 local-task-activity-export/v1 合同和管理下载 API，强制指定快照、整组脱敏、10000 行上限与签名后快照复验。独立签名只证明摘要投影，不复制原回执签名或声称效果完成。跨会话隔离、敏感文本、鉴权、签名篡改、过期快照及磁盘回执篡改测试通过；固定 Go 样例由 Python 校验合同并验签。170 项 Python 测试、Ruff、Go 全量/vet/定向 race 与四目标全包构建通过。前端下载入口、结果材料和 Skill 版本仍待开发。
+
+证据：[task-activity-export-api-20260912.md](evidence/personal-experience/task-activity-export-api-20260912.md)。本批仅本地落盘。
+
+## M102：个人活动摘要下载入口（UX-011/012）
+
+已归属活动详情可下载整组脱敏回执摘要，按活动/快照校验白名单、行数和顺序后保存签名文档。提供超限/冲突/错误提示，详情变化取消旧请求。56 项 Web 测试及企业/本地构建通过；隔离 Go embed 浏览器验证真实配对和模拟导出下载、文件名/内容及快照冲突，桌面/移动截图已检查。浏览器只做格式校验；服务端签名与跨语言验签证据见 M101。效果材料、Skill 版本及筛选仍待推进。
+
+证据：[task-activity-export-ui-20260912.md](evidence/personal-experience/task-activity-export-ui-20260912.md)。
+
+## M103：历史授权来源关联核心（UX-011）
+
+新增 intent 内部历史 GrantReference 读取，按完整回执主体/任务/意图/Authority revision 与 matched Grant 对齐签名 Binding 和 Intent，不查询当前 Grant、不恢复权限。缺少选择或关联错误保持不可用；绑定撤销后历史仍可读，运行时依然拒绝。该关联只证明授权来源，尚不能证明具体 Skill 实际执行版本；后续继续核验历史准入/安装内容及接 API/UI。
+
+证据：[task-activity-historical-grant-20260912.md](evidence/personal-experience/task-activity-historical-grant-20260912.md)。
+
+## M104：历史 Skill 内容来源核验核心（UX-011）
+
+在历史 GrantReference 基础上只读选中准入，验证 ID/签名与内容摘要；普通准入保留 content_hash，导入准入另核对规范来源，分别输出 artifact_digest 与 analysis_sha256。声明版本缺失保持未知，名称/版本限长并拒绝控制字符；不返回路径/原文，不查询当前 Grant 或安装文件。尚未接服务端查询/UI，不能把历史授权来源当成实际 Skill 执行证明。
+
+证据：[task-activity-historical-skill-20260912.md](evidence/personal-experience/task-activity-historical-skill-20260912.md)。
+
+## M105：历史准入受限磁盘读取（UX-011）
+
+新增独立历史读取入口，复用既有文件身份/8 MiB 读取限制；检查 admissions 目录身份和链接，严格解析文档并核对 ID。缺失保持明确错误，不初始化或修改状态。限额恰好边界与超限、文件/目录链接、异常类型、未知字段、错误 ID 与尾随内容已验证。历史查询 API 将组合此入口与 M103/M104 签名核验，不改变既有 GetAdmission。
+
+证据：[task-activity-historical-admission-read-20260912.md](evidence/personal-experience/task-activity-historical-admission-read-20260912.md)。
+
+## M106：活动历史 Skill 来源查询 API（UX-011）
+
+新增管理 sources API 与 local-task-activity-sources/v1 合同，按活动快照分页关联历史 Binding/Intent/准入。明确 verified_source/unavailable/unattributed，缺失/篡改不返回可信元数据；缓存同关联键，每请求最多 8 个不同键。签名撤销不抹去历史来源，查询不恢复权限。定向验证正常版本/摘要、跨会话分页、缺失/篡改/撤销、鉴权、快照及预算边界；前端来源展示待接。
+
+证据：[task-activity-sources-api-20260912.md](evidence/personal-experience/task-activity-sources-api-20260912.md)。
+
+## M107：个人活动历史 Skill 来源面板（UX-011/012）
+
+活动详情已可按需展开本页历史来源，展示声明版本、准入/制品/分析摘要并说明其与实际执行的区别。逐行核对回执 hash/seq/Grant，错误清除旧内容；刷新/分页/活动变化取消请求。59 项 Web 测试、企业/本地构建与隔离 embed 浏览器来源展示/读取失败验证通过，桌面和移动截图已检查。筛选检索、效果与来源导出，以及真实平台样例继续待完成。
+
+证据：[task-activity-sources-ui-20260912.md](evidence/personal-experience/task-activity-sources-ui-20260912.md)。
+
+## M108：全快照活动检索 API（UX-011）
+
+新增管理 search API 与版本合同，支持平台/主体/会话/任务精确筛选及标识关键词，全部条件 AND。完整验签快照先筛选再分页，保留活动/源快照身份；未归属筛选不补造绑定。中文/大小写关键词、后续页命中、条件组合、参数边界/非法输入、鉴权、源快照失效与链损坏验证已补齐。前端筛选表单和状态恢复待接。
+
+证据：[task-activity-search-api-20260912.md](evidence/personal-experience/task-activity-search-api-20260912.md)。
+
+## M109：个人活动筛选与 URL 状态（UX-011/012）
+
+任务活动页已接关键词和平台/主体/会话/任务筛选；草稿只在明确提交后请求，切换视图、翻页、刷新、进入详情和返回均保留条件及正确快照范围。筛选响应核对服务端条件回显，读取错误与无匹配结果分别展示。61 项 Web 测试、企业/本地构建和隔离 Go embed 浏览器旅程通过；桌面/移动筛选布局已检查。Skill/效果内容仍不进入关键词搜索，效果与来源的完整导出及真实平台样例继续待完成。
+
+证据：[task-activity-search-ui-20260912.md](evidence/personal-experience/task-activity-search-ui-20260912.md)。
+
+## M110：完整脱敏追溯包核心（UX-011/013）
+
+新增 `local-task-trace-export/v1` 独立签名文档，将同一活动快照的回执摘要、逐回执历史 Skill 来源、任务范围效果结论和被结论实际引用的效果证据元数据组合为一份脱敏投影。构建前复验活动摘要签名、来源 seq/hash、完成结论主体和全部证据签名；缺失引用、重复材料、跨任务材料和虚假 verified 均拒绝签名。任务、Skill、授权、准入、要求和证据等原始标识仅输出摘要引用，原始参数、原因文本、观察材料与私钥不进入文档。来源不可用或结论未核验时明确 `incomplete=true`。
+
+固定 Go 样例通过 Draft 7 合同和 Python Ed25519 互验；Python 合同测试、Ruff、Go 全量/vet/定向 race 与 linux/amd64、linux/arm64、darwin/arm64、windows/amd64 四目标构建通过。签名范围仅为 `redacted_trace_projection_only`，不证明公钥自身可信、完整历史、当前权限、实际 Skill 执行或任务成功。服务端快照编排、下载 API 和前端入口继续待办。
+
+证据：[task-trace-export-core-20260913.md](evidence/personal-experience/task-trace-export-core-20260913.md)。本批仅本地落盘。
+
+## M111：完整追溯包下载 API（UX-011/013）
+
+新增管理 `GET /v1/task-activities/{id}/trace-export`，要求已归属任务及明确回执快照。服务端从完整验签链投影回执，逐条解析历史 Skill 来源，按同一任务和主体范围计算完成结论，从签名存储读取效果记录后调用 M110 核心生成独立签名文档；调用方不能提交关联材料。响应前再次核对回执快照和效果记录 ID/签名集合，变化返回 409 且不附下载头。不同历史来源读取限为 8 个，超限返回 413；缺失历史来源保留 unavailable/incomplete。
+
+接口验证覆盖管理鉴权、决策令牌越权、方法/参数/视图/活动/快照错误、来源隐私、来源缺失、签名验签、附件头和读取预算。Go 全量/vet、服务端定向 race、174 项 Python 合同/Ruff及四目标构建通过。当前没有前端下载入口或真实平台活动样例，不提升 UX-011 或跨系统验收状态。
+
+证据：[task-trace-export-api-20260913.md](evidence/personal-experience/task-trace-export-api-20260913.md)。本批仅本地落盘。
+
+## M112：完整追溯包前端入口（UX-011/012/013）
+
+活动详情新增独立“下载完整脱敏追溯包”入口，与既有回执摘要下载明确区分。前端验证完整白名单、活动/快照、回执和来源关联、完成状态、incomplete 语义及证据引用集合，验证失败不保存；成功后显示材料完整性状态。界面明确浏览器仅检查格式与关联，签名仍需外部可信公钥验证。409、413 与通用错误分别提示，详情变化会卸载并取消旧请求。
+
+新增 2 项固定 Go 样例前端验证，共 19 个文件、63 项 Vitest 通过；企业/个人构建通过。隔离 Go embed + Chromium 完成真实管理配对，并以明确 fixture 验证点击前无请求、完整包文件名/内容、incomplete 提示、快照冲突、导出区唯一节点及桌面/390 px 移动布局，无 page error。浏览器 fixture 不作为真实智能体平台或密码学验签证据。
+
+证据：[task-trace-export-ui-20260913.md](evidence/personal-experience/task-trace-export-ui-20260913.md)。本批仅本地落盘。
+
+## M113：默认关闭的独立加密原文仓（UX-013）
+
+新增 `internal/rawcontent` 和 `local-raw-task-content-envelope/v1`。只读打开不会创建密钥或目录；显式初始化生成独立随机密钥，AES-256-GCM 以封套元数据为 AAD，任务仅保留摘要引用。结构化字段在加密前整项移除明确 secret、凭据字段名及内置凭据值形态；全部被移除、无法分类、重复/非法路径、控制字符、超限和预算不足均拒绝。默认保留 24 小时/64 MiB，配置范围 1 小时至 30 天、1 MiB 至 1 GiB，单条 1 MiB。
+
+读取核对任务、期限、密文认证和明文摘要；用户删除及过期批量清理只触及独立密文目录。定向测试覆盖默认无副作用、磁盘无原文、跨任务、过期、AAD 篡改、密钥损坏、凭据过滤、清理不触碰模拟事实链及合同固定样例。Go 定向/race/vet与 175 项 Python 合同/Ruff通过；任务授权、采集 API/UI 尚未接入，因此默认运行行为仍是不采集原文。
+
+证据：[raw-task-content-store-20260913.md](evidence/personal-experience/raw-task-content-store-20260913.md)。本批仅本地落盘。
+
+## M114：逐任务原文采集授权与撤销核心（UX-013）
+
+新增 `local-raw-task-content-grant/v1` 和 `local-raw-task-content-revocation/v1`，以本机 Ed25519 身份签名不可变授权及终态撤销。授权只保存任务/操作者摘要，固定内容种类、1 分钟至 24 小时采集窗口、1 小时至仓上限的密文保留期和单条上限；每次采集重新验签并检查任务、种类、窗口、大小及撤销。原 `Store.Write` 已收紧为包内方法，生产写入只能经授权入口；仅初始化仓不能采集。
+
+撤销绑定完整授权签名并使用预期签名作 CAS，相同请求幂等，错误前置条件冲突；撤销与采集串行，返回后不能再写入，但不删除既有密文或更改事实链。定向测试覆盖默认无副作用、跨状态目录、跨任务、未授权种类、大小限制、未生效/过期、篡改、撤销幂等及撤销后既有密文可读。固定 Go Grant/Revocation 样例已通过 Python Draft 7 合同和独立 Ed25519 验签；管理 API/UI 尚未接入，默认仍不采集原文。
+
+证据：[raw-task-content-authority-20260913.md](evidence/personal-experience/raw-task-content-authority-20260913.md)。本批仅本地落盘。
+
+## M115：原文仓签名启用状态与管理 API（UX-013）
+
+新增不可变 `local-raw-task-content-activation/v1`，签名绑定操作者摘要、启用时间、保留期、磁盘预算和独立加密密钥指纹，作为重启恢复限制的唯一事实源。只有密钥/目录的部分初始化保持 disabled；签名、字段或密钥绑定损坏显示 error 且不自动覆盖。相同限制重试返回原记录，不同限制冲突；启用本身不产生任务 Grant，默认采集始终为 false。
+
+管理端新增 status 与 activation GET/POST，要求配对后的管理会话并拒绝决策凭据。启用正文严格拒绝缺失、null、重复、未知、尾随、非整数和越界；GET 每次从磁盘复验签名及密钥。定向测试覆盖默认读取无副作用、非法请求不初始化、首次/幂等/冲突、重启打开、错误签名身份、部分状态、磁盘篡改和错误状态不泄漏限制。固定 Go Activation、Activate 请求和 Status 样例已通过 Python 合同及 Ed25519 互验；前端及逐任务管理/采集 API 尚未接入。
+
+证据：[raw-task-content-activation-api-20260913.md](evidence/personal-experience/raw-task-content-activation-api-20260913.md)。本批仅本地落盘。
+
+## M116：逐任务 Grant/Revoke 管理 API（UX-013）
+
+新增管理会话专用 Grant 集合、单项和撤销入口。创建严格绑定原始任务请求到磁盘任务摘要，固定内容种类、采集窗口、保留期和单条上限；响应及磁盘不回显任务/操作者。单项和集合使用 verified view 区分 active/expired/revoked，撤销携带签名墓碑；集合稳定排序且在任一授权/墓碑/Activation 异常时整体失败，不返回部分可信数据。
+
+定向 HTTP 测试覆盖未启用、管理鉴权、决策凭据越权、严格请求、范围边界、创建、单项、列表、不存在、错误 CAS、撤销、幂等重试和磁盘隐私。新增 GrantCreate/Revoke/View/List 合同及固定 Go 样例，Python Draft 7 递归解析并与 M114 签名向量交叉验证。运行时采集正文接口仍未开放，管理会话和通用决策令牌均不构成采集凭据。
+
+证据：[raw-task-content-grant-api-20260913.md](evidence/personal-experience/raw-task-content-grant-api-20260913.md)。本批仅本地落盘。
+
+## M117：运行时会话绑定的短时原文采集许可与 API（UX-013）
+
+新增不落盘的签名 `local-raw-task-content-capture-permit/v1`。许可最长 5 分钟，保存随机许可 ID、原文 Grant 及其完整签名，并只以 sha256 引用绑定 Runtime Identity、原生会话、签名 Binding 和服务端任务；实际期限由请求、Grant 和运行时会话最早到期点截断。签发与采集分别通过 `/v1/raw-task-content/capture-permits` 和 `/v1/raw-task-content/captures`，均要求同一实例凭据重新认证当前签名会话，管理会话、通用决策令牌、自检凭据及跨实例/会话/任务借用不能替代。
+
+每次写入重新读取 Activation/密钥、许可、原文 Grant/撤销及运行时身份/Binding。采集正文只接受 path/value/secret 精确结构，递归拒绝重复/未知/null 字段，进入 AES-256-GCM 仓前整项移除 secret 与内置凭据模式；响应只返回密文记录元数据，不返回明文、nonce 或 ciphertext。Runtime Identity、会话/Intent/权限 Grant 或原文 Grant 任一撤销/到期均失败关闭，且不创建部分密文。
+
+Go 全量/vet、rawcontent/runtimeidentity/server 定向 race、188 项 Python Draft 7 合同与独立 Ed25519 验签、Ruff及 linux/amd64、linux/arm64、darwin/arm64、windows/amd64 四目标编译通过。接口尚未接入 Hermes/OpenClaw/WorkBuddy 原生适配器，不能据此声明真实平台已采集；原文清单、读取/删除和持续前端提示继续待办。
+
+证据：[raw-task-content-runtime-capture-20260913.md](evidence/personal-experience/raw-task-content-runtime-capture-20260913.md)。本批仅本地落盘。
+
+## M118：原文记录管理读取、删除与过期清理 API（UX-013）
+
+新增管理会话专用的记录 search/read/delete 与 purge-expired 入口。清单使用请求正文中的任务 ID 计算摘要，响应只返回 active/expired 元数据；在返回前对整个有界内容目录逐条执行结构、密钥和 AES-GCM 认证，任何任务的记录损坏均整体失败，不返回部分列表。显式 read 只读取匹配任务且仍 active 的记录，响应标记 `contains_plaintext=true` 并返回已过滤的 path/value，不返回 nonce 或 ciphertext。
+
+删除要求正文 task_id 与路径记录匹配，并以 confirm_record_id 精确确认；删除前同样完成 AEAD 认证。过期清理要求 `confirm_expired_only=true`，先认证所有记录，再删除达到半开到期边界的密文。两种删除均不写回原文 Grant、回执、效果证据或追溯包。缺失、过期、跨任务、篡改、严格正文和管理/决策鉴权已覆盖。
+
+新增 Record、Records、Read Content、Delete 与 Purge 的九份合同和八份管理固定样例；Go 全量/vet、rawcontent/server 定向 race、196 项 Python Draft 7 合同/Ruff及四目标编译通过。明文管理 UI、持续开启提示、诊断包排除检查和原生适配器采集仍待完成。
+
+证据：[raw-task-content-management-api-20260913.md](evidence/personal-experience/raw-task-content-management-api-20260913.md)。本批仅本地落盘。
+
+## M119：原文仓持续状态与隐私设置界面（UX-012/013）
+
+个人控制台顶栏已持续显示原文仓关闭、按任务授权启用、异常或不可用状态，并在 30 秒轮询、窗口重新聚焦和设置变更时刷新。设置页新增显式启用流程，可确认 1 小时至 30 天保留期、16 MiB 至 1 GiB 上限和当前人工身份；启用后展示服务端复验的固定 Activation 摘要，且明确默认采集仍关闭。
+
+到期清理要求独立勾选确认，只删除达到期限的密文。前端对 Status、Activation 和 Purge 响应实施精确字段、数值范围与字段关系校验；无效响应撤下旧 ready 状态，浏览器不保存这些权限状态。隔离真实 daemon/Go embed 浏览器旅程验证新安装关闭、显式启用、顶栏即时同步、清理、刷新恢复、伪造默认采集响应失败关闭和移动端布局。
+
+20 个 Web 测试文件共 66 项通过，个人/企业两种构建通过；Go 全量/vet、rawcontent/server/ui race、196 项合同/Ruff、四目标构建及 7 项浏览器检查通过。任务级 Grant/记录/明文管理 UI、自动清理、诊断包排除检查和原生平台采集继续待办。
+
+证据：[raw-task-content-settings-ui-20260913.md](evidence/personal-experience/raw-task-content-settings-ui-20260913.md)。本批仅本地落盘。
+
+## M120：任务详情原文授权与二次查看界面（UX-013）
+
+有可信 Binding 的任务活动详情已增加原文面板；未归属活动不开放。创建 Grant 要求内容种类、有效期、受 Activation 限制的保留期、单条上限、人工身份和明确任务范围确认；active Grant 可使用当前签名经独立确认终态撤销。前端计算任务摘要并只展示匹配当前任务的授权和记录。
+
+记录默认只显示元数据，选择 active 记录不会读取明文；用户二次勾选后才读取一次，响应必须精确匹配所选记录与任务，关闭/刷新/切换/失败均撤下 DOM 中的明文。删除要求完整 record_id 确认并在成功后重新读取清单。所有操作互斥，原文和授权不进浏览器存储、下载或剪贴板。
+
+新增 4 项前端固定合同测试，Web 共 70 项；个人/企业构建、Go 全量/vet/race、196 项合同/Ruff、四目标构建通过。浏览器实际调用签名 Activation/Grant/Revoke，记录界面以固定合同替身验证 9 项二次动作及失败关闭。原生适配器采集、自动清理、诊断包排除和真实平台端到端仍待完成。
+
+证据：[raw-task-content-task-ui-20260913.md](evidence/personal-experience/raw-task-content-task-ui-20260913.md)。本批仅本地落盘。
+
+## M121：默认导出与原文仓隔离回归（UX-013）
+
+CLI 全局导出、管理 HTTP 全局导出、任务回执摘要和完整脱敏追溯包已增加原文目录磁盘哨兵。测试在 `raw-task-content/content/` 放置唯一可识别内容，要求四种结构化白名单投影均不出现内容或目录标记，也不因无效原文文件而失败。
+
+四项普通/race 定向测试、Go 全量和 vet 通过，格式与 diff 检查无输出。仓库目前没有通用诊断包；未来新增诊断、崩溃或日志收集入口时仍须增加独立排除测试。原生适配器采集、自动到期清理和真实平台原文端到端继续待办。
+
+证据：[raw-task-content-export-isolation-20260913.md](evidence/personal-experience/raw-task-content-export-isolation-20260913.md)。本批仅本地落盘。
+
+## M122：服务生命周期内的原文自动到期清理（UX-013）
+
+`serve` 维护协程已接入原文仓 expired-only 清理：启动后立即执行，此后每 15 分钟执行，退出时随维护上下文取消并等待结束。禁用原文仓时不创建任何可选状态；启用后每次重新验证签名 Activation、独立密钥绑定和完整密文目录，再删除到期封套。
+
+定向测试验证到期/未到期记录分离、Grant 与回执链不变、篡改时整次失败且默认健康入口继续可用；维护回调失败不会结束循环。Go 全量/vet、server/CLI 定向 race、gofmt/diff 检查及 linux/amd64、linux/arm64、darwin/arm64、windows/amd64 四目标构建通过。原生适配器采集和三平台真实原文端到端继续待办。
+
+证据：[raw-task-content-automatic-cleanup-20260913.md](evidence/personal-experience/raw-task-content-automatic-cleanup-20260913.md)。本批仅本地落盘。
+
+## M123：Hermes 原文采集运行时桥（UX-013）
+
+新增 Runtime Identity 专用 native-captures 协议。薄适配器只提交原生 session、实例和内容字段，服务端从签名 Binding 恢复任务，并只在任务/kind 唯一匹配 active Grant 时内部签发 10 秒许可后立即采集；无授权拒绝，重叠授权冲突，适配器不持有 task ID、Grant、许可或管理凭据。
+
+Hermes 已管理插件在允许后采集参数、观察后采集结果，嵌套 JSON 展开为有界 JSON Pointer 字段供服务端 secret 过滤。250ms 辅助调用失败不改变裁决、结果或脱敏观察；旧全局凭据与产品自检不触发。105 项适配器测试、Go 全量/vet/race、合同总集/Ruff和四目标构建通过。真实 Hermes CLI 完整会话以及 OpenClaw/WorkBuddy 独立接入仍待完成。
+
+证据：[hermes-raw-content-bridge-20260913.md](evidence/personal-experience/hermes-raw-content-bridge-20260913.md)。本批仅本地落盘。
+
+## M124：真实 Hermes CLI 原生完整会话的原文采集端到端（UX-013）
+
+补上 M123 遗留验证：以公开 `hermes chat --oneshot`（Hermes Agent v0.21.0，入口 sha256 4e623fce…）驱动真实 Agent 循环与插件生命周期，隔离 HOME/HERMES_HOME 由产品安装器配置托管 profile，合成模型仅作对话驱动。运行 `managed-instance-native-smoke.py`（含 M123 原文增量，脚本 sha256 8e586e70…），17 项检查全部通过。
+
+核心结果：真实原生会话的签名 Binding 自动恢复任务，Grant 创建后的允许调用经 native-captures 产生恰好 2 条 parameters/output 密文记录，管理端读回明文与实际执行的路径及文件内容逐字段一致；Grant 之前的首个允许调用正确未采集（默认关闭负向证据）；产品自检用独立 Grant/Binding；撤销 Runtime Identity 后新会话 3 次调用全部产生未签名 deny，回执链 verify 通过（共 10 条签名回执）。Go 全量/vet、gofmt/diff 检查及四目标交叉编译通过。
+
+登记边界：仅覆盖 Linux arm64 宿主上的 Hermes；macOS/Windows 实机、真实 LLM 供应商与浏览器原文面板为独立验证线。OpenClaw 尚无 Runtime Identity/managed 接入，WorkBuddy 仍缺公开阻断钩子与可用测试环境，不能借用 Hermes 结果提升支持。
+
+证据：[hermes-native-e2e-raw-content-20260913.md](evidence/personal-experience/hermes-native-e2e-raw-content-20260913.md) 及同名 JSON 报告。本批仅本地落盘。
+
+## M125：OpenClaw Runtime Identity 与 managed 接入（服务端/适配器安装层）
+
+将 Runtime Identity 与托管安装计划从 Hermes 延伸到 OpenClaw：`supportedIdentityPlatforms` 封闭集合加入 openclaw，Record/Summary 携带平台字段并进入签名；Grant 以 `grant.Options{Platform:"openclaw"}` 平台锁定，enroll 经 `AuthorizeSessionContext` 一次读锁完成身份+绑定+平台校验；实例 ID 内容派生，服务端按 Hermes→OpenClaw 根目录探测解析平台，不信任客户端上报。
+
+托管连接字段按宿主约定区分：Hermes snake_case 写 `plugins/siq-agent-security/config.json`，OpenClaw camelCase（`runtimeIdentityId`/`tokenPath`/`agentId`）写 `<root>/siq-agent-security.json`。计划钉定校验身份元数据平台一致（拒绝跨平台身份钉入），静默降级被 `ErrPlanChanged` 拒绝，卸载仍要求先撤销身份（tombstone）。`/v1/adapter/instances` OpenClaw 行顶层 `native_available:false`（原生捕获未验证前不申报），跨平台预览 409，安装后裁决面平台内 allow/valid、跨平台凭据 401，诊断四项 pass。
+
+修复真实缺陷：`adapter_http.go` `validateManagedSelection` 硬编码 Hermes 平台导致 managed OpenClaw 经 HTTP 安装必然 409；已改为由计划视图透传平台。另修复 `skillinstall` 两处测试桩未跟随 `ResolveInstance` 签名扩展。
+
+验证：`runtimeidentity`/`adapterinstall`/`server` 三层新增 OpenClaw 定向测试（含端到端 `TestOpenClawManagedInstallDecisionsAndRevocation`：预览/安装/字段断言/裁决/跨平台拒绝/诊断/卸载重放）全部通过；Go 全量/vet/gofmt/diff 检查、CGO_ENABLED=0 四目标构建（SHA256 见证据文档）、Python 合同 197 passed + Ruff 通过。OpenClaw 原生捕获与插件运行时桥为 M126 待办，`native_available` 保持 false；仅覆盖本机 Linux arm64 宿主。
+
+证据：[openclaw-managed-runtime-identity-20260913.md](evidence/personal-experience/openclaw-managed-runtime-identity-20260913.md)。本批仅本地落盘。
+
+## M126：OpenClaw 插件运行时托管桥（managed Runtime Identity + 原生原文捕获）
+
+补上 M125 遗留的插件侧运行时行为（插件 v0.2.0 → v0.3.0），对齐 Hermes 托管桥合同：托管配置（camelCase `runtimeIdentityId`/`agentId`/`tokenPath`）下凭据必须匹配 `ri-<32hex>.<64hex>` 且拒绝符号链接/超长/旧全局 token；每次 `before_tool_call` 先经 `/v1/runtime-sessions` 注册并严格校验 8 字段响应（platform 必须 `openclaw`），失败在 block 模式 fail-closed 且不进入 decide；allow 后按 JSON pointer（≤32 层/≤256 路径/≤1024 字段/≤1MiB 单值）捕获参数、observe 带决策引用后捕获结果，POST `/v1/raw-task-content/native-captures`（期望 201，250ms best effort 预算，超界整体放弃）。非托管路径行为不变。
+
+验证：新增 Node 场景测试（resolution hook 替换 SDK 入口 + mock 本地服务驱动真实 hook handler，8 场景：legacy 不注册不捕获、托管 allow 注册+参数捕获、注册失败/异平台/旧 token fail-closed、observe 引用+输出捕获、捕获超时 best effort、托管 deny 带回执）全部通过；Go 全量 36 包/vet/gofmt/diff 检查、CGO_ENABLED=0 四目标构建（SHA256 见证据文档）、Python 合同 197 passed + Ruff 通过。该测试不是真实 OpenClaw 网关验收，`native_available` 在实机原生捕获验证前保持 false；支持矩阵不因此标注 supported。
+
+证据：[openclaw-managed-plugin-bridge-20260913.md](evidence/personal-experience/openclaw-managed-plugin-bridge-20260913.md)。本批仅本地落盘。
+
+## M127：OpenClaw 托管接入真机原生冒烟（2026.5.12 实机 17 检查全过）
+
+补上 M126 遗留的真机验收：以真实 OpenClaw 2026.5.12 公共 CLI（`openclaw agent --local`，真实插件 hook 生命周期，隔离 HOME，合成模型/工具夹具）驱动 `openclaw-managed-native-smoke.py`，17 项检查全部通过。覆盖：catalog 原生未验收仍报 `native_available:false`、managed 预览不动宿主、安装使用签发身份且资产与适配器源一致、原生会话自动 enroll、环境变量不能覆盖 managed agent、write 在执行前被拒、显式 Grant 后 parameters/output 各产生 1 条原文密文记录（明文经管理端读回逐字段一致，grant rawgrant-09b5…）、回执链 verify（3 条）、撤销身份后新原生调用全部被阻断。
+
+真机发现并处理五项：(1) 安装器顶层写 `security.installPolicy`，OpenClaw 2026.5.12 严格校验判为 Unrecognized key 拒绝启动——记入 compat_finding，仅夹具移键规避，产品侧待改（`native_available` 保持 false）；(2) 产品缺陷已修复：插件把 `ctx.agentId` 当 `agent_id` 上报导致 managed 绑定 401 failClosed，新增 `reportedAgentId(ctx)` 托管恒用配置 agent；(3) 产品缺陷已修复：after_tool_call result 载体自带的 undefined 可枚举键（details/terminate）使 `rawContentFields` 遍历整体中止、输出捕获静默失败，改为跳过 undefined/function/symbol 叶子，新增回归场景；(4) 宿主回放转录时剥除 tool-call id 非字母数字并对重复 id 追加 8 位 hex 消歧，夹具三态配对；(5) 宿主每请求回放全量转录，role=tool 计数跨轮累计。
+
+验证：插件 Node 场景套件 10/10（含新增 undefined-leaf 回归）；`go test ./internal/adapterinstall/`（资产一致性 `TestEmbeddedAssetsMatchRuntimeTree`：adapters/runtime 为规范源，插件改动必须同步 `adapterinstall/assets` go:embed 副本）；gofmt/diff 检查无输出；CGO_ENABLED=0 四目标构建（SHA256 见证据文档）；Python 合同 197 passed + Ruff 通过。
+
+登记边界：仅覆盖 Linux arm64 宿主上的 OpenClaw 2026.5.12；`security.installPolicy` 兼容性解决前 `native_available` 维持 false，支持矩阵不因此标注 supported；无真实用户审批、Skill 归属、OS/网络隔离宣称。
+
+证据：[openclaw-managed-native-smoke-20260913.md](evidence/personal-experience/openclaw-managed-native-smoke-20260913.md) 及 `/tmp/openclaw-managed-native-smoke-final.json`。本批仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+## M128：Skill 运行时归属与权限绑定（UX-007 核心批 / Q05）
+
+> 后续审查修正：以下保留 M128 当时的实现记录。仅匹配调用方提供的 Skill ID/摘要/版本不足以证明执行来源，当前 Store 对精确匹配返回 unknown；不得只给适配器增加自报字段就开启 verified 强制门禁。详见 [修复证据](evidence/personal-experience/stage-review-fixes-20260913.md)。
+
+将 Skill 权限从"授予时一次性绑定"推进到"运行时可验证绑定"。授予侧：admission.Admit 推导的 Skill 版本身份（`source:type:name@hash12` + version + 64hex content_hash）经 grant.Build 固化为 `Grant.Skill` 并纳入签名 canon；运行侧：`receipt.Request.Skill` 作为**不可信声明**，引擎经可插拔 `state.Store.SkillAttribution`（受信 grant 记录）裁决为 `verified|mismatch|unknown` 并签入 receipt 新增 `skill_attribution` 字段（verified 仅由 skill_id+content_hash+版本对受信状态精确匹配得出，模型自报永不视为 verified；unclaimed 调用该字段缺省）；决策侧：skill 范围 grant 仅在归属 verified 时可行使，伪造标识/切换版本/借用其他智能体身份/未声明 → 默认拒绝，reason_code `skill_attribution_mismatch`。
+
+分阶段强制：新增 `SkillAttributionEnforced` 引擎选项与 `skill_attribution_enforcement` 配置（默认关）。直接无条件强制会拒绝所有真实 skill 派生 grant 的每次运行时调用（实测破坏 runtimecheck 探针与 server 流程），因平台适配器尚未附加运行时 Skill 声明。关闭期间声明仍被解析、裁决并签入 receipt（诚实遥测），但 skill 范围 grant 暂按基线行使；任何调用不因声明显示 verified，除非 lookup 确认。端到端强制依赖适配器侧运行时声明附加，记为后续批次前置工作。
+
+测试：grant 层 3（身份进 grant/签名验证/缺身份基线 + skillRefOf 直接单测覆盖空 hash 空 ID）；receipt 层 10（verified 放行；unclaimed 拒绝且 receipt 无 skill_attribution；伪造未知身份拒绝；版本切换拒绝；跨智能体借用拒绝且记 unknown；基线 grant 不受声明影响；5 种畸形声明保持 unknown 且不回显损坏身份；nil lookup 全 unknown；lookup 返回非法状态值按拒绝；生命周期链归属随决策追加）；state 层 6（精确匹配；内容漂移/换版/缺 hash/缺 version mismatch；无关 Skill unknown；跨智能体/跨平台 unknown；过期/非 live unknown；基线 grant 永不 verified）。合同样本按机制再生 6 个（grant canon 新增 skill 字段导致签名/ID 连锁变化，逐个核对 diff 仅预期变化）；receipt/grant schema 新增字段（additionalProperties:false，verified 条件必填约束）。
+
+验证：`go test ./...` 36 包 ok 0 失败；gofmt -l/git diff --check 无输出；go vet 通过；CGO_ENABLED=0 四目标构建（linux/amd64、linux/arm64、darwin/arm64、windows/amd64，SHA256 见证据文档）；Python 合同 197 passed + Ruff 通过。
+
+登记边界：强制默认关（`skill_attribution_enforcement` 未开启前 skill 范围 grant 按基线行使）；UX-007 整体仍为 doing（场景模板、多 Skill 边界、跨 OS 行为未覆盖）；仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+证据：[skill-runtime-attribution-20260913.md](evidence/personal-experience/skill-runtime-attribution-20260913.md)。
+
+## M129：场景模板与多 Skill 调用边界（UX-007 后半 / 2026-09-13）
+
+范围：apps/agentshield、packages/contracts/grant.schema.json。
+
+实现：
+- 场景模板（UX-007）：`internal/grant/scenario.go` 封闭目录 3 个只减不加预设（no-network@1 移除网络；no-exec@1 移除进程执行与包安装；sandboxed@1 移除网络/执行/包安装/fs.write，仅留工具与模型 + 隐式只读）。`Build` 在派生任何投影前用 `ApplyScenario` 过滤 DeclaredFacts（hermes allowlist、OpenClaw 工具策略、网络/文件系统规则天然一致收缩）；模板身份 `ScenarioRef{ID,Version}` 签入 Grant；`Build` 失败关闭（目录外/版本不符 → `ErrScenarioInvalid`）；`Grant.Scenario` 为 omitempty，旧签名 grant 兼容，`DraftFrom` 自动保留场景。
+- HTTP：`GET /v1/grant-scenarios`（只读目录，无敏感字段）；`POST /v1/grants` 接受 `scenario_id`，未知场景 400。
+- 多 Skill 调用边界：state lookup 层每个 live Skill grant 按 skill_id+content_hash+版本独立精确匹配，混合身份（A 的 id + B 的 hash）mismatch；引擎层（enforcement on）live grant A 只服务归属 A 的调用，claim B 即使对 B verified 也不得经由 A 授权，拒绝码 `skill_attribution_mismatch`。
+- 合约：grant.schema.json 新增可选 `scenario` 属性；签发样本零变更（omitempty，197 合同测试持平）。
+
+测试：新增 11 个正负向测试（场景 7：no-network/no-exec/sandboxed 收缩正确、永不放宽超出准入、未知场景/目录外对象失败关闭、目录封闭恰 3 项、DraftFrom 保留场景；HTTP 2：目录只读无敏感字段+405、签发绑定与基线无 scenario 字段；多 Skill 2：lookup 层双 grant 精确匹配+混合身份 mismatch、引擎层跨 Skill 拒绝/匹配允许）。
+
+诚实记录（宿主能力缺口，阻塞项复核）：适配器侧运行时 Skill claim 挂载确认阻塞于宿主钩子能力——OpenClaw 2026.5.12 `before_tool_call` 上下文仅 `{toolName, agentId, sessionKey, sessionId, runId, toolCallId}`（~/.openclaw/node_modules/openclaw/dist/reply-BCcP6j4h.js ~L33932）；Hermes `pre_tool_call` 仅 `(tool_name, args, task_id, session_id, tool_call_id, turn_id, api_request_id, middleware_trace)`（~/.hermes/hermes-agent/hermes_cli/plugins.py:6831）。两者均不暴露 Skill 身份，适配器无法提供可验证声明；M128 分阶段强制设计与本结论一致，宿主上游加入 skill 来源字段前保持阻塞，不伪造。
+
+验证：`go test ./...` 全部 ok 0 失败；gofmt -l/git diff --check 无输出；go vet 通过；合约样本零变更；Python 合同 197 passed + Ruff 通过；CGO_ENABLED=0 四目标构建（linux/amd64、linux/arm64、darwin/arm64、windows/amd64，SHA256 见证据文档）。
+
+登记边界：UX-007 整体仍为 doing（跨 OS 行为、适配器 claim 挂载[宿主能力阻塞]未闭环）；场景目录为封闭集合，新增属代码变更；同 agent 多 live Skill grant 并存策略留待 UX-009/010；仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+证据：[scenario-templates-multi-skill-20260913.md](evidence/personal-experience/scenario-templates-multi-skill-20260913.md)。
+
+## M130：UX-008 后台启动器通知层（daemon 侧桌面通知 / 2026-09-13）
+
+范围：apps/agentshield（internal/state、internal/notify[新包]、cmd/agentshield）。
+
+实现：
+- 配置（opt-in）：`desktop_notify`（默认关）、`desktop_notify_command`（平台默认通知器 override），均 omitempty，旧 config.json 零变化；校验在加载侧（decodeConfig 拒绝空白命令），`SaveConfig` 维持纯写盘语义（config.json 不承载安全决策）。
+- `internal/notify`：`CommandNotifier`（argv 经 strings.Fields 切分、exec.CommandContext 直接执行、不经 shell、5s 超时）；`DefaultCommand`（仅 linux 且 notify-send 在 PATH；windows/darwin 报告不支持）；`Dispatcher`（轮询 5s、合并窗口 15s，对齐 M15/M16 节奏）——仅在 pending 数相对已报告值增加时投递，窗口内抑制但不吞增量，归零重置窗口，投递失败记日志且有界重试（不盖 lastNotify 戳），独立 goroutine，永不阻塞决策路径或确认收件箱。
+- 隐私：通知体 count-only（`有 %d 项待确认操作，请在本地控制台处理`），不含工具名/action_id/session/agent 标识/参数摘要/grant 与 receipt 标识（桌面通知可被同机其他应用读取，与 ADR-032 同一隐私规则；泄漏面有逐项否定断言测试）。
+- 接线：cmdServe 启动 `startDesktopNotify`（配置优先→平台默认→nil；不支持平台 + 无 override → nil notifier + 显式日志"收件箱完全可用"，绝不伪造投递）；`pendingConfirmations` 复用 `Engine.Confirmations()` 只读投影、只数 Status=="pending"。引擎热路径零改动。
+
+测试：新增 14 个测试全部通过（notify 8：增量投递/窗口合并不吞增量/归零重置/失败重试/count-only 泄漏面否定断言/argv 无 shell/平台默认仅 linux+二进制/ctx 取消退出；cmd 6：配置 argv 覆盖/不支持平台 nil/默认关闭与无通知器不启动+如实日志/真实引擎 hold→计数 1→resolve 后归 0/空白命令加载拒绝+合法往返/pending 闭包绑定引擎计数）。1 项在本机按设计 SKIP（本机存在 notify-send）。
+
+验证：`go test ./...` 全部 ok 0 失败；gofmt -l/git diff --check 无输出；go vet 通过；Python 合同 197 passed + Ruff 通过（M130 未触碰合同 schema/样例）；CGO_ENABLED=0 四目标构建（linux/amd64、linux/arm64、darwin/arm64、windows/amd64，SHA256 见证据文档）。
+
+登记边界（诚实记录）：OS 实机投递未验收——调度/投递层已实现并以测试替身+真实引擎测试，但"桌面真实弹出"需实机证据，UX-008 三系统实机验收项保持未完成；windows/darwin 无平台默认通知器（osascript/Toast 未实现），仅可显式配置 `desktop_notify_command`；原生恢复执行仍阻塞于 Hermes 30s 回调上限（M16 已验证）；任务内授权（task-scoped authorization）留待后续批次；仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+证据：[desktop-notify-background-launcher-20260913.md](evidence/personal-experience/desktop-notify-background-launcher-20260913.md)。

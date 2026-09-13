@@ -83,3 +83,46 @@ func serveLocalHTTP(hs *http.Server, ln net.Listener, stop <-chan os.Signal, gra
 	// still awaited. Surface it for diagnosis instead of claiming clean drain.
 	return errors.Join(serveErr, shutdownErr)
 }
+
+// A grace timeout is a failure, but is not permission to unlock state while
+// runtime-check workers are still writing. Preserve the error and wait.
+func closeLocalRuntimeChecks(closeChecks func(context.Context) error, grace time.Duration) error {
+	ctx, cancel := context.WithTimeout(context.Background(), grace)
+	defer cancel()
+	err := closeChecks(ctx)
+	if err != nil {
+		return errors.Join(err, closeChecks(context.Background()))
+	}
+	return nil
+}
+
+// runServeMaintenance keeps optional housekeeping within the serve lifetime.
+// Maintenance failures are isolated from the decision API; each operation
+// performs its own authenticated state validation and gets another chance on
+// the next tick.
+func runServeMaintenance(
+	ctx context.Context,
+	refreshTicks, rawContentPurgeTicks <-chan time.Time,
+	refresh func() error,
+	purgeRawContent func(time.Time) error,
+) {
+	_ = purgeRawContent(time.Now())
+	for {
+		select {
+		case _, ok := <-refreshTicks:
+			if !ok {
+				refreshTicks = nil
+				continue
+			}
+			_ = refresh()
+		case now, ok := <-rawContentPurgeTicks:
+			if !ok {
+				rawContentPurgeTicks = nil
+				continue
+			}
+			_ = purgeRawContent(now)
+		case <-ctx.Done():
+			return
+		}
+	}
+}

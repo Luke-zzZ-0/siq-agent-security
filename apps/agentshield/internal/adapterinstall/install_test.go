@@ -53,7 +53,7 @@ func TestHermesInstallUninstallRoundTrip(t *testing.T) {
 	}
 }
 
-func TestOpenClawMergesInstallPolicyAndRestoresBackup(t *testing.T) {
+func TestOpenClawRegistersRuntimeWithoutUnsupportedInstallPolicy(t *testing.T) {
 	opts := testOpts(t, OpenClaw)
 	oc := filepath.Join(opts.Home, ".openclaw", "openclaw.json")
 	_ = os.MkdirAll(filepath.Dir(oc), 0o700)
@@ -74,10 +74,8 @@ func TestOpenClawMergesInstallPolicyAndRestoresBackup(t *testing.T) {
 	if sec["extra"] != true {
 		t.Fatal("must preserve nested unrelated keys")
 	}
-	pol := sec["installPolicy"].(map[string]any)
-	exec := pol["exec"].(map[string]any)
-	if exec["command"] != opts.Binary {
-		t.Fatalf("command=%v", exec["command"])
+	if _, exists := sec["installPolicy"]; exists {
+		t.Fatal("must not inject unsupported installation policy")
 	}
 
 	if _, err := Uninstall(opts); err != nil {
