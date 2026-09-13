@@ -40,17 +40,17 @@ SIQ Agent Security 将用户授权、参数来源、工具执行和实际效果�
 
 当前优先完善个人用户体验：发现已有智能体与 Skill、由用户确认权限后启用保护、安全安装和更新 Skill，并记录授权与执行证据。SIQ Skill 提供交互与操作指引；实际裁决依赖本机 Go 运行时与平台适配器，安装 Skill 本身不会自动保护所有智能体。管理界面由本地服务提供，可在浏览器打开。
 
-**截至 2026-09-12 的仓库状态：** 远端 `main` 已合入 [PR #28](https://github.com/maoyadongsh/siq-agent-security/pull/28)，包含个人控制台、发现与权限管理、Skill 安装/更新流程及本地生命周期基础。[PR #31](https://github.com/maoyadongsh/siq-agent-security/pull/31) 的客户端升级恢复和后台生命周期仍待合并；后续 macOS / Windows 增量仍在本地开发。研究源码标签与早期二进制发行版不包含这些后续开发成果。
+**截至 2026-09-13 的仓库状态：** 已核查开发分支及客户端生命周期增量已合入 `main`；[PR #35](https://github.com/maoyadongsh/siq-agent-security/pull/35) 补齐 N01 状态兼容保护、递归备份、可恢复迁移和签名发行兼容预检，并通过 Linux 最低验收。生产 Git 获取、自动新版检查、可信 Skill 归属、真实审批恢复和三系统完整验收仍待完成。研究源码标签与早期二进制发行版不包含这些后续成果；合并不代表正式发行。
 
 | 范围 | 当前可核验状态 | 尚待完成 |
 | --- | --- | --- |
-| Linux 个人管理 | 本地控制台和部分原生接入已有隔离 Linux 验证；开发分支已有后台安装、升级与恢复验证 | 正式发行安装、真实重新登录及完整用户旅程验收 |
-| macOS | 开发分支已实现 LaunchAgent 生命周期，完成模拟测试与交叉编译 | macOS 实机验收与分发 |
-| Windows | 本地开发已实现任务 XML 导出与签名准备 | 任务注册、后台生命周期及 Windows 实机验收 |
+| Linux 个人管理 | 本地控制台和部分原生接入已有隔离 Linux 验证；主线已有后台生命周期、升级与恢复验证 | 正式发行安装、真实重新登录及完整用户旅程验收 |
+| macOS | 主线已实现 LaunchAgent 生命周期，完成模拟测试与交叉编译 | macOS 实机验收与分发 |
+| Windows | 主线已实现任务准备、注册及后台生命周期，已有模拟测试/交叉构建 | Windows 实机完整旅程与发行验收 |
 | OpenClaw / Hermes / WorkBuddy | OpenClaw、Hermes 的部分 Linux 原生路径已验证 | WorkBuddy 桌面端及三系统完整组合；CodeBuddy 适配器不等于 WorkBuddy 已验收 |
 | 局域网团队多设备管理 | 仓库已有可选企业 Control API、Edge 与 Connectors | 个人体验完成后再建设团队设备接入、统一管控与验收流程 |
 
-具体范围以[开发任务书](docs/personal-experience-lan-team-development-taskbook-20260910-145507.md)、[开发台账与证据](docs/personal-experience-development-progress-20260910.md)为准。发现资产不等于已启用保护；保护范围取决于实际接入的工具路径。
+具体范围以[开发任务书](docs/personal-experience-lan-team-next-development-taskbook-20260913-192253.md)、[开发台账与证据](docs/personal-experience-development-progress-20260910.md)为准。发现资产不等于已启用保护；保护范围取决于实际接入的工具路径。
 
 ## 核心价值
 
@@ -308,7 +308,7 @@ apps/control-api/.venv/bin/python benchmarks/hackathon/verify.py \
 
 欢迎普通 Linux 复现、同值来源解释、夹具诊断、指标纠错和有来源依据的负向案例。先阅读[贡献指南](CONTRIBUTING.md)，再选择[首批任务](docs/research/community-backlog.md)、[Issues](https://github.com/maoyadongsh/siq-agent-security/issues)或 [Discussions](https://github.com/maoyadongsh/siq-agent-security/discussions)。
 
-产品开发按“个人体验 → 局域网团队多设备管理”推进，优先补齐跨系统后台生命周期、可信 Skill 运行归属、审批后恢复执行、任务追溯与隐私控制，再完成真实平台综合验收。具体任务见[个人与团队开发任务书](docs/personal-experience-lan-team-development-taskbook-20260910-145507.md)。
+产品开发按“个人体验 → 局域网团队多设备管理”推进，优先补齐跨系统后台生命周期、可信 Skill 运行归属、审批后恢复执行、任务追溯与隐私控制，再完成真实平台综合验收。具体任务见[个人与团队开发任务书](docs/personal-experience-lan-team-next-development-taskbook-20260913-192253.md)。
 
 研究方向继续推进长期归档与 DOI、外部独立复现、预先确定协议的新实验，以及论文与制品评审。新二进制研究版本仍需单独的分发与原生验收。实际进展见[开源实施记录](docs/research/operations-20260908.md)与[任务台账](docs/open-source-research-tasks-20260908.md)。贡献签署与评审遵循 [DCO](DCO) 和[治理规则](GOVERNANCE.md)，社区交流遵循[行为准则](CODE_OF_CONDUCT.md)。
 

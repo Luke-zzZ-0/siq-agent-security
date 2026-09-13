@@ -33,17 +33,17 @@ The project serves researchers, Agent tool and adapter developers, and platform 
 
 The current priority is the personal experience: discover existing agents and Skills, enable protection after the user confirms permissions, install and update Skills safely, and record authorization and execution evidence. The SIQ Skill provides interaction and operating guidance; actual decisions depend on the local Go runtime and platform adapters. Installing the Skill alone does not protect every agent. The local service provides a browser-based management console.
 
-**Repository snapshot, 2026-09-12:** remote `main` includes [PR #28](https://github.com/maoyadongsh/siq-agent-security/pull/28), covering the personal console, discovery and permissions, Skill installation/update flows, and local lifecycle foundations. [PR #31](https://github.com/maoyadongsh/siq-agent-security/pull/31), covering client upgrade recovery and background lifecycle, is still awaiting merge. Further macOS / Windows work remains in local development. The research source tag and earlier binary releases do not include these subsequent changes. CI badges describe `main`, not unmerged branches or released artifacts.
+**Repository snapshot, 2026-09-13:** audited development branches and client lifecycle increments are merged into `main`. [PR #35](https://github.com/maoyadongsh/siq-agent-security/pull/35) adds N01 state compatibility protection, recursive backup, recoverable migration and signed release compatibility checks, meeting its Linux minimum acceptance gate. Production Git fetching, automatic update checks, trusted Skill attribution, native approval continuation and full OS acceptance remain open. Research tags and earlier binary releases do not include these subsequent changes; merging is not a release.
 
 | Scope | Current evidence | Remaining work |
 | --- | --- | --- |
-| Linux personal management | Console and selected native integrations validated in isolated Linux environments; background setup, upgrade and recovery validated on a development branch | Official release installation, actual re-login and complete user acceptance |
-| macOS | LaunchAgent lifecycle implemented on development branches, with simulated tests and cross-compilation | Native macOS acceptance and distribution |
-| Windows | Task XML export and signed preparation implemented locally | Task registration, background lifecycle and native Windows acceptance |
+| Linux personal management | Console and selected native integrations validated in isolated Linux environments; background lifecycle, upgrade and recovery validation merged into main | Official release installation, actual re-login and complete user acceptance |
+| macOS | LaunchAgent lifecycle implemented on main, with simulated tests and cross-compilation | Native macOS acceptance and distribution |
+| Windows | Task preparation, registration and lifecycle implemented on main with simulated tests/cross-builds | Complete native Windows journey and distribution acceptance |
 | OpenClaw / Hermes / WorkBuddy | Selected native Linux paths verified for OpenClaw and Hermes | WorkBuddy desktop and the complete OS/platform matrix; a CodeBuddy adapter does not establish WorkBuddy acceptance |
 | LAN team management | Optional enterprise Control API, Edge and Connectors already exist | Team device onboarding, unified management and acceptance after the personal phase |
 
-See the [development taskbook](docs/personal-experience-lan-team-development-taskbook-20260910-145507.md) and [progress ledger with evidence](docs/personal-experience-development-progress-20260910.md) for exact scope. Discovery does not mean protection is enabled; enforcement depends on the integrated tool paths.
+See the [development taskbook](docs/personal-experience-lan-team-next-development-taskbook-20260913-192253.md) and [progress ledger with evidence](docs/personal-experience-development-progress-20260910.md) for exact scope. Discovery does not mean protection is enabled; enforcement depends on the integrated tool paths.
 
 ## Core value
 
@@ -301,7 +301,7 @@ See the [threat model](docs/threat-model.md), [capability matrix](docs/agentshie
 
 Contributions are welcome for ordinary Linux reproduction, same-value provenance explanations, fixture diagnostics, metric corrections and negative cases with documented origins. Read [CONTRIBUTING.md](CONTRIBUTING.md), then choose a [starter task](docs/research/community-backlog.md), [Issue](https://github.com/maoyadongsh/siq-agent-security/issues) or [Discussion](https://github.com/maoyadongsh/siq-agent-security/discussions).
 
-Product development proceeds from the personal experience to LAN team management. Priorities include cross-platform background lifecycle, trusted Skill attribution during execution, resuming approved actions, task traceability, privacy controls and native platform acceptance. See the [personal and team development taskbook](docs/personal-experience-lan-team-development-taskbook-20260910-145507.md).
+Product development proceeds from the personal experience to LAN team management. Priorities include cross-platform background lifecycle, trusted Skill attribution during execution, resuming approved actions, task traceability, privacy controls and native platform acceptance. See the [personal and team development taskbook](docs/personal-experience-lan-team-next-development-taskbook-20260913-192253.md).
 
 Research priorities remain long-term archival and a DOI, independent external reproduction, new experiments with protocols defined in advance, and paper/artifact review. A new binary research release still needs separate distribution and native acceptance checks. Actual progress is recorded in the [operations report](docs/research/operations-20260908.md) and [task ledger](docs/open-source-research-tasks-20260908.md). Contributions follow the [DCO](DCO) and [governance rules](GOVERNANCE.md); community participation follows the [code of conduct](CODE_OF_CONDUCT.md).
 

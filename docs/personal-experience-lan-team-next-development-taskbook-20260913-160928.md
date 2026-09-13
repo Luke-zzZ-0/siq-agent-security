@@ -1,5 +1,7 @@
 # SIQ Agent Security 后续开发任务书：个人闭环与局域网团队管理
 
+> 本文保留为 v2 历史计划；后续执行请使用 [v3.0](personal-experience-lan-team-next-development-taskbook-20260913-192253.md)，其中 N00/N01 已完成范围和新的首批 N02/N04 已更新。
+
 > 执行进度更新：N01 已完成开发与 Linux 最低验收，见 [本批报告](evidence/personal-experience/n01-completion-20260913-190637/report.md)。Windows/macOS 原生项仍保留，其他任务状态见 [接续台账](personal-experience-closure-progress-20260913.md)。下方需求及最终目标不变。
 
 > 文档版本：v2.0；编制时间：2026-09-13 16:09:28（Asia/Shanghai）。
