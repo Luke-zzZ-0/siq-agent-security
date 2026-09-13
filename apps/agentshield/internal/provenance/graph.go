@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 )
 
@@ -161,7 +162,7 @@ func (s *Store) importAssertion(a Assertion, now time.Time) (Assertion, error) {
 		return Assertion{}, err
 	}
 	dir := s.graphDir(a.Scope)
-	if err := os.MkdirAll(dir, 0700); err != nil {
+	if err := statefs.MkdirAll(dir, 0700); err != nil {
 		return Assertion{}, err
 	}
 	fi, err := os.Lstat(dir)
@@ -183,7 +184,7 @@ func (s *Store) importAssertion(a Assertion, now time.Time) (Assertion, error) {
 	} else if !errors.Is(err, os.ErrNotExist) {
 		return Assertion{}, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return Assertion{}, err
 	}

@@ -39,7 +39,7 @@ func cmdServiceUpgrade(args []string, out io.Writer) error {
 	if err := cmdServiceUnit(nil, &source); err != nil {
 		return err
 	}
-	version, err := clientrelease.CheckUpgrade(*manifest, *binary)
+	version, err := checkUpgradeForCurrentState(*manifest, *binary)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func cmdServiceUpgrade(args []string, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	verifiedVersion, err := clientrelease.CheckUpgrade(*manifest, staged)
+	verifiedVersion, err := checkUpgradeForCurrentState(*manifest, staged)
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func cmdServiceUpgrade(args []string, out io.Writer) error {
 	}
 	// Verification is repeated immediately before the irreversible stop request.
 	recheck := func() error {
-		v, err := clientrelease.CheckUpgrade(*manifest, staged)
+		v, err := checkUpgradeForCurrentState(*manifest, staged)
 		if err != nil {
 			return err
 		}
@@ -111,7 +111,7 @@ func cmdServiceUpgrade(args []string, out io.Writer) error {
 			return err
 		}
 		if *sourceManifest != "" {
-			if _, err := clientrelease.CheckUpgrade(*sourceManifest, preserved); err != nil {
+			if _, err := checkUpgradeForCurrentState(*sourceManifest, preserved); err != nil {
 				return err
 			}
 			if _, err := clientrelease.Stage(st.Dir, *sourceManifest, preserved); err != nil {
@@ -170,7 +170,7 @@ func switchUserService(st *state.Store, source, target []byte, recoverID string,
 	if len(checks) == 1 {
 		binaryCheck = checks[0]
 	}
-	lifecycle, err := state.AcquireWriter(filepath.Join(st.Dir, "service-control"))
+	lifecycle, err := state.AcquireScopedWriter(st.Dir, "service-control")
 	if err != nil {
 		return err
 	}

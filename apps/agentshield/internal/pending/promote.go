@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strconv"
 	"strings"
 )
@@ -21,7 +22,7 @@ func Promote(stateDir string, appendOne func(Record) error) (int, error) {
 		return 0, nil
 	}
 	path := filepath.Join(stateDir, "pending", "decisions.jsonl")
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return 0, nil
@@ -80,7 +81,7 @@ func Promote(stateDir string, appendOne func(Record) error) (int, error) {
 }
 
 func readCursor(stateDir string) (int, error) {
-	raw, err := os.ReadFile(filepath.Join(stateDir, "pending", cursorFile))
+	raw, err := statefs.ReadFile(filepath.Join(stateDir, "pending", cursorFile))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return 0, nil
@@ -100,10 +101,10 @@ func readCursor(stateDir string) (int, error) {
 
 func writeCursor(stateDir string, n int) error {
 	dir := filepath.Join(stateDir, "pending")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
-	tmp, err := os.CreateTemp(dir, ".promoted.*")
+	tmp, err := statefs.CreateTemp(dir, ".promoted.*")
 	if err != nil {
 		return err
 	}
@@ -111,7 +112,7 @@ func writeCursor(stateDir string, n int) error {
 	cleanup := true
 	defer func() {
 		if cleanup {
-			_ = os.Remove(tmpName)
+			_ = statefs.Remove(tmpName)
 		}
 	}()
 	if _, err := fmt.Fprintf(tmp, "%d\n", n); err != nil {
@@ -125,11 +126,11 @@ func writeCursor(stateDir string, n int) error {
 	if err := tmp.Close(); err != nil {
 		return err
 	}
-	if err := os.Chmod(tmpName, 0o600); err != nil {
+	if err := statefs.Chmod(tmpName, 0o600); err != nil {
 		return err
 	}
 	dest := filepath.Join(dir, cursorFile)
-	if err := os.Rename(tmpName, dest); err != nil {
+	if err := statefs.Rename(tmpName, dest); err != nil {
 		return err
 	}
 	cleanup = false

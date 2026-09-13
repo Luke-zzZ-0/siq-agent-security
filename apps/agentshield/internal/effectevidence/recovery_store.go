@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"time"
@@ -22,7 +23,7 @@ func (s *Store) recoveryDir(id string) (string, error) {
 		return "", err
 	}
 	dir := filepath.Join(root, id+".recoveries")
-	if os.Mkdir(dir, 0700) != nil {
+	if statefs.Mkdir(dir, 0700) != nil {
 		info, err := os.Lstat(dir)
 		if err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
 			return "", ErrState
@@ -35,7 +36,7 @@ func (s *Store) recoveryHistory(p PendingFile, now time.Time) ([]FileRecovery, [
 	if err != nil {
 		return nil, nil, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return nil, nil, ErrState
 	}
@@ -61,7 +62,7 @@ func (s *Store) recoveryHistory(p PendingFile, now time.Time) ([]FileRecovery, [
 		if e != nil || !info.Mode().IsRegular() || info.Size() > 4096 {
 			return nil, nil, ErrState
 		}
-		raw, e := os.ReadFile(path)
+		raw, e := statefs.ReadFile(path)
 		if e != nil {
 			return nil, nil, ErrState
 		}
@@ -155,19 +156,19 @@ func (s *Store) RecoverPendingFile(id, expectedOwner, owner string, now time.Tim
 	if err != nil {
 		return FileRecovery{}, ErrState
 	}
-	tmp, err := os.CreateTemp(dir, ".recovery-*")
+	tmp, err := statefs.CreateTemp(dir, ".recovery-*")
 	if err != nil {
 		return FileRecovery{}, ErrState
 	}
 	name := tmp.Name()
-	defer os.Remove(name)
+	defer statefs.Remove(name)
 	_, we := tmp.Write(raw)
 	se := tmp.Sync()
 	ce := tmp.Close()
 	if we != nil || se != nil || ce != nil {
 		return FileRecovery{}, ErrState
 	}
-	if os.Link(name, filepath.Join(dir, fmt.Sprintf("%06d.json", r.Sequence))) != nil {
+	if statefs.Link(name, filepath.Join(dir, fmt.Sprintf("%06d.json", r.Sequence))) != nil {
 		return FileRecovery{}, ErrState
 	}
 	return r, nil

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	statepkg "siq-agent-security/apps/agentshield/internal/state"
 	"strings"
 	"testing"
 	"time"
@@ -13,6 +14,9 @@ func testOpts(t *testing.T, platform string) Options {
 	t.Helper()
 	home := t.TempDir()
 	state := t.TempDir()
+	if _, err := statepkg.Open(state); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.Chmod(state, 0700); err != nil {
 		t.Fatal(err)
 	}

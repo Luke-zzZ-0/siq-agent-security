@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strconv"
 	"strings"
@@ -82,7 +83,7 @@ func (s *Store) Catalog(ctx context.Context) (*Catalog, error) {
 	if err := checkDirectories(dir); err != nil {
 		return nil, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return nil, ErrUnavailable
 	}
@@ -266,7 +267,7 @@ func (s *Store) compareTarget(ctx context.Context, c *Claim, out *Inspection) er
 		if err := checkDirectories(path); err != nil {
 			return err
 		}
-		f, err := os.Open(path)
+		f, err := statefs.Open(path)
 		if err != nil {
 			return ErrUnavailable
 		}

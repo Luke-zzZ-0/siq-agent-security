@@ -28,7 +28,7 @@ func withPreparedUserService(args []string, apply func(string, state.UserService
 	if err != nil {
 		return err
 	}
-	controlLock, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	controlLock, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

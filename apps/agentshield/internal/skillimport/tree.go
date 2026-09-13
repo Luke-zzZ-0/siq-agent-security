@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"unicode"
@@ -163,7 +164,7 @@ func writeFile(path string, raw []byte, executable bool) error {
 	if executable {
 		mode = 0700
 	}
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
+	f, err := statefs.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
 	if err != nil {
 		return ErrUnavailable
 	}
@@ -206,7 +207,7 @@ func directoryTree(ctx context.Context, root, target string, skipGit bool) (tree
 		if err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
 			return ErrInvalid
 		}
-		dir, err := os.Open(path)
+		dir, err := statefs.Open(path)
 		if err != nil {
 			return ErrUnavailable
 		}
@@ -255,7 +256,7 @@ func directoryTree(ctx context.Context, root, target string, skipGit bool) (tree
 				}
 				out.Directories = append(out.Directories, child)
 				if target != "" {
-					if err = os.Mkdir(filepath.Join(target, filepath.FromSlash(child)), 0700); err != nil {
+					if err = statefs.Mkdir(filepath.Join(target, filepath.FromSlash(child)), 0700); err != nil {
 						return ErrUnavailable
 					}
 				}

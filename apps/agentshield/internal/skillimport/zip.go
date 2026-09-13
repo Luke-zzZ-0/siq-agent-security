@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -106,7 +107,7 @@ func extractZip(ctx context.Context, raw []byte, target string) (tree, bool, err
 		if len(out.Directories) >= maxDirs {
 			return ErrLimit
 		}
-		if err := os.Mkdir(filepath.Join(target, filepath.FromSlash(path)), 0700); err != nil {
+		if err := statefs.Mkdir(filepath.Join(target, filepath.FromSlash(path)), 0700); err != nil {
 			return ErrUnavailable
 		}
 		paths[key] = path

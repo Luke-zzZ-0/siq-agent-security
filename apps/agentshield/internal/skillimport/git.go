@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -101,10 +102,10 @@ func (s *Store) gitTree(ctx context.Context, source, blob, payload string, req *
 		fetch = fetchGitCLI
 	}
 	worktree := filepath.Join(blob, "unpacked")
-	if err := os.Mkdir(worktree, 0700); err != nil {
+	if err := statefs.Mkdir(worktree, 0700); err != nil {
 		return none, false, nil, ErrUnavailable
 	}
-	defer os.RemoveAll(worktree)
+	defer statefs.RemoveAll(worktree)
 	commit, err := fetch(ctx, source, req.Ref, worktree)
 	if err != nil {
 		return none, false, nil, err
@@ -157,19 +158,19 @@ func cloneGit(ctx context.Context, cleanURL, ref, dst, fileAllow string) (string
 	}
 	ctx, cancel := context.WithTimeout(ctx, 50*time.Second)
 	defer cancel()
-	home, err := os.MkdirTemp("", "skill-import-git-*")
+	home, err := statefs.MkdirTemp("", "skill-import-git-*")
 	if err != nil {
 		return "", ErrUnavailable
 	}
-	defer os.RemoveAll(home)
+	defer statefs.RemoveAll(home)
 	// An empty hooks directory replaces the repository's .git/hooks for every
 	// hook invocation during clone and checkout.
 	hooks := filepath.Join(home, "empty-hooks")
-	if err = os.Mkdir(hooks, 0700); err != nil {
+	if err = statefs.Mkdir(hooks, 0700); err != nil {
 		return "", ErrUnavailable
 	}
 	config := filepath.Join(home, "git.config")
-	if err = os.WriteFile(config, nil, 0600); err != nil {
+	if err = statefs.WriteFile(config, nil, 0600); err != nil {
 		return "", ErrUnavailable
 	}
 	// The protocol allowlist mirrors fileAllow: production stays https-only,

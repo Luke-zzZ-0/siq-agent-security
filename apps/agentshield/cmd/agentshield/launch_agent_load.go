@@ -24,7 +24,7 @@ func withLaunchAgentCommand(args []string, confirmation string, apply func(*stat
 	if err != nil {
 		return err
 	}
-	lifecycle, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	lifecycle, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

@@ -8,8 +8,10 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"os"
 	"runtime"
 	"siq-agent-security/apps/agentshield/internal/skillmanifest"
+	"siq-agent-security/apps/agentshield/internal/stateformat"
 )
 
 // CheckUpgrade verifies the signed declaration and candidate bytes, without
@@ -21,7 +23,7 @@ func CheckUpgrade(manifestPath, binaryPath string) (string, error) {
 	}
 	return checkUpgrade(manifestPath, binaryPath, runtime.GOOS, runtime.GOARCH, key)
 }
-func checkUpgrade(manifestPath, binaryPath, goos, arch string, key ed25519.PublicKey) (string, error) {
+func checkUpgrade(manifestPath, binaryPath, goos, arch string, key ed25519.PublicKey, directories ...string) (string, error) {
 	f, err := openRegular(manifestPath, 1<<20)
 	if err != nil {
 		return "", err
@@ -42,6 +44,11 @@ func checkUpgrade(manifestPath, binaryPath, goos, arch string, key ed25519.Publi
 	}
 	if err = skillmanifest.CheckClientCompatibility(&m); err != nil {
 		return "", err
+	}
+	for _, dir := range directories {
+		if err = checkStateDeclaration(dir, &m); err != nil {
+			return "", err
+		}
 	}
 	if m.Binary.Name != "siq-agent-security" || m.Binary.Version == "" {
 		return "", errors.New("client-upgrade-check: invalid product")
@@ -69,4 +76,41 @@ func checkUpgrade(manifestPath, binaryPath, goos, arch string, key ed25519.Publi
 		return "", errors.New("client-upgrade-check: candidate integrity mismatch")
 	}
 	return m.Binary.Version, nil
+}
+
+// CheckUpgradeForState binds the verified release declaration to the actual
+// state before staging, restoring a binary, stopping a service or switching.
+func CheckUpgradeForState(dir, manifest, binary string) (string, error) {
+	key, e := skillmanifest.ParsePublicKey(skillmanifest.ReleasePublicKeyB64)
+	if e != nil {
+		return "", e
+	}
+	return checkUpgrade(manifest, binary, runtime.GOOS, runtime.GOARCH, key, dir)
+}
+func checkStateDeclaration(dir string, m *skillmanifest.Manifest) error {
+	if e := stateformat.Check(dir, true, false); e != nil {
+		return e
+	}
+	marker, e := stateformat.ReadMarker(dir)
+	format, reader, writer := 1, 1, 1
+	if e == nil {
+		format = marker.FormatVersion
+		if marker.Schema == "state-format/v2" {
+			reader = marker.MinReader
+			writer = marker.MinWriter
+		}
+	} else if !os.IsNotExist(e) {
+		return e
+	}
+	c := m.StateCompatibility
+	if c == nil {
+		if format > 1 {
+			return errors.New("client-upgrade-check: candidate has no compatible state protocol; keep the current service")
+		}
+		return nil
+	}
+	if m.ManifestVersion != 3 || c.ReaderVersion < reader || c.WriterVersion < writer || format < c.MinFormat || format > c.MaxFormat {
+		return errors.New("client-upgrade-check: candidate cannot read and write this state; keep the current service")
+	}
+	return nil
 }

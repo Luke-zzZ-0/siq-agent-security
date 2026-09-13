@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/product"
@@ -24,7 +25,7 @@ func FindModuleRoot() (string, error) {
 	for _, s := range starts {
 		for d := s; ; d = filepath.Dir(d) {
 			p := filepath.Join(d, "go.mod")
-			if raw, err := os.ReadFile(p); err == nil && strings.Contains(string(raw), goModuleLine) {
+			if raw, err := statefs.ReadFile(p); err == nil && strings.Contains(string(raw), goModuleLine) {
 				return d, nil
 			}
 			if filepath.Dir(d) == d {

@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
 	"runtime"
 	"siq-agent-security/apps/agentshield/internal/intent"
 	"siq-agent-security/apps/agentshield/internal/signing"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 )
 
@@ -19,11 +19,11 @@ func MeasureIntentScale(bindings, samples int) ([]byte, error) {
 	if bindings < 1 || bindings > 4096 || samples < 1 || samples > 10000 {
 		return nil, fmt.Errorf("intent benchmark: bindings must be 1..4096 and samples 1..10000")
 	}
-	dir, err := os.MkdirTemp("", "siq-intent-perf-")
+	dir, err := statefs.MkdirTemp("", "siq-intent-perf-")
 	if err != nil {
 		return nil, err
 	}
-	defer os.RemoveAll(dir)
+	defer statefs.RemoveAll(dir)
 	key, _ := signing.FromSeed(bytes.Repeat([]byte{19}, 32))
 	store, err := intent.Open(dir, key)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/state"
 	"strings"
 	"testing"
 
@@ -23,6 +24,9 @@ func TestCodeBuddyBootstrapFailuresStillProduceHookDecision(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			dir := t.TempDir()
+			if _, err := state.Open(dir); err != nil {
+				t.Fatal(err)
+			}
 			t.Setenv("SIQ_AGENT_SECURITY_STATE_DIR", dir)
 			if err := os.WriteFile(filepath.Join(dir, "config.json"), []byte(tc.config), 0o600); err != nil {
 				t.Fatal(err)

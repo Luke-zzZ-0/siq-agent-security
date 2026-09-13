@@ -3,9 +3,9 @@ package skillimport
 import (
 	"context"
 	"io"
-	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -53,7 +53,7 @@ func (s *Store) copyPrivate(ctx context.Context, id, target string) (*Record, er
 	if checkDirs(target) != nil {
 		return nil, ErrInvalid
 	}
-	dir, err := os.Open(target)
+	dir, err := statefs.Open(target)
 	if err != nil {
 		return nil, ErrInvalid
 	}

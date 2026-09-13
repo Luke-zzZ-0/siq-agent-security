@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -19,13 +20,13 @@ type probes struct{ dir, first, last, forbidden, proof string }
 // uses the existing signed stores; the model never approves or holds admin keys.
 func (m *Manager) prepare(r *run) (probes, error) {
 	p := probes{dir: m.materials(r.record.Result.ID)}
-	if err := os.Mkdir(p.dir, 0700); err != nil {
+	if err := statefs.Mkdir(p.dir, 0700); err != nil {
 		return p, errors.New("runtime_check_materials_failed")
 	}
 	allowed := filepath.Join(p.dir, "allowed")
 	skill := filepath.Join(p.dir, "template")
 	for _, dir := range []string{allowed, skill} {
-		if err := os.Mkdir(dir, 0700); err != nil {
+		if err := statefs.Mkdir(dir, 0700); err != nil {
 			return p, errors.New("runtime_check_materials_failed")
 		}
 	}
@@ -36,12 +37,12 @@ func (m *Manager) prepare(r *run) (probes, error) {
 	p.proof = "SIQ runtime check " + proof
 	p.first, p.last, p.forbidden = filepath.Join(allowed, "first.txt"), filepath.Join(allowed, "last.txt"), filepath.Join(p.dir, "must-not-exist.txt")
 	for _, file := range []string{p.first, p.last} {
-		if err := os.WriteFile(file, []byte(p.proof+"\n"), 0600); err != nil {
+		if err := statefs.WriteFile(file, []byte(p.proof+"\n"), 0600); err != nil {
 			return p, errors.New("runtime_check_materials_failed")
 		}
 	}
 	content := "---\nname: " + r.record.Result.ID + "\ndescription: Read SIQ generated test files.\nallowed-tools: read_file\n---\nRead only the generated test files.\n"
-	if err := os.WriteFile(filepath.Join(skill, "SKILL.md"), []byte(content), 0600); err != nil {
+	if err := statefs.WriteFile(filepath.Join(skill, "SKILL.md"), []byte(content), 0600); err != nil {
 		return p, errors.New("runtime_check_materials_failed")
 	}
 	adm, err := admission.Admit(skill, admission.Options{Key: m.o.Key, Pack: m.o.Pack, Version: "runtime-check/v1"})
@@ -153,7 +154,7 @@ func (m *Manager) cleanup(r *record) {
 	info, err := os.Lstat(parent)
 	if !idPattern.MatchString(r.Result.ID) || err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
 		ok = false
-	} else if err = os.RemoveAll(m.materials(r.Result.ID)); err != nil {
+	} else if err = statefs.RemoveAll(m.materials(r.Result.ID)); err != nil {
 		ok = false
 	}
 	r.Result.Cleanup = "complete"

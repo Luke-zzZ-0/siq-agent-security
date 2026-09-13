@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strconv"
 )
 
@@ -95,7 +96,7 @@ func unregisterLaunchAgent(st *state.Store, key *signing.Key, plist []byte, home
 		return err
 	}
 	if linked {
-		if err := os.Remove(link); err != nil {
+		if err := statefs.Remove(link); err != nil {
 			return err
 		}
 	}

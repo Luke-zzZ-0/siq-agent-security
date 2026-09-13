@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -47,7 +48,7 @@ func ReadEmbeddedPubkey(skillDir string) (string, error) {
 		filepath.Join("scripts", "resolve_verified_bin.sh"),
 		filepath.Join("scripts", "bootstrap.sh"),
 	} {
-		raw, err := os.ReadFile(filepath.Join(skillDir, leaf))
+		raw, err := statefs.ReadFile(filepath.Join(skillDir, leaf))
 		if err != nil {
 			continue
 		}
@@ -64,7 +65,7 @@ func ReadEmbeddedPubkey(skillDir string) (string, error) {
 }
 
 func rewrite(path string, re *regexp.Regexp, repl string) error {
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return err
 	}
@@ -72,11 +73,11 @@ func rewrite(path string, re *regexp.Regexp, repl string) error {
 		return fmt.Errorf("skillmanifest: %s has no pubkey assignment to replace", filepath.Base(path))
 	}
 	out := re.ReplaceAllLiteral(raw, []byte(repl))
-	return os.WriteFile(path, out, 0o755)
+	return statefs.WriteFile(path, out, 0o755)
 }
 
 func rewriteOptional(path string, re *regexp.Regexp, repl string) error {
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil
@@ -87,5 +88,5 @@ func rewriteOptional(path string, re *regexp.Regexp, repl string) error {
 		return nil
 	}
 	out := re.ReplaceAllLiteral(raw, []byte(repl))
-	return os.WriteFile(path, out, 0o755)
+	return statefs.WriteFile(path, out, 0o755)
 }

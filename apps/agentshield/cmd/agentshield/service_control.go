@@ -65,7 +65,7 @@ func cmdServiceControl(action string, args []string, out io.Writer) (resultErr e
 	st := &state.Store{Dir: dir}
 	// Status is read-only; mutations serialize independently of the daemon writer.
 	if action != "status" {
-		lock, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+		lock, err := state.AcquireScopedWriter(dir, "service-control")
 		if err != nil {
 			return err
 		}

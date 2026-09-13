@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -229,7 +230,7 @@ func (s *Store) checkUpdateRequest(ctx context.Context, p *UpdatePlan) error {
 	if err := checkDirectories(dir); err != nil {
 		return err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return ErrUnavailable
 	}
@@ -296,7 +297,7 @@ func (s *Store) StageUpdate(ctx context.Context, id string, req UpdateStageReque
 	if err := checkDirectories(parent); err != nil {
 		return nil, false, err
 	}
-	f, err := os.Open(parent)
+	f, err := statefs.Open(parent)
 	if err != nil {
 		return nil, false, ErrUnavailable
 	}
@@ -309,7 +310,7 @@ func (s *Store) StageUpdate(ctx context.Context, id string, req UpdateStageReque
 		return nil, false, ErrLimit
 	}
 	stage := s.updateStage(p.UpdateID)
-	if err := os.Mkdir(stage, 0700); err != nil {
+	if err := statefs.Mkdir(stage, 0700); err != nil {
 		if os.IsExist(err) {
 			return nil, false, ErrConflict
 		}
@@ -318,11 +319,11 @@ func (s *Store) StageUpdate(ctx context.Context, id string, req UpdateStageReque
 	published := false
 	defer func() {
 		if !published {
-			_ = os.RemoveAll(stage)
+			_ = statefs.RemoveAll(stage)
 		}
 	}()
 	payload := filepath.Join(stage, "payload")
-	if err := os.Mkdir(payload, 0700); err != nil {
+	if err := statefs.Mkdir(payload, 0700); err != nil {
 		return nil, false, ErrUnavailable
 	}
 	copy, err := s.imports.CopyForUpdate(ctx, p.CandidateSource.ImportID, payload)

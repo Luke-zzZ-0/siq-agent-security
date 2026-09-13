@@ -149,6 +149,10 @@ func TestInitializationRecoversPartialMetadata(t *testing.T) {
 			if keep == remove {
 				remove = "local-instance.json"
 			}
+			// A crash before instance publication also precedes the final format marker.
+			if err := os.Remove(filepath.Join(st.Dir, StateFormatMarkerName)); err != nil {
+				t.Fatal(err)
+			}
 			original, _ := os.ReadFile(filepath.Join(st.Dir, keep))
 			if err := os.Remove(filepath.Join(st.Dir, remove)); err != nil {
 				t.Fatal(err)

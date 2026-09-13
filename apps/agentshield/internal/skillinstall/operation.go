@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -340,7 +341,7 @@ func (s *Store) operationCapacity() error {
 	if err := checkDirectories(parent); err != nil {
 		return err
 	}
-	f, err := os.Open(parent)
+	f, err := statefs.Open(parent)
 	if err != nil {
 		return ErrUnavailable
 	}

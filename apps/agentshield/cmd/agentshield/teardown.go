@@ -45,7 +45,7 @@ func cmdTeardown(args []string, out io.Writer) error {
 	return err
 }
 func teardownUserService(st *state.Store, unit []byte, control userSystemctl) (resultErr error) {
-	lock, err := state.AcquireWriter(filepath.Join(st.Dir, "service-control"))
+	lock, err := state.AcquireScopedWriter(st.Dir, "service-control")
 	if err != nil {
 		return err
 	}

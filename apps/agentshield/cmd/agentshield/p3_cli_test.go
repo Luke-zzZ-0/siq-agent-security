@@ -8,12 +8,16 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/state"
 	"strings"
 	"testing"
 )
 
 func TestCmdSyncSkipsWithoutCreds(t *testing.T) {
 	dir := t.TempDir()
+	if _, err := state.Open(dir); err != nil {
+		t.Fatal(err)
+	}
 	t.Setenv("AGENTSHIELD_STATE_DIR", dir)
 	t.Setenv("AGENTSHIELD_SIGNING_KEY_SEED", "")
 	t.Setenv("SIQ_AS_EDGE_IDENTITY", "")
@@ -29,6 +33,9 @@ func TestCmdSyncSkipsWithoutCreds(t *testing.T) {
 
 func TestCmdSyncHTTPFailureUnchanged(t *testing.T) {
 	dir := t.TempDir()
+	if _, err := state.Open(dir); err != nil {
+		t.Fatal(err)
+	}
 	t.Setenv("AGENTSHIELD_STATE_DIR", dir)
 	t.Setenv("AGENTSHIELD_SIGNING_KEY_SEED", "")
 	t.Setenv("HOME", filepath.Join(dir, "home"))
@@ -70,6 +77,9 @@ func TestCmdSyncHTTPFailureUnchanged(t *testing.T) {
 
 func TestCmdExportWritesFile(t *testing.T) {
 	dir := t.TempDir()
+	if _, err := state.Open(dir); err != nil {
+		t.Fatal(err)
+	}
 	t.Setenv("AGENTSHIELD_STATE_DIR", dir)
 	t.Setenv("AGENTSHIELD_SIGNING_KEY_SEED", "")
 	t.Setenv("HOME", filepath.Join(dir, "home"))

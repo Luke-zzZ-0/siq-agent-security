@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -68,7 +69,7 @@ func OpenCheckpointStore(stateDir string, key *signing.Key) (*CheckpointStore, e
 	if err := assertNotUnderReceipts(abs, root); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(root, 0o700); err != nil {
+	if err := statefs.MkdirAll(root, 0o700); err != nil {
 		return nil, err
 	}
 	return &CheckpointStore{root: root, key: key, now: func() time.Time { return time.Now().UTC() }}, nil
@@ -87,7 +88,7 @@ func OpenCheckpointStoreAt(dir string, key *signing.Key) (*CheckpointStore, erro
 	if err := assertPathNotUnderReceipts(abs); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(abs, 0o700); err != nil {
+	if err := statefs.MkdirAll(abs, 0o700); err != nil {
 		return nil, err
 	}
 	return &CheckpointStore{root: abs, key: key, now: func() time.Time { return time.Now().UTC() }}, nil
@@ -154,27 +155,27 @@ func (s *CheckpointStore) Publish(chainID string, maxSeq int, tipHash string) er
 		return err
 	}
 	path := s.Path(chainID)
-	tmp, err := os.CreateTemp(s.root, ".cp-*")
+	tmp, err := statefs.CreateTemp(s.root, ".cp-*")
 	if err != nil {
 		return err
 	}
 	tmpName := tmp.Name()
 	if _, err := tmp.Write(append(raw, '\n')); err != nil {
 		_ = tmp.Close()
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	if err := tmp.Sync(); err != nil {
 		_ = tmp.Close()
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	if err := tmp.Close(); err != nil {
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
-	if err := os.Rename(tmpName, path); err != nil {
-		_ = os.Remove(tmpName)
+	if err := statefs.Rename(tmpName, path); err != nil {
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	return nil
@@ -194,7 +195,7 @@ func (s *CheckpointStore) PublishFromChain(c *Chain) error {
 
 // Load verifies the signed document and returns a Checkpoint for VerifyDetailed.
 func (s *CheckpointStore) Load(chainID string) (*Checkpoint, error) {
-	raw, err := os.ReadFile(s.Path(chainID))
+	raw, err := statefs.ReadFile(s.Path(chainID))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, ErrCheckpointMissing

@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"sync"
@@ -117,7 +118,7 @@ func InitializeAuthority(stateDir string, key *signing.Key, store *Store) (*Auth
 		return nil, ErrInvalid
 	}
 	dir := authorityDir(stateDir)
-	if err := os.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
+	if err := statefs.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
 		return nil, ErrState
 	}
 	return OpenAuthorityExisting(stateDir, key, store)
@@ -241,11 +242,11 @@ func publishAuthority(path string, raw []byte) error {
 	if len(raw) == 0 || len(raw) > maxAuthorityBytes || privateDir(filepath.Dir(path)) != nil {
 		return ErrState
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".pending-authority-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".pending-authority-*")
 	if err != nil {
 		return ErrState
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(raw); err == nil {
 		err = f.Sync()
 	}
@@ -253,7 +254,7 @@ func publishAuthority(path string, raw []byte) error {
 	if err != nil || closeErr != nil {
 		return ErrState
 	}
-	if err = os.Link(f.Name(), path); err != nil {
+	if err = statefs.Link(f.Name(), path); err != nil {
 		if errors.Is(err, os.ErrExist) {
 			return ErrConflict
 		}
@@ -263,7 +264,7 @@ func publishAuthority(path string, raw []byte) error {
 }
 
 func (a *Authority) authorityRecordCount() (int, error) {
-	entries, err := os.ReadDir(a.dir)
+	entries, err := statefs.ReadDir(a.dir)
 	if err != nil {
 		return 0, ErrState
 	}
@@ -471,7 +472,7 @@ func (a *Authority) List(now time.Time) ([]GrantView, error) {
 	if _, err := a.authorityRecordCount(); err != nil {
 		return nil, err
 	}
-	entries, err := os.ReadDir(a.dir)
+	entries, err := statefs.ReadDir(a.dir)
 	if err != nil {
 		return nil, ErrState
 	}

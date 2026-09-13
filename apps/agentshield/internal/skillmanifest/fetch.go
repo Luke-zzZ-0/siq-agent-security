@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 )
@@ -131,10 +132,10 @@ func DownloadVerifiedArtifact(ctx context.Context, art Artifact, destPath string
 		return "", fmt.Errorf("skillmanifest: Content-Length %d != pinned bytes %d", resp.ContentLength, art.Bytes)
 	}
 
-	if err := os.MkdirAll(filepath.Dir(destPath), 0o700); err != nil {
+	if err := statefs.MkdirAll(filepath.Dir(destPath), 0o700); err != nil {
 		return "", err
 	}
-	f, err := os.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o700)
+	f, err := statefs.OpenFile(destPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o700)
 	if err != nil {
 		return "", err
 	}
@@ -142,7 +143,7 @@ func DownloadVerifiedArtifact(ctx context.Context, art Artifact, destPath string
 	defer func() {
 		_ = f.Close()
 		if cleanup {
-			_ = os.Remove(destPath)
+			_ = statefs.Remove(destPath)
 		}
 	}()
 
@@ -172,12 +173,12 @@ func DownloadVerifiedArtifact(ctx context.Context, art Artifact, destPath string
 // FetchAndStage downloads a pinned artifact into a temp file, verifies it,
 // then StageVerifiedBinary into stageRoot (DEV04-E + DEV04-D).
 func FetchAndStage(ctx context.Context, art Artifact, stageRoot string, opts FetchOptions) (stagedPath string, err error) {
-	tmp, err := os.MkdirTemp("", "siq-fetch.*")
+	tmp, err := statefs.MkdirTemp("", "siq-fetch.*")
 	if err != nil {
 		return "", err
 	}
-	defer func() { _ = os.RemoveAll(tmp) }()
-	if err := os.Chmod(tmp, 0o700); err != nil {
+	defer func() { _ = statefs.RemoveAll(tmp) }()
+	if err := statefs.Chmod(tmp, 0o700); err != nil {
 		return "", err
 	}
 	dest := filepath.Join(tmp, artifactLeaf(art.URL))

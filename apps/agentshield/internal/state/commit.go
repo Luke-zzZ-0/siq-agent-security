@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"sync"
@@ -124,6 +125,9 @@ func (s *Store) CommitGrantFrom(c GrantCommit, sourceID string, revision int, si
 }
 
 func (s *Store) commitGrantLocked(c GrantCommit) (int, error) {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return -1, err
+	}
 	if err := validateCommit(c); err != nil {
 		return -1, err
 	}
@@ -292,7 +296,7 @@ func (s *Store) HasIncompleteCommit(id string, seq int) bool {
 }
 func (s *Store) ListIncompleteCommits() ([]IncompleteCommit, error) {
 	out := []IncompleteCommit{}
-	entries, err := os.ReadDir(s.commitPath("", ""))
+	entries, err := statefs.ReadDir(s.commitPath("", ""))
 	if errors.Is(err, os.ErrNotExist) {
 		return out, nil
 	}
@@ -341,6 +345,9 @@ func (s *Store) ListIncompleteCommits() ([]IncompleteCommit, error) {
 
 // RecoverGrantCommits requires real ownership, including nonce, not just a PID.
 func (s *Store) RecoverGrantCommits(w *Writer) (int, error) {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return 0, err
+	}
 	if w == nil || filepath.Clean(w.Dir) != filepath.Clean(s.Dir) {
 		return 0, ErrWriterBusy
 	}
@@ -379,7 +386,7 @@ func (s *Store) RecoverGrantCommits(w *Writer) (int, error) {
 // committedAudit projects one event per committed journal; replay cannot append
 // duplicates. Original audit.jsonl remains readable and is never rewritten.
 func (s *Store) committedAudit() ([]AuditEvent, error) {
-	entries, err := os.ReadDir(filepath.Join(s.Dir, "commit-audit"))
+	entries, err := statefs.ReadDir(filepath.Join(s.Dir, "commit-audit"))
 	if errors.Is(err, os.ErrNotExist) {
 		return nil, nil
 	}
@@ -429,7 +436,7 @@ func readCommitFile(path string) ([]byte, error) {
 	if !info.Mode().IsRegular() || info.Size() > maxCommitBytes {
 		return nil, errors.New("state: invalid commit file type/budget")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -455,14 +462,14 @@ func readCommitFile(path string) ([]byte, error) {
 // visible. Existing identical bytes are replay success, other bytes conflict.
 func publishCommitFile(path string, raw []byte) error {
 	dir := filepath.Dir(path)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
-	f, err := os.CreateTemp(dir, ".pending-commit-*")
+	f, err := statefs.CreateTemp(dir, ".pending-commit-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err := f.Write(raw); err != nil {
 		f.Close()
 		return err
@@ -474,7 +481,7 @@ func publishCommitFile(path string, raw []byte) error {
 	if err := f.Close(); err != nil {
 		return err
 	}
-	if err := os.Link(f.Name(), path); err != nil {
+	if err := statefs.Link(f.Name(), path); err != nil {
 		if !errors.Is(err, os.ErrExist) {
 			return err
 		}
@@ -487,7 +494,7 @@ func publishCommitFile(path string, raw []byte) error {
 		}
 	}
 	if runtime.GOOS != "windows" {
-		d, err := os.Open(dir)
+		d, err := statefs.Open(dir)
 		if err != nil {
 			return err
 		}

@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 )
@@ -75,7 +76,7 @@ func (r *run) readConfig(path string) ([]byte, error) {
 	if !before.Mode().IsRegular() || before.Size() > maxDiscoveryConfig {
 		return nil, errors.New("config type or size refused")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +143,7 @@ func (r *run) walkSkills(p platformSpec, dir string, seen map[string]bool, depth
 		_, ok := r.skillIDs[dir]
 		return ok
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		r.report.Skipped = append(r.report.Skipped, "unreadable:"+p.name+":"+redactHome(dir, r.opts.Home))
 		return false

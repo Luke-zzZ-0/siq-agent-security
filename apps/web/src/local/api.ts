@@ -98,9 +98,17 @@ async function fetchLocal(path: string, init: RequestInit = {}): Promise<Respons
   const importRequest = path === '/v1/skill-imports' || path.startsWith('/v1/skill-imports/') || path.startsWith('/v1/skill-installations/');
   const timeout = setTimeout(cancel, importRequest ? 70000 : path === '/v1/adapter/preview' ? 45000 : 8000);
   try {
-    return await fetch(path, { ...init, credentials: 'same-origin', cache: 'no-store', signal: controller.signal });
-  } catch {
-    throw new LocalApiError(0, '无法连接本地服务。请启动 siq-agent-security serve 后重试。');
+    const response = await fetch(path, { ...init, credentials: 'same-origin', cache: 'no-store', signal: controller.signal });
+    if (response.status === 503) {
+      const body: unknown = await response.clone().json().catch(() => null);
+      if (body && typeof body === 'object' && 'error' in body && body.error === 'state_incompatible') {
+        throw new LocalApiError(503, '状态版本不兼容或迁移未完成。请保留状态目录，运行 siq-agent-security state-status 检查；中断迁移可用原兼容版本执行 state-migrate --confirm。不要删除状态或恢复旧授权。');
+      }
+    }
+    return response;
+  } catch (error) {
+    if (error instanceof LocalApiError) throw error;
+    throw new LocalApiError(0, '无法连接本地服务。请启动 siq-agent-security serve 后重试；若启动提示状态不兼容，请运行 siq-agent-security state-status 检查并保留状态目录。');
   } finally {
     clearTimeout(timeout);
     init.signal?.removeEventListener('abort', cancel);

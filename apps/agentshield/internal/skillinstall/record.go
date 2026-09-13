@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 	"unicode"
@@ -196,11 +197,11 @@ func (s *Store) publish(p Plan) error {
 	if err != nil {
 		return ErrUnavailable
 	}
-	f, err := os.CreateTemp(parent, ".plan-*")
+	f, err := statefs.CreateTemp(parent, ".plan-*")
 	if err != nil {
 		return ErrUnavailable
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(raw); err == nil {
 		err = f.Sync()
 	}
@@ -208,7 +209,7 @@ func (s *Store) publish(p Plan) error {
 	if err != nil || closeErr != nil {
 		return ErrUnavailable
 	}
-	if err := os.Link(f.Name(), s.record(p.PlanID)); err != nil {
+	if err := statefs.Link(f.Name(), s.record(p.PlanID)); err != nil {
 		if os.IsExist(err) {
 			return ErrConflict
 		}
@@ -224,7 +225,7 @@ func (s *Store) checkRequest(candidate Plan) error {
 	if err := checkDirectories(parent); err != nil {
 		return err
 	}
-	f, err := os.Open(parent)
+	f, err := statefs.Open(parent)
 	if err != nil {
 		return ErrUnavailable
 	}

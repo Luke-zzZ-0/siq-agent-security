@@ -5,8 +5,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 )
 
@@ -67,7 +67,7 @@ func (c *Chain) ReadLimited(lim ReadLimit) (ReadResult, error) {
 			break
 		}
 		lastFile := fi == len(files)-1
-		f, err := os.Open(p)
+		f, err := statefs.Open(p)
 		if err != nil {
 			return ReadResult{}, err
 		}

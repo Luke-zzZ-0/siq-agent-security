@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
@@ -193,7 +194,7 @@ func BuiltinBytes() []byte { return builtinJSON }
 // VerifySignature checks <path>.sig (base64 Ed25519) over the canonical bytes
 // of the document at path.
 func VerifySignature(pub ed25519.PublicKey, path string, raw []byte) error {
-	sigB64, err := os.ReadFile(path + ".sig")
+	sigB64, err := statefs.ReadFile(path + ".sig")
 	if err != nil {
 		return rejectf("missing signature file (.sig)")
 	}
@@ -230,7 +231,7 @@ func Load(pub ed25519.PublicKey, warn func(string)) (*Pack, error) {
 	if warn == nil {
 		warn = func(string) {}
 	}
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		warn("external rulepack unreadable; using builtin")
 		return builtin, nil

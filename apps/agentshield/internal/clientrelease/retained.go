@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"siq-agent-security/apps/agentshield/internal/skillmanifest"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -41,7 +42,7 @@ func retainedManifest(directory, digest, binary, goos, arch string, key ed25519.
 			return "", errors.New("client-release: unsafe retained directory")
 		}
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return "", err
 	}

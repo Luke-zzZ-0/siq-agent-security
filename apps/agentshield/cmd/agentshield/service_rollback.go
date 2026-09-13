@@ -67,13 +67,13 @@ func cmdServiceRollback(args []string, out io.Writer) error {
 			return err
 		}
 	}
-	oldPath, version, err := prepareRollbackBinary(st, plan, *binary, *manifest, *restore, clientrelease.CheckUpgrade)
+	oldPath, version, err := prepareRollbackBinary(st, plan, *binary, *manifest, *restore, checkUpgradeForCurrentState)
 	if err != nil {
 		return err
 	}
 	unit := plan.SourceUnit
 	recheck := func() error {
-		v, err := clientrelease.CheckUpgrade(*manifest, oldPath)
+		v, err := checkUpgradeForCurrentState(*manifest, oldPath)
 		if err != nil {
 			return err
 		}
@@ -151,7 +151,7 @@ func prepareRollbackBinary(st *state.Store, plan state.ServiceSwitch, binary, ma
 		return "", "", errors.New("service-rollback: historical path is not a regular file")
 	}
 	if errors.Is(statErr, os.ErrNotExist) && restore {
-		lock, err := state.AcquireWriter(filepath.Join(st.Dir, "service-control"))
+		lock, err := state.AcquireScopedWriter(st.Dir, "service-control")
 		if err != nil {
 			return "", "", err
 		}

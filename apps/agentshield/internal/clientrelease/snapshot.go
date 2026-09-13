@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/state"
 )
@@ -34,20 +35,23 @@ func snapshot(directory, sourcePath, goos string) (result string, resultErr erro
 	if directory == "" {
 		return "", errors.New("client-snapshot: state directory required")
 	}
+	if err := state.RequireStateCompatibility(directory); err != nil {
+		return "", err
+	}
 	root := filepath.Join(directory, "client-snapshots")
 	if err = privateDirectory(root); err != nil {
 		return "", err
 	}
-	w, err := state.AcquireWriter(root)
+	w, err := state.AcquireScopedWriter(directory, "client-snapshots")
 	if err != nil {
 		return "", err
 	}
 	defer func() { resultErr = errors.Join(resultErr, w.Release()) }()
-	temp, err := os.CreateTemp(root, ".source-*")
+	temp, err := statefs.CreateTemp(root, ".source-*")
 	if err != nil {
 		return "", err
 	}
-	defer os.Remove(temp.Name())
+	defer statefs.Remove(temp.Name())
 	defer temp.Close()
 	hash := sha256.New()
 	n, err := io.Copy(io.MultiWriter(temp, hash), io.LimitReader(source, maxBinaryBytes+1))

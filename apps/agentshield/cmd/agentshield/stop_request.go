@@ -8,7 +8,6 @@ import (
 	"io"
 	"mime"
 	"net/http"
-	"path/filepath"
 	"time"
 
 	"siq-agent-security/apps/agentshield/internal/localcontrol"
@@ -115,7 +114,7 @@ func withLocalStopClient(apply func(*state.Store, *signing.Key, *http.Client, st
 	if err != nil {
 		return err
 	}
-	lock, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	lock, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

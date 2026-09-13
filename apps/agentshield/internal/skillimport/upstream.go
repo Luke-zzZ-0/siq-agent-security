@@ -2,8 +2,8 @@ package skillimport
 
 import (
 	"context"
-	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
 )
@@ -50,15 +50,15 @@ func (s *Store) CheckUpstream(ctx context.Context, id, remoteURL string) (*Upstr
 	if record.SchemaVersion != "local-skill-import/v2" {
 		return nil, ErrInvalid
 	}
-	staging, err := os.MkdirTemp(s.dir, "upstream-*")
+	staging, err := statefs.MkdirTemp(s.dir, "upstream-*")
 	if err != nil {
 		return nil, ErrUnavailable
 	}
-	defer os.RemoveAll(staging)
+	defer statefs.RemoveAll(staging)
 	blob := filepath.Join(staging, "blob")
 	payload := filepath.Join(staging, "payload")
 	for _, dir := range []string{blob, payload} {
-		if err = os.Mkdir(dir, 0700); err != nil {
+		if err = statefs.Mkdir(dir, 0700); err != nil {
 			return nil, ErrUnavailable
 		}
 	}

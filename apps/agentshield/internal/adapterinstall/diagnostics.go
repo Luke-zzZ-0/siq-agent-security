@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/product"
@@ -162,7 +163,7 @@ func inspectRead(home, path string) ([]byte, error) {
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 1<<20 {
 		return nil, errors.New("adapter: diagnostic file type or size invalid")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, errors.New("adapter: diagnostic read failed")
 	}

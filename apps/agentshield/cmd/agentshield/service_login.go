@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 )
 
 func runtimeUserUnit(props map[string]string) bool {
@@ -90,7 +91,7 @@ func setUserLogin(control userSystemctl, path, name string, enable bool) error {
 	link := loginLinkPath(fragment)
 	wants := filepath.Dir(link)
 	if enable {
-		if err = os.Mkdir(wants, 0700); err != nil && !errors.Is(err, os.ErrExist) {
+		if err = statefs.Mkdir(wants, 0700); err != nil && !errors.Is(err, os.ErrExist) {
 			return err
 		}
 	}
@@ -107,18 +108,18 @@ func setUserLogin(control userSystemctl, path, name string, enable bool) error {
 			return err
 		}
 		if !enable {
-			if err = os.Remove(link); err != nil {
+			if err = statefs.Remove(link); err != nil {
 				return err
 			}
 		}
 	} else if !errors.Is(statErr, os.ErrNotExist) {
 		return statErr
 	} else if enable {
-		if err = os.Symlink(path, link); err != nil {
+		if err = statefs.Symlink(path, link); err != nil {
 			return err
 		}
 	}
-	if d, err := os.Open(wants); err == nil {
+	if d, err := statefs.Open(wants); err == nil {
 		syncErr := d.Sync()
 		d.Close()
 		if syncErr != nil {
@@ -127,7 +128,7 @@ func setUserLogin(control userSystemctl, path, name string, enable bool) error {
 	} else if !errors.Is(err, os.ErrNotExist) {
 		return err
 	}
-	parentDir, err := os.Open(parent)
+	parentDir, err := statefs.Open(parent)
 	if err != nil {
 		return err
 	}
@@ -184,7 +185,7 @@ func cmdServiceLogin(args []string, out io.Writer) (resultErr error) {
 	if err != nil {
 		return err
 	}
-	lock, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	lock, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

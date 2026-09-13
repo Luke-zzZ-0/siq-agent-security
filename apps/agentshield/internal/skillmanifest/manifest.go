@@ -15,8 +15,8 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/admission"
@@ -112,13 +112,34 @@ func CurrentClientCompatibility() *ClientCompatibility {
 }
 
 func CheckClientCompatibility(m *Manifest) error {
-	if m == nil || m.ManifestVersion != 2 || m.ClientCompatibility == nil || *m.ClientCompatibility != *CurrentClientCompatibility() {
+	if m == nil || (m.ManifestVersion != 2 && m.ManifestVersion != 3) || m.ClientCompatibility == nil || *m.ClientCompatibility != *CurrentClientCompatibility() {
 		return fmt.Errorf("skillmanifest: signed client compatibility declaration missing or unsupported")
+	}
+	if m.ManifestVersion == 2 && m.StateCompatibility != nil {
+		return fmt.Errorf("skillmanifest: state protocol requires manifest v3")
+	}
+	if m.ManifestVersion == 3 {
+		c := m.StateCompatibility
+		if c == nil || c.ReaderVersion < 1 || c.WriterVersion < c.ReaderVersion || c.MinFormat < 1 || c.MaxFormat < c.MinFormat {
+			return fmt.Errorf("skillmanifest: invalid state protocol declaration")
+		}
 	}
 	return nil
 }
 
+type StateCompatibility struct {
+	ReaderVersion int `json:"reader_version"`
+	WriterVersion int `json:"writer_version"`
+	MinFormat     int `json:"min_format"`
+	MaxFormat     int `json:"max_format"`
+}
+
+func CurrentStateCompatibility() *StateCompatibility {
+	return &StateCompatibility{ReaderVersion: 2, WriterVersion: 2, MinFormat: 1, MaxFormat: 2}
+}
+
 type Manifest struct {
+	StateCompatibility  *StateCompatibility  `json:"state_compatibility,omitempty"`
 	ClientCompatibility *ClientCompatibility `json:"client_compatibility,omitempty"`
 	ManifestVersion     int                  `json:"manifest_version"`
 	Skill               Skill                `json:"skill"`
@@ -192,8 +213,9 @@ func Build(opts Options) (*Manifest, error) {
 		SignedBy:      opts.SignedBy,
 	}
 	if opts.ClientCompatible {
-		m.ManifestVersion = 2
+		m.ManifestVersion = 3
 		m.ClientCompatibility = CurrentClientCompatibility()
+		m.StateCompatibility = CurrentStateCompatibility()
 	}
 	return m, nil
 }
@@ -233,7 +255,7 @@ func VerifyWithPublicKey(m *Manifest, trusted ed25519.PublicKey) error {
 	if m == nil {
 		return fmt.Errorf("skillmanifest: nil manifest")
 	}
-	if m.ManifestVersion == 2 {
+	if m.ManifestVersion == 2 || m.ManifestVersion == 3 {
 		if err := CheckClientCompatibility(m); err != nil {
 			return err
 		}
@@ -242,7 +264,7 @@ func VerifyWithPublicKey(m *Manifest, trusted ed25519.PublicKey) error {
 				return fmt.Errorf("skillmanifest: invalid v2 artifact size")
 			}
 		}
-	} else if m.ManifestVersion != 1 || m.ClientCompatibility != nil {
+	} else if m.ManifestVersion != 1 || m.ClientCompatibility != nil || m.StateCompatibility != nil {
 		return fmt.Errorf("skillmanifest: unsupported manifest version")
 	}
 	if len(trusted) != ed25519.PublicKeySize {
@@ -304,7 +326,7 @@ func HashSkillDir(dir string) (string, error) {
 
 // LoadFile reads and unmarshals a skill-manifest.json.
 func LoadFile(path string) (*Manifest, error) {
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -323,10 +345,10 @@ func WriteFile(path string, m *Manifest) error {
 		return err
 	}
 	raw = append(raw, '\n')
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := statefs.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-	return os.WriteFile(path, raw, 0o600)
+	return statefs.WriteFile(path, raw, 0o600)
 }
 
 // ArtifactName is the file name used in --bin-dir and in the unpublished URL.
@@ -336,7 +358,7 @@ func ArtifactName(osName, arch, ext string) string {
 
 // HashFile returns sha256 hex and size of one built binary.
 func HashFile(path string) (string, int64, error) {
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return "", 0, err
 	}

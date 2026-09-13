@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"path/filepath"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
@@ -19,7 +18,7 @@ func cmdWindowsTaskUnregister(args []string, out io.Writer) error {
 		return errors.New("task-unregister: --confirm-unregister required, no other arguments accepted")
 	}
 	err := withWindowsTaskIdentity(nil, func(st *state.Store, key *signing.Key, expected []byte, sid string) (resultErr error) {
-		lifecycle, err := state.AcquireWriter(filepath.Join(st.Dir, "service-control"))
+		lifecycle, err := state.AcquireScopedWriter(st.Dir, "service-control")
 		if err != nil {
 			return err
 		}

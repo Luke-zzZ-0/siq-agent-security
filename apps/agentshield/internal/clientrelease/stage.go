@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/skillmanifest"
 	"siq-agent-security/apps/agentshield/internal/state"
@@ -27,7 +28,7 @@ func openRegular(path string, limit int64) (*os.File, error) {
 	if !info.Mode().IsRegular() || info.Size() > limit {
 		return nil, errors.New("client-stage: ordinary bounded file required")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +68,11 @@ func stage(directory, manifestPath, binaryPath, goos, arch string, trusted ed255
 	if err = skillmanifest.VerifyWithPublicKey(&m, trusted); err != nil {
 		return "", err
 	}
-	if (m.ManifestVersion != 1 && m.ManifestVersion != 2) || m.Binary.Name != "siq-agent-security" || m.Binary.Version == "" {
+	if (m.ManifestVersion != 1 && m.ManifestVersion != 2 && m.ManifestVersion != 3) || m.Binary.Name != "siq-agent-security" || m.Binary.Version == "" {
 		return "", errors.New("client-stage: incompatible manifest identity")
+	}
+	if err = checkStateDeclaration(directory, &m); err != nil {
+		return "", err
 	}
 	var pin skillmanifest.Artifact
 	count := 0
@@ -90,12 +94,15 @@ func stage(directory, manifestPath, binaryPath, goos, arch string, trusted ed255
 	if directory == "" {
 		return "", errors.New("client-stage: state directory required")
 	}
+	if err := state.RequireStateCompatibility(directory); err != nil {
+		return "", err
+	}
 	root := filepath.Join(directory, "client-releases")
 	// Refuse a pre-existing symlink at either managed publication directory.
 	if err = privateDirectory(root); err != nil {
 		return "", err
 	}
-	w, err := state.AcquireWriter(root)
+	w, err := state.AcquireScopedWriter(directory, "client-releases")
 	if err != nil {
 		return "", err
 	}
@@ -104,11 +111,11 @@ func stage(directory, manifestPath, binaryPath, goos, arch string, trusted ed255
 	if err = privateDirectory(versionDir); err != nil {
 		return "", err
 	}
-	temp, err := os.CreateTemp(versionDir, ".candidate-*")
+	temp, err := statefs.CreateTemp(versionDir, ".candidate-*")
 	if err != nil {
 		return "", err
 	}
-	defer os.Remove(temp.Name())
+	defer statefs.Remove(temp.Name())
 	defer temp.Close()
 	hash := sha256.New()
 	n, err := io.Copy(io.MultiWriter(temp, hash), io.LimitReader(source, pin.Bytes+1))
@@ -134,11 +141,11 @@ func stage(directory, manifestPath, binaryPath, goos, arch string, trusted ed255
 	}
 	manifestHash := sha256.Sum256(raw)
 	manifestDigest := hex.EncodeToString(manifestHash[:])
-	mf, err := os.CreateTemp(versionDir, ".manifest-*")
+	mf, err := statefs.CreateTemp(versionDir, ".manifest-*")
 	if err != nil {
 		return "", err
 	}
-	defer os.Remove(mf.Name())
+	defer statefs.Remove(mf.Name())
 	defer mf.Close()
 	if _, err = mf.Write(raw); err != nil {
 		return "", err
@@ -156,7 +163,7 @@ func stage(directory, manifestPath, binaryPath, goos, arch string, trusted ed255
 }
 
 func privateDirectory(path string) error {
-	if err := os.MkdirAll(path, 0700); err != nil {
+	if err := statefs.MkdirAll(path, 0700); err != nil {
 		return err
 	}
 	info, err := os.Lstat(path)
@@ -170,7 +177,7 @@ func privateDirectory(path string) error {
 }
 
 func publish(temp, target string, size int64, digest string, mode os.FileMode) error {
-	if err := os.Link(temp, target); err != nil {
+	if err := statefs.Link(temp, target); err != nil {
 		if !errors.Is(err, os.ErrExist) {
 			return err
 		}
@@ -193,7 +200,7 @@ func publish(temp, target string, size int64, digest string, mode os.FileMode) e
 		}
 	}
 	if runtime.GOOS != "windows" {
-		d, err := os.Open(filepath.Dir(target))
+		d, err := statefs.Open(filepath.Dir(target))
 		if err != nil {
 			return err
 		}

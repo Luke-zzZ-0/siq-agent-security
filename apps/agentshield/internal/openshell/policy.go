@@ -3,7 +3,7 @@ package openshell
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"os"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strconv"
 	"strings"
 	"time"
@@ -165,13 +165,13 @@ func splitEndpoint(endpoint string) (host string, port int, err error) {
 }
 
 func withPolicyFile(doc map[string]any, fn func(path string) error) (err error) {
-	f, err := os.CreateTemp("", "siq-as-policy-*.yaml")
+	f, err := statefs.CreateTemp("", "siq-as-policy-*.yaml")
 	if err != nil {
 		return failf("无法创建策略临时文件（fail-closed）: %s", err.Error())
 	}
 	path := f.Name()
 	defer func() {
-		_ = os.Remove(path)
+		_ = statefs.Remove(path)
 	}()
 	if err := f.Chmod(0o600); err != nil {
 		_ = f.Close()

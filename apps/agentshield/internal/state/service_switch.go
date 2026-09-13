@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
 	"siq-agent-security/apps/agentshield/internal/signing"
@@ -239,7 +240,7 @@ func (s *Store) ApplyServiceSwitch(w *Writer, key *signing.Key, id string) error
 		if err != nil || !bytes.Equal(current, raw) {
 			return errors.New("state: pending switch changed")
 		}
-		if err = os.Remove(filepath.Join(s.Dir, serviceSwitchPending)); err != nil {
+		if err = statefs.Remove(filepath.Join(s.Dir, serviceSwitchPending)); err != nil {
 			return err
 		}
 		return syncServiceDirectory(s.Dir)
@@ -257,11 +258,11 @@ func replaceServiceImage(path string, before, after []byte) error {
 	if !bytes.Equal(current, before) {
 		return errors.New("state: service switch image drift")
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".service-switch-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".service-switch-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	defer f.Close()
 	if _, err = f.Write(after); err != nil {
 		return err
@@ -272,7 +273,7 @@ func replaceServiceImage(path string, before, after []byte) error {
 	if err = f.Close(); err != nil {
 		return err
 	}
-	if err = os.Rename(f.Name(), path); err != nil {
+	if err = statefs.Rename(f.Name(), path); err != nil {
 		return err
 	}
 	return syncServiceDirectory(filepath.Dir(path))
@@ -281,7 +282,7 @@ func syncServiceDirectory(path string) error {
 	if runtime.GOOS == "windows" {
 		return nil
 	}
-	d, err := os.Open(path)
+	d, err := statefs.Open(path)
 	if err != nil {
 		return err
 	}

@@ -2,9 +2,9 @@ package skillimport
 
 import (
 	"context"
-	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
 )
@@ -81,10 +81,10 @@ func (s *Store) remoteTree(ctx context.Context, source, blob, payload string, re
 	target := payload
 	if req.ArchivePath != "" {
 		target = filepath.Join(blob, "unpacked")
-		if err = os.Mkdir(target, 0700); err != nil {
+		if err = statefs.Mkdir(target, 0700); err != nil {
 			return none, false, nil, ErrUnavailable
 		}
-		defer os.RemoveAll(target)
+		defer statefs.RemoveAll(target)
 	}
 	tree, excluded, err := extractZip(ctx, archive.raw, target)
 	if err != nil {

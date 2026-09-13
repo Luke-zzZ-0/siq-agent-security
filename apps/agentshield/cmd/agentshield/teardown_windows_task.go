@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"time"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
@@ -26,7 +25,7 @@ func cmdWindowsTeardown() error {
 }
 
 func teardownWindowsTask(st *state.Store, key *signing.Key, expected []byte, sid string, presence func(string, string) (bool, error), query func(string) ([]byte, error), runtime func(string, string) (string, error), request func() (state.ServiceStopAcceptance, error), remove func(string, string, []byte) error, wait time.Duration) (resultErr error) {
-	lifecycle, err := state.AcquireWriter(filepath.Join(st.Dir, "service-control"))
+	lifecycle, err := state.AcquireScopedWriter(st.Dir, "service-control")
 	if err != nil {
 		return err
 	}

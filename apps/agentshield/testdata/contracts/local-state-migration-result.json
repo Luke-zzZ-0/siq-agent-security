@@ -1,0 +1,6 @@
+{
+  "schema": "local-state-migration-result/v1",
+  "status": "up_to_date",
+  "format_version": 2,
+  "backup_entries": 0
+}

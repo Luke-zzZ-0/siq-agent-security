@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"siq-agent-security/apps/agentshield/internal/clientrelease"
 )
 
 func cmdClientUpgradeCheck(args []string, out io.Writer) error {
@@ -19,7 +18,7 @@ func cmdClientUpgradeCheck(args []string, out io.Writer) error {
 	if *manifest == "" || *binary == "" || fs.NArg() != 0 {
 		return errors.New("client-upgrade-check: --manifest FILE --binary FILE required")
 	}
-	version, err := clientrelease.CheckUpgrade(*manifest, *binary)
+	version, err := checkUpgradeForCurrentState(*manifest, *binary)
 	if err != nil {
 		return err
 	}

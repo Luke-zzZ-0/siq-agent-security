@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"time"
 
@@ -144,14 +145,14 @@ func Run(o Options) (Report, error) {
 	dir := o.StateDir
 	cleanup := false
 	if dir == "" {
-		dir, err = os.MkdirTemp("", "siq-perfbaseline-*")
+		dir, err = statefs.MkdirTemp("", "siq-perfbaseline-*")
 		if err != nil {
 			return Report{}, err
 		}
 		cleanup = true
 	}
 	if cleanup {
-		defer os.RemoveAll(dir)
+		defer statefs.RemoveAll(dir)
 	}
 
 	seed := o.Seed

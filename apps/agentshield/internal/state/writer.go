@@ -31,8 +31,33 @@ type Writer struct {
 // AcquireWriter creates serve.lock with O_EXCL. A lock whose pid is proven
 // dead is renamed aside (never silently deleted) and acquisition is retried.
 func AcquireWriter(dir string) (*Writer, error) {
-	if dir == "" {
+	return acquireWriter(dir, dir)
+}
+
+// AcquireScopedWriter keeps independent maintenance locks tied to the actual
+// state root. Never infer the root from a caller-chosen directory basename.
+func AcquireScopedWriter(stateDir, scope string) (*Writer, error) {
+	switch scope {
+	case "service-control", "adapter-write", "client-releases", "client-snapshots":
+	default:
+		return nil, errors.New("state: invalid writer scope")
+	}
+	return acquireWriter(filepath.Join(stateDir, scope), stateDir)
+}
+
+func acquireWriter(dir, compatDir string) (*Writer, error) {
+	return acquireWriterChecked(dir, compatDir, func() error { return RequireStateCompatibility(compatDir) })
+}
+
+func acquireWriterChecked(dir, compatDir string, check func() error) (*Writer, error) {
+	if dir == "" || compatDir == "" {
 		return nil, errors.New("state: directory required")
+	}
+	if err := checkStateParents(dir); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrIncompatibleState, ErrCorruptState)
+	}
+	if err := check(); err != nil {
+		return nil, err
 	}
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return nil, err
@@ -55,7 +80,11 @@ func AcquireWriter(dir string) (*Writer, error) {
 				_ = os.Remove(path)
 				return nil, err
 			}
-			return &Writer{Dir: dir, path: path, owner: owner, pid: pid}, nil
+			w := &Writer{Dir: dir, path: path, owner: owner, pid: pid}
+			if err := check(); err != nil {
+				return nil, errors.Join(err, w.Release())
+			}
+			return w, nil
 		}
 		if !errors.Is(err, os.ErrExist) {
 			return nil, err

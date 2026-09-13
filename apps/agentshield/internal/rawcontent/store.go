@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"sync"
 	"time"
@@ -197,7 +198,7 @@ func Initialize(stateDir string, limits Limits) (*Store, error) {
 	if stateDir == "" || !limits.valid() {
 		return nil, ErrInvalid
 	}
-	if err := os.MkdirAll(filepath.Join(stateDir, "keys"), 0700); err != nil {
+	if err := statefs.MkdirAll(filepath.Join(stateDir, "keys"), 0700); err != nil {
 		return nil, ErrState
 	}
 	path := keyPath(stateDir)
@@ -206,7 +207,7 @@ func Initialize(stateDir string, limits Limits) (*Store, error) {
 		if _, err := io.ReadFull(random, key); err != nil {
 			return nil, ErrState
 		}
-		f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+		f, err := statefs.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
 		if err != nil {
 			return nil, ErrState
 		}
@@ -219,7 +220,7 @@ func Initialize(stateDir string, limits Limits) (*Store, error) {
 	} else if err != nil {
 		return nil, ErrState
 	}
-	if err := os.Mkdir(contentDir(stateDir), 0700); err != nil && !errors.Is(err, os.ErrExist) {
+	if err := statefs.Mkdir(contentDir(stateDir), 0700); err != nil && !errors.Is(err, os.ErrExist) {
 		return nil, ErrState
 	}
 	return OpenExisting(stateDir, limits)
@@ -241,7 +242,7 @@ func readKey(path string) ([]byte, error) {
 	if !info.Mode().IsRegular() || info.Mode()&os.ModeSymlink != 0 || info.Size() > 128 || (runtime.GOOS != "windows" && info.Mode().Perm()&0077 != 0) {
 		return nil, ErrState
 	}
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return nil, ErrState
 	}
@@ -260,7 +261,7 @@ func aad(e Envelope) []byte {
 }
 
 func (s *Store) diskBytes() (int64, error) {
-	entries, err := os.ReadDir(s.dir)
+	entries, err := statefs.ReadDir(s.dir)
 	if err != nil {
 		return 0, ErrState
 	}
@@ -320,18 +321,18 @@ func (s *Store) write(taskID string, content Prepared, retention time.Duration, 
 		return Envelope{}, ErrBudget
 	}
 	path := filepath.Join(s.dir, e.RecordID+".json")
-	f, err := os.CreateTemp(s.dir, ".pending-content-*")
+	f, err := statefs.CreateTemp(s.dir, ".pending-content-*")
 	if err != nil {
 		return Envelope{}, ErrState
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	_, writeErr := f.Write(raw)
 	syncErr := f.Sync()
 	closeErr := f.Close()
 	if writeErr != nil || syncErr != nil || closeErr != nil {
 		return Envelope{}, ErrState
 	}
-	if err := os.Link(f.Name(), path); err != nil {
+	if err := statefs.Link(f.Name(), path); err != nil {
 		return Envelope{}, ErrState
 	}
 	return e, nil
@@ -469,7 +470,7 @@ func (s *Store) ListMetadata(taskID string, now time.Time) ([]Metadata, error) {
 	if !ok || now.IsZero() || privateDir(s.dir) != nil {
 		return nil, ErrInvalid
 	}
-	entries, err := os.ReadDir(s.dir)
+	entries, err := statefs.ReadDir(s.dir)
 	if err != nil {
 		return nil, ErrState
 	}
@@ -516,7 +517,7 @@ func (s *Store) Delete(taskID, id string) error {
 	if _, err := s.decryptEnvelope(e); err != nil {
 		return err
 	}
-	if err := os.Remove(filepath.Join(s.dir, id+".json")); err != nil {
+	if err := statefs.Remove(filepath.Join(s.dir, id+".json")); err != nil {
 		return ErrState
 	}
 	return nil
@@ -535,7 +536,7 @@ func (s *Store) PurgeExpired(now time.Time) (PurgeResult, error) {
 	if now.IsZero() || privateDir(s.dir) != nil {
 		return PurgeResult{}, ErrInvalid
 	}
-	entries, err := os.ReadDir(s.dir)
+	entries, err := statefs.ReadDir(s.dir)
 	if err != nil {
 		return PurgeResult{}, ErrState
 	}
@@ -573,7 +574,7 @@ func (s *Store) PurgeExpired(now time.Time) (PurgeResult, error) {
 	}
 	result := PurgeResult{}
 	for _, item := range expired {
-		if err := os.Remove(filepath.Join(s.dir, item.id+".json")); err != nil {
+		if err := statefs.Remove(filepath.Join(s.dir, item.id+".json")); err != nil {
 			return result, ErrState
 		}
 		result.Deleted++

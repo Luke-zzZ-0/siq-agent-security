@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 	"unicode"
@@ -218,7 +219,7 @@ func (s *Store) Stage(ctx context.Context, r Request) (*Plan, bool, error) {
 	if err := checkDirectories(filepath.Join(s.dir, "stages")); err != nil {
 		return nil, false, err
 	}
-	directory, err := os.Open(filepath.Join(s.dir, "stages"))
+	directory, err := statefs.Open(filepath.Join(s.dir, "stages"))
 	if err != nil {
 		return nil, false, ErrUnavailable
 	}
@@ -231,7 +232,7 @@ func (s *Store) Stage(ctx context.Context, r Request) (*Plan, bool, error) {
 		return nil, false, ErrLimit
 	}
 	stage := s.stage(p.PlanID)
-	if err := os.Mkdir(stage, 0700); err != nil {
+	if err := statefs.Mkdir(stage, 0700); err != nil {
 		if os.IsExist(err) {
 			return nil, false, ErrConflict
 		}
@@ -240,11 +241,11 @@ func (s *Store) Stage(ctx context.Context, r Request) (*Plan, bool, error) {
 	published := false
 	defer func() {
 		if !published {
-			_ = os.RemoveAll(stage)
+			_ = statefs.RemoveAll(stage)
 		}
 	}()
 	payload := filepath.Join(stage, "payload")
-	if err := os.Mkdir(payload, 0700); err != nil {
+	if err := statefs.Mkdir(payload, 0700); err != nil {
 		return nil, false, ErrUnavailable
 	}
 	record, err := s.imports.CopyForInstallation(ctx, p.Source.ImportID, payload)
