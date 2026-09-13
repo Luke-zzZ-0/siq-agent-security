@@ -34,8 +34,9 @@ func remoteValid(r *RemoteMetadata) bool {
 	return r != nil && digestPattern.MatchString(r.ArchiveSHA256) && digestPattern.MatchString(r.FinalLocatorDigest) && r.ArchiveBytes > 0 && r.ArchiveBytes <= maxArchiveBytes && archivePathValid(r.ArchivePath) && (r.ExpectedSHA256 == "" || r.ExpectedSHA256 == r.ArchiveSHA256)
 }
 func recordVersionValid(r Record) bool {
-	return (r.SchemaVersion == "local-skill-import/v1" && kindValid(r.SourceKind) && r.Remote == nil) ||
-		(r.SchemaVersion == "local-skill-import/v2" && r.SourceKind == "https_zip" && remoteValid(r.Remote))
+	return (r.SchemaVersion == "local-skill-import/v1" && kindValid(r.SourceKind) && r.Remote == nil && r.Git == nil) ||
+		(r.SchemaVersion == "local-skill-import/v2" && r.SourceKind == "https_zip" && remoteValid(r.Remote) && r.Git == nil) ||
+		(r.SchemaVersion == "local-skill-import/v2" && r.SourceKind == "git" && gitValid(r.Git) && r.Remote == nil)
 }
 func (s *Store) CreateRemote(ctx context.Context, req RemoteCreateRequest) (*Record, *Analysis, bool, error) {
 	if req.SchemaVersion != "local-skill-import-remote-create/v1" || !importID.MatchString(req.ImportID) || !actorValid(req.ActorID) || !archivePathValid(req.ArchivePath) || (req.ExpectedSHA256 != "" && !digestPattern.MatchString(req.ExpectedSHA256)) {
@@ -50,7 +51,7 @@ func (s *Store) CreateRemote(ctx context.Context, req RemoteCreateRequest) (*Rec
 		return nil, nil, false, ErrInvalid
 	}
 	local := CreateRequest{ImportID: req.ImportID, SourceKind: "https_zip", ActorID: req.ActorID}
-	return s.create(ctx, local, parsed.String(), sum(canonical), &req)
+	return s.create(ctx, local, parsed.String(), sum(canonical), createExtra{remote: &req})
 }
 func (s *Store) remoteTree(ctx context.Context, source, blob, payload string, req *RemoteCreateRequest) (tree, bool, *RemoteMetadata, error) {
 	none := emptyTree()

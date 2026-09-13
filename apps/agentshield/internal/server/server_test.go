@@ -21,6 +21,18 @@ import (
 )
 
 const token = "0123456789abcdef0123456789abcdef0123456789abcdef"
+const rawExportSentinel = "PRIVATE_RAW_CONTENT_MUST_NOT_ENTER_DEFAULT_EXPORTS"
+
+func seedRawExportSentinel(t *testing.T, dir string) {
+	t.Helper()
+	target := filepath.Join(dir, "raw-task-content", "content")
+	if err := os.MkdirAll(target, 0700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(target, "raw-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json"), []byte(rawExportSentinel), 0600); err != nil {
+		t.Fatal(err)
+	}
+}
 
 func newServer(t *testing.T, mode string) (*Server, *state.Store) {
 	t.Helper()
@@ -904,6 +916,7 @@ func TestDriftCheckFailClosedAndFinding(t *testing.T) {
 
 func TestExportOmitsToken(t *testing.T) {
 	s, st := newServer(t, "block")
+	seedRawExportSentinel(t, st.Dir)
 	_ = st.AppendAudit(state.AuditEvent{At: "2026-09-05T00:00:00Z", Event: "asset_confirm", ActorID: "u", Target: "agent:hermes:x"})
 	req := loopbackRequest(http.MethodGet, "/v1/export", nil)
 	req.Header.Set("Authorization", "Bearer "+s.bootAdmin)
@@ -918,6 +931,9 @@ func TestExportOmitsToken(t *testing.T) {
 	}
 	if strings.Contains(body, token) {
 		t.Fatal("bearer token must not appear in export")
+	}
+	if strings.Contains(body, rawExportSentinel) || strings.Contains(body, "raw-task-content") {
+		t.Fatal("raw content store must not appear in default export")
 	}
 	if !strings.Contains(rr.Header().Get("Content-Disposition"), "siq-agent-security-export.json") {
 		t.Fatalf("disposition %q", rr.Header().Get("Content-Disposition"))

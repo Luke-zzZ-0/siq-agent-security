@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-records.v1.schema.json",
+  "title": "Verified raw task content metadata list",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "items"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-records/v1" },
+    "items": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": { "$ref": "https://siq.dev/contracts/local-raw-task-content-record.v1.schema.json" }
+    }
+  }
+}

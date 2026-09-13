@@ -1,0 +1,8 @@
+{
+  "schema_version": "local-raw-task-content-status/v1",
+  "status": "ready",
+  "default_capture": false,
+  "retention_seconds": 86400,
+  "budget_bytes": 67108864,
+  "activated_at": "2026-09-13T02:30:00Z"
+}

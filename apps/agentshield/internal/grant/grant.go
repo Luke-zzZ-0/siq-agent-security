@@ -79,9 +79,20 @@ type Readback struct {
 }
 
 // Grant is the signed document.
+// SkillRef identifies the admitted skill version a grant was derived from.
+// A grant carrying a SkillRef only authorizes calls whose runtime skill
+// attribution verifies against trusted state (receipt engine).
+type SkillRef struct {
+	SkillID     string  `json:"skill_id"`
+	Version     *string `json:"version,omitempty"`
+	ContentHash string  `json:"content_hash"`
+}
+
 type Grant struct {
 	GrantID                string              `json:"grant_id"`
 	AdmissionID            string              `json:"admission_id"`
+	Skill                  *SkillRef           `json:"skill,omitempty"`
+	Scenario               *ScenarioRef        `json:"scenario,omitempty"`
 	Subject                Subject             `json:"subject"`
 	Platform               string              `json:"platform"`
 	Facts                  []Fact              `json:"facts"`
@@ -116,6 +127,10 @@ type Options struct {
 	// RedactSecrets is recorded in conditions of credential deny facts so the
 	// decide engine knows redaction is permitted (spec §3.8.2 step 6).
 	RedactSecrets bool
+	// Scenario restricts the built grant to a built-in scenario template
+	// (UX-007). It can only drop declared facts, never add them; the applied
+	// identity is signed into the grant. Nil keeps every declared fact.
+	Scenario *Scenario
 }
 
 // Result of Build.
@@ -132,7 +147,27 @@ func Build(adm admission.Admission, opts Options) (*Result, error) {
 	if importsource.Reserved(adm.AdmissionID) {
 		return nil, ErrImportPreparationRequired
 	}
+	// A scenario template narrows the declared facts before anything is
+	// derived from them, so every downstream projection (tool allowlists,
+	// network rules, filesystem sets) stays consistent with the restriction.
+	// The catalog is closed: only exact built-in (id, version) pairs apply.
+	if opts.Scenario != nil {
+		builtin := ScenarioByID(opts.Scenario.ID)
+		if builtin == nil || builtin.Version != opts.Scenario.Version {
+			return nil, ErrScenarioInvalid
+		}
+		adm = ApplyScenario(adm, *builtin)
+	}
 	return buildGrant(adm, opts)
+}
+
+// skillRefOf extracts the admitted skill identity. Admissions missing a skill
+// id (synthetic pre-skill records) produce nil, leaving the grant baseline.
+func skillRefOf(adm admission.Admission) *SkillRef {
+	if adm.SkillID == "" || adm.ContentHash == "" {
+		return nil
+	}
+	return &SkillRef{SkillID: adm.SkillID, Version: adm.SkillVersion, ContentHash: adm.ContentHash}
 }
 func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	if opts.Key == nil {
@@ -154,6 +189,7 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	g := Grant{
 		GrantID:          "grt-" + adm.ContentHash[:12] + "-" + shortID(opts.Platform+opts.Subject.ID),
 		AdmissionID:      adm.AdmissionID,
+		Skill:            skillRefOf(adm),
 		Subject:          opts.Subject,
 		Platform:         opts.Platform,
 		DefaultEffect:    "deny",
@@ -164,6 +200,9 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	}
 	if opts.importGrantID != "" {
 		g.GrantID = opts.importGrantID
+	}
+	if opts.Scenario != nil {
+		g.Scenario = &ScenarioRef{ID: opts.Scenario.ID, Version: opts.Scenario.Version}
 	}
 	if opts.ExpiresAt != nil {
 		value := opts.ExpiresAt.UTC().Format(time.RFC3339Nano)
@@ -186,6 +225,7 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	ocAllow, ocReq := map[string]bool{}, map[string]bool{}
 	var netRules []any
 	fsRW := map[string]bool{}
+	fsRO := map[string]bool{}
 	var models []any
 	var tools []any
 	needsProcess := false
@@ -204,7 +244,11 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 		case "network":
 			netRules = append(netRules, map[string]any{"endpoint": d.Resource.Value, "effect": "allow"})
 		case "filesystem":
-			fsRW[d.Resource.Value] = true
+			if d.Action == "fs.read" {
+				fsRO[d.Resource.Value] = true
+			} else {
+				fsRW[d.Resource.Value] = true
+			}
 		case "process":
 			needsProcess = true
 			hermes["terminal"] = true
@@ -235,9 +279,9 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 	if len(netRules) > 0 {
 		dp["network"] = netRules
 	}
-	if len(fsRW) > 0 {
+	if len(fsRW) > 0 || len(fsRO) > 0 {
 		rw := keysSorted(fsRW)
-		dp["filesystem"] = map[string]any{"read_only": []any{}, "read_write": toAny(rw)}
+		dp["filesystem"] = map[string]any{"read_only": toAny(keysSorted(fsRO)), "read_write": toAny(rw)}
 	}
 	if len(models) > 0 {
 		dp["model_routing"] = map[string]any{"allowed_models": models}
@@ -255,11 +299,11 @@ func buildGrant(adm admission.Admission, opts Options) (*Result, error) {
 
 	switch opts.Platform {
 	case "hermes":
-		al := keysSorted(hermes)
+		al := restrictScenarioTools(g.Scenario, keysSorted(hermes))
 		g.HermesToolsetAllowlist = &al
 	case "openclaw":
-		oc.Allow = keysSorted(ocAllow)
-		oc.RequireApproval = keysSorted(ocReq)
+		oc.Allow = restrictScenarioTools(g.Scenario, keysSorted(ocAllow))
+		oc.RequireApproval = restrictScenarioTools(g.Scenario, keysSorted(ocReq))
 		g.OpenClawToolPolicy = &oc
 	}
 

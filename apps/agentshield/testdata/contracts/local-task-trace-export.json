@@ -1,0 +1,79 @@
+{
+  "schema_version": "local-task-trace-export/v1",
+  "attestation_scope": "redacted_trace_projection_only",
+  "activity_id": "1111111111111111111111111111111111111111111111111111111111111111",
+  "snapshot": "2222222222222222222222222222222222222222222222222222222222222222",
+  "generated_at": "2026-09-12T00:00:00Z",
+  "source_count": 3,
+  "source_tip_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+  "source_last_seq": 2,
+  "prefix_valid": true,
+  "history_integrity": "unknown",
+  "incomplete": true,
+  "public_key_base64": "6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw=",
+  "receipts": [
+    {
+      "seq": 0,
+      "issued_at": "2026-09-08T01:00:00Z",
+      "receipt_ref": "sha256:7cbc95c3d19969acfa1cc45f7d9767b85e3a781e69c1eadca0372ab614607d18",
+      "tool_ref": "sha256:4f8c93565726289d48d3e01de9c5df35c3b968b372cc381fa9a565b0e7d1b275",
+      "action": "allow",
+      "source_hash": "4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ],
+  "sources": [
+    {
+      "seq": 0,
+      "receipt_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "status": "verified_source",
+      "source": {
+        "grant_ref": "sha256:d55adc894fe0e01ca70688964de52aa7b80b0bcc46dec530be99ce9d9ed213bc",
+        "admission_ref": "sha256:9d563a966f7b4a4d27dbe4e11d60a1b68305f2096bf01db878fe28eb506278e6",
+        "permission_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+        "skill_name_ref": "sha256:891c1c0a2da0959e176b712d5f902a97296a9dbd326f28bc317e387c96f5ed33",
+        "declared_version_ref": "sha256:777226897ade41ef47e8693649769df3cd34a7cd9be201b41422a5c3612b0ba4",
+        "content_hash": "6666666666666666666666666666666666666666666666666666666666666666",
+        "import": {
+          "import_ref": "sha256:75a96bfe11786a96f7773d320ab927c5313980bb703355999b7e031dcf1214c9",
+          "artifact_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+          "analysis_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+        }
+      }
+    }
+  ],
+  "completion": {
+    "status": "unknown",
+    "reason_code": "effect_evidence_insufficient",
+    "requirements": [
+      {
+        "requirement_ref": "sha256:be87b1e2405b5b2702a4ffb6544a5ee1094cdcb21f80adf024bf3d31b1860a0b",
+        "status": "unknown",
+        "reason_code": "effect_evidence_insufficient",
+        "evidence_refs": [
+          "sha256:8924c0513d9ed713293651870305025c4bc62fed7f63e5467e598f2146633b10"
+        ]
+      }
+    ],
+    "incident_refs": []
+  },
+  "effects": [
+    {
+      "evidence_ref": "sha256:8924c0513d9ed713293651870305025c4bc62fed7f63e5467e598f2146633b10",
+      "action_ref": "sha256:bf0a9567032309b7baa0f4bd90dc12357f538dfe9ef120e5abd45d4c9b9039d6",
+      "decision_receipt_ref": "sha256:91a02231d9af7fef0ea1ba61fccd89796f454c21e91e561ef79debc80c73bbd0",
+      "effect_type_ref": "sha256:939ec0075ad727289d7fd615896e241124b64234787b21f4c820cdff22e6c6be",
+      "resource_ref": "filesystem:sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "execution_state": "completed",
+      "source_type": "host_observer",
+      "source_ref": "sha256:8d4c7e41146a6f79834e90d18857c74505973cea4f39c185cd02ded300fa68b5",
+      "independence": "host_independent",
+      "coverage": "partial",
+      "result": "expected",
+      "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observed_at": "2026-09-08T01:00:00Z",
+      "finding_code": ""
+    }
+  ],
+  "signing_schema": "local_canonical/v1",
+  "signature": "01d1606d3aa985038a568e1368022366fd44240bd776232b2eec355d09ca89da74b3a6577ddd1dbee8f5bc28074487bf5e3ab7f0552c9fddf12462a04601fa0a"
+}

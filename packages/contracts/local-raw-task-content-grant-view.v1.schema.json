@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-grant-view.v1.schema.json",
+  "title": "Verified raw content grant management view",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "grant", "revocation"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-grant-view/v1" },
+    "status": { "enum": ["active", "expired", "revoked"] },
+    "grant": { "$ref": "https://siq.dev/contracts/local-raw-task-content-grant.v1.schema.json" },
+    "revocation": {
+      "anyOf": [
+        { "$ref": "https://siq.dev/contracts/local-raw-task-content-revocation.v1.schema.json" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "revoked" } } },
+      "then": {
+        "properties": {
+          "revocation": { "$ref": "https://siq.dev/contracts/local-raw-task-content-revocation.v1.schema.json" }
+        }
+      },
+      "else": { "properties": { "revocation": { "type": "null" } } }
+    }
+  ]
+}

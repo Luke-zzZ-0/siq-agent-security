@@ -96,7 +96,7 @@ func TestDiscoversPlatformsAndSkills(t *testing.T) {
 	if skills != 4 { // report-beautifier, gh-triage, shared, style (not-a-skill excluded)
 		t.Fatalf("expected 4 skills, got %d: %v", skills, keys(c))
 	}
-	if c["platform:openclaw"].Attributes["agentshield_install_gate"] != "true" || c["platform:openclaw"].Attributes["agentshield_tool_hook"] != "true" {
+	if c["platform:openclaw"].Attributes["agentshield_install_gate"] == "true" || c["platform:openclaw"].Attributes["agentshield_tool_hook"] != "true" {
 		t.Fatalf("openclaw adapters not detected: %v", c["platform:openclaw"].Attributes)
 	}
 	if c["platform:codebuddy"].Attributes["agentshield_tool_hook"] != "true" {
@@ -121,8 +121,8 @@ func TestDiscoversPlatformsAndSkills(t *testing.T) {
 			declaredTools++
 		}
 	}
-	if factsObs != 4 { // openclaw gate+hook, codebuddy hook, hermes plugin marker
-		t.Fatalf("expected 4 observed facts, got %d", factsObs)
+	if factsObs != 3 { // openclaw hook, codebuddy hook, hermes plugin marker
+		t.Fatalf("expected 3 observed facts, got %d", factsObs)
 	}
 	if declaredTools < 1 {
 		t.Fatal("hermes platform_toolsets must produce declared tool facts")

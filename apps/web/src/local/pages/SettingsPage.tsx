@@ -8,6 +8,7 @@ import { adapterLabel, adapterTag, configurationLabel, platformLabel } from '../
 import RuntimeCheckDialog from '../components/RuntimeCheckDialog';
 import AdapterChangeDialog, { type AdapterChangeRequest } from '../components/AdapterChangeDialog';
 import AdapterDiagnosisPanel from '../components/AdapterDiagnosisPanel';
+import RawContentPrivacyPanel from '../components/RawContentPrivacyPanel';
 
 const MODES = ['block', 'warn', 'audit_only'] as const;
 
@@ -231,6 +232,7 @@ export default function SettingsPage() {
           <input id="actor-set" value={actorId} onChange={(e) => setActorId(e.target.value)} />
         </div>
       </div>
+      <RawContentPrivacyPanel actorId={actorId} />
       <div className="card">
         <h2>平台适配器</h2>
         <p className="page-desc">先查看配置诊断，再选择接入操作。安装文件、宿主启用、运行验证分别显示；安装完成后仍需验证实际调用。</p>

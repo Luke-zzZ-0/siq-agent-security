@@ -1,0 +1,332 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-skill-update-check-result.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "install_id",
+    "checked_at",
+    "status",
+    "source_kind",
+    "content_changes",
+    "content_changes_total",
+    "content_changes_truncated",
+    "requires_confirmation",
+    "permission_comparison"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-skill-update-check-result/v1"
+    },
+    "install_id": {
+      "type": "string",
+      "pattern": "^sin-[a-f0-9]{64}$"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "up_to_date",
+        "new_version"
+      ]
+    },
+    "source_kind": {
+      "enum": [
+        "git",
+        "https_zip"
+      ]
+    },
+    "content_changes": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path_display",
+          "path_digest",
+          "before",
+          "after"
+        ],
+        "properties": {
+          "path_display": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "path_digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "sha256",
+                  "bytes",
+                  "executable"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "file",
+                      "directory"
+                    ]
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^([a-f0-9]{64})?$"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 8388608
+                  },
+                  "executable": {
+                    "type": "boolean"
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "kind": {
+                          "const": "directory"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "sha256": {
+                          "const": ""
+                        },
+                        "bytes": {
+                          "const": 0
+                        },
+                        "executable": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "after": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "sha256",
+                  "bytes",
+                  "executable"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "file",
+                      "directory"
+                    ]
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^([a-f0-9]{64})?$"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 8388608
+                  },
+                  "executable": {
+                    "type": "boolean"
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "kind": {
+                          "const": "directory"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "sha256": {
+                          "const": ""
+                        },
+                        "bytes": {
+                          "const": 0
+                        },
+                        "executable": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "sha256": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "not": {
+          "properties": {
+            "before": {
+              "type": "null"
+            },
+            "after": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    },
+    "content_changes_total": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "content_changes_truncated": {
+      "type": "boolean"
+    },
+    "requires_confirmation": {
+      "type": "boolean"
+    },
+    "permission_comparison": {
+      "const": "deferred_to_update_comparison"
+    },
+    "upstream_commit_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "upstream_archive_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "git"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "upstream_commit_sha"
+        ],
+        "not": {
+          "required": [
+            "upstream_archive_sha256"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "upstream_archive_sha256"
+        ],
+        "not": {
+          "required": [
+            "upstream_commit_sha"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "up_to_date"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content_changes_total": {
+            "const": 0
+          },
+          "content_changes": {
+            "maxItems": 0
+          },
+          "content_changes_truncated": {
+            "const": false
+          },
+          "requires_confirmation": {
+            "const": false
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "content_changes_total": {
+            "minimum": 1
+          },
+          "content_changes": {
+            "minItems": 1
+          },
+          "requires_confirmation": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "content_changes_truncated": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "content_changes_total": {
+            "minimum": 201
+          },
+          "content_changes": {
+            "minItems": 200
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "content_changes_total": {
+            "maximum": 200
+          }
+        }
+      }
+    }
+  ]
+}

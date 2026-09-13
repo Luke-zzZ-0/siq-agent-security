@@ -1,0 +1,71 @@
+{
+  "schema_version": "personal-openclaw-managed-native-smoke/v1",
+  "recorded_at": "2026-09-13T04:37:30.710733+00:00",
+  "passed": true,
+  "binary_sha256": "1d358cd5e411d158d12b83fae1d4a4a96b22ab0e0e36e790fcfdc94c69ad6343",
+  "harness_sha256": "e3ca387bab8bbc1ad5ff79f09df0cce92793854047f05b1ba06f9fd94cb4590a",
+  "native_cli_sha256": "ee861ae6f3298a0c2062ff52a682b5ce4786ae515a3eb816921f9a128341c733",
+  "openclaw_version": "2026.5.12",
+  "native_entrypoint": "public openclaw agent --local; real plugin hook lifecycle",
+  "session_id_source": "native before_tool_call; plugin enrolls automatically; not injected",
+  "checks": [
+    "openclaw_catalog_reports_native_unavailable",
+    "managed_preview_does_not_mutate_host",
+    "managed_install_uses_issued_identity",
+    "installed_assets_match_adapter_source",
+    "installer_preserves_other_openclaw_settings_and_install_policy",
+    "openclaw_2026_5_12_rejects_security_installpolicy_key_moved_aside_for_run",
+    "diagnosis_keeps_runtime_unverified",
+    "native_cli_started",
+    "native_session_automatically_enrolled",
+    "instance_credential_used_without_manual_intent",
+    "environment_cannot_override_managed_agent",
+    "write_denied_before_execution",
+    "allowed_read",
+    "native_raw_parameters_captured_after_explicit_task_grant",
+    "native_raw_output_captured_after_explicit_task_grant",
+    "receipt_chain_verified",
+    "revoked_identity_blocks_new_native_calls"
+  ],
+  "receipt_count": 3,
+  "installation": {
+    "method": "managed_v3_preview_apply_with_public_openclaw_cli",
+    "changed_file_count": 5,
+    "runtime_state": "unverified"
+  },
+  "compat_finding": "installer writes top-level security.installPolicy; openclaw 2026.5.12 rejects the key as unrecognized and refuses to start agent runs until it is removed",
+  "model_requests": [
+    {
+      "tool_results": 0,
+      "stream": true
+    },
+    {
+      "tool_results": 0,
+      "stream": true
+    },
+    {
+      "tool_results": 1,
+      "stream": true
+    },
+    {
+      "tool_results": 2,
+      "stream": true
+    }
+  ],
+  "raw_content": {
+    "record_count": 2,
+    "kinds": [
+      "output",
+      "parameters"
+    ],
+    "task_binding_source": "server-signed native session binding",
+    "grant_id": "rawgrant-09b5840fb98b3a942b3286f53926bc0f",
+    "plaintext_verified_via_admin_read": true
+  },
+  "limitations": [
+    "isolated profile configured through product installer; browser workflow is separate evidence",
+    "synthetic model and operator; no real-user approval, Skill attribution or OS isolation proof",
+    "native startup may produce host history/cache; network isolation is not claimed",
+    "harness augments installer-written openclaw.json with synthetic model/tools config"
+  ]
+}

@@ -154,7 +154,9 @@ def _local_endpoint() -> str | None:
         return None
 
 
-def _post(path: str, body: dict[str, Any], *, expected: int = 200) -> dict[str, Any] | None:
+def _post(
+    path: str, body: dict[str, Any], *, expected: int = 200, timeout_s: float | None = None
+) -> dict[str, Any] | None:
     tok = _token()
     endpoint = _local_endpoint()
     if not tok or not endpoint or not path.startswith("/v1/"):
@@ -173,7 +175,10 @@ def _post(path: str, body: dict[str, Any], *, expected: int = 200) -> dict[str, 
     )
     try:
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoCheckRedirect())
-        with opener.open(req, timeout=float(_CFG["timeout_s"])) as resp:
+        timeout = float(_CFG["timeout_s"])
+        if timeout_s is not None:
+            timeout = min(timeout, timeout_s)
+        with opener.open(req, timeout=timeout) as resp:
             if resp.status != expected:
                 return None
             raw = resp.read((1 << 20) + 1)
@@ -266,8 +271,67 @@ def _decision_reference(sid, tool, call_id):
     with _CORRELATION_LOCK:
         value = _CORRELATIONS.get((sid, tool, call_id))
         if value and value[1] and value[0] > time.monotonic():
+            # Keep a tombstone so a duplicate pre/post cannot reuse the call.
+            _CORRELATIONS[(sid, tool, call_id)] = (value[0], "", "")
             return {"action_id": value[1], "decision_receipt_id": value[2]}
     return {}
+
+
+def _raw_content_fields(tool_name: str, root: str, value: Any) -> list[dict[str, Any]] | None:
+    """Flatten JSON-compatible host values so secret-shaped keys remain visible."""
+    fields: list[dict[str, Any]] = [{"path": "/tool/name", "value": tool_name, "secret": False}]
+
+    def append(path: str, current: Any, depth: int) -> bool:
+        if depth > 32 or len(path) > 256 or any(ord(char) < 32 for char in path):
+            return False
+        if isinstance(current, dict):
+            if not current:
+                fields.append({"path": path, "value": "{}", "secret": False})
+            for key, item in current.items():
+                if not isinstance(key, str) or not key:
+                    return False
+                segment = key.replace("~", "~0").replace("/", "~1")
+                if not append(path + "/" + segment, item, depth + 1):
+                    return False
+            return len(fields) <= 1024
+        if isinstance(current, list):
+            if not current:
+                fields.append({"path": path, "value": "[]", "secret": False})
+            for index, item in enumerate(current):
+                if not append(path + "/" + str(index), item, depth + 1):
+                    return False
+            return len(fields) <= 1024
+        try:
+            encoded = json.dumps(current, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+        except (TypeError, ValueError, RecursionError, UnicodeError):
+            return False
+        if not encoded or len(encoded.encode("utf-8")) > 1 << 20:
+            return False
+        fields.append({"path": path, "value": encoded, "secret": False})
+        return len(fields) <= 1024
+
+    if not isinstance(tool_name, str) or not tool_name or not append(root, value, 0):
+        return None
+    return fields
+
+
+def _capture_native_raw_content(kind: str, session_id: str, tool_name: str, value: Any) -> None:
+    identity = _CFG.get("runtime_identity_id")
+    agent = _CFG.get("agent_id")
+    if (_check_launch_present() or not isinstance(identity, str)
+            or re.fullmatch(r"ri-[a-f0-9]{32}", identity) is None
+            or not isinstance(agent, str) or re.fullmatch(r"hri-[a-f0-9]{32}", agent) is None
+            or not isinstance(session_id, str) or not session_id or len(session_id) > 256):
+        return
+    root = "/tool/arguments" if kind == "parameters" else "/tool/result"
+    fields = _raw_content_fields(tool_name, root, value)
+    if fields is None:
+        return
+    _post("/v1/raw-task-content/native-captures", {
+        "schema_version": "local-raw-task-content-native-capture/v1",
+        "platform": "hermes", "agent_id": agent, "session_id": session_id,
+        "kind": kind, "fields": fields,
+    }, expected=201, timeout_s=0.25)
 
 
 class _NoCheckRedirect(urllib.request.HTTPRedirectHandler):
@@ -371,6 +435,13 @@ def _pre_tool_call(
     context_assertion_id: Any = None,
     **_: Any,
 ):
+    sid = session_id or task_id or "hermes-default"
+    with _CORRELATION_LOCK:
+        key = (sid, tool_name, tool_call_id)
+        prior = _CORRELATIONS.get(key)
+        if prior and prior[0] > time.monotonic():
+            _CORRELATIONS[key] = (prior[0], "", "")
+            return {"action": "block", "message": "siq-agent-security: duplicate tool call"}
     if not _attach_runtime_check(session_id):
         return {"action": "block", "message": "siq-agent-security: runtime check session could not be verified"}
     if not _enroll_runtime_session(session_id):
@@ -406,6 +477,7 @@ def _pre_tool_call(
             if authority_refs:
                 return {"action": "block", "message": "siq-agent-security: authority decision correlation unavailable"}
             return _fail_closed("decision correlation conflict or capacity", tool=tool_name, session_id=sid)
+        _capture_native_raw_content("parameters", sid, tool_name, args if isinstance(args, dict) else {})
         return None
     if action == "redact":
         # Hermes pre_tool_call cannot rewrite params; treat as block with guidance
@@ -486,21 +558,26 @@ def _post_tool_call(
     tool_call_id: str = "",
     **_: Any,
 ) -> None:
-    _capture_mcp_result(session_id or task_id or "hermes-default", tool_name, tool_call_id, result)
+    sid = session_id or task_id or "hermes-default"
     text = result if isinstance(result, str) else json.dumps(result, ensure_ascii=False, default=str)
+    decision_reference = _decision_reference(sid, tool_name, tool_call_id)
+    if decision_reference:
+        _capture_mcp_result(sid, tool_name, tool_call_id, result)
     _post(
         "/v1/observe",
         {
             "platform": _CFG["platform"],
-            "session_id": session_id or task_id or "hermes-default",
+            "session_id": sid,
             "agent_id": _CFG["agent_id"] or os.environ.get("HERMES_PROFILE", "default"),
             "tool": tool_name,
             "tool_call_id": tool_call_id,
             "params": args if isinstance(args, dict) else {},
             "result": text[: 64 * 1024],
-            **_decision_reference(session_id or task_id or "hermes-default", tool_name, tool_call_id),
+            **decision_reference,
         },
     )
+    if decision_reference:
+        _capture_native_raw_content("output", sid, tool_name, result)
 
 
 def register(ctx) -> None:

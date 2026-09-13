@@ -158,6 +158,35 @@
         "timeout_ms": { "type": "integer", "minimum": 1 },
         "resolved_by_receipt_id": { "type": ["string", "null"] }
       }
+    },
+    "skill_attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "description": "运行时 Skill 归属的可信裁决（UX-007 / Q05）：verified 仅由受信本地状态精确匹配 skill_id+content_hash(+版本) 得出；模型/运行时自报永不视为 verified。仅当调用携带 Skill 声明时存在；unclaimed 调用本字段缺省。",
+      "properties": {
+        "skill_id": { "type": "string", "maxLength": 128 },
+        "version": { "type": "string", "maxLength": 64 },
+        "content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "status": { "type": "string", "enum": ["verified", "mismatch", "unknown"] }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "skill_id",
+              "content_hash"
+            ]
+          }
+        }
+      ]
     }
   },
   "allOf": [

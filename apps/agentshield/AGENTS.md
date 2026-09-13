@@ -60,3 +60,23 @@ for t in linux/amd64 linux/arm64 darwin/arm64 windows/amd64; do GOOS=${t%/*} GOA
 按当前个人客户端生命周期开发授权及规格 §3.11.6，`service-register` 可通过 `systemctl --user link` 写入当前用户的服务搜索路径链接；签名配置仍仅写状态目录。限定实例专属名称、归属读回、无 force/sudo、无隐式自启，不得修改未知单位/覆盖配置。测试只注册隔离状态实例的 runtime 链接并复验后清理；不能修改用户生产服务。
 
 M44 按规格 §3.11.8 增加服务注销：仅在已停止、双 Writer 与签名/manager 归属复验后删除实际加载的同名用户服务符号链接；不得广泛 disable 或删除源配置、密钥与历史。此为用户已授权生命周期开发的受限系统链接写入例外。
+
+M54 按规格 §3.11.16 增加明确 --restore-missing-binary 的受限恢复：仅恢复签名原 source unit 指向的缺失程序，快照须同时匹配历史摘要与发行清单。允许原路径同目录临时文件及排他发布，不覆盖已有对象或创建外部目录。
+
+M59 按规格 §3.11.21 允许经签名/manager 归属复验后，创建或移除当前注册目录 default.target.wants 下的精确实例链接；不广泛 enable/disable、不改其他依赖。隔离实测仍仅 runtime 注册范围。
+
+M63 按规格 §3.11.25 允许 macOS launch-agent-register 向当前用户 Library/LaunchAgents 发布实例专属的精确签名源链接；只创建缺失目录/链接，不覆盖未知对象，不加载或启动任务。无 macOS 时仅在隔离临时 home 测试文件层，不修改真实系统目录。
+
+M66 按规格 §3.11.28 允许明确 launch-agent-load --confirm-load 后在当前 GUI 用户域 bootstrap 已签名且精确注册的单个实例。当前域/同标签状态与源链接必须复验，未知配置拒绝；不 enable/kickstart/bootout，不操作其他任务。无 macOS 时只测试临时目录和模拟控制器，不执行真实系统加载。
+
+M67 按规格 §3.11.29 允许 launch-agent-start --confirm-start 经归属复验后 kickstart 当前 GUI 实例，不带强制重启参数；释放主 Writer 后启动，健康失败保留现场。仅模拟控制器验证，不宣称 macOS 原生通过。
+
+M68 按规格 §3.11.30 允许 launch-agent-stop --confirm-stop 在当前 GUI 域和完整归属复验后 stop 精确实例，读回退出状态并确认 Writer 可用；不 bootout/disable/删配置，不对 PID 直接发信号。无 macOS 实机时仅测试模拟控制器。
+
+M69 按规格 §3.11.31 允许明确 launch-agent-unregister 后，持双锁复验已停止实例并 bootout 精确 GUI 任务；完整枚举确认缺席后仅删除精确归属注册链接并同步目录。未知文件/其他任务不得删除，源配置、密钥、历史保留；无 macOS 时仅模拟验证。
+
+M78 按规格 §3.11.40 允许 `task-register --confirm-register` 在当前用户本机 Task Scheduler 根目录，以 TASK_CREATE 排他创建签名绑定的单个实例任务；双锁与完整归属复验，不覆盖、不启动、不自动清理失败现场。无 Windows 时只测试模拟控制器，不操作真实系统任务。
+
+M79 按规格 §3.11.41 允许 `task-start --confirm-start` 在生命周期锁、完整签名/系统配置核对后按需 Run 当前用户已注册实例；主 Writer 检查后先释放再启动，不传动作参数，不强制重启、改配置或自动删除。无 Windows 宿主只测试模拟控制器。
+
+M88 按规格 §3.11.50 允许明确 task-unregister --confirm-unregister 在双 Writer、签名/完整配置与空闲状态复验后，删除当前用户精确实例任务并读回缺席；保留本地源配置、密钥和历史。无 Windows 宿主只测试模拟控制器，不执行真实系统删除。

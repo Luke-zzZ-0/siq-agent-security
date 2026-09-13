@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-grant.v1.schema.json",
+  "title": "Signed task-level raw content capture grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "grant_id",
+    "task_ref",
+    "kinds",
+    "actor_ref",
+    "issued_at",
+    "expires_at",
+    "retention_seconds",
+    "max_plaintext_bytes",
+    "signing_schema",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-grant/v1" },
+    "grant_id": { "type": "string", "pattern": "^rawgrant-[a-f0-9]{32}$" },
+    "task_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "kinds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": { "enum": ["input", "parameters", "output", "note"] }
+    },
+    "actor_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "retention_seconds": { "type": "integer", "minimum": 3600, "maximum": 2592000 },
+    "max_plaintext_bytes": { "type": "integer", "minimum": 1, "maximum": 1048576 },
+    "signing_schema": { "const": "local_canonical/v1" },
+    "signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" }
+  }
+}

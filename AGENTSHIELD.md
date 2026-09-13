@@ -7,6 +7,8 @@
 仓库：[`maoyadongsh/siq-agent-security`](https://github.com/maoyadongsh/siq-agent-security)  
 分支：`main`（本地产品与 Trusted Intent V2 核心已合入）。研究演示与发布入口见根 README；本地源码构建及 Skill 接入步骤见下文。
 
+Linux 个人体验开发版可在构建后使用 `./siq-agent-security setup --confirm-setup` 一次完成初始化、用户后台注册和启动；加 `--open-ui` 可在就绪后请求打开浏览器。再执行 `./siq-agent-security pair` 获取配对码，打开输出的管理地址。可选 `--port N` 指定初始端口；重复执行复用同一健康服务。需要 systemd 用户会话，尚不启用登录自启；Windows/macOS 的开发中 setup 入口见文末，尚待实机验收；也可使用下面的前台 `start`。
+
 ## 三步（本机复现）
 
 需要 Go 1.22+；从当前前端源码构建完整本地控制台使用 Node.js 22 / npm。Skill 引导脚本另需 Python 3 和 OpenSSL 3。
@@ -56,7 +58,7 @@ Linux 开发版可在初始化后运行 `siq-agent-security service-unit` 导出
 | 平台 | Linux | macOS | Windows | 说明 |
 | --- | --- | --- | --- | --- |
 | Hermes | L0–L3 experimental | L0–L2 experimental | L0–L2 experimental | Linux L0–L2 有 Spark 证据；L3 可选未宣称 |
-| OpenClaw | L0–L3 experimental | L0–L2 experimental | L0–L2 experimental | linux L1 `policy-exec` + L2 decide 证据已归档；未挂本机 OpenClaw 网关；矩阵不改 |
+| OpenClaw | L0–L3 experimental | L0–L2 experimental | L0–L2 experimental | Linux arm64 公共 CLI 托管会话已验证；`policy-exec` 组件证据不证明原生安装拦截，顶层 installPolicy 不受支持；其他 OS 原生验收待完成 |
 | CodeBuddy | L0–L2 experimental | L0–L2 experimental | L0–L2 experimental | linux `hook codebuddy` 证据已归档；非 GUI 客户端；无 L3；矩阵不改 |
 | Trae | L0 audit_only | L0 audit_only | L0 audit_only | 无工具钩子，不能阻断 |
 | Claude Code / Codex | L0 experimental | L0 experimental | L0 experimental | 非本轮 |
@@ -175,3 +177,79 @@ Linux 已注册服务可用 `siq-agent-security service-start` 启动，`siq-age
 
 
 升级前可执行 `siq-agent-security client-upgrade-check --manifest FILE --binary FILE`。它要求发行方签名的 v2 无迁移兼容声明并检查候选内容；v1 仍可暂存，但不能通过该预检。成功不代表已批准或切换版本。发行准备工具只有显式 `release-manifest --client-compatible` 才生成 v2；旧 Skill 引导脚本与冻结 v1 包保持原协议。
+
+
+Linux 已注册服务可执行 `siq-agent-security service-upgrade --manifest FILE --binary FILE --confirm-upgrade`。候选必须通过 v2 发行签名/兼容预检；确认后会短暂停止保护，block 模式下受控操作暂时拒绝。失败输出的事务 ID 可配合同一候选及 `--recover ID` 前滚恢复；不得替换目标。该流程不回滚台账，自动回退仍待实施。
+
+若候选因端口冲突等原因启动失败，先排除冲突，再使用同一候选和事务 ID 执行 `service-upgrade ... --confirm-upgrade --recover ID`。只有已停止/失败且无主进程的单位可恢复；活跃写锁或无法确认的进程状态会被拒绝，勿手工删除锁。
+
+
+显式恢复原升级事务的源配置可使用 `siq-agent-security service-rollback --transaction ID --manifest OLD --binary OLD --confirm-rollback`。原升级事务必须含 v2 程序摘要绑定；旧程序必须在原路径、匹配原 source 摘要并通过 v2 发行校验；失败时保留原参数并使用回退输出的新事务 ID 加 `--recover ID`。此操作不回滚授权或台账，也不下载历史程序。
+
+首次升级会在停止服务前把当前 CLI 程序复制到状态目录的 `client-snapshots/<sha256>/`。这是本地观测副本，不是发行信任证明；回退仍需已验证的旧清单；若原程序缺失，可在回退命令上明确加 `--restore-missing-binary`，从匹配历史摘要的本地快照恢复原路径。已有文件不覆盖，父目录必须存在；快照或发行校验失败时不恢复。
+
+新升级事务记录源快照与目标程序的签名摘要，停止前与启动前核对实际文件。旧 v1 切换日志可继续前滚恢复，但缺少历史程序摘要，不能用于新的产品回退。
+
+回退时可省略 `--manifest`：程序会在本机已留存的历史版本目录中寻找唯一匹配的发行清单，并重新验证发行签名、兼容声明与程序摘要。找不到或有多份匹配时会提示显式提供清单。首次从外部程序路径升级时，可加 `--source-manifest OLD.json` 保存当前程序的发行清单与副本，供后续回退使用；该选项不适用于 `--recover`。
+
+日常可运行 `siq-agent-security ui` 打开当前实例的管理页面，或 `ui --print` 仅输出地址。两者都会先验证服务身份和状态目录，不生成配对码；首次连接仍需单独执行 `pair`。浏览器无法打开时可手动访问输出地址，服务继续运行。
+
+Linux 正式发行安装入口为 `siq-agent-security client-install --manifest RELEASE.json --binary DOWNLOADED --confirm-install`，可加 `--port N`、`--open-ui`。它先校验发行签名与兼容声明，再保存到状态目录的稳定程序路径，由该程序执行后台 setup；安装成功显示后续管理应使用的程序路径。已有其他版本请走 `service-upgrade`，此入口不替换未知服务、不修改 PATH 或启用登录自启。当前为源码开发能力，正式签名制品安装验收仍待完成。
+
+Linux 可用 `service-login --enable --confirm-enable` 明确启用当前实例的用户登录自启，`service-login --disable` 关闭。操作不启动/停止当前进程；默认 setup 的持久注册可用于后续登录，`--runtime` 注册只在本登录会话有效。注销前先关闭自启，再正常停止并注销服务；未知启动入口不会被覆盖或删除。
+
+需要退出本机后台运行时，可执行 `teardown --confirm-teardown`，一次关闭当前实例自启、正常停止并注销后台入口。配置、身份、程序和历史数据保留，之后可重新 `setup`。该命令不会卸载智能体钩子；服务停止后，block 模式下的受控操作会拒绝。重复执行会复验已退出状态。
+
+macOS 开发版新增 `launch-agent-plist`，只读导出当前已初始化实例的 LaunchAgent 配置。当前仅完成导出与跨解析器校验，尚未接通自动注册、启动或 macOS 实机验收；不要将此命令视为后台安装成功。
+
+macOS `launch-agent-prepare` 可在状态目录中准备签名归属记录与 plist，重复执行复验内容，并恢复签名记录存在但 plist 缺失的中断。尚不写入 Library/LaunchAgents 或加载任务，不能据此认为后台服务已启动。
+
+macOS `launch-agent-register` 会复验/准备签名配置，并向当前用户 `Library/LaunchAgents` 排他发布实例链接。只复用同一源的精确链接，不覆盖未知文件或跟随被重定向的目录。当前尚不执行 launchctl，不代表已经加载或启动；实机验收待完成。
+
+macOS `launch-agent-status` 只读核对当前 GUI 用户域的已加载 XML 配置，与签名源字段及用户目录链接匹配后区分已加载/报告 PID/API 就绪。该兼容入口基于 `launchctl list -x`，尚缺当前 macOS 实机验证；命令或格式不支持时返回未确认，不会自动加载或替换任务。
+
+`launch-agent-status` 现在会先核对当前 GUI 用户域的完整任务列表；明确缺席时提示“已注册，当前用户域未加载”。查询失败、格式不支持或查询中任务变化均保持“未确认”，不会自动加载或重装。此查询只反映当时的当前用户域，不证明全系统没有服务。
+
+macOS 可在 `launch-agent-register` 后运行 `launch-agent-load --confirm-load`，将已签名的当前实例配置加载到当前 GUI 用户域。重复执行会核对并复用已加载配置；失败时先运行 `launch-agent-status` 检查再重试。该命令不请求启动，不能仅凭加载成功判断保护就绪。当前仍缺 macOS 实机验收。
+
+macOS `launch-agent-start --confirm-start` 会复用上述加载流程，启动当前实例并检查目录健康；已有进程时仅验证，不强制重启。失败后保留现场，请使用 `launch-agent-status` 检查。当前属于待实机验收的开发能力。
+
+macOS `launch-agent-stop --confirm-stop` 停止当前归属实例并保留配置、密钥和历史；再次运行 `launch-agent-start --confirm-start` 可复用配置。停止超时、异常退出或台账仍被占用时返回未确认，不能据此判断安全排空完成。此命令仍待 macOS 实机验收。
+
+macOS 停止服务后，可执行 `launch-agent-unregister --confirm-unregister` 移除当前用户域注册。命令保留程序、配置、密钥和历史；再次使用先 `launch-agent-register`，再 `launch-agent-start --confirm-start`。注销失败保留现场，可检查状态后重试；不会自动终止仍在运行的实例。完整流程仍待 macOS 实机验证。
+
+macOS 开发入口现可使用 `setup --confirm-setup [--port N] [--open-ui]` 串联初始化、注册和启动。须在非 root 的 GUI 用户会话中运行；`--runtime` 仅适用于 Linux。健康的已归属实例会复用；任一步失败保留现场，排查后可重试。此编排尚待 macOS 实机验收，不代表已提供正式安装包或登录自启。
+
+macOS 现可执行 `teardown --confirm-teardown` 串联停止与注销，并保留程序、配置、密钥和历史。停止未确认会阻止后续注销；已停止但注销中断可重试。退出后智能体钩子仍在，block 模式请求会拒绝；再次使用可运行 `setup --confirm-setup`。此完整旅程仍待 macOS 实机验收。
+
+后台启动器可使用 `serve --state-dir /absolute/canonical/path` 显式绑定已初始化实例；该参数优先于新旧状态目录环境变量，不修改环境。路径必须已存在且规范，不接受相对路径或符号链接别名；不指定则保留既有默认行为。Windows 计划任务接入将使用此入口，任务注册尚未实现。
+
+Windows 开发入口 `task-xml` 只读导出当前用户计划任务配置：绑定当前用户 SID、当前程序与实例目录，最低权限、无自动触发器。路径暂限本地盘符规范路径，不支持 UNC/设备路径或百分号环境展开。导出不会注册或启动任务；签名归属、任务生命周期及 Windows 实机验收尚待完成。
+
+Windows `task-prepare` 会在状态目录内准备任务 XML 与签名归属记录，绑定当前用户 SID、实例、目录和内容摘要。重复准备只接受原配置；XML 缺失可按签名恢复，未知内容不会覆盖。该命令不注册或启动系统计划任务，原生验收仍待完成。
+
+Windows `task-query` 只读查询已经准备且已在系统中注册的实例任务，完整核对当前用户、签名源和系统返回的 XML 后输出配置。查询失败不会当作任务不存在，也不会注册、覆盖或启动任务；成功不代表进程健康。当前只有模拟查询与跨平台编译证据，尚待 Windows 实机验收。
+
+Windows `task-presence` 只读检查已签名准备实例的系统任务，成功输出 `present` 或 `absent`；存在时还必须通过完整配置核对。依赖系统 Windows PowerShell 与 Task Scheduler，任何无法确认的查询均报错，不触发创建或覆盖。当前原生脚本与系统兼容仍待 Windows 验收。
+
+Windows `task-register --confirm-register` 准备签名配置并排他注册当前用户的实例任务。已有任务只在完整配置匹配时复用；创建后读回失败保留现场，再次执行须重新核对。命令不启动任务、不更新同名异配置。依赖系统 Windows PowerShell / Task Scheduler；当前仅模拟与交叉编译通过，原生注册验收仍待完成。
+
+Windows `task-start --confirm-start` 对已注册且配置匹配的任务请求按需启动，成功前检查本机 API 的实例目录健康；已有健康实例复用。请先运行 `task-register --confirm-register`。健康失败保留任务和状态，不强制重启或删除。此路径尚待 Windows 实机验收，正常退出和注销命令见下文。
+
+Windows `task-runtime` 只读显示已核对任务的 `state`、可见 `instances` 与 `last_result`。它会拒绝矛盾状态；`last_result=0` 不表示当前服务已正常退出。原生运行状态与正常退出通道仍待 Windows 验收。
+
+服务端现已支持本机签名退出协议（规格 §3.11.45）：先获取当前运行挑战，再签署退出请求，接受记录持久化成功后进入排空。配对/适配器/恢复 token 不能替代签名；HTTP 202 仅表示请求已接受。对应退出请求 CLI 见下文；完整链路仅有隔离 Linux 子进程证据，Windows 后台退出待验收。
+
+`siq-agent-security stop-request --confirm-stop` 使用当前状态目录和配置端口请求正常退出，输出签名接受记录。命令会验签当前运行挑战和本机记录；响应丢失但匹配记录已落盘时可确认接受，不自动重发。**该命令只确认接受，不等待或宣称服务已经退出。** 最终确认可使用下方 stop 命令；Windows 任务停止命令见下文。
+
+签名退出请求进入排空后，服务会保留 `service-stop-<boot_id>.result.json`，记录 `drained` 或 `drain_failed` 并绑定接受记录。它表示收尾结果，写入时仍持 Writer，不能单凭文件存在判断进程已退出。停止完成确认使用下方 stop 命令。
+
+`siq-agent-security stop --confirm-stop` 请求退出并等待本次签名排空结果与主 Writer 释放，成功输出结果 JSON。超时后可用 `stop --confirm-stop --recover <boot_id>` 继续核对原请求；恢复检查不会发送新的停止请求，也不会停止后来启动的实例。此命令不注销或禁用系统任务，不能阻止管理器之后重新启动。完整 CLI 已在隔离 Linux 验证，Windows/macOS 原生验收仍待完成。
+
+Windows `task-stop --confirm-stop` 对签名绑定的已注册实例请求正常退出，核对本次排空记录、任务空闲状态和主 Writer 释放；原本空闲时仅确认空闲。排队、归属变化、排空失败或非零退出结果会报错并保留现场。命令不强制终止、不注销或禁用任务；仅通过模拟测试和交叉编译，尚待 Windows 实机验收。
+
+Windows `task-unregister --confirm-unregister` 注销已签名且空闲的当前实例任务，成功前重新确认缺席；运行或排队时拒绝，请先完成正常停止。本地源配置、密钥和历史保留；失败保留现场，可检查后重试。该命令仅有模拟编排与交叉编译证据，PowerShell/COM 删除仍待 Windows 实机验收。
+
+Windows 开发入口 `setup --confirm-setup [--port N] [--open-ui]` 先只读预检当前用户 Task Scheduler，再串联初始化、排他注册、启动和目录健康检查。已有健康实例仍核对系统任务归属；失败保留现场。`--runtime` 不支持，不自动配置登录触发器。PowerShell/COM 和浏览器完整旅程仍待 Windows 实机验收。
+
+Windows `teardown --confirm-teardown` 串联正常停止与任务注销，保留程序、配置、密钥和历史。停止未确认不会继续注销；注销已完成但响应中断可重试确认缺席。智能体钩子不会卸载，服务停止后 block 模式受控操作会拒绝。该旅程仍待 Windows 实机验收。

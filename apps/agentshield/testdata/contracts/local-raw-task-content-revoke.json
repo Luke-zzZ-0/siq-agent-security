@@ -1,0 +1,5 @@
+{
+  "schema_version": "local-raw-task-content-revoke/v1",
+  "expected_grant_signature": "a15068fd82bfca732d8c2690084850d9176d05a2a587609cb604996adebfee9e50cfdbd2ceb22eb708e1e581b04352e2a55f082ea9cbe546da6377b38d7f9f09",
+  "actor_id": "fixture-revoker"
+}

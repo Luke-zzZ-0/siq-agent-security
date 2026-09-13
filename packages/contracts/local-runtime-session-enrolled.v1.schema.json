@@ -20,7 +20,7 @@
       "pattern": "^ri-[a-f0-9]{32}$"
     },
     "platform": {
-      "const": "hermes"
+      "enum": ["hermes", "openclaw"]
     },
     "agent_id": {
       "type": "string",

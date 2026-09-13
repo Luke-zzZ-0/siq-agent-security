@@ -36,6 +36,12 @@ func permissionEnvelope(r Record, session string, g *grant.Grant, at time.Time) 
 		tools = append(tools, tool)
 	}
 	sort.Strings(tools)
+	effects := []string{}
+	for _, effect := range []string{"tool.invoke", "file.read", "file.write", "file.delete", "network.request", "process.exec", "message.send", "database.read", "database.write", "secret.read"} {
+		if grant.ScenarioAllowsEffects(g.Scenario, []string{effect}) {
+			effects = append(effects, effect)
+		}
+	}
 	expires := at.Add(time.Duration(r.SessionTTLSeconds) * time.Second)
 	if g.ExpiresAt != nil {
 		end, e := time.Parse(time.RFC3339Nano, *g.ExpiresAt)
@@ -49,7 +55,7 @@ func permissionEnvelope(r Record, session string, g *grant.Grant, at time.Time) 
 		Purpose: permissionPurpose, AllowedTools: tools,
 		// This envelope selects instance permissions, not inferred task intent.
 		// Grant still checks each resource and condition; unknown effects remain denied.
-		AllowedEffects:      []string{"tool.invoke", "file.read", "file.write", "file.delete", "network.request", "process.exec", "message.send", "database.read", "database.write", "secret.read"},
+		AllowedEffects:      effects,
 		ResourceConstraints: []intent.ResourceConstraint{}, ParameterConstraints: []intent.ParameterConstraint{},
 		IssuedAt: at.UTC().Format(time.RFC3339Nano), ValidFrom: at.UTC().Format(time.RFC3339Nano), ExpiresAt: expires.UTC().Format(time.RFC3339Nano),
 		Authority: intent.Authority{Issuer: "local-runtime-identity", Revision: recordDigest(r), EvidenceIDs: []string{}},
@@ -122,18 +128,27 @@ func bindingMatches(r Record, session string, c *intent.Contract, b *intent.Bind
 // AuthorizeSession is the required credential + session boundary for middleware.
 // Authenticating the bearer alone must never authorize another session or agent.
 func (s *Store) AuthorizeSession(token, platform, agent, session string) (intent.Binding, error) {
+	_, binding, err := s.AuthorizeSessionContext(token, platform, agent, session)
+	return binding, err
+}
+
+// AuthorizeSessionContext returns the authenticated identity and its current
+// signed binding from one read-locked validation. Callers that bind additional
+// short-lived authority must use this result instead of authenticating the
+// identity and resolving the session in separate steps.
+func (s *Store) AuthorizeSessionContext(token, platform, agent, session string) (Record, intent.Binding, error) {
 	writeMu.RLock()
 	defer writeMu.RUnlock()
 	if !textValid(session, 256) {
-		return intent.Binding{}, ErrInvalid
+		return Record{}, intent.Binding{}, ErrInvalid
 	}
 	r, err := s.authenticate(token)
 	if err != nil || r.Platform != platform || r.AgentID != agent {
-		return intent.Binding{}, ErrUnavailable
+		return Record{}, intent.Binding{}, ErrUnavailable
 	}
 	c, b, err := s.intents.ResolveBinding(platform, session, agent)
 	if err != nil || !bindingMatches(r, session, c, b) {
-		return intent.Binding{}, ErrUnavailable
+		return Record{}, intent.Binding{}, ErrUnavailable
 	}
-	return *b, nil
+	return r, *b, nil
 }

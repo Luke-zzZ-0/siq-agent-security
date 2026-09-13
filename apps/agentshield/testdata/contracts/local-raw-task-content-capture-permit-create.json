@@ -1,0 +1,11 @@
+{
+  "schema_version": "local-raw-task-content-capture-permit-create/v1",
+  "platform": "hermes",
+  "agent_id": "hri-11111111111111111111111111111111",
+  "session_id": "fixture-session",
+  "task_id": "fixture-runtime-task",
+  "grant_id": "rawgrant-0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
+  "expected_grant_signature": "5f05d688206b127498413647f481a598503cee3bda4760f6efc96895d1dce57f08dc4bf9185220e81103fb848064ca73e1dc5a2e3211a5be741b9d9923678905",
+  "kind": "input",
+  "ttl_seconds": 60
+}

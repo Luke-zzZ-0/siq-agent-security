@@ -1,0 +1,30 @@
+{
+  "activity": {
+    "activity_id": "dd1aa90f0c4bcc4a78cefb4468f73297a7a6795c333ba26cdde214de5768e4bf",
+    "attribution": "bound",
+    "binding": {
+      "agent_id": "a-1",
+      "chain_id": "local",
+      "intent_digest": "b023a2e07ae3e1fe00723c0cdd5ef00c1ab41bd3d45e2c94b5b9a5e820a6b511",
+      "intent_id": "int-api",
+      "platform": "hermes",
+      "session_id": "s",
+      "task_id": "task-1"
+    },
+    "first_seq": 0,
+    "last_seq": 0,
+    "receipt_count": 1
+  },
+  "evaluated_at": "2026-09-12T00:00:00Z",
+  "reason_code": "evaluated",
+  "result": {
+    "incident_ids": [],
+    "reason_code": "not_required",
+    "requirements": [],
+    "schema_version": "completion-status/v1",
+    "status": "unknown",
+    "task_id": "task-1"
+  },
+  "schema_version": "local-task-activity-completion/v1",
+  "snapshot": "a08fcbf58e5d0a1801ad468312ef22c439d8420b7ffd868c49b6a1cb25056f62"
+}

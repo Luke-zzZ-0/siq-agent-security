@@ -1,0 +1,29 @@
+{
+  "schema_version": "local-task-activities/v1",
+  "snapshot": "c9ae81247ddb6538c0385ea4b6d7249c02798daccbb201d41b6b2d165f142ee4",
+  "view": "tasks",
+  "offset": 0,
+  "total": 2,
+  "next_offset": 1,
+  "prefix_valid": true,
+  "history_integrity": "unknown",
+  "evidence_freshness": "unknown",
+  "items": [
+    {
+      "activity_id": "8535d2ccd03f2c6fb85a3a91c122508b0b82eef9050ede5fcabc5c37c1698f8f",
+      "attribution": "bound",
+      "binding": {
+        "agent_id": "agent-1",
+        "chain_id": "local",
+        "intent_digest": "digest",
+        "intent_id": "i",
+        "platform": "hermes",
+        "session_id": "s",
+        "task_id": "t"
+      },
+      "receipt_count": 1,
+      "first_seq": 0,
+      "last_seq": 0
+    }
+  ]
+}

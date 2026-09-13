@@ -83,6 +83,11 @@ type Store struct {
 	now       func() time.Time
 	// Private test boundary, never set from runtime configuration.
 	boundary func(string) error
+	// Upstream re-fetch seam for update checks. The default re-fetches the
+	// recorded import source; tests substitute a snapshot so cross-package
+	// behavior is exercised without a network. Never set from runtime
+	// configuration.
+	upstream func(context.Context, *skillimport.Record, string) (*skillimport.UpstreamSnapshot, error)
 }
 
 func Open(authority *state.Store, key *signing.Key, imports *skillimport.Store, resolve func(context.Context, string) (Target, error)) (*Store, error) {
@@ -95,7 +100,11 @@ func Open(authority *state.Store, key *signing.Key, imports *skillimport.Store, 
 			return nil, err
 		}
 	}
-	return &Store{dir: dir, key: key, imports: imports, authority: authority, resolve: resolve, now: time.Now, boundary: func(string) error { return nil }}, nil
+	return &Store{dir: dir, key: key, imports: imports, authority: authority, resolve: resolve, now: time.Now,
+		boundary: func(string) error { return nil },
+		upstream: func(ctx context.Context, record *skillimport.Record, remoteURL string) (*skillimport.UpstreamSnapshot, error) {
+			return imports.CheckUpstream(ctx, record.ImportID, remoteURL)
+		}}, nil
 }
 func nameValid(name string) bool {
 	if !namePattern.MatchString(name) {

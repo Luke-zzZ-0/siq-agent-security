@@ -15,8 +15,17 @@ import (
 var managedIdentityPattern = regexp.MustCompile(`^ri-[a-f0-9]{32}$`)
 var ErrIdentityWithdrawalRequired = errors.New("adapter: managed identity must be revoked before uninstall")
 
+// Managed config field names differ by host convention: Hermes plugin
+// config.json uses snake_case, OpenClaw's product config uses camelCase.
+func managedConfigKeys(platform string) (id, token, agent string) {
+	if platform == OpenClaw {
+		return "runtimeIdentityId", "tokenPath", "agentId"
+	}
+	return "runtime_identity_id", "token_path", "agent_id"
+}
+
 func validManagedTarget(o Options) bool {
-	return o.Platform == Hermes && o.Instance != nil && validateInstance(o) == nil && managedIdentityPattern.MatchString(o.RuntimeIdentityID)
+	return (o.Platform == Hermes || o.Platform == OpenClaw) && o.Instance != nil && validateInstance(o) == nil && managedIdentityPattern.MatchString(o.RuntimeIdentityID)
 }
 func managedCredentialPath(o Options) string {
 	return filepath.Join(o.StateDir, "runtime-identity-secrets", o.RuntimeIdentityID+".token")
@@ -42,7 +51,7 @@ func (p *Plan) pinRuntimeIdentity() error {
 		AgentID    string `json:"agent_id"`
 		Platform   string `json:"platform"`
 	}
-	if json.Unmarshal(meta.Data, &identity) != nil || identity.ID != o.RuntimeIdentityID || identity.InstanceID != o.Instance.ID || identity.AgentID != "hri-"+strings.TrimPrefix(o.Instance.ID, "hi-") || identity.Platform != Hermes {
+	if json.Unmarshal(meta.Data, &identity) != nil || identity.ID != o.RuntimeIdentityID || identity.InstanceID != o.Instance.ID || identity.AgentID != "hri-"+strings.TrimPrefix(o.Instance.ID, "hi-") || identity.Platform != o.Platform {
 		return ErrPlanChanged
 	}
 	revoked, err := p.input(managedRevocationPath(o))
@@ -54,10 +63,14 @@ func (p *Plan) pinRuntimeIdentity() error {
 
 // ConfiguredRuntimeIdentity reads only the adapter's non-secret config reference.
 func ConfiguredRuntimeIdentity(o Options) (string, error) {
-	if o.Platform != Hermes {
+	idKey := "runtime_identity_id"
+	path := filepath.Join(o.configRoot(), "plugins", product.PluginDir(), "config.json")
+	if o.Platform == OpenClaw {
+		idKey = "runtimeIdentityId"
+		path = filepath.Join(o.configRoot(), product.Name+".json")
+	} else if o.Platform != Hermes {
 		return "", nil
 	}
-	path := filepath.Join(o.configRoot(), "plugins", product.PluginDir(), "config.json")
 	if _, err := os.Lstat(path); errors.Is(err, os.ErrNotExist) {
 		return "", nil
 	}
@@ -68,7 +81,7 @@ func ConfiguredRuntimeIdentity(o Options) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	value, exists := doc["runtime_identity_id"]
+	value, exists := doc[idKey]
 	if !exists {
 		return "", nil
 	}
@@ -84,7 +97,8 @@ func managedConnectionMatches(o Options, doc map[string]any) bool {
 		root := o.configRoot()
 		o.Instance = &InstanceTarget{ID: hermeshome.Identifier(root), Name: "default", ConfigDir: root}
 	}
-	id, ok := doc["runtime_identity_id"].(string)
+	idKey, tokenKey, agentKey := managedConfigKeys(o.Platform)
+	id, ok := doc[idKey].(string)
 	if !ok {
 		return false
 	}
@@ -92,7 +106,7 @@ func managedConnectionMatches(o Options, doc map[string]any) bool {
 		return false
 	}
 	o.RuntimeIdentityID = id
-	return validManagedTarget(o) && doc["token_path"] == managedCredentialPath(o) && doc["agent_id"] == "hri-"+strings.TrimPrefix(o.Instance.ID, "hi-")
+	return validManagedTarget(o) && doc[tokenKey] == managedCredentialPath(o) && doc[agentKey] == "hri-"+strings.TrimPrefix(o.Instance.ID, "hi-")
 }
 
 // Direct CLI/package callers cannot remove managed hooks while the credential

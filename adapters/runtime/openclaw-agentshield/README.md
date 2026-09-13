@@ -1,54 +1,25 @@
-# openclaw-agentshield（OpenClaw 适配器：L1 安装门禁 + L2 运行时）
+# openclaw-agentshield（OpenClaw 运行时适配器）
 
-两半：**安装门禁**由 OpenClaw 的 `security.installPolicy` 调用 `siq-agent-security policy-exec`（Go，在本仓 `apps/agentshield`）；**运行时**由本目录的插件把 `before_tool_call` / `after_tool_call` 接到决策 API。两半都不含规则、判定或密钥。
+插件将 `before_tool_call` / `after_tool_call` 接到本机决策 API，不包含规则、判定或签名密钥。
 
-## L1 安装门禁
+## Skill 安装检查
 
-`~/.openclaw/openclaw.json`：
+请通过 SIQ 的 Skill 导入、检查和确认安装流程安装 Skill。已验证的 OpenClaw 2026.5.12 不接受顶层 `security.installPolicy`；安装器不再写入该字段，盘点也不把它视为有效安装门禁。尚未证明 OpenClaw 原生安装入口可被本插件拦截。
 
-```json5
-{
-  security: {
-    installPolicy: {
-      enabled: true,
-      targets: ["skill"],
-      exec: {
-        source: "exec",
-        command: "/usr/local/bin/siq-agent-security",   // 绝对路径
-        args: ["policy-exec"],
-        timeoutMs: 10000,
-        trustedDirs: ["/usr/local/bin"],
-        passEnv: ["SIQ_AGENT_SECURITY_STATE_DIR", "HOME", "PATH"]
-      }
-    }
-  }
-}
-```
-
-`policy-exec` 读 stdin 的安装请求，对 `stagedPath` 跑 `siq-agent-security admit`，输出：
-
-| admission verdict | decision | 说明 |
-| --- | --- | --- |
-| `quarantine` | `block` | reason 列出隔离类别 |
-| `admit_with_conditions` | `warn` | 提示安装后 `siq-agent-security grant <admission_id>` |
-| `admit` | `allow` | |
-| 请求畸形 / 无路径 / 分析失败 | `block` | fail-closed（OpenClaw 在 exec 失败时同样 fail-closed）|
-| `targetType != skill` | `warn` | 插件安装不在本策略范围 |
-
-准入结论与 Skill Card 同时写入本机状态目录，控制台可见。
+`policy-exec` 保留供有明确调用合同的外部宿主使用。历史本产品配置仅在归属记录和完整策略内容匹配后迁移；未知用户配置保留。
 
 ## L2 运行时
 
 ```bash
 siq-agent-security adapter install openclaw
-# writes plugin assets/manifest, registers plugins.load.paths + entry, and merges installPolicy (backup first)
+# writes plugin assets/manifest, registers plugins.load.paths + entry, without injecting unsupported installPolicy (backup first)
 ```
 
 | 决策 API `action` | 插件返回 |
 | --- | --- |
 | `allow` | 无决策 |
 | `deny` | `{ block: true, blockReason }` |
-| `hold` | 要求宿主检查点协议版本 1；先取得本地批准，再进入平台审批，执行前按最终参数重查授权；缺能力、拒绝、过期或失败在 block 下阻断 |
+| `hold` | 要求宿主检查点协议版本 1；先取得本地批准，再进入平台审批，执行前按最终参数重查授权；缺能力、拒绝、过期或失败在 block 或托管身份下阻断 |
 | `redact` | `{ params }`（改写后的参数） |
 
 `after_tool_call` 把结果截断 64 KiB 发 `/v1/observe`（服务端脱敏、更新污点）。
@@ -61,12 +32,13 @@ siq-agent-security adapter install openclaw
 
 | 场景 | `block` | `audit_only` / `warn` |
 | --- | --- | --- |
-| 服务不可达 / 超时 / 401 / 非法 JSON / 无 token | `block: true` | 放行 + `console.warn` |
+| 非托管服务不可达 / 超时 / 401 / 非法 JSON / 无 token | `block: true` | 放行 + `console.warn` |
+| 托管身份验证或决策失败 / 非法配置 / 非本机地址 | `block: true` | `block: true` |
 | OpenClaw 钩子 15 s 超时 | OpenClaw 自身 fail-closed | 同左 |
 
 ## 卸载
 
-`siq-agent-security adapter uninstall openclaw` 从 `<state>/backups/adapters/` 还原 `openclaw.json` 并删除本插件目录。
+`siq-agent-security adapter uninstall openclaw` 按安装记录移除本插件注册与自建文件，保留其他用户配置；首次备份供人工恢复参考。
 
 ## 验证状态
 
@@ -94,3 +66,16 @@ V2：pre/post 传递 tool_call_id、action_id/decision_receipt_id；缓存最多
 22:18 当前集成：[宿主能力识别及 18 场景验收](../../../docs/trusted-intent-v2-approval-integration-20260907-221813.md)。适配器源码与内嵌资产已包含 `beforeExecute` 重查，并要求原生 hook context 的 `approvalExecutionRecheckVersion: 1`；原版或旧候选 v1 缺少该能力时 block 下拒绝 hold，不会进入平台审批。此标记不能由用户配置或工具参数补齐。配套 v2 宿主在隔离副本保留正常执行并阻断撤销、参数篡改和故障；真实安装未自动升级，重新安装插件也不会替宿主打补丁。当前复测使用 `scripts/validate-openclaw-approval-integration.py`，旧候选脚本仅供旧指纹基线复核。
 
 22:36 配套交付：[宿主升级、回退和恢复说明](../../../docs/trusted-intent-v2-checkpoint-upgrade-20260907-223635.md)。`scripts/openclaw-checkpoint-compat.py` 提供只读 inspect 和显式 apply/restore，使用固定指纹、私有原始备份与 POSIX 文件锁；完成修改后需重新启动目标运行时。已在完整临时副本验证升级后的批准/撤销及回退后拒绝，未修改本机安装；回退宿主不会使当前适配器在原版上自动恢复 hold 支持。
+
+## 托管 Runtime Identity 模式（2026-09-13，v0.3.0）
+
+Managed 安装器写入 camelCase 配置 `runtimeIdentityId` / `agentId` / `tokenPath` 后，插件进入托管模式，行为对齐 Hermes 托管桥（`adapters/runtime/hermes-agentshield/__init__.py`）：
+
+- **凭据校验**：托管 token 文件必须是 `ri-<32hex>.<64hex>` 且前缀匹配 `runtimeIdentityId`；符号链接拒绝（`lstat`），超过 512 字符拒绝。旧的全局 token 不能充当托管身份。
+- **逐调用注册**：每次 `before_tool_call` 先向 `/v1/runtime-sessions` 发 `local-runtime-session-enroll/v1`，严格校验 8 字段响应（platform 必须是 `openclaw`、identity/agent/session 一致、`bind-*` / `int-ri-*` 格式）；注册失败或响应异常在 block 模式 fail-closed，且不会进入 `/v1/decide`。
+- **原生原文捕获（best effort，250ms 预算）**：allow 后把参数按 JSON pointer 展平（`/tool/name` + `/tool/arguments/...`），observe 带决策引用时把结果按 `/tool/result/...` 捕获，POST `/v1/raw-task-content/native-captures`（期望 201）。层级 ≤32、路径 ≤256、字段 ≤1024、单值 ≤1MiB，超界即放弃本次捕获。daemon 拥有原文采集策略与 secret 过滤，适配器不读原文开关。
+- 非托管（legacy）路径行为不变：不注册、不捕获。
+
+验证：`node --experimental-strip-types --test tests/managed-bridge.test.mjs`（8 个场景：legacy 不注册不捕获、托管 allow 注册+参数捕获、注册失败 fail-closed、异平台注册拒绝、旧 token 拒绝、observe 引用+输出捕获、捕获超时 best effort、托管 deny 带回执）。测试通过 resolution hook 替换 OpenClaw SDK 入口并用 mock 本地服务驱动真实 hook handler，**不是**真实 OpenClaw 网关验收；`native_available` 在真实原生捕获验证前仍为 false。
+
+凭据仅发送至显式端口的 HTTP loopback，localhost 固定为 127.0.0.1，不跟随重定向。托管模式要求真实会话、有效身份凭据及带 action/receipt 的允许裁决。输出原文仅在允许执行或 hold 最终复验通过后按精确调用关联采集一次；重复调用保持失效至关联过期。

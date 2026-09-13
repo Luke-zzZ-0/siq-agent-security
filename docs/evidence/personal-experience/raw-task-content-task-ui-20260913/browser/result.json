@@ -1,0 +1,12 @@
+{
+  "ready_task_starts_without_capture_grant": true,
+  "explicit_task_grant_uses_real_signed_api": true,
+  "explicit_revocation_uses_current_grant_signature": true,
+  "plaintext_requires_second_action_and_is_scoped_to_record": true,
+  "closing_plaintext_removes_it_from_dom": true,
+  "mobile_task_panel_has_no_horizontal_overflow": true,
+  "record_delete_requires_full_id_confirmation": true,
+  "cross_task_record_response_removes_old_trusted_state": true,
+  "plaintext_and_authority_are_not_browser_persisted": true,
+  "page_errors": []
+}

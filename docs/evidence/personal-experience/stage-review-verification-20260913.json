@@ -1,0 +1,78 @@
+{
+  "schema_version": "stage-review-verification/v1",
+  "recorded_at": "2026-09-13T05:56:14.587572+00:00",
+  "scope": "completed M124-M128 snapshot plus stage review fixes; concurrent later work excluded",
+  "passed": true,
+  "validation_environment": "isolated source snapshot /tmp/siq-stage-review-20260913; Linux arm64",
+  "tests": {
+    "openclaw_managed_bridge": 47,
+    "openclaw_legacy_hook_approval": "passed",
+    "hermes": 109,
+    "go_all_packages": "passed",
+    "go_vet": "passed",
+    "gofmt": "clean",
+    "python_schema_contracts": 197
+  },
+  "commands": [
+    "node --experimental-strip-types --test adapters/runtime/openclaw-agentshield/tests/managed-bridge.test.mjs",
+    "node scripts/test-openclaw-adapter.cjs",
+    "python3 -m pytest adapters/runtime/hermes-agentshield/tests -q",
+    "go test ./...",
+    "go vet ./...",
+    "gofmt -l .",
+    "python -m pytest app/tests/test_schema_contracts.py -q"
+  ],
+  "cross_build_sha256": {
+    "linux/amd64": "7670f6224ea5e7973c095a05c348e953a4a1f086678ec5d93e81e413171642e1",
+    "linux/arm64": "86c4e78f7e2774e82b0955b71e7c93ea2a470031d9aa8f81f61bf954a5acd91b",
+    "darwin/arm64": "e1d0bcca547af8e6bfb70273e417aa618382e4fd4a49eb4622efec082f5e3ca7",
+    "windows/amd64": "788d6751e771e1b937062529208caaef4eda91682df5ce225e1e8f0e8635e165"
+  },
+  "changed_existing_file_sha256": {
+    "AGENTSHIELD.md": "39a3115615eddf7ca9aba9965ad71cafb722fa31a4cc21a99ad2f7f941132652",
+    "adapters/runtime/hermes-agentshield/__init__.py": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646",
+    "adapters/runtime/hermes-agentshield/tests/test_adapter.py": "7a9c6804cf7ac0937076e64347ff91d6c80921dbdeab64ef8d918be3b6f72b86",
+    "adapters/runtime/hermes-agentshield/tests/test_runtime_identity.py": "e75bc9af822ef7d2ba90f579030507dd7cc17a46099601a0199c74ab0b739056",
+    "adapters/runtime/openclaw-agentshield/README.md": "094e88f4b98b36dbc40894f5d9a3de64314f16e227090115cc894465401eadea",
+    "adapters/runtime/openclaw-agentshield/index.ts": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449",
+    "adapters/runtime/openclaw-agentshield/tests/managed-bridge.test.mjs": "58ee6d68bcc999b2e9283648dd8649b07657df560eefc7d945d8121ca87788c7",
+    "adapters/runtime/openclaw-agentshield/tests/scenarios.mjs": "05360d8784c618afeccb4afc018592f38a382669d44f6dfe843cf660ab3088b9",
+    "apps/agentshield/internal/adapterinstall/assets/hermes/__init__.py": "c9dbe74dd226d4ba2c9ae34cf8c057b684acbcf15fbea95e204a530df0820646",
+    "apps/agentshield/internal/adapterinstall/assets/openclaw/index.ts": "81e62c8929bdff5a610028e3b69d45947424fb0da250718505cca815877cd449",
+    "apps/agentshield/internal/adapterinstall/install_test.go": "2744f8fd5128dcab7930e8565b3c26bb336e07c816387424f1929e747104dce8",
+    "apps/agentshield/internal/adapterinstall/openclaw_config_test.go": "c5868cdb164fd92902c53bc8331fc159a69d495c199bc709706726206c3423bd",
+    "apps/agentshield/internal/adapterinstall/plan.go": "ce7236aaf3f9e55c845ae07dbd23ce3b620c2481630267f54e0b943110f9084f",
+    "apps/agentshield/internal/adapterinstall/plan_uninstall.go": "ade4473507435671e0fb4aea41377f3201bbaf765d75341da527f8298b69461a",
+    "apps/agentshield/internal/inventory/inventory.go": "ba02c07e881158bf2aff0fdf8cf439f69bd19f01c9472a2d17a2fed83d0e148b",
+    "apps/agentshield/internal/inventory/inventory_test.go": "4611d5d77a5c5a8fe9f4fc2f39f6ba08967c857f2966af407c24a02dd1243d6a",
+    "apps/agentshield/internal/state/skill_attribution_test.go": "6c019ae68c7280a2640d7ae44d4a5970ed92d5293a65baf8c91002a7ebd32e2a",
+    "apps/agentshield/internal/state/state.go": "815d49d9e9ca2efcc29cd58fdb234a1332998b4f507aa74505a4de24b900b7d0",
+    "apps/agentshield/testdata/contracts/inventory.sample.json": "6bfddb60ffbad4d93378aee1daa26801d3763af402feac242736d2b6d61eb9ed",
+    "docs/agentshield-dev-spec-v1.md": "87f571211ebcba1187f60f0e53569359a018ffd0192a4581c943b3df7a85127b",
+    "docs/evidence/personal-experience/openclaw-managed-native-smoke-20260913.md": "2d037001ed7c0109490d0f420d8601493b6dfb641d168f5b5e4f5ca56f9d6f6a",
+    "docs/personal-experience-current.md": "7f82e7a8b4bd3d394f35961778ec8d5892048044a4e185bf6e534957410b6d0c",
+    "docs/personal-experience-development-progress-20260910.md": "f453802f059ea6ece1329463de64e97d1ca64e00ef161257e5c202a443a8d11f",
+    "scripts/personal-experience/openclaw-managed-native-smoke.py": "2d2cf7262ef630dfb989ddb9f376a3ff215cffc6151ab3c204bfe390a83af9f1",
+    "scripts/test-openclaw-adapter.cjs": "a24e8d654b3c7e7f32db24fdc3d213c3917486761385e5e5627e48082491905e"
+  },
+  "native_report_sha256": "364359c5a109cd5c048260857c6b12f45a21ad07990a3088bcec285abe82f0cc",
+  "historical_m127_report_sha256": "3b4ac4b337c1ae7ca24ffbb0816fc20ad806e4e7d86f09a23dfe20486f5e5ae4",
+  "limitations": [
+    "Cross builds do not validate macOS or Windows native operation",
+    "Synthetic model and isolated profile; no true user approval or trusted Skill execution attribution",
+    "No native OpenClaw installation interception claim",
+    "No commit, push, merge, or user service restart"
+  ],
+  "workspace_integration": {
+    "recorded_at": "2026-09-13T05:59:47.741103+00:00",
+    "go_test_all": "passed",
+    "diff_check": "clean",
+    "embedded_adapters": "byte-identical",
+    "preserved_concurrent_changes": [
+      "M129 progress appendix",
+      "desktop notification configuration fields and validation in state.go"
+    ],
+    "integrated_state_go_sha256": "fbb376d7d6baa32fdb5f0ddcbaae36140285d44ac6017502d693fc4d5df58af8",
+    "note": "changed_existing_file_sha256 describes the isolated reviewed snapshot; state.go additionally includes unrelated concurrent notification fields after integration. Integration tests do not accept later milestones."
+  }
+}

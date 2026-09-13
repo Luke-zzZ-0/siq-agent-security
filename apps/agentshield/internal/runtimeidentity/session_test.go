@@ -81,6 +81,25 @@ func TestSessionEnrollmentIsFixedAndScoped(t *testing.T) {
 	}
 }
 
+func TestScenarioPermissionEnvelopeCannotReintroduceExec(t *testing.T) {
+	for _, id := range []string{"no-exec", "no-network", "sandboxed"} {
+		tools := []string{"read_file", "exec", "terminal"}
+		g := &grant.Grant{Scenario: &grant.ScenarioRef{ID: id, Version: 1}, HermesToolsetAllowlist: &tools}
+		c := permissionEnvelope(Record{IdentityID: "review", SessionTTLSeconds: 60}, "session", g, time.Now())
+		if !reflect.DeepEqual(c.AllowedTools, []string{"read_file"}) {
+			t.Fatal("unexpected tools", c.AllowedTools)
+		}
+		for _, effect := range c.AllowedEffects {
+			if effect == "process.exec" || effect == "unknown" {
+				t.Fatal("unsafe envelope", c.AllowedEffects)
+			}
+			if id == "sandboxed" && effect != "file.read" && effect != "database.read" && effect != "tool.invoke" {
+				t.Fatal("mutating readonly envelope")
+			}
+		}
+	}
+}
+
 func TestSessionRevocationAndExpiryNeverResurrect(t *testing.T) {
 	for _, kind := range []string{"binding", "intent", "expiry", "grant"} {
 		t.Run(kind, func(t *testing.T) {
@@ -244,11 +263,11 @@ func TestDifferentInstancesCannotBorrowEachOthersSessions(t *testing.T) {
 		t.Fatal(err)
 	}
 	s.intents = authority
-	s.resolve = func(id string) error {
+	s.resolve = func(id string) (string, error) {
 		if id == req.InstanceID || id == otherInstance {
-			return nil
+			return "hermes", nil
 		}
-		return ErrUnavailable
+		return "", ErrUnavailable
 	}
 	first, firstToken := create(t, s, req)
 	otherReq := req

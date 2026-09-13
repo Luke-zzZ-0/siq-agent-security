@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/adapterinstall"
-	"siq-agent-security/apps/agentshield/internal/hermeshome"
 )
 
 func (s *Server) adapterOptions(platform string) adapterinstall.Options {
@@ -54,7 +53,7 @@ func (s *Server) diagnoseInstance(opts adapterinstall.Options) adapterinstall.Di
 	if id == "" && err == nil {
 		return d
 	}
-	instanceID := hermeshome.Identifier(hermeshome.LegacyRoot(opts.Home))
+	instanceID := adapterinstall.DefaultInstanceID(opts.Home, opts.Platform)
 	if opts.Instance != nil {
 		instanceID = opts.Instance.ID
 	}

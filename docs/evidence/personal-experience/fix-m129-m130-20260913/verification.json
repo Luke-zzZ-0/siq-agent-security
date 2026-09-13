@@ -1,0 +1,58 @@
+{
+  "schema_version": "stage-fix-verification/v1",
+  "recorded_at": "2026-09-13T06:48:00.118118+00:00",
+  "scope": "M129/M130 independent acceptance four findings",
+  "status": "component_regressions_passed",
+  "tests": {
+    "original_four_findings": "passed",
+    "full_go_tests": "passed",
+    "targeted_race_five_packages": "passed",
+    "go_vet": "passed",
+    "gofmt": "clean",
+    "cli_notification_tests": {
+      "passed": 6,
+      "skipped": 0
+    },
+    "python_contracts": 197
+  },
+  "cross_build_sha256": {
+    "linux/amd64": "e7fde43c835dcc5b0fbb9dc9ec92733255fdf48c674a2186774d2af2424661df",
+    "linux/arm64": "ff5a80e7159afe528d83720e368d7a994d2457088f2a1f6faeee66d978f9bba8",
+    "darwin/arm64": "8025a76eb62f4293e632ca470cfefcc9b3ee222d8e49655205cff258972dcf45",
+    "windows/amd64": "b63fcb224832c8c5a4146066a70fe8bc58ca94d8d922f7e7db1aa00fa5dfe722"
+  },
+  "reviewed_file_sha256": {
+    "apps/agentshield/cmd/agentshield/desktop_notify_test.go": "69754da16a73d2ec4ca8f194fe2e76fecd9b63f904c2512e39a0265274ca709e",
+    "apps/agentshield/internal/grant/grant.go": "01fa77f7897eb5b2efbc305e11014a2accd8c6894daa16c21039306ecec80b62",
+    "apps/agentshield/internal/grant/patch.go": "ce26695d4228d644a6d4af3e8c16e17ec1f9623a8e6693685e0d71e90cb0819f",
+    "apps/agentshield/internal/grant/runtime_tools.go": "63d6fd0bb2795e2248bd1be575997381ff9d9ec1847624d2068eb18aeab6b30d",
+    "apps/agentshield/internal/grant/scenario.go": "c84c162de60549bc1c07e0e80285bad4d59741854370ae6688c3b9a722e39762",
+    "apps/agentshield/internal/grant/scenario_test.go": "97369aa4c6925a09eb4d70a16aca74aa26702f3c3e3d800e4334be107c486a0b",
+    "apps/agentshield/internal/notify/notify.go": "455cac1dedc49980c218ca51085f6963aad2398d462818fa2c2a356ff6350324",
+    "apps/agentshield/internal/notify/reviewer_notify_test.go": "2092cbed28d94ffba3cc33948552039dd02db5706d84b7f727d4980baf92a023",
+    "apps/agentshield/internal/receipt/engine.go": "6f95f5e210b26891ac494b39e09324b90507b51fd8aa44da530e190e7a4ecfee",
+    "apps/agentshield/internal/receipt/reviewer_scenario_test.go": "1686eccab97f0c5837e0c4bef6f478e32987b114b56337d868df4eb4841ba4bd",
+    "apps/agentshield/internal/runtimeidentity/session.go": "cd66456e14c90ad3d6979346e5b2e3d2b7f5218a4bd54742565b0b0f9b52284e",
+    "apps/agentshield/internal/runtimeidentity/session_test.go": "b12240ace0e5ffef9d15d2df499798f1e75529347f161c3c0a4b3dcce228fda3",
+    "apps/agentshield/internal/server/reviewer_scenario_test.go": "8345ca3e6acc191912012d9d17f2f9e74a3b6e64c9cf6b1b4b4b4e78be4f0a34",
+    "apps/agentshield/internal/server/server.go": "84b8c715a4656efd22e9cccc226953b367ea8ff6e2530a4c52ae855a5acd54e9",
+    "docs/agentshield-dev-spec-v1.md": "175d9ecbbaf7c47d82bfda3165d97950048d990411fc5ee75841925d4be8b91b",
+    "docs/evidence/personal-experience/stage-acceptance-m129-m130-20260913.md": "3a8f69532b6c173da0abbac599dac3f87a2072fcb8fdbb4ea968da7c8c616178",
+    "docs/personal-experience-current.md": "595514fc34a5b308417d915d5ca9676d2195f535f52d7af3c5d1ec2a05937848",
+    "docs/personal-experience-development-progress-20260910.md": "c54aee5e09d210ea59b92cfe45c67e477fbc95fbf3721743df3fa3710d2b23f3"
+  },
+  "artifact_sha256": {
+    "go.log": "4044f6993daeadb8c523016d1e81b8759e69807c2f216532ef03abfe632316f3",
+    "race.log": "f5f49f38c828218c04156a9574d04e618a4c838ccc64ac6c20beab70c8774490",
+    "vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli.log": "369ea7a36dc8aeb24ff536a86b48fef51d7aec11c40b3afeb48b95c5d02f5c01",
+    "contracts.log": "1d4bae90fffd4c0142616dad4ebaa6b296c054cb41744baf498fdf68474ce8e8"
+  },
+  "limitations": [
+    "No native Windows/macOS acceptance",
+    "No real desktop notification or actual shell tool run",
+    "Trusted Skill attribution and LAN team work remain unfinished",
+    "No commit, push, merge, or user service restart"
+  ],
+  "preserved_unreviewed_milestone": "M131 Git import and progress entry preserved; not accepted by this review"
+}

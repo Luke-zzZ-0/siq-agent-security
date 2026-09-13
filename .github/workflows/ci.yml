@@ -12,11 +12,8 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # gitleaks-action 在 pull_request 上会 GET /pulls/{n}/commits；
-    # 顶层 contents:read 会把其余权限置 none，缺了这一项即 403。
     permissions:
       contents: read
-      pull-requests: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
         with:
@@ -29,9 +26,11 @@ jobs:
           mkdir -p "$RUNNER_TEMP/siq-scanner"
           GOBIN="$RUNNER_TEMP/siq-scanner" go install github.com/zricethezav/gitleaks/v8@v8.24.2
           python3 scripts/check_gitleaks_config.py --binary "$RUNNER_TEMP/siq-scanner/gitleaks"
-      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7  # v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Scan reachable history including roots and merge additions
+        run: |
+          "$RUNNER_TEMP/siq-scanner/gitleaks" git --redact \
+            --log-opts="--full-history -m HEAD" \
+            --report-format=sarif --report-path="$RUNNER_TEMP/siq-scanner/results.sarif"
       - name: Reject tracked task-signing private keys
         run: |
           bad=0

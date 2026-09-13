@@ -1,0 +1,9 @@
+{
+  "schema_version": "local-service-stop-result/v1",
+  "boot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_directory_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "acceptance_sha256": "0b860fca2a2c364a40d2bd774e019b0db54d7f11075b646b89a500aa445236f4",
+  "finished_at": 1700000001,
+  "status": "drained",
+  "signature": "d5a9c13334a12afd0b9f9d8f14446469332c9ca3f00df2128aa61a442ac1ad7248f73715805d5f83fd4c2990a0e90acfd8929dd2d4f03b951a275fcb46ca0402"
+}

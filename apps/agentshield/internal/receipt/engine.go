@@ -77,7 +77,43 @@ type Request struct {
 	IntentID            string                        `json:"intent_id,omitempty"`
 	Principal           string                        `json:"principal,omitempty"`
 	Intent              *IntentContract               `json:"intent,omitempty"`
+	// Skill is the runtime's claim about which skill version produced this
+	// call. It is untrusted input: it never grants anything by itself and is
+	// only resolved to a verified attribution through the trusted lookup.
+	Skill *SkillClaim `json:"skill,omitempty"`
 }
+
+// SkillClaim is a runtime-declared skill identity (untrusted).
+type SkillClaim struct {
+	SkillID     string `json:"skill_id"`
+	Version     string `json:"version,omitempty"`
+	ContentHash string `json:"content_hash,omitempty"`
+}
+
+// Skill attribution statuses. verified requires an exact match against trusted
+// local state; unknown/mismatch never authorize a skill-scoped grant and are
+// never displayed as verified.
+const (
+	SkillAttributionUnclaimed = "unclaimed"
+	SkillAttributionVerified  = "verified"
+	SkillAttributionMismatch  = "mismatch"
+	SkillAttributionUnknown   = "unknown"
+)
+
+// SkillAttribution is the engine's trusted resolution of a runtime skill claim,
+// signed into the receipt chain.
+type SkillAttribution struct {
+	SkillID     string `json:"skill_id,omitempty"`
+	Version     string `json:"version,omitempty"`
+	ContentHash string `json:"content_hash,omitempty"`
+	Status      string `json:"status"`
+}
+
+// SkillAttributionLookup resolves a runtime skill claim against trusted local
+// state (approved skill version records). Returning nil means the claim cannot
+// be attributed. Implementations must derive the result from trusted state,
+// never from the claim alone.
+type SkillAttributionLookup func(platform, sessionID, agentID string, claim *SkillClaim) *SkillAttribution
 
 // IntentLookup resolves authority from trusted local state. Implementations
 // must verify the stored digest/signature before returning an intent.
@@ -156,6 +192,7 @@ type Receipt struct {
 	Engine              EngineInfo                    `json:"engine"`
 	DecisionLatencyMS   *int                          `json:"decision_latency_ms"`
 	Hold                *Hold                         `json:"hold"`
+	SkillAttribution    *SkillAttribution             `json:"skill_attribution,omitempty"`
 }
 
 // Decision is what the adapter acts on.
@@ -193,9 +230,18 @@ type Options struct {
 	// UntrustedSkillLoaded reports whether the session has a non-admit skill
 	// loaded (sets trifecta.untrusted_input).
 	UntrustedSkillLoaded func(sessionID string) bool
-	IntentLookup         IntentLookup
-	ContextLookup        func(string) (*trustedcontext.Assertion, error)
-	IntentEnforcement    string // optional (legacy) or required (fail closed)
+	// SkillAttribution resolves runtime skill claims against trusted state.
+	// nil → every claim stays unknown (fail closed for skill-scoped grants).
+	SkillAttribution SkillAttributionLookup
+	// SkillAttributionEnforced turns on the skill-scoped grant gate (UX-007).
+	// Off (default) skill-scoped grants behave as baseline: platform adapters
+	// do not yet attach runtime skill claims, so enforcing now would deny
+	// every call. Claims are still resolved and signed into receipts either
+	// way, and are never displayed as verified unless the lookup confirms.
+	SkillAttributionEnforced bool
+	IntentLookup             IntentLookup
+	ContextLookup            func(string) (*trustedcontext.Assertion, error)
+	IntentEnforcement        string // optional (legacy) or required (fail closed)
 }
 
 type session struct {
@@ -344,6 +390,7 @@ func (e *Engine) Decide(req Request) (*Decision, error) {
 	if err != nil {
 		return nil, err
 	}
+	skillAttribution := e.resolveSkillAttribution(req)
 	var resolvedIntent *IntentContract
 	var authorityErr error
 	if e.opts.IntentLookup != nil {
@@ -471,6 +518,7 @@ func (e *Engine) Decide(req Request) (*Decision, error) {
 		TaintLabels:       []string{},
 		EnforcementMode:   e.opts.EnforcementMode,
 		Engine:            EngineInfo{Version: e.opts.Version, RulepackVersion: e.opts.Pack.Version},
+		SkillAttribution:  skillAttribution,
 	}
 	if resolvedIntent != nil || s.boundIntentID != "" {
 		rec.IntentBinding = "bound"
@@ -641,6 +689,8 @@ func classifyReason(reason, action string) string {
 		return "grant_expiration_invalid"
 	case strings.Contains(r, "not granted") || strings.Contains(r, "outside granted"):
 		return "grant_scope_violation"
+	case strings.Contains(r, "skill attribution does not verify"):
+		return "skill_attribution_mismatch"
 	case strings.Contains(r, "intent"):
 		return "intent_violation"
 	case strings.Contains(r, "lethal trifecta"):
@@ -652,6 +702,65 @@ func classifyReason(reason, action string) string {
 	default:
 		return "runtime_denied"
 	}
+}
+
+var (
+	skillIDPattern      = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$`)
+	skillVersionPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$`)
+	hex64Pattern        = regexp.MustCompile(`^[0-9a-f]{64}$`)
+)
+
+// validSkillClaim bounds the untrusted runtime claim so malformed identities
+// can never reach a trusted record comparison or the signed receipt.
+func validSkillClaim(c *SkillClaim) bool {
+	if c == nil || !skillIDPattern.MatchString(c.SkillID) || len(c.Version) > 64 || len(c.ContentHash) > 64 {
+		return false
+	}
+	if c.Version != "" && !skillVersionPattern.MatchString(c.Version) {
+		return false
+	}
+	if c.ContentHash != "" && !hex64Pattern.MatchString(c.ContentHash) {
+		return false
+	}
+	return true
+}
+
+// resolveSkillAttribution turns the runtime's untrusted skill claim into a
+// trusted attribution record. A claim without an exact trusted match stays
+// unknown; it is never treated as verified, whatever the runtime reports.
+func (e *Engine) resolveSkillAttribution(req Request) *SkillAttribution {
+	claim := req.Skill
+	if claim == nil {
+		return nil
+	}
+	if !validSkillClaim(claim) {
+		return &SkillAttribution{Status: SkillAttributionUnknown}
+	}
+	if e.opts.SkillAttribution != nil {
+		if a := e.opts.SkillAttribution(req.Platform, req.SessionID, req.AgentID, claim); a != nil {
+			switch a.Status {
+			case SkillAttributionVerified, SkillAttributionMismatch, SkillAttributionUnknown:
+				return a
+			}
+		}
+	}
+	return &SkillAttribution{SkillID: claim.SkillID, Version: claim.Version, ContentHash: claim.ContentHash, Status: SkillAttributionUnknown}
+}
+
+// skillAttributionMatches reports whether the trusted attribution covers the
+// grant's approved skill version exactly. Anything less (unclaimed, unknown,
+// version or content drift) fails closed.
+func skillAttributionMatches(ref grant.SkillRef, a *SkillAttribution) bool {
+	if a == nil || a.Status != SkillAttributionVerified {
+		return false
+	}
+	if a.SkillID != ref.SkillID || a.ContentHash != ref.ContentHash {
+		return false
+	}
+	if ref.Version != nil && a.Version != *ref.Version {
+		return false
+	}
+	return true
 }
 
 // evaluate performs steps 2–5 and returns the raw (pre-mode) action.
@@ -677,6 +786,17 @@ func (e *Engine) evaluate(req Request, s *session, descriptor runtimeaction.Desc
 		return ActionDeny, "grant expiration invalid"
 	}
 
+	// A skill-scoped grant only serves calls attributed to exactly its
+	// approved skill version; forged, switched or borrowed identities (and no
+	// claim at all) fall through to default deny (UX-007, Q05). Gated on
+	// SkillAttributionEnforced: adapters do not yet attach runtime claims.
+	if g.Skill != nil && e.opts.SkillAttributionEnforced && !skillAttributionMatches(*g.Skill, rec.SkillAttribution) {
+		return ActionDeny, "skill attribution does not verify for grant (default deny)"
+	}
+
+	if !grant.ScenarioAllowsEffects(g.Scenario, descriptor.Effects) {
+		return ActionDeny, "operation not granted by scenario"
+	}
 	allow, requireApproval := toolSets(g)
 	switch {
 	case requireApproval[req.Tool]:

@@ -153,6 +153,11 @@
     "platform": "hermes",
     "signature": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
     "signing_schema": "local_canonical/v1",
+    "skill": {
+      "content_hash": "4af17a9f97199f397e267a992f07d36fdd1c01c9d6d618a87cf44c7e10108ab3",
+      "skill_id": "local_dir:github-triage@4af17a9f9719",
+      "version": "1.2.0"
+    },
     "status": "pending_approval",
     "subject": {
       "id": "expiry-agent",

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-activate.v1.schema.json",
+  "title": "Explicit raw task content activation request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "actor_id", "retention_seconds", "budget_bytes"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-activate/v1" },
+    "actor_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "retention_seconds": { "type": "integer", "minimum": 3600, "maximum": 2592000 },
+    "budget_bytes": { "type": "integer", "minimum": 1048576, "maximum": 1073741824 }
+  }
+}

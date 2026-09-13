@@ -80,7 +80,7 @@ func (s *Server) adapterPreview(w http.ResponseWriter, r *http.Request) {
 	}
 	view := plan.View()
 	if view.RuntimeIdentityID != "" && view.Action == "install" {
-		if err := s.validateManagedSelection(view.RuntimeIdentityID, view.InstanceID); err != nil {
+		if err := s.validateManagedSelection(view.Platform, view.RuntimeIdentityID, view.InstanceID); err != nil {
 			adapterError(w, err)
 			return
 		}
@@ -158,7 +158,7 @@ func (s *Server) adapterMutate(w http.ResponseWriter, r *http.Request, action st
 	revoked := false
 	if view.RuntimeIdentityID != "" {
 		if action == "install" {
-			if err := s.validateManagedSelection(view.RuntimeIdentityID, view.InstanceID); err != nil {
+			if err := s.validateManagedSelection(view.Platform, view.RuntimeIdentityID, view.InstanceID); err != nil {
 				adapterError(w, err)
 				return
 			}
@@ -223,9 +223,9 @@ func (s *Server) adapterRecover(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, 200, res)
 }
 
-func (s *Server) validateManagedSelection(id, instance string) error {
+func (s *Server) validateManagedSelection(platform, id, instance string) error {
 	summary, err := s.runtimeIdentities.Summary(id)
-	if err != nil || summary.Status != "issued" || summary.InstanceID != instance || summary.Platform != adapterinstall.Hermes {
+	if err != nil || summary.Status != "issued" || summary.InstanceID != instance || summary.Platform != platform {
 		return adapterinstall.ErrPlanChanged
 	}
 	return nil

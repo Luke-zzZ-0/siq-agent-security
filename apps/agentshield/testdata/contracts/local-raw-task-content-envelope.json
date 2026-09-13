@@ -1,0 +1,14 @@
+{
+  "schema_version": "local-raw-task-content-envelope/v1",
+  "record_id": "raw-07070707070707070707070707070707",
+  "task_ref": "sha256:a0b3ab797d78c6b43759993022d2c7173270794fcc57189cf851e4838abdb0f5",
+  "kind": "input",
+  "created_at": "2026-09-13T00:00:00Z",
+  "expires_at": "2026-09-14T00:00:00Z",
+  "plaintext_sha256": "6be8c398da5d797ad0b6b91e0b23da7aff2bee1c8385b03119ed74f10bdbafad",
+  "plaintext_bytes": 142,
+  "omitted_secret_count": 1,
+  "algorithm": "aes-256-gcm/v1",
+  "nonce_base64": "BwcHBwcHBwcHBwcH",
+  "ciphertext_base64": "tbk5XG6D0gQTn+RITLDJGm6fpXyWHQUNQ/N0iKSccK2Xn7WIPKWlXNORs8NyNi3Z/A9MLxHV6XCucBhUirS8OrY7HgRX/9M3LeLo7a6cxyH3SHIAZ2cBP4DinlEPzit67MAiX5SM8gwFBqM0Ewa1jqALSyH6r4p/ahdPyNFn1xhg02ySHRteU7nDJvUBHI9Gf954nAgtBrtL57S2ybc="
+}

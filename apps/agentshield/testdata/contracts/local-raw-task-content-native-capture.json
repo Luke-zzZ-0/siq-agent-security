@@ -1,0 +1,14 @@
+{
+  "schema_version": "local-raw-task-content-native-capture/v1",
+  "platform": "hermes",
+  "agent_id": "hri-11111111111111111111111111111111",
+  "session_id": "fixture-session",
+  "kind": "parameters",
+  "fields": [
+    {
+      "path": "/tool/arguments",
+      "value": "{\"path\":\"report.md\"}",
+      "secret": false
+    }
+  ]
+}

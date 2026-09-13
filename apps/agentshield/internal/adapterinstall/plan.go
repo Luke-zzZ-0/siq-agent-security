@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strings"
 	"time"
@@ -392,6 +393,21 @@ func (p *Plan) prepareInstall() error {
 		if o.Platform == OpenClaw {
 			path = filepath.Join(root, product.Name+".json")
 			cfg = map[string]any{"endpoint": o.Endpoint, "tokenPath": filepath.Join(o.StateDir, "token"), "enforcementMode": o.Mode, "timeoutMs": 5000}
+			previous, err := p.planJSON(path)
+			if err != nil {
+				return err
+			}
+			if _, managed := previous["runtimeIdentityId"]; managed && o.RuntimeIdentityID == "" {
+				return ErrPlanChanged
+			}
+			if o.RuntimeIdentityID != "" {
+				if err := p.pinRuntimeIdentity(); err != nil {
+					return err
+				}
+				cfg["runtimeIdentityId"] = o.RuntimeIdentityID
+				cfg["agentId"] = "hri-" + strings.TrimPrefix(o.Instance.ID, "hi-")
+				cfg["tokenPath"] = managedCredentialPath(o)
+			}
 		}
 		if err := p.write(path, encodePlanJSON(cfg), 0o600, "连接当前本地服务，使用决策凭据引用和当前执行模式"); err != nil {
 			return err
@@ -420,20 +436,27 @@ func (p *Plan) prepareInstall() error {
 		if _, exists := doc["security"]; exists && !ok {
 			return errors.New("adapter: invalid OpenClaw security object")
 		}
-		if sec == nil {
-			sec = map[string]any{}
-		}
 		if previous, exists := sec["installPolicy"]; exists {
-			policy, _ := previous.(map[string]any)
-			exec, _ := policy["exec"].(map[string]any)
-			command, _ := exec["command"].(string)
-			if command != o.Binary && command != p.payload.Record.Binary {
-				return errors.New("adapter: another install policy already exists")
+			// Only migrate the exact legacy policy owned by our install record.
+			// Public OpenClaw rejects this key; it is not an installation hook.
+			if p.owns(path) && sameOpenClawLegacyPolicy(previous, p.payload.Record.Binary) {
+				original, err := p.originalJSON(path)
+				if err != nil {
+					return err
+				}
+				oldSec, _ := original["security"].(map[string]any)
+				if !reflect.DeepEqual(previous, oldSec["installPolicy"]) {
+					delete(sec, "installPolicy")
+					if old, exists := oldSec["installPolicy"]; exists {
+						sec["installPolicy"] = old
+					}
+					if len(sec) == 0 {
+						delete(doc, "security")
+					}
+				}
 			}
 		}
-		sec["installPolicy"] = openClawInstallPolicy(o)
-		doc["security"] = sec
-		return p.write(path, encodePlanJSON(doc), 0o600, "登记本插件的加载路径与启用项，并配置 Skill 安装门禁；保留其他平台设置")
+		return p.write(path, encodePlanJSON(doc), 0o600, "登记本插件的加载路径与启用项；保留其他平台设置")
 	case CodeBuddy:
 		path := filepath.Join(root, "settings.json")
 		doc, err := p.planJSON(path)
@@ -463,6 +486,13 @@ func (p *Plan) prepareInstall() error {
 
 func openClawInstallPolicy(o Options) map[string]any {
 	return map[string]any{"enabled": true, "targets": []any{"skill", "plugin"}, "exec": map[string]any{"source": "exec", "command": o.Binary, "args": []any{"policy-exec"}, "timeoutMs": 10000, "trustedDirs": []any{filepath.Dir(o.Binary)}, "passEnv": []any{product.EnvStateDir, product.EnvStateDirOld, "HOME", "PATH"}}}
+}
+
+func sameOpenClawLegacyPolicy(value any, binary string) bool {
+	// Compare JSON-normalized numbers, since planJSON decodes numbers as float64.
+	var expected any
+	_ = json.Unmarshal(encodePlanJSON(openClawInstallPolicy(Options{Binary: binary})), &expected)
+	return binary != "" && reflect.DeepEqual(value, expected)
 }
 
 func hermesWrapper(o Options) []byte {

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-capture-permit-create.v1.schema.json",
+  "title": "Runtime request for a raw task content capture permit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "platform", "agent_id", "session_id", "task_id", "grant_id", "expected_grant_signature", "kind", "ttl_seconds"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-capture-permit-create/v1" },
+    "platform": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "agent_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "session_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "task_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "grant_id": { "type": "string", "pattern": "^rawgrant-[a-f0-9]{32}$" },
+    "expected_grant_signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+    "kind": { "enum": ["input", "parameters", "output", "note"] },
+    "ttl_seconds": { "type": "integer", "minimum": 10, "maximum": 300 }
+  }
+}

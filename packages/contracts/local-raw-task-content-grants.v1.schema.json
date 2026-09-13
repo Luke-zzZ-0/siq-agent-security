@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-grants.v1.schema.json",
+  "title": "Verified raw content grant management collection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "items"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-grants/v1" },
+    "items": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": { "$ref": "https://siq.dev/contracts/local-raw-task-content-grant-view.v1.schema.json" }
+    }
+  }
+}

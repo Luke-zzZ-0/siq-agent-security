@@ -1,0 +1,14 @@
+=== RUN   TestDesktopNotifierConfiguredCommandWins
+--- PASS: TestDesktopNotifierConfiguredCommandWins (0.00s)
+=== RUN   TestDesktopNotifierUnsupportedPlatformWithoutOverrideStaysSilent
+--- PASS: TestDesktopNotifierUnsupportedPlatformWithoutOverrideStaysSilent (0.00s)
+=== RUN   TestStartDesktopNotifyDisabledAndUnsupportedAreNoOps
+--- PASS: TestStartDesktopNotifyDisabledAndUnsupportedAreNoOps (0.00s)
+=== RUN   TestPendingConfirmationsCountsOnlyPending
+--- PASS: TestPendingConfirmationsCountsOnlyPending (0.02s)
+=== RUN   TestDesktopNotifyConfigValidation
+--- PASS: TestDesktopNotifyConfigValidation (0.00s)
+=== RUN   TestDispatcherPendingCountBindsDeliveryErrorToLog
+--- PASS: TestDispatcherPendingCountBindsDeliveryErrorToLog (0.00s)
+PASS
+ok  	siq-agent-security/apps/agentshield/cmd/agentshield	0.032s

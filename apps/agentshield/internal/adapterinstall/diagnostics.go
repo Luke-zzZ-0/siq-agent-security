@@ -197,7 +197,8 @@ func inspectConnection(d *Diagnosis, opts Options, path string) {
 		tokenField, modeField = "tokenPath", "enforcementMode"
 	}
 	credentialMatches := doc[tokenField] == filepath.Join(opts.StateDir, "token")
-	if _, managed := doc["runtime_identity_id"]; opts.Platform == Hermes && managed {
+	idKey, _, _ := managedConfigKeys(opts.Platform)
+	if _, managed := doc[idKey]; managed {
 		credentialMatches = managedConnectionMatches(opts, doc)
 	}
 	if err == nil && opts.Endpoint != "" && opts.StateDir != "" && opts.Mode != "" &&

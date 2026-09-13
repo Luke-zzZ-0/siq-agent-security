@@ -73,6 +73,8 @@ A detached signature was added on 2026-09-09 without modifying the original asse
 
 ## Start here
 
+For distribution through `vercel-labs/skills`, run the [pinned compatibility checks](docs/research/skills-distribution.md) first. File equivalence, binary setup, admission, authorization and runtime protection have separate acceptance criteria.
+
 | Your goal | Entry point | What to expect |
 | :--- | :--- | :--- |
 | Manage local agents and Skills | [Personal console](#personal-console-linux-source-build) · [Operations guide](AGENTSHIELD.md) | Start the local service, pair the browser and enable protection within verified platform scope |

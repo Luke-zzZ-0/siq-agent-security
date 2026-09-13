@@ -125,3 +125,91 @@ func TestHTTPStopWithoutRequests(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestRuntimeCheckCloseWaitsAfterGraceFailure(t *testing.T) {
+	entered, release := make(chan struct{}), make(chan struct{})
+	done := make(chan error, 1)
+	calls := 0
+	go func() {
+		done <- closeLocalRuntimeChecks(func(ctx context.Context) error {
+			calls++
+			if calls == 1 {
+				<-ctx.Done()
+				return ctx.Err()
+			}
+			close(entered)
+			<-release
+			return nil
+		}, 0)
+	}()
+	<-entered
+	select {
+	case <-done:
+		t.Fatal("returned while runtime worker still active")
+	default:
+	}
+	close(release)
+	if err := <-done; !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatal("lost grace failure", err)
+	}
+	if calls != 2 {
+		t.Fatal("unexpected close calls", calls)
+	}
+}
+
+func TestRuntimeCheckCleanClose(t *testing.T) {
+	calls := 0
+	if err := closeLocalRuntimeChecks(func(context.Context) error { calls++; return nil }, time.Second); err != nil || calls != 1 {
+		t.Fatal(err, calls)
+	}
+}
+
+func TestServeMaintenanceRunsStartupAndTicksUntilCanceled(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	refreshTicks := make(chan time.Time, 1)
+	purgeTicks := make(chan time.Time, 1)
+	refreshCalls := make(chan struct{}, 1)
+	purgeCalls := make(chan time.Time, 2)
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		runServeMaintenance(ctx, refreshTicks, purgeTicks, func() error {
+			refreshCalls <- struct{}{}
+			return errors.New("refresh failure is isolated")
+		}, func(now time.Time) error {
+			purgeCalls <- now
+			return errors.New("purge failure is isolated")
+		})
+	}()
+
+	select {
+	case startup := <-purgeCalls:
+		if startup.IsZero() {
+			t.Fatal("startup purge received zero time")
+		}
+	case <-time.After(time.Second):
+		t.Fatal("startup purge did not run")
+	}
+	refreshTicks <- time.Date(2026, 9, 13, 10, 0, 0, 0, time.UTC)
+	select {
+	case <-refreshCalls:
+	case <-time.After(time.Second):
+		t.Fatal("refresh tick did not run")
+	}
+	wantPurge := time.Date(2026, 9, 13, 10, 15, 0, 0, time.UTC)
+	purgeTicks <- wantPurge
+	select {
+	case got := <-purgeCalls:
+		if !got.Equal(wantPurge) {
+			t.Fatal("purge tick time changed", got)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("purge tick did not run")
+	}
+	cancel()
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("maintenance did not stop with serve context")
+	}
+}

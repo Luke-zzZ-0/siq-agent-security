@@ -73,9 +73,15 @@ type CreateRequest struct {
 	SessionTTLSeconds     int    `json:"session_ttl_seconds"`
 }
 
-// ResolveInstance must resolve the ID against current discovered Hermes roots;
-// it must not accept an arbitrary client-provided path.
-type ResolveInstance func(string) error
+// supportedIdentityPlatforms is the closed set of host products for which a
+// Runtime Identity may be issued. Extending it requires a real adapter and
+// contracts, not just a new constant here.
+var supportedIdentityPlatforms = map[string]bool{"hermes": true, "openclaw": true}
+
+// ResolveInstance must resolve the ID against currently discovered roots of the
+// host product it names; it must not accept an arbitrary client-provided path.
+// It returns the platform the instance belongs to.
+type ResolveInstance func(string) (string, error)
 
 type Store struct {
 	dir     string
@@ -163,7 +169,7 @@ func (s *Store) read(id string) (Record, error) {
 	}
 	agent, err := AgentID(r.InstanceID)
 	_, timeErr := time.Parse(time.RFC3339Nano, r.CreatedAt)
-	if err != nil || timeErr != nil || r.SchemaVersion != "local-runtime-identity/v1" || r.IdentityID != id || r.AgentID != agent || r.Platform != "hermes" || !textValid(r.ActorID, 128) || !textValid(r.GrantRef.GrantID, 256) || !textValid(r.GrantRef.AdmissionID, 256) || !hexDigest.MatchString(r.GrantRef.PermissionDigest) || !hexDigest.MatchString(r.CredentialHash) || r.SessionTTLSeconds < 60 || r.SessionTTLSeconds > 86400 || !s.verify(r, r.Signature) {
+	if err != nil || timeErr != nil || r.SchemaVersion != "local-runtime-identity/v1" || r.IdentityID != id || r.AgentID != agent || !supportedIdentityPlatforms[r.Platform] || !textValid(r.ActorID, 128) || !textValid(r.GrantRef.GrantID, 256) || !textValid(r.GrantRef.AdmissionID, 256) || !hexDigest.MatchString(r.GrantRef.PermissionDigest) || !hexDigest.MatchString(r.CredentialHash) || r.SessionTTLSeconds < 60 || r.SessionTTLSeconds > 86400 || !s.verify(r, r.Signature) {
 		return Record{}, ErrInvalid
 	}
 	return r, nil
@@ -195,14 +201,15 @@ func (s *Store) Create(req CreateRequest) (Record, error) {
 	if err != nil || req.SchemaVersion != "local-runtime-identity-create/v1" || !textValid(req.GrantID, 256) || req.ExpectedGrantRevision < 0 || !textValid(req.ActorID, 128) || req.SessionTTLSeconds < 60 || req.SessionTTLSeconds > 86400 {
 		return Record{}, ErrInvalid
 	}
-	if s.resolve(req.InstanceID) != nil {
+	platform, err := s.resolve(req.InstanceID)
+	if err != nil || !supportedIdentityPlatforms[platform] {
 		return Record{}, ErrUnavailable
 	}
-	ref, err := s.intents.SelectGrant(req.GrantID, "hermes", agent, req.ExpectedGrantRevision)
+	ref, err := s.intents.SelectGrant(req.GrantID, platform, agent, req.ExpectedGrantRevision)
 	if err != nil {
 		return Record{}, err
 	}
-	g, err := s.intents.GrantForReference(ref, "hermes", agent)
+	g, err := s.intents.GrantForReference(ref, platform, agent)
 	if err != nil {
 		return Record{}, err
 	}
@@ -236,7 +243,7 @@ func (s *Store) Create(req CreateRequest) (Record, error) {
 	}
 	id := "ri-" + hex.EncodeToString(nonce[:16])
 	token := id + "." + hex.EncodeToString(nonce[16:])
-	r := Record{SchemaVersion: "local-runtime-identity/v1", IdentityID: id, InstanceID: req.InstanceID, AgentID: agent, Platform: "hermes", GrantRef: ref, ActorID: req.ActorID, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), SessionTTLSeconds: req.SessionTTLSeconds, CredentialHash: hash([]byte(token))}
+	r := Record{SchemaVersion: "local-runtime-identity/v1", IdentityID: id, InstanceID: req.InstanceID, AgentID: agent, Platform: platform, GrantRef: ref, ActorID: req.ActorID, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), SessionTTLSeconds: req.SessionTTLSeconds, CredentialHash: hash([]byte(token))}
 	r.Signature, err = s.sign(r)
 	if err != nil {
 		return Record{}, ErrUnavailable
@@ -247,10 +254,10 @@ func (s *Store) Create(req CreateRequest) (Record, error) {
 	}
 	// Never remove a failed publication's orphan here: it may be required to
 	// diagnose interruption, and without the signed record it has no authority.
-	if _, err = s.intents.GrantForReference(ref, "hermes", agent); err != nil {
+	if _, err = s.intents.GrantForReference(ref, platform, agent); err != nil {
 		return Record{}, err
 	}
-	if s.resolve(req.InstanceID) != nil {
+	if p, e := s.resolve(req.InstanceID); e != nil || p != platform {
 		return Record{}, ErrUnavailable
 	}
 	b, err := json.Marshal(r)

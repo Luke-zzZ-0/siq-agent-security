@@ -1,0 +1,11 @@
+{
+  "schema_version": "local-raw-task-content-activation/v1",
+  "enabled": true,
+  "actor_ref": "sha256:254bf9f1fd779611614c612d0cce998ca1b2af547cd4aa664c78e72565024b8c",
+  "activated_at": "2026-09-13T02:30:00Z",
+  "retention_seconds": 86400,
+  "budget_bytes": 67108864,
+  "key_fingerprint": "sha256:f849d67325facf04177bc663b2dc544051831c589ef581d412f2eba44834e77c",
+  "signing_schema": "local_canonical/v1",
+  "signature": "8b4567b9a3e912ef73d5cf71f251d93613221116edcba5b144b68b6424ada409558f0552769a529c91694240df544cf5136d36829ad7d7c863095294d150e409"
+}

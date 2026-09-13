@@ -35,6 +35,7 @@ type CreateRequest struct {
 }
 type Record struct {
 	Remote              *RemoteMetadata `json:"remote,omitempty"`
+	Git                 *GitMetadata    `json:"git,omitempty"`
 	SchemaVersion       string          `json:"schema_version"`
 	ImportID            string          `json:"import_id"`
 	SourceKind          string          `json:"source_kind"`
@@ -55,6 +56,7 @@ type Analysis struct {
 }
 type Store struct {
 	download func(context.Context, string) (downloadedArchive, error)
+	gitFetch func(context.Context, string, string, string) (string, error)
 	dir      string
 	key      *signing.Key
 	pack     *rulepack.Pack
@@ -121,9 +123,17 @@ func (s *Store) Create(ctx context.Context, req CreateRequest) (*Record, *Analys
 		return nil, nil, false, ErrInvalid
 	}
 	locator := sum([]byte(source))
-	return s.create(ctx, req, source, locator, nil)
+	return s.create(ctx, req, source, locator, createExtra{})
 }
-func (s *Store) create(ctx context.Context, req CreateRequest, source, locator string, remote *RemoteCreateRequest) (*Record, *Analysis, bool, error) {
+
+// createExtra carries the per-source request for remote kinds; local kinds
+// pass the zero value.
+type createExtra struct {
+	remote *RemoteCreateRequest
+	git    *GitCreateRequest
+}
+
+func (s *Store) create(ctx context.Context, req CreateRequest, source, locator string, extra createExtra) (*Record, *Analysis, bool, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -183,7 +193,8 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 	}
 	var snapshot tree
 	var excluded bool
-	var metadata *RemoteMetadata
+	var remoteMeta *RemoteMetadata
+	var gitMeta *GitMetadata
 	switch req.SourceKind {
 	case "local_dir":
 		snapshot, excluded, err = directoryTree(ctx, source, payload, true)
@@ -199,7 +210,9 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 			}
 		}
 	case "https_zip":
-		snapshot, excluded, metadata, err = s.remoteTree(ctx, source, blob, payload, remote)
+		snapshot, excluded, remoteMeta, err = s.remoteTree(ctx, source, blob, payload, extra.remote)
+	case "git":
+		snapshot, excluded, gitMeta, err = s.gitTree(ctx, source, blob, payload, extra.git)
 	case "local_zip":
 		if err = checkDirs(filepath.Dir(source)); err == nil {
 			var raw []byte
@@ -222,8 +235,11 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 		return nil, nil, false, ErrInvalid
 	}
 	sourceType := "local_dir"
-	if req.SourceKind != "local_dir" {
+	switch req.SourceKind {
+	case "https_zip", "local_zip":
 		sourceType = "zip"
+	case "git":
+		sourceType = "git"
 	}
 	result, err := admission.Admit(payload, admission.Options{SourceIsOpaque: true, Source: admission.Source{Type: sourceType, Locator: "skill-import:" + req.ImportID, TrustLevel: "unknown"}, Key: s.key, Pack: s.pack, Version: s.version})
 	if err != nil {
@@ -247,9 +263,14 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 		return nil, nil, false, err
 	}
 	record := &Record{SchemaVersion: "local-skill-import/v1", ImportID: req.ImportID, SourceKind: req.SourceKind, SourceLocatorDigest: locator, ActorID: req.ActorID, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), ArtifactDigest: snapshotDigest, AnalysisSHA256: sum(analysisRaw), Directories: snapshot.Directories, Files: snapshot.Files, ExcludedGitMetadata: excluded}
-	if metadata != nil {
+	if remoteMeta != nil || gitMeta != nil {
 		record.SchemaVersion = "local-skill-import/v2"
-		record.Remote = metadata
+	}
+	if remoteMeta != nil {
+		record.Remote = remoteMeta
+	}
+	if gitMeta != nil {
+		record.Git = gitMeta
 	}
 	record.Signature, err = s.key.SignCanonical(unsigned(*record))
 	if err != nil {

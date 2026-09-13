@@ -1,0 +1,5 @@
+{
+  "schema_version": "local-skill-update-check/v1",
+  "remote_url": "https://downloads.example.com/skill.zip",
+  "actor_id": "fixture-reviewer"
+}

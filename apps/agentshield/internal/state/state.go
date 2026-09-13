@@ -23,6 +23,7 @@ import (
 	"siq-agent-security/apps/agentshield/internal/admission"
 	"siq-agent-security/apps/agentshield/internal/grant"
 	"siq-agent-security/apps/agentshield/internal/product"
+	"siq-agent-security/apps/agentshield/internal/receipt"
 )
 
 // DirEnv overrides the platform default state directory.
@@ -75,6 +76,18 @@ type Config struct {
 	// SessionIdleTTLSeconds: 0 → engine default (30m); -1 → disable idle expiry;
 	// positive → seconds in [1, 86400] (DEV16-E).
 	SessionIdleTTLSeconds int `json:"session_idle_ttl_seconds,omitempty"`
+	// SkillAttributionEnforcement turns on the UX-007 skill-scoped grant gate.
+	// Default off until platform adapters attach runtime skill claims; claims
+	// are still resolved and recorded on receipts while off.
+	SkillAttributionEnforcement bool `json:"skill_attribution_enforcement,omitempty"`
+	// DesktopNotify turns on the daemon-side desktop notification dispatcher
+	// (UX-008 background launcher layer). Default off; browser notifications
+	// (ADR-032) are separate and client-side only.
+	DesktopNotify bool `json:"desktop_notify,omitempty"`
+	// DesktopNotifyCommand overrides the platform default notifier argv
+	// (whitespace-split, executed without a shell). Empty uses the platform
+	// default; unsupported platforms with no override stay silent.
+	DesktopNotifyCommand string `json:"desktop_notify_command,omitempty"`
 }
 
 // Store is an opened state directory.
@@ -129,6 +142,12 @@ func decodeConfig(raw []byte) (Config, error) {
 	}
 	if cfg.SessionIdleTTLSeconds < -1 || cfg.SessionIdleTTLSeconds > 86400 {
 		return cfg, fmt.Errorf("state: session_idle_ttl_seconds %d out of range [-1,86400]", cfg.SessionIdleTTLSeconds)
+	}
+	if cfg.DesktopNotifyCommand != "" {
+		argv := strings.Fields(cfg.DesktopNotifyCommand)
+		if len(argv) == 0 || strings.TrimSpace(argv[0]) == "" {
+			return cfg, fmt.Errorf("state: invalid desktop_notify_command")
+		}
 	}
 	return cfg, nil
 }
@@ -413,6 +432,60 @@ func (s *Store) ActiveGrant(platform, agentID string) *grant.Grant {
 		if g.Platform == platform && g.Subject.ID == agentID && (g.Status == "deployed" || g.Status == "effective") {
 			return &g
 		}
+	}
+	return nil
+}
+
+// SkillAttribution is the receipt.SkillAttributionLookup: it resolves a
+// runtime skill claim against approved grant records (deployed/effective,
+// lifetime valid) for the same platform and agent. A metadata match cannot
+// attest which Skill caused a tool execution: identifiers and hashes can be
+// copied by the caller. Until a trusted execution binding exists, even an
+// exact match remains unknown and cannot satisfy the verified-skill gate.
+func (s *Store) SkillAttribution(platform, sessionID, agentID string, claim *receipt.SkillClaim) *receipt.SkillAttribution {
+	_ = sessionID // attribution is per platform+agent trusted state, not per session
+	if claim == nil || claim.SkillID == "" {
+		return nil
+	}
+	all, err := s.ListGrants()
+	if err != nil {
+		return nil
+	}
+	now := time.Now()
+	skillKnown := false
+	for i := range all {
+		g := all[i]
+		if g.Platform != platform || g.Subject.ID != agentID || g.Skill == nil {
+			continue
+		}
+		if g.Status != "deployed" && g.Status != "effective" {
+			continue
+		}
+		if grant.ValidateLifetime(g, now) != nil {
+			continue
+		}
+		if g.Skill.SkillID != claim.SkillID {
+			continue
+		}
+		skillKnown = true
+		if claim.ContentHash == "" || claim.ContentHash != g.Skill.ContentHash {
+			continue
+		}
+		if g.Skill.Version != nil && claim.Version != *g.Skill.Version {
+			continue
+		}
+		a := receipt.SkillAttribution{
+			SkillID:     g.Skill.SkillID,
+			ContentHash: g.Skill.ContentHash,
+			Status:      receipt.SkillAttributionUnknown,
+		}
+		if g.Skill.Version != nil {
+			a.Version = *g.Skill.Version
+		}
+		return &a
+	}
+	if skillKnown {
+		return &receipt.SkillAttribution{SkillID: claim.SkillID, Status: receipt.SkillAttributionMismatch}
 	}
 	return nil
 }

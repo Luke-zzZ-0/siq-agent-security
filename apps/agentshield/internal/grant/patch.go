@@ -237,9 +237,20 @@ func PatchDesired(g Grant, patch DesiredPatch, key *signing.Key) (Grant, Desired
 	}
 	g.DesiredPolicyRef = &DesiredPolicyRef{PolicyID: pid, Version: ver, StaticDomainsUnavailable: static}
 
+	if g.Scenario != nil {
+		sc := ScenarioByID(g.Scenario.ID)
+		if sc == nil || sc.Version != g.Scenario.Version {
+			return g, nil, ErrScenarioInvalid
+		}
+		for _, f := range g.Facts {
+			if f.Effect == "allow" && scenarioDropped(*sc, admission.DeclaredFact{Domain: f.Domain, Action: f.Action, Resource: f.Resource}) {
+				return g, nil, ErrScenarioInvalid
+			}
+		}
+	}
 	switch g.Platform {
 	case "hermes":
-		al := keysSorted(hermes)
+		al := restrictScenarioTools(g.Scenario, keysSorted(hermes))
 		g.HermesToolsetAllowlist = &al
 	case "openclaw":
 		for tool := range ocReq {
@@ -247,7 +258,7 @@ func PatchDesired(g Grant, patch DesiredPatch, key *signing.Key) (Grant, Desired
 				delete(ocReq, tool)
 			}
 		}
-		g.OpenClawToolPolicy = &OpenClawToolPolicy{Allow: keysSorted(ocAllow), Deny: keysSorted(deniedTools), RequireApproval: keysSorted(ocReq)}
+		g.OpenClawToolPolicy = &OpenClawToolPolicy{Allow: restrictScenarioTools(g.Scenario, keysSorted(ocAllow)), Deny: keysSorted(deniedTools), RequireApproval: restrictScenarioTools(g.Scenario, keysSorted(ocReq))}
 	}
 
 	g.Signature = "" // cleared before resign

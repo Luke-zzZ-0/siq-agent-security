@@ -1,0 +1,36 @@
+{
+  "schema_version": "local-task-activity-search/v1",
+  "snapshot": "598975457da8571a5572e8223626a172c630e6ca441b6be84038b4026c02baba",
+  "view": "tasks",
+  "offset": 0,
+  "total": 2,
+  "next_offset": 1,
+  "prefix_valid": true,
+  "history_integrity": "unknown",
+  "evidence_freshness": "unknown",
+  "items": [
+    {
+      "activity_id": "6bc0b6d7e37726de3b0bab7480429cd4b38a8a3dc37c5cee0cd68ec4e9e4a715",
+      "attribution": "bound",
+      "binding": {
+        "agent_id": "agent",
+        "chain_id": "local",
+        "intent_digest": "digest",
+        "intent_id": "intent",
+        "platform": "hermes",
+        "session_id": "报告-One",
+        "task_id": "报告-One"
+      },
+      "receipt_count": 1,
+      "first_seq": 1,
+      "last_seq": 1
+    }
+  ],
+  "filters": {
+    "platform": "",
+    "agent_id": "",
+    "session_id": "",
+    "task_id": "",
+    "q": "报告"
+  }
+}
