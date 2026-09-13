@@ -1,6 +1,6 @@
 # 个人体验当前交接（K002，2026-09-11）
 
-> **2026-09-13 N01 最新交付：开发与 Linux 最低验收已完成。** 状态协议 v2、实例绑定、递归备份和可重入迁移、发行兼容检查、真实旧程序拒写均已落盘。其余 OS 原生验证见 N07/N09，未提交或推送。见 [完成报告](evidence/personal-experience/n01-completion-20260913-190637/report.md) 与 [接续台账](personal-experience-closure-progress-20260913.md)。
+> **当前执行入口：[后续开发任务书 v3.0](personal-experience-lan-team-next-development-taskbook-20260913-192253.md)。** N01 已经 PR #35 提交、推送并合入 main `0d4133f`，代码与 Linux 最低验收完成；N00 分支/旧树核查完成。下一批 N02 安全 Git 与 N04 平台能力，Windows/macOS 原生验收继续 N07/N09。见 [接续台账](personal-experience-closure-progress-20260913.md)。下方 v2 和未提交表述保留为历史。
 
 
 > **2026-09-13 早前独立审查（历史）：当时 N01 仍为 doing。** Ornith 的自动迁移完成声明未通过验收，入口防护修复已落盘且通过组件/Linux 验证；完整迁移、旧程序拒写和跨 OS 验收继续待办。当前工作树 `/tmp/siq-personal-closure`，未提交或推送。执行接续见 [新台账](personal-experience-closure-progress-20260913.md)，详见 [审查报告](evidence/personal-experience/ornith-n01-review-fixes-20260913-182231/report.md)。

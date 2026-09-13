@@ -15,3 +15,7 @@
 N00 的分支遗漏与旧工作树差异复核已完成；N01 已完成代码与 Linux 最低门槛。发布结果另行追加，原 N01 报告中的未提交表述是采证时状态，不改写历史验证 JSON。
 
 存档整理：两个 Web 测试日志仅去掉末尾多余空行以通过 Git 空白检查；命令、测试数量与退出结果未变。源文件指纹不受影响。
+
+## 发布与合并结果
+
+N01 已通过 [PR #35](https://github.com/maoyadongsh/siq-agent-security/pull/35) 于 2026-09-13 19:21:14（Asia/Shanghai）合入 main `0d4133f03ec23bb13af5765f3c731138e5595e7a`。最终 PR head `c54b1390d449dc6f918f6a52a01eb15a08ec7275` 的远端检查为 37 成功、3 按条件跳过，无失败/等待；结果见 `pr35-merged.json`。合并最新 main 后 Go 全量复验通过，日志 `post-integration-go.log`。按用户本轮明确合并授权使用已有管理员权限处理代码所有者审阅门槛，未改保护规则、未发布安装包。后续任务书见 [v3.0](../../../personal-experience-lan-team-next-development-taskbook-20260913-192253.md)。
