@@ -152,3 +152,54 @@ func TestUpstreamCheckRejectsLocalAndUnknown(t *testing.T) {
 		t.Fatal("unknown id accepted", err)
 	}
 }
+
+func TestUpstreamFailureAndCancellationCleanTemporaryFiles(t *testing.T) {
+	s, _ := storeFixture(t)
+	req := remoteRequest()
+	raw := remoteArchive(t)
+	s.download = func(context.Context, string) (downloadedArchive, error) { return downloadedArchive{raw, req.URL}, nil }
+	rec, _, _, err := s.CreateRemote(context.Background(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, cancelled := range []bool{false, true} {
+		ctx, cancel := context.WithCancel(context.Background())
+		s.download = func(context.Context, string) (downloadedArchive, error) {
+			if cancelled {
+				cancel()
+				return downloadedArchive{}, ctx.Err()
+			}
+			return downloadedArchive{}, ErrDownloadFailed
+		}
+		_, err = s.CheckUpstream(ctx, rec.ImportID, req.URL)
+		cancel()
+		if err == nil {
+			t.Fatal("failed fetch accepted")
+		}
+		entries, e := os.ReadDir(s.dir)
+		if e != nil {
+			t.Fatal(e)
+		}
+		for _, entry := range entries {
+			if strings.HasPrefix(entry.Name(), "upstream-") {
+				t.Fatal("temporary fetch retained", entry.Name())
+			}
+		}
+		after, e := s.ReadRecord(context.Background(), rec.ImportID)
+		if e != nil || after.Signature != rec.Signature {
+			t.Fatal("record changed", e)
+		}
+	}
+}
+
+func TestProductionGitGateDoesNotInvokeTransport(t *testing.T) {
+	for _, url := range []string{"https://git.example.com/skill.git", "https://8.8.8.8/skill.git", "https://localhost.localdomain/skill.git"} {
+		dst := filepath.Join(t.TempDir(), "uncreated")
+		if _, err := fetchGitCLI(context.Background(), url, "main", dst); !errors.Is(err, ErrGitTransportUnavailable) {
+			t.Fatal(url, err)
+		}
+		if _, err := os.Lstat(dst); !os.IsNotExist(err) {
+			t.Fatal("disabled transport created target", err)
+		}
+	}
+}

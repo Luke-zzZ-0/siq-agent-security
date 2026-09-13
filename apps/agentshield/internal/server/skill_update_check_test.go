@@ -74,3 +74,26 @@ func TestSkillUpdateCheckHTTPGuardsLeaveStateUntouched(t *testing.T) {
 		t.Fatal("check touched the grant", code, current)
 	}
 }
+
+func TestUpdateCheckErrorResponses(t *testing.T) {
+	for _, tc := range []struct {
+		err    error
+		status int
+		code   string
+	}{
+		{skillinstall.ErrUnavailable, 503, "skill_install_unavailable"},
+		{skillinstall.ErrUpdateURLBlocked, 400, "skill_update_url_blocked"},
+		{skillinstall.ErrUpdateSourceUnavailable, 503, "skill_update_source_unavailable"},
+		{skillinstall.ErrChanged, 409, "skill_install_changed"},
+	} {
+		w := httptest.NewRecorder()
+		skillInstallError(w, tc.err)
+		var body map[string]string
+		if err := json.Unmarshal(w.Body.Bytes(), &body); err != nil {
+			t.Fatal(err)
+		}
+		if w.Code != tc.status || body["error"] != tc.code || len(body) != 1 {
+			t.Fatal(w.Code, body)
+		}
+	}
+}

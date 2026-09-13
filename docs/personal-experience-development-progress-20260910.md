@@ -1,5 +1,7 @@
 # 个人体验与局域网团队开发台账
 
+> 2026-09-13 M132 审查修复：获取失败分类、请求/结果合同与个人检查入口已补齐；生产 Git 获取在具备完整安全传输前明确拒绝，HTTPS ZIP 新版检查可用。回归与浏览器验证见 [本批记录](evidence/personal-experience/stage-fixes-m132-20260913.md)。UX-010 保持 doing，自动定期检查、Git 安全传输和原生更新验收继续待办。
+
 > M129/M130 独立验收的四项缺陷已修复并通过组件复验，见 [修复复验记录](evidence/personal-experience/stage-fixes-m129-m130-20260913.md)。限制模板现按实际操作效果裁决，场景不匹配返回冲突，通知失败有独立退避且不记录子进程原始输出。该结果不提升跨 OS、WorkBuddy、真实通知投递或团队阶段的验收状态。
 
 > 2026-09-13 阶段复核：M124–M128 的审查修复与验证见 [阶段修复记录](evidence/personal-experience/stage-review-fixes-20260913.md)。OpenClaw 安装兼容性已修复并重跑原生会话；Skill 元数据匹配不能证明执行来源，M128 的 verified 口径已收紧。另一窗口的后续开发不计入本次验收。

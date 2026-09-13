@@ -2,10 +2,13 @@ package skillinstall
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"time"
 	"unicode"
 	"unicode/utf8"
+
+	"siq-agent-security/apps/agentshield/internal/skillimport"
 )
 
 // Update checks answer "has the installed skill's upstream moved?" for an
@@ -22,6 +25,33 @@ type UpdateCheckRequest struct {
 // Zip imports do not retain their source URL in the signed record, so the
 // caller supplies it; git imports keep it and require this field to be empty.
 const updateCheckPermissionDeferred = "deferred_to_update_comparison"
+
+var ErrUpdateURLBlocked = errors.New("skill_update_url_blocked")
+var ErrUpdateSourceUnavailable = errors.New("skill_update_source_unavailable")
+
+// Fetch errors are different from changes to signed installation records.
+// Keep this mapping local to update checks; older write flows are unchanged.
+func updateFetchError(ctx context.Context, err error) error {
+	if ctx.Err() != nil {
+		return ctx.Err()
+	}
+	switch {
+	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
+		return err
+	case errors.Is(err, skillimport.ErrGitTransportUnavailable):
+		return ErrUpdateSourceUnavailable
+	case errors.Is(err, skillimport.ErrURLBlocked):
+		return ErrUpdateURLBlocked
+	case errors.Is(err, skillimport.ErrLimit):
+		return ErrLimit
+	case errors.Is(err, skillimport.ErrChanged), errors.Is(err, skillimport.ErrArchiveMismatch):
+		return ErrChanged
+	case errors.Is(err, skillimport.ErrInvalid):
+		return ErrInvalid
+	default:
+		return ErrUnavailable
+	}
+}
 
 type UpdateCheckResult struct {
 	SchemaVersion           string                `json:"schema_version"`
@@ -42,7 +72,7 @@ func (s *Store) CheckUpdate(ctx context.Context, id string, req UpdateCheckReque
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	if req.SchemaVersion != "local-skill-update-check/v1" || len(req.RemoteURL) > 2048 || !actorIDValid(req.ActorID) {
+	if req.SchemaVersion != "local-skill-update-check/v1" || len(req.RemoteURL) > 4096 || !actorIDValid(req.ActorID) {
 		return nil, ErrInvalid
 	}
 	select {
@@ -91,7 +121,7 @@ func (s *Store) checkUpdate(ctx context.Context, id string, req UpdateCheckReque
 	}
 	snapshot, err := s.upstream(ctx, imported, req.RemoteURL)
 	if err != nil {
-		return nil, sourceError(ctx, err)
+		return nil, updateFetchError(ctx, err)
 	}
 	out := &UpdateCheckResult{SchemaVersion: "local-skill-update-check-result/v1", InstallID: id, Status: "up_to_date", SourceKind: snapshot.SourceKind, UpstreamCommitSHA: snapshot.CommitSHA, UpstreamArchiveSHA256: snapshot.ArchiveSHA256, ContentChanges: []UpdateContentChange{}, PermissionComparison: updateCheckPermissionDeferred}
 	delta := compareContentDelta(updateTree(installed.Directories, installed.Files), updateTree(snapshot.Directories, snapshot.Files))

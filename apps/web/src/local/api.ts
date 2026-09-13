@@ -1,3 +1,4 @@
+import { isSkillUpdateCheckResult, type SkillUpdateCheckRequest } from './skillUpdateCheck';
 import { isActivitySources } from './taskSources';
 import { isRawContentActivation, isRawContentPurgeResult, isRawContentStatus } from './rawTaskContent';
 import {
@@ -277,6 +278,10 @@ export const localApi = {
   }),
   skillInstallations: (signal?: AbortSignal) => request<unknown>('/v1/skill-installations/operations', { signal }).then((data) => {
     if (!isSkillInstallationCatalog(data)) throw new LocalApiError(502, 'skill_install_incompatible_response');
+    return data;
+  }),
+  checkSkillUpdate: (id: string, body: SkillUpdateCheckRequest, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/update-check`, { method: 'POST', body: JSON.stringify(body), signal }).then((data) => {
+    if (!isSkillUpdateCheckResult(data, id)) throw new LocalApiError(502, 'skill_install_incompatible_response');
     return data;
   }),
   inspectSkillInstallation: (id: string, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/inspection`, { signal }).then((data) => {

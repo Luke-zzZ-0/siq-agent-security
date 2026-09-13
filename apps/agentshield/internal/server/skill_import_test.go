@@ -428,3 +428,11 @@ func TestGitSkillImportHTTPAdminStrictAndBounds(t *testing.T) {
 		t.Fatal("invalid git request persisted", err)
 	}
 }
+
+func TestGitDisabledTransportErrorIsExplicit(t *testing.T) {
+	w := httptest.NewRecorder()
+	skillImportError(w, skillimport.ErrGitTransportUnavailable)
+	if w.Code != 503 || !strings.Contains(w.Body.String(), `"error":"skill_import_git_transport_unavailable"`) {
+		t.Fatal(w.Code, w.Body.String())
+	}
+}

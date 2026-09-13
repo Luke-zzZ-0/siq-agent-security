@@ -1,0 +1,17 @@
+=== RUN   TestReviewerGitFetchRejectsPrivateDNSBeforeGit
+    reviewer_upstream_test.go:33: private DNS destination reached git CLI without being blocked
+    reviewer_upstream_test.go:36: want ErrURLBlocked, got skill_import_download_failed
+--- FAIL: TestReviewerGitFetchRejectsPrivateDNSBeforeGit (0.00s)
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/skillimport	0.011s
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_unavailable
+    reviewer_update_check_test.go:21: fetch failure should remain unavailable, not report changed installation: got skill_install_changed
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_download_failed
+    reviewer_update_check_test.go:21: fetch failure should remain unavailable, not report changed installation: got skill_install_changed
+--- FAIL: TestReviewerUpdateCheckPreservesFetchAvailability (0.27s)
+    --- FAIL: TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_unavailable (0.14s)
+    --- FAIL: TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_download_failed (0.13s)
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/skillinstall	0.276s
+FAIL

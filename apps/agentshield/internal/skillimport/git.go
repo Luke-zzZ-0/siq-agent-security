@@ -3,6 +3,7 @@ package skillimport
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -25,6 +26,10 @@ import (
 
 var gitRefPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._/-]{0,127}$`)
 var commitPattern = regexp.MustCompile(`^[a-f0-9]{40}$`)
+
+// Git's own transport does not yet satisfy our pinned public-address and
+// bounded-fetch requirements. This gate has no runtime override.
+var ErrGitTransportUnavailable = fmt.Errorf("%w: git_transport_unavailable", ErrURLBlocked)
 
 type GitCreateRequest struct {
 	SchemaVersion  string `json:"schema_version"`
@@ -128,13 +133,16 @@ func fetchGitCLI(ctx context.Context, rawURL, ref, dst string) (string, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	parsed, err := downloadURL(rawURL)
+	_, err := downloadURL(rawURL)
 	if err != nil {
 		return "", err
 	}
-	// file transport stays disabled even for redirect targets: the scheme was
-	// validated before the clone and must not be re-widened mid-flight.
-	return cloneGit(ctx, parsed.String(), ref, dst, "never")
+	if err := ctx.Err(); err != nil {
+		return "", err
+	}
+	// Fail before LookPath, process creation or network access. HTTPS alone
+	// does not constrain DNS, redirects, or alternate object locations.
+	return "", ErrGitTransportUnavailable
 }
 
 // cloneGit runs the hardened clone; fileAllow exists only for tests driving a

@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-09-13T07:44:55.374599+00:00",
+  "status": "fixes_verified_with_git_transport_disabled",
+  "branch": "codex/m132-review-fixes-20260913",
+  "prerequisite": "4aa15dd",
+  "tests": {
+    "go_full": "passed",
+    "targeted_race": "passed",
+    "vet": "passed",
+    "gofmt": "clean",
+    "python_contracts": 200,
+    "web": 73,
+    "browser_fixture_checks": 7,
+    "original_negative_regressions": "passed"
+  },
+  "cross_builds": {
+    "linux/amd64": {
+      "exit_code": 0,
+      "sha256": "8a0981080e0e0b12632021c0da5f59395645f3a2ebff2d2a87ae9ceb8ef9cc2e",
+      "error": ""
+    },
+    "linux/arm64": {
+      "exit_code": 0,
+      "sha256": "882a02ce1860687fdda2c63db07313e3e4dd992843cbc8e79bd57effc57c80fc",
+      "error": ""
+    },
+    "darwin/arm64": {
+      "exit_code": 0,
+      "sha256": "338b9b2276322ec38fef2d167c8368bbaf1cee55403ca1cf8deddbae76b1415d",
+      "error": ""
+    },
+    "windows/amd64": {
+      "exit_code": 0,
+      "sha256": "6197947728f9fbf010fc736639dc5196dde1a5b5bc63948b13016db39de7581a",
+      "error": ""
+    }
+  },
+  "integrated_shared_workspace": "reviewed source patch applied and byte-compared; GLM branch/index preserved",
+  "source_sha256": {
+    "apps/agentshield/internal/server/skill_import.go": "65381271dbfaddcf54f19510f51a605c42ed0d759ea2e4a4930d9623e666e5a8",
+    "apps/agentshield/internal/server/skill_import_test.go": "d466ecdbb68b57261f86760650711d992bffb342aade5d1cb2ed67cb720780f9",
+    "apps/agentshield/internal/server/skill_install.go": "baef4015f7496726020f52def0c2b7d814920c4b473edb1c193bfd8e91e35771",
+    "apps/agentshield/internal/server/skill_update_check_test.go": "4095259dc8d6884ed6d05b3af3c815fc2b52f4511793ebcb11b654298bb68b98",
+    "apps/agentshield/internal/skillimport/git.go": "92d89bb964bca816ad2245704cdbbf70ba808378e607e6d12c63a1e18529bd4a",
+    "apps/agentshield/internal/skillimport/reviewer_upstream_test.go": "1dfb31a34352e1a339c9480334e2909aee67b2c4df4e2735b8bfc65a3d80b2e1",
+    "apps/agentshield/internal/skillimport/upstream_test.go": "6efc8951091f7bf4bf521298be7cb1c17c951a82dddeb5e1628273e5a1e18c15",
+    "apps/agentshield/internal/skillinstall/reviewer_update_check_test.go": "47d82b7b56fbd6ed7aae02a7ccbf86de7e71d7c34d60184de3702442679c1b19",
+    "apps/agentshield/internal/skillinstall/update_check.go": "d36ffa332310b5c822d12587e2d01b0f6d4ce0387dbea557676487645063e645",
+    "apps/agentshield/internal/skillinstall/update_check_regression_test.go": "fe7de26b73b3eefefd8f8be437bae46855cd8ed4de07a5739ca209de9f7cfe60",
+    "apps/agentshield/testdata/contracts/local-skill-import-git-create.json": "ebfd7029a3b3442663de96426cfc639ef52b19c24adf1cfd327797864570325f",
+    "apps/agentshield/testdata/contracts/local-skill-update-check-result.json": "bf2f29a4f17f82b57d6ba464c016c72d42538a55785212624ebdd5759c9c2938",
+    "apps/agentshield/testdata/contracts/local-skill-update-check.json": "fbe133eeba529168e73fcb376a4922b4387c634bff169f1feb176947d20f0a4f",
+    "apps/control-api/app/tests/test_schema_contracts.py": "bd866fd274bde6aa437cbabf2488291d039c73f85c66d21ab6932a2967f5f26e",
+    "apps/web/src/local/api.ts": "f9dcd08cd8620a304114b6ccfbc1ae0db0f9df56e3b608b586aa5eaffd870742",
+    "apps/web/src/local/components/SkillUpdateCheckPanel.tsx": "848cb91708bbc6eeaafa5cf7de83a7e7e5904ebcd123c9075454a8088700e2ea",
+    "apps/web/src/local/pages/InstalledSkillsPage.tsx": "8b639070903964471975f89eca0e3bcd0c3633c3aa1618aec5f2767208764ffd",
+    "apps/web/src/local/skillUpdateCheck.test.ts": "c445cf3e935e95c83076b98060b60bb4ca65d9c3bc67c30ba3a144120c259de3",
+    "apps/web/src/local/skillUpdateCheck.ts": "71accf39f590cc1e348d8234556684c11cd23fe66fc4f5676f77110bb888bdd5",
+    "packages/contracts/local-skill-import-git-create.v1.schema.json": "873d89edca9b65cc581411adde118d88526f3b99fe65ae7a810a186fafd11a3e",
+    "packages/contracts/local-skill-update-check-result.v1.schema.json": "aa1d69ec275bf8f295ffa318ccc6c83960dacd459b54caf5cdc5372146fdea7b",
+    "packages/contracts/local-skill-update-check.v1.schema.json": "9acd11714951a646b2ac678247923ff9a5f3088636b8fb25bf7b65671b5a1d29",
+    "scripts/personal-experience/update-check-browser-smoke.py": "3acad88ca861dee6dda6ca982da38d87ae160617e50189b60c04c6406654bc19"
+  },
+  "evidence_sha256": {
+    "local-build.log": "746a2d7131cf2ec4514812feb11b9bf7c5040dd2808e036b2c03659e3ae27f62",
+    "browser.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "web.log": "71471e7ad67e7e0637debb2a5420fb27ea084c9c905e7969fcc995f394b6c77e",
+    "full.log": "8b5b83f368a47c445d6aea2f02270e5ccf642d1aa602b2ad9679050e1042bc32",
+    "vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "regressions.log": "b852e86c333e3d727a50d1817b5c028eef428cf869d15970103f38502fcdfc43",
+    "go.log": "7d7abc54a55d909b6098441f730553ea6d9ef4ca9e921266079d5808b2c4a090",
+    "race.log": "63a9aac4949978089ecad89d5bf09ecc00e14f2b6f89dafaf8d5286004b5112e",
+    "web-build.log": "294d9739d890e15bfa8980481f9b80f05a885135d7429045fbca57297bb769d5",
+    "npm.log": "bf4c17ca399910c1c5ab20b379797b9ea5713811b218fa4c3aa350bf7ffbdd0c",
+    "schema.log": "8a1c93987ab01bcbf7a5fa73241fd4adcd12c26a4a2c9eaf1a170cf502fd35d6",
+    "browser/mobile.png": "76070274510e222fcc7dd337771c22bd25f7a4ecc74afbe735ce99fe5d8e33cb",
+    "browser/desktop.png": "a77819f88089d5f2f3518f80bdeb4035e70f4425d26060313831a41638321549"
+  },
+  "limitations": [
+    "Production Git fetch explicitly disabled until safe transport is implemented",
+    "Browser responses are fixtures, no real CDN or Git hosting acceptance",
+    "No native Windows/macOS, WorkBuddy, or LAN acceptance",
+    "No automatic scheduled upstream polling",
+    "No main merge or release"
+  ],
+  "log_normalization": "Trailing blank lines removed for git whitespace checks"
+}

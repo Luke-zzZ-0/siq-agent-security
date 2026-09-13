@@ -1,3 +1,4 @@
+import SkillUpdateCheckPanel from '../components/SkillUpdateCheckPanel';
 import SkillRemovalDialog from '../components/SkillRemovalDialog';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -121,6 +122,7 @@ export default function InstalledSkillsPage() {
           </div>
           {record.recorded_status === 'installed_unverified' ? <SkillRemovalDialog key={record.install_id} current={removal?.record.install_id === selected ? removal : null} disabled={checking || !visible} onOpen={setRemovalOpen} onRefresh={refreshDetails} /> : null}
           {removal?.record.install_id === selected && removal.status === 'not_requested' && !checking && !removalOpen ? <div className="import-actions"><Link className="btn" to={`/skill-updates?install_id=${encodeURIComponent(record.install_id)}`}>审阅候选并更新</Link></div> : null}
+          {record.recorded_status === 'installed_unverified' ? <SkillUpdateCheckPanel key={record.install_id + record.claim_signature} installId={record.install_id} disabled={removalOpen || !visible || !!removal?.claim} /> : null}
           <details><summary>查看安装基线</summary><dl><dt>操作编号</dt><dd><code>{record.install_id}</code></dd><dt>副本摘要</dt><dd><code>{record.plan.source.artifact_digest}</code></dd><dt>实例编号</dt><dd><code>{record.plan.instance_id}</code></dd></dl></details>
         </>}
       </section>

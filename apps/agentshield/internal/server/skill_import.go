@@ -15,6 +15,8 @@ import (
 func skillImportError(w http.ResponseWriter, err error) {
 	status, code := 503, "skill_import_unavailable"
 	switch {
+	case errors.Is(err, skillimport.ErrGitTransportUnavailable):
+		status, code = 503, "skill_import_git_transport_unavailable"
 	case errors.Is(err, importsource.ErrInvalid):
 		status, code = 409, "skill_import_permission_source_invalid"
 	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):

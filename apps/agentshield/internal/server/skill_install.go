@@ -50,6 +50,10 @@ func (s *Server) initSkillInstallations() error {
 func skillInstallError(w http.ResponseWriter, err error) {
 	status, code := 503, "skill_install_unavailable"
 	switch {
+	case errors.Is(err, skillinstall.ErrUpdateURLBlocked):
+		status, code = 400, "skill_update_url_blocked"
+	case errors.Is(err, skillinstall.ErrUpdateSourceUnavailable):
+		status, code = 503, "skill_update_source_unavailable"
 	case errors.Is(err, skillinstall.ErrRemovalPending):
 		status, code = 409, "skill_install_removal_pending"
 	case errors.Is(err, skillinstall.ErrRecoveryRequired):
