@@ -196,6 +196,11 @@ func (p *Plan) prepareUninstall() error {
 
 func (p *Plan) surgicalWrite(path string, doc map[string]any) error {
 	after := fileImage{Exists: true, Data: encodePlanJSON(doc), Mode: 0o600}
+	// A configuration this install modified keeps the mode it had before the
+	// install touched it, matching the snapshot restore path below.
+	if mode, ok := p.payload.Record.OriginalModes[path]; ok {
+		after.Mode = mode
+	}
 	if len(doc) == 0 && p.payload.Record.Modified[path] == "" {
 		after = fileImage{}
 	}

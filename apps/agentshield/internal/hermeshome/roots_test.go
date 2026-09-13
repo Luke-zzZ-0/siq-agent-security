@@ -105,3 +105,93 @@ func TestProfileEnumerationBudget(t *testing.T) {
 		t.Fatal("profile enumeration unbounded or limit invisible")
 	}
 }
+
+func TestUnicodeAndSpaceProfileNamesAndNonDefaultRootsAreDiscovered(t *testing.T) {
+	home := t.TempDir()
+	base := LegacyRoot(home)
+	nonDefault := filepath.Join(t.TempDir(), "My Profiles")
+	for _, path := range []string{
+		filepath.Join(base, "profiles", "my work"),
+		filepath.Join(base, "profiles", "工作区"),
+		filepath.Join(nonDefault, "profiles", "个人 配置"),
+	} {
+		marker(t, path)
+	}
+	scan := Scan(Options{Home: home, Override: nonDefault, OS: "linux"})
+	if len(scan.Issues) != 0 {
+		t.Fatalf("unexpected issues: %v", scan.Issues)
+	}
+	byPath := map[string]Root{}
+	for _, root := range scan.Roots {
+		byPath[root.Path] = root
+	}
+	for path, wantName := range map[string]string{
+		filepath.Join(base, "profiles", "my work"):     "my work",
+		filepath.Join(base, "profiles", "工作区"):         "工作区",
+		filepath.Join(nonDefault, "profiles", "个人 配置"): "个人 配置",
+	} {
+		root, ok := byPath[path]
+		if !ok {
+			t.Fatalf("profile not discovered: %s", path)
+		}
+		if root.Name != wantName {
+			t.Fatalf("profile name mismatch: got %q want %q", root.Name, wantName)
+		}
+		if root.ID != Identifier(path) || root.CandidateID == "" {
+			t.Fatalf("identity broken for %s: %+v", path, root)
+		}
+	}
+	// The non-default root itself is discovered separately from its profiles.
+	if _, ok := byPath[nonDefault]; !ok {
+		t.Fatal("non-default root not discovered")
+	}
+	if _, ok := byPath[filepath.Join(nonDefault, "profiles")]; ok {
+		t.Fatal("profiles container discovered as instance")
+	}
+}
+
+func TestInstanceMoveAndRemoveChangeDiscoveryIdentity(t *testing.T) {
+	home := t.TempDir()
+	base := LegacyRoot(home)
+	original := filepath.Join(base, "profiles", "work")
+	marker(t, original)
+	originalID := Identifier(original)
+	if _, err := Resolve(Options{Home: home, OS: "linux"}, originalID); err != nil {
+		t.Fatal("original instance unresolved before move")
+	}
+
+	moved := filepath.Join(base, "profiles", "work moved")
+	if err := os.Rename(original, moved); err != nil {
+		t.Fatal(err)
+	}
+	marker(t, moved)
+	scan := Scan(Options{Home: home, OS: "linux"})
+	if _, err := Resolve(Options{Home: home, OS: "linux"}, originalID); err == nil {
+		t.Fatal("moved instance still resolves by old identity")
+	}
+	found := false
+	for _, root := range scan.Roots {
+		if root.Path == moved && root.Name == "work moved" {
+			found = true
+		}
+		if root.ID == originalID {
+			t.Fatal("moved instance kept old identity at new path")
+		}
+	}
+	if !found {
+		t.Fatal("moved instance not discovered at new path")
+	}
+
+	if err := os.RemoveAll(moved); err != nil {
+		t.Fatal(err)
+	}
+	scan = Scan(Options{Home: home, OS: "linux"})
+	for _, root := range scan.Roots {
+		if root.Path == moved {
+			t.Fatal("removed instance still discovered")
+		}
+	}
+	if _, err := Resolve(Options{Home: home, OS: "linux"}, Identifier(moved)); err == nil {
+		t.Fatal("removed instance still resolves")
+	}
+}

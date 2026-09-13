@@ -1,10 +1,14 @@
 package adapterinstall
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"runtime"
 	"testing"
+	"time"
+
+	statepkg "siq-agent-security/apps/agentshield/internal/state"
 
 	"siq-agent-security/apps/agentshield/internal/hermeshome"
 )
@@ -73,5 +77,88 @@ func TestDefaultInstanceUpgradeRestoresLegacyWrapper(t *testing.T) {
 	}
 	if exists(targeted.wrapperPath()) {
 		t.Fatal("new instance wrapper not removed")
+	}
+}
+
+func TestPlanRejectsConfigChangedBetweenPrepareAndApply(t *testing.T) {
+	opts := testOpts(t, Hermes)
+	configJSON := filepath.Join(opts.configRoot(), "plugins", "siq-agent-security", "config.json")
+	putTestFile(t, configJSON, []byte(`{"endpoint":"http://127.0.0.1:47611"}`), 0600)
+	p := testPlan(t, opts, "install")
+	if len(p.payload.Inputs) == 0 {
+		t.Fatal("plan captured no before-images")
+	}
+	if _, err := Apply(p); err != nil {
+		t.Fatalf("unchanged configuration must apply cleanly: %v", err)
+	}
+	if _, err := Uninstall(opts); err != nil {
+		t.Fatal(err)
+	}
+	stale := testPlan(t, opts, "install")
+	if err := os.WriteFile(configJSON, []byte(`{"endpoint":"http://127.0.0.1:47612"}`), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Apply(stale); !errors.Is(err, ErrPlanChanged) {
+		t.Fatalf("stale plan must be rejected with ErrPlanChanged, got %v", err)
+	}
+}
+
+func testOptsAt(t *testing.T, home string) Options {
+	t.Helper()
+	state := t.TempDir()
+	if _, err := statepkg.Open(state); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chmod(state, 0700); err != nil {
+		t.Fatal(err)
+	}
+	bin := filepath.Join(home, "bin", "agentshield")
+	putTestFile(t, bin, []byte("#!/bin/sh\n"), 0o700)
+	return Options{
+		Platform: Hermes,
+		Home:     home,
+		StateDir: state,
+		Binary:   bin,
+		Endpoint: "http://127.0.0.1:47611",
+		Mode:     "block",
+		Now:      time.Date(2026, 9, 4, 6, 0, 0, 0, time.UTC),
+	}
+}
+
+func TestPlanPinnedToMovedInstanceIsRejected(t *testing.T) {
+	home := t.TempDir()
+	profile := filepath.Join(home, ".hermes", "profiles", "work")
+	putTestFile(t, filepath.Join(profile, "config.yaml"), []byte("model: work\n"), 0600)
+	roots := hermeshome.Scan(hermeshome.Options{Home: home, OS: "linux"}).Roots
+	var target hermeshome.Root
+	for _, root := range roots {
+		if root.Path == profile {
+			target = root
+		}
+	}
+	if target.ID == "" {
+		t.Fatal("named profile not discovered")
+	}
+	opts := WithHermesInstance(testOptsAt(t, home), target)
+	p := testPlan(t, opts, "install")
+
+	if err := os.Rename(profile, profile+"-moved"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Apply(p); !errors.Is(err, ErrPlanChanged) {
+		t.Fatalf("plan on moved instance must be rejected, got %v", err)
+	}
+
+	// Identity is path-derived: a directory recreated at the old path is the
+	// same instance identity, so the binding stays with the path — but only a
+	// freshly prepared plan may act on it.
+	putTestFile(t, filepath.Join(profile, "config.yaml"), []byte("model: recreated\n"), 0600)
+	fresh := testPlan(t, WithHermesInstance(testOptsAt(t, home), target), "install")
+	if _, err := Apply(fresh); err != nil {
+		t.Fatalf("plan prepared against the current instance must apply: %v", err)
+	}
+	raw, err := os.ReadFile(filepath.Join(profile, "config.yaml"))
+	if err != nil || string(raw) != "model: recreated\n" {
+		t.Fatal("fresh install modified host config")
 	}
 }
