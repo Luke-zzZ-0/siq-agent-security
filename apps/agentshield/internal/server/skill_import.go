@@ -160,3 +160,31 @@ func (s *Server) skillImportRemoteCreate(w http.ResponseWriter, r *http.Request)
 	}
 	writeJSON(w, status, skillimport.NewResult(record, analysis, reused))
 }
+
+func (s *Server) skillImportGitCreate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "no-store")
+	if r.Method != http.MethodPost {
+		w.WriteHeader(405)
+		return
+	}
+	var req skillimport.GitCreateRequest
+	if !readStrictFlatRequest(w, r, &req, "skill_import_invalid", "schema_version", "import_id", "url", "ref", "sub_dir", "expected_commit", "actor_id") {
+		return
+	}
+	if !s.skillImportSlot(w) {
+		return
+	}
+	defer s.skillImportMu.Unlock()
+	ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
+	defer cancel()
+	record, analysis, reused, err := s.skillImports.CreateGit(ctx, req)
+	if err != nil {
+		skillImportError(w, err)
+		return
+	}
+	status := 201
+	if reused {
+		status = 200
+	}
+	writeJSON(w, status, skillimport.NewResult(record, analysis, reused))
+}

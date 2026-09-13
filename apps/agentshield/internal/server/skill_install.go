@@ -230,6 +230,29 @@ func (s *Server) skillInstallOperation(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, 200, result)
 		return
 	}
+	if len(parts) == 2 && parts[0] != "" && parts[1] == "update-check" {
+		if r.Method != http.MethodPost {
+			w.WriteHeader(405)
+			return
+		}
+		var req skillinstall.UpdateCheckRequest
+		if !readStrictFlatRequest(w, r, &req, "skill_install_invalid", "schema_version", "remote_url", "actor_id") {
+			return
+		}
+		if !s.skillInstallSlot(w) {
+			return
+		}
+		defer s.skillImportMu.Unlock()
+		ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
+		defer cancel()
+		result, err := s.skillInstallations.CheckUpdate(ctx, parts[0], req)
+		if err != nil {
+			skillInstallError(w, err)
+			return
+		}
+		writeJSON(w, 200, result)
+		return
+	}
 	recover := len(parts) == 2 && parts[1] == "recover"
 	activate := len(parts) == 2 && parts[1] == "activate"
 	readiness := len(parts) == 2 && parts[1] == "runtime"

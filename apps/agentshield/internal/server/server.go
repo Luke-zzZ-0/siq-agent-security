@@ -193,6 +193,7 @@ func New(d Deps) (*Server, error) {
 	s.mux.HandleFunc("/v1/skill-installations/grants/", s.auth(s.skillInstallGrantRuntime, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports", s.auth(s.skillImportCreate, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports/remote", s.auth(s.skillImportRemoteCreate, capAdmin))
+	s.mux.HandleFunc("/v1/skill-imports/git", s.auth(s.skillImportGitCreate, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports/", s.auth(s.skillImportRead, capAdmin))
 	s.mux.HandleFunc("/v1/runtime-identities", s.auth(s.runtimeIdentityCollection, capAdmin))
 	s.mux.HandleFunc("/v1/runtime-identities/", s.auth(s.runtimeIdentityOne, capAdmin))

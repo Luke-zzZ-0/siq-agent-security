@@ -1085,3 +1085,40 @@ Hermes 已管理插件在允许后采集参数、观察后采集结果，嵌套 
 登记边界（诚实记录）：OS 实机投递未验收——调度/投递层已实现并以测试替身+真实引擎测试，但"桌面真实弹出"需实机证据，UX-008 三系统实机验收项保持未完成；windows/darwin 无平台默认通知器（osascript/Toast 未实现），仅可显式配置 `desktop_notify_command`；原生恢复执行仍阻塞于 Hermes 30s 回调上限（M16 已验证）；任务内授权（task-scoped authorization）留待后续批次；仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
 
 证据：[desktop-notify-background-launcher-20260913.md](evidence/personal-experience/desktop-notify-background-launcher-20260913.md)。
+
+## M131：UX-009 增量 —— Git 来源 Skill 导入（/v1/skill-imports/git / 2026-09-13）
+
+范围：apps/agentshield（internal/skillimport、internal/server）。
+
+实现：
+- 新增 `POST /v1/skill-imports/git`（管理员能力，路由置于 `/v1/skill-imports/` 通配之前），合同 `local-skill-import-git-create/v1`：ImportID/URL/Ref/SubDir/ExpectedCommit(可选)/ActorID 全部必填键，严格平铺 JSON，槽位 TryLock 429，60s 上下文。
+- URL 复用 https_zip 下载校验（https 公网主机、443/缺省、拒 userinfo/fragment/反斜杠/控制字符）；Ref 白名单正则 + 拒 ".."、尾 "/" "."、空/点开头/.lock 分量、40 位十六进制（提交固定用 ExpectedCommit）；SubDir 复用归档路径校验并拒 git 元数据路径。
+- git CLI 硬编码：无 shell、净化环境（GIT_CONFIG_NOSYSTEM/空全局配置临时 HOME/GIT_TERMINAL_PROMPT=0/GIT_ASKPASS=echo/隔离 HOME+TMPDIR/LC_ALL=C）、`-c core.hooksPath=<空目录>`（恶意 Git 钩子在 clone/checkout 不执行）、fsmonitor=false、gc.auto=0、protocol.file.allow=never、GIT_ALLOW_PROTOCOL=https、`clone --depth 1 --single-branch` 后 `rev-parse --verify HEAD^{commit}`（stdout 模式校验 40 hex，stderr 刻意丢弃，远端文本不入日志/错误）。50s 克隆预算。
+- 准入沿用既有管线：目录树限额（2000 文件/目录、深度 16、单文件 8MiB、总量 64MiB）、.git 元数据排除、准入后摘要复查（检查后替换拒绝）、ExpectedCommit 不匹配 → ErrArchiveMismatch；同 ImportID 不同参数 → ErrConflict；重复请求 reused/200。
+- 记录 schema v2 新增 `git` 元数据（URL/Ref/SubDir/ExpectedCommit/CommitSHA）；recordVersionValid 三分支互斥（v1 与 https_zip 拒 git 字段，git 拒 remote 字段），gitValid 复验 URL 往返与 commit 40 hex。
+
+测试：新增 6 个测试全部通过（store 5：真实 git fixture 端到端克隆含恶意 post-checkout 钩子不执行断言/Exec bit 保留/签名验证/Load 全链路/reused+conflict+wrong-pin+缺 SubDir 负向、SubDir 子树选择、23 例请求校验表、gitRefValid、记录校验与版本互斥；server 1：401/403 边界、私有主机 400 url_blocked、GET 405、严格体循环全 400 无错误回显、持锁 429、records 保持为空）。既有 zip/remote/skillimport 测试零回归。
+
+诚实记录（边界）：测试经 `file://` 传输走真实硬编码克隆——`protocol.file.allow`/`GIT_ALLOW_PROTOCOL` 是测试缝参数，生产入口 fetchGitCLI 恒 https-only 且 file 传输 never；服务端测试无法注入未导出 gitFetch 缝，HTTP 层仅覆盖失败路径（与 remote 一致），正向 201 流程在 store 层覆盖。DNS 解绑残余风险：URL 校验在请求时解析主机名，克隆时实际连接未做 IP 钉扎。未在真实 git 托管服务联测，无 OS 实机验证；git 二进制缺失 → 503 skill_import_unavailable（本机 git 2.43.0）。UX-009 整体仍为 doing（浏览器文件选择、平台安装入口拦截、可信 Skill 归属[宿主能力阻塞]未闭环）。
+
+验证：`go test ./...` 全部 ok 0 失败；gofmt -l/git diff --check 无输出；go vet 通过；Python 合同 197 passed + Ruff 通过；CGO_ENABLED=0 四目标构建（linux/amd64、linux/arm64、darwin/arm64、windows/amd64，SHA256 见证据文档）。仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+证据：[git-skill-import-20260913.md](evidence/personal-experience/git-skill-import-20260913.md)。
+
+## M132：UX-010 增量 —— 已安装 Skill 新版检查（只读远端快照 / 2026-09-13）
+
+范围：apps/agentshield（internal/skillimport、internal/skillinstall、internal/server）。
+
+实现：
+- skillimport：`CheckUpstream(ctx, importID, remoteURL)` 在一次性 `upstream-*` 暂存（0700，结束即 RemoveAll）中重取上游，产出 `UpstreamSnapshot`（来源类型/URL/Ref/SubDir/CommitSHA 或 ArchiveSHA256/ArchiveBytes + 目录/文件清单 + .git 排除标记）。git 按记录 URL/Ref/SubDir 重克隆（ExpectedCommit 空即不固定），快照携带当前 HEAD——上游前进如实反映，记录不动。zip 调用方 URL 以 `sum(canon.Marshal{url, archive_path, expected_sha256})` 复算定位摘要与 `SourceLocatorDigest` 绑定：他 URL → ErrChanged，非 https → ErrURLBlocked。local_dir/未知 schema/未知来源 → ErrInvalid。`ReadRecord` 导出包装支持已清理暂存后的读取。
+- skillinstall：`CheckUpdate`（合同 `local-skill-update-check/v1`，结果 schema `local-skill-update-check-result/v1`）纯只读——不创建/修改/固定记录、不授予权限、不写状态。前提：RecordedStatus=installed_unverified 且 Operation 存在、无进行中移除、导入 ArtifactDigest/AnalysisSHA256 与 Plan.Source 绑定一致。git 来源拒绝调用方 URL（上游位置以记录为准），zip 来源要求非空 URL 交定位摘要绑定。内容差异复用共享 `compareContentDelta`（与更新比较同一 200 项截断预算），Total>0 → new_version + requires_confirmation=true；权限差异显式 `deferred_to_update_comparison`。结果产出前重读记录核签名、复查移除、检查 ctx；边界事件 update_checked。
+- server：`POST /v1/skill-installations/operations/{id}/update-check`，严格平铺 JSON（schema_version/remote_url/actor_id），管理员能力 401/403、GET 405、槽位 TryLock 429、60s 上下文，错误沿用 skillInstallError 映射。
+- 更新比较重构：`compareContents` 抽出共享 `compareContentDelta/contentDelta`，更新比较与只读检查同一路径报告，无行为变化。
+
+测试：新增 7 个测试全部通过（skillimport 3：git 快照见前进 HEAD+新文件且记录/暂存不动、zip 定位摘要绑定 URL 拒绝他源、local/未知/不存在三向拒绝；skillinstall 3：up_to_date/new_version 全字段断言+零状态写入[路径清单前后对比]+grant revision 不变、210 项差异 200 截断、守卫表[schema/actor/未知 id/local/git 拒 URL/zip 拒空 URL/摘要篡改 ErrChanged/revoke+Remove 后 ErrRemovalPending，缝未被调用断言]；server 1：凭据边界/405/严格体/本地 400/未知 404/移除与 grant 状态不变）。git/zip 记录由测试共享密钥重签落盘维持安装绑定。既有测试零回归。
+
+诚实记录（边界）：skillinstall 层测试的上游重取经 `upstream` 缝以快照替身完成（跨包行为、无网络；缝为测试专用，注释明确 Never set from runtime configuration），真实获取路径由 skillimport 层本地 git fixture 与直接 download 缝覆盖。未在真实 git 托管服务或归档 CDN 联测；无 OS 实机验证。权限差异比较、确认切换 UI、原生更新验收与通用旧状态写入拒绝仍属 UX-010 后续；UX-010 保持 doing。
+
+验证：`go vet ./... && go test ./...` 37 包全部 ok 0 失败；gofmt -l/git diff --check 无输出；Python 合同 197 passed + Ruff 通过（未触碰合同 schema/样本）；CGO_ENABLED=0 四目标构建（linux/amd64、linux/arm64、darwin/arm64、windows/amd64，SHA256 见证据文档）。仅本地落盘，未提交、未推送、未发布，未重启用户 daemon。
+
+证据：[skill-update-check-20260913.md](evidence/personal-experience/skill-update-check-20260913.md)。
