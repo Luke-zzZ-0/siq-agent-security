@@ -76,7 +76,17 @@ func updateTree(dirs []string, files []skillimport.File) map[string]UpdateConten
 	}
 	return tree
 }
-func (v *UpdateComparison) compareContents(before, after map[string]UpdateContent) {
+
+type contentDelta struct {
+	Changes   []UpdateContentChange
+	Total     int
+	Truncated bool
+}
+
+// compareContentDelta diffs two installation manifests; both the update
+// comparison and the read-only update check report through it.
+func compareContentDelta(before, after map[string]UpdateContent) contentDelta {
+	out := contentDelta{Changes: []UpdateContentChange{}}
 	paths := make(map[string]bool, len(before)+len(after))
 	for p := range before {
 		paths[p] = true
@@ -95,9 +105,9 @@ func (v *UpdateComparison) compareContents(before, after map[string]UpdateConten
 		if bok && aok && b == a {
 			continue
 		}
-		v.ContentChangesTotal++
-		if len(v.ContentChanges) >= maxInspectionChanges {
-			v.ContentChangesTruncated = true
+		out.Total++
+		if len(out.Changes) >= maxInspectionChanges {
+			out.Truncated = true
 			continue
 		}
 		display := strconv.QuoteToGraphic(p)
@@ -115,8 +125,13 @@ func (v *UpdateComparison) compareContents(before, after map[string]UpdateConten
 			value := a
 			change.After = &value
 		}
-		v.ContentChanges = append(v.ContentChanges, change)
+		out.Changes = append(out.Changes, change)
 	}
+	return out
+}
+func (v *UpdateComparison) compareContents(before, after map[string]UpdateContent) {
+	delta := compareContentDelta(before, after)
+	v.ContentChanges, v.ContentChangesTotal, v.ContentChangesTruncated = delta.Changes, delta.Total, delta.Truncated
 }
 func updateCanonical(value any) (string, error) {
 	raw, err := json.Marshal(value)

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-revocation.v1.schema.json",
+  "title": "Signed terminal raw content capture revocation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "grant_id",
+    "expected_grant_signature",
+    "actor_ref",
+    "revoked_at",
+    "reason_code",
+    "signing_schema",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-revocation/v1" },
+    "grant_id": { "type": "string", "pattern": "^rawgrant-[a-f0-9]{32}$" },
+    "expected_grant_signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+    "actor_ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "revoked_at": { "type": "string", "format": "date-time" },
+    "reason_code": { "const": "raw_content_capture_revoked" },
+    "signing_schema": { "const": "local_canonical/v1" },
+    "signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" }
+  }
+}

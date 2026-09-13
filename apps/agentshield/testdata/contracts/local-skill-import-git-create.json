@@ -1,0 +1,9 @@
+{
+  "schema_version": "local-skill-import-git-create/v1",
+  "import_id": "si-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "url": "https://git.example.com/skill.git",
+  "ref": "main",
+  "sub_dir": "skill",
+  "expected_commit": "",
+  "actor_id": "fixture-reviewer"
+}

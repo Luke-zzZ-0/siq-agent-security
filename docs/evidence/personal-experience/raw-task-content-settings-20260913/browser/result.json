@@ -1,0 +1,10 @@
+{
+  "fresh_install_is_disabled_and_visible": true,
+  "explicit_activation_updates_panel_and_topbar": true,
+  "expired_only_purge_requires_confirmation": true,
+  "signed_activation_survives_reload": true,
+  "invalid_contract_fails_closed_without_stale_ready_state": true,
+  "raw_authority_is_not_browser_persisted": true,
+  "mobile_has_no_horizontal_overflow": true,
+  "page_errors": []
+}

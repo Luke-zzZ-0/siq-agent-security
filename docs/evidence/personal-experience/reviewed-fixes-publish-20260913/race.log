@@ -1,0 +1,5 @@
+ok  	siq-agent-security/apps/agentshield/internal/grant	1.264s
+ok  	siq-agent-security/apps/agentshield/internal/receipt	29.204s
+ok  	siq-agent-security/apps/agentshield/internal/notify	1.048s
+ok  	siq-agent-security/apps/agentshield/internal/runtimeidentity	2.361s
+ok  	siq-agent-security/apps/agentshield/internal/server	33.839s

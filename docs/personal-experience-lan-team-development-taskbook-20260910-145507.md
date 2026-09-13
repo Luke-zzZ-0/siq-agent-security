@@ -1,5 +1,7 @@
 # SIQ Agent Security 个人体验优化与局域网团队管理开发任务书
 
+> 当前执行入口（2026-09-13）：[后续开发任务书 v2.0](personal-experience-lan-team-next-development-taskbook-20260913-160928.md)。全部已核查分支已通过 PR #32 合入 main `983b820`；后续从最新 `origin/main` 新建工作树，先个人闭环再 LAN。本文下方的旧基线、未提交/未合并表述和完成度数字均为各阶段历史记录，不代表当前状态。
+
 > 编制时间：2026-09-10 14:55:07，Asia/Shanghai（UTC+08:00）  
 > 文档版本：v1.1
 > 项目目录：`/home/maoyd/siq/siq-agent-security`  

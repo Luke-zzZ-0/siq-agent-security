@@ -3,6 +3,7 @@ package adapterinstall
 import (
 	"errors"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strings"
 
@@ -73,14 +74,12 @@ func (p *Plan) prepareUninstall() error {
 			return conflictRecovery(path, rec.Modified[path], err)
 		}
 		if sec, ok := doc["security"].(map[string]any); ok {
-			if policy, exists := sec["installPolicy"]; exists {
-				object, _ := policy.(map[string]any)
-				exec, _ := object["exec"].(map[string]any)
-				if exec["command"] != rec.Binary {
+			oldSec, _ := original["security"].(map[string]any)
+			if policy, exists := sec["installPolicy"]; exists && !reflect.DeepEqual(policy, oldSec["installPolicy"]) {
+				if !sameOpenClawLegacyPolicy(policy, rec.Binary) {
 					return conflictRecovery(path, rec.Modified[path], errors.New("installation policy changed outside this operation"))
 				}
 				delete(sec, "installPolicy")
-				oldSec, _ := original["security"].(map[string]any)
 				if old, exists := oldSec["installPolicy"]; exists {
 					sec["installPolicy"] = old
 				}

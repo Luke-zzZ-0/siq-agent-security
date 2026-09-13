@@ -1,0 +1,16 @@
+{
+  "schema_version": "local-raw-task-content-grant/v1",
+  "grant_id": "rawgrant-09090909090909090909090909090909",
+  "task_ref": "sha256:a0b3ab797d78c6b43759993022d2c7173270794fcc57189cf851e4838abdb0f5",
+  "kinds": [
+    "input",
+    "output"
+  ],
+  "actor_ref": "sha256:820e78c21f66d657b2d9cda5b8b7356835dabcf53029bb05343a451e8a94b7e7",
+  "issued_at": "2026-09-13T03:00:00Z",
+  "expires_at": "2026-09-13T04:00:00Z",
+  "retention_seconds": 7200,
+  "max_plaintext_bytes": 4096,
+  "signing_schema": "local_canonical/v1",
+  "signature": "a15068fd82bfca732d8c2690084850d9176d05a2a587609cb604996adebfee9e50cfdbd2ceb22eb708e1e581b04352e2a55f082ea9cbe546da6377b38d7f9f09"
+}

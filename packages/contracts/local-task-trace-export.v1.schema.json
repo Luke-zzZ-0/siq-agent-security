@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local-task-trace-export.v1.schema.json",
+  "title": "Signed redacted task trace projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "attestation_scope", "activity_id", "snapshot", "generated_at", "source_count", "source_tip_hash", "source_last_seq", "prefix_valid", "history_integrity", "incomplete", "public_key_base64", "receipts", "sources", "completion", "effects", "signing_schema", "signature"],
+  "properties": {
+    "schema_version": { "const": "local-task-trace-export/v1" },
+    "attestation_scope": { "const": "redacted_trace_projection_only" },
+    "activity_id": { "$ref": "#/definitions/hash" },
+    "snapshot": { "$ref": "#/definitions/hash" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "source_count": { "type": "integer", "minimum": 1, "maximum": 100000 },
+    "source_tip_hash": { "$ref": "#/definitions/hash" },
+    "source_last_seq": { "type": "integer", "minimum": 0 },
+    "prefix_valid": { "const": true },
+    "history_integrity": { "enum": ["verified", "unknown", "failed"] },
+    "incomplete": { "type": "boolean" },
+    "public_key_base64": { "type": "string", "pattern": "^[A-Za-z0-9+/]{43}=$" },
+    "receipts": {
+      "type": "array", "minItems": 1, "maxItems": 10000,
+      "items": { "$ref": "#/definitions/receipt" }
+    },
+    "sources": {
+      "type": "array", "minItems": 1, "maxItems": 10000,
+      "items": { "$ref": "#/definitions/source_row" }
+    },
+    "completion": { "$ref": "#/definitions/completion" },
+    "effects": {
+      "type": "array", "maxItems": 8192,
+      "items": { "$ref": "#/definitions/effect" }
+    },
+    "signing_schema": { "const": "local_canonical/v1" },
+    "signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "incomplete": { "const": false } } },
+      "then": {
+        "properties": {
+          "sources": { "items": { "properties": { "status": { "const": "verified_source" } } } },
+          "completion": { "properties": { "status": { "const": "verified" } } }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "completion": { "properties": { "status": { "enum": ["incomplete", "conflicting", "unknown", "unavailable"] } } }
+        }
+      },
+      "then": { "properties": { "incomplete": { "const": true } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "sources": { "contains": { "properties": { "status": { "const": "unavailable" } } } }
+        }
+      },
+      "then": { "properties": { "incomplete": { "const": true } } }
+    }
+  ],
+  "definitions": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "ref": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "reason": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,127}$" },
+    "receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["seq", "issued_at", "receipt_ref", "tool_ref", "action", "source_hash"],
+      "properties": {
+        "seq": { "type": "integer", "minimum": 0 },
+        "issued_at": { "type": "string", "maxLength": 40 },
+        "receipt_ref": { "$ref": "#/definitions/ref" },
+        "tool_ref": { "$ref": "#/definitions/ref" },
+        "action": { "enum": ["allow", "deny", "hold", "redact", "unknown"] },
+        "source_hash": { "$ref": "#/definitions/hash" }
+      }
+    },
+    "source_row": {
+      "type": "object", "additionalProperties": false,
+      "required": ["seq", "receipt_hash", "status", "source"],
+      "properties": {
+        "seq": { "type": "integer", "minimum": 0 },
+        "receipt_hash": { "$ref": "#/definitions/hash" },
+        "status": { "enum": ["verified_source", "unavailable"] },
+        "source": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/skill_source" }] }
+      },
+      "allOf": [{
+        "if": { "properties": { "status": { "const": "verified_source" } } },
+        "then": { "properties": { "source": { "$ref": "#/definitions/skill_source" } } },
+        "else": { "properties": { "source": { "type": "null" } } }
+      }]
+    },
+    "skill_source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["grant_ref", "admission_ref", "permission_digest", "skill_name_ref", "declared_version_ref", "content_hash", "import"],
+      "properties": {
+        "grant_ref": { "$ref": "#/definitions/ref" },
+        "admission_ref": { "$ref": "#/definitions/ref" },
+        "permission_digest": { "$ref": "#/definitions/hash" },
+        "skill_name_ref": { "$ref": "#/definitions/ref" },
+        "declared_version_ref": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/ref" }] },
+        "content_hash": { "$ref": "#/definitions/hash" },
+        "import": { "anyOf": [{ "type": "null" }, { "$ref": "#/definitions/import_source" }] }
+      }
+    },
+    "import_source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["import_ref", "artifact_digest", "analysis_sha256"],
+      "properties": {
+        "import_ref": { "$ref": "#/definitions/ref" },
+        "artifact_digest": { "$ref": "#/definitions/hash" },
+        "analysis_sha256": { "$ref": "#/definitions/hash" }
+      }
+    },
+    "completion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason_code", "requirements", "incident_refs"],
+      "properties": {
+        "status": { "enum": ["verified", "incomplete", "conflicting", "unknown", "unavailable"] },
+        "reason_code": { "$ref": "#/definitions/reason" },
+        "requirements": { "type": "array", "maxItems": 128, "items": { "$ref": "#/definitions/requirement" } },
+        "incident_refs": { "type": "array", "maxItems": 8192, "uniqueItems": true, "items": { "$ref": "#/definitions/ref" } }
+      },
+      "allOf": [{
+        "if": { "properties": { "status": { "const": "verified" } } },
+        "then": {
+          "properties": {
+            "requirements": {
+              "minItems": 1,
+              "items": {
+                "allOf": [
+                  { "$ref": "#/definitions/requirement" },
+                  { "properties": { "status": { "const": "verified" }, "evidence_refs": { "minItems": 1 } } }
+                ]
+              }
+            },
+            "incident_refs": { "maxItems": 0 }
+          }
+        }
+      }]
+    },
+    "requirement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requirement_ref", "status", "reason_code", "evidence_refs"],
+      "properties": {
+        "requirement_ref": { "$ref": "#/definitions/ref" },
+        "status": { "enum": ["verified", "incomplete", "conflicting", "unknown"] },
+        "reason_code": { "$ref": "#/definitions/reason" },
+        "evidence_refs": { "type": "array", "maxItems": 8192, "uniqueItems": true, "items": { "$ref": "#/definitions/ref" } }
+      }
+    },
+    "effect": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_ref", "action_ref", "decision_receipt_ref", "effect_type_ref", "resource_ref", "execution_state", "source_type", "source_ref", "independence", "coverage", "result", "evidence_digest", "observed_at", "finding_code"],
+      "properties": {
+        "evidence_ref": { "$ref": "#/definitions/ref" },
+        "action_ref": { "$ref": "#/definitions/ref" },
+        "decision_receipt_ref": { "$ref": "#/definitions/ref" },
+        "effect_type_ref": { "$ref": "#/definitions/ref" },
+        "resource_ref": { "type": "string", "pattern": "^(filesystem|network|message):sha256:[a-f0-9]{64}$" },
+        "execution_state": { "enum": ["requested", "started", "completed", "failed", "unknown"] },
+        "source_type": { "enum": ["tool_report", "host_observer", "openshell", "provider_audit", "test_oracle", "unknown"] },
+        "source_ref": { "$ref": "#/definitions/ref" },
+        "independence": { "enum": ["self_reported", "host_independent", "external_independent", "unknown"] },
+        "coverage": { "enum": ["full", "partial", "unknown"] },
+        "result": { "enum": ["expected", "unexpected", "conflicting", "unknown"] },
+        "evidence_digest": { "$ref": "#/definitions/hash" },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "finding_code": { "enum": ["", "unauthorized_effect_observed", "effect_scope_mismatch"] }
+      }
+    }
+  }
+}

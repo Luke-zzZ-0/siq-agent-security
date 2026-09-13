@@ -24,10 +24,12 @@ import (
 	"siq-agent-security/apps/agentshield/internal/importsource"
 	"siq-agent-security/apps/agentshield/internal/intent"
 	"siq-agent-security/apps/agentshield/internal/inventory"
+	"siq-agent-security/apps/agentshield/internal/localcontrol"
 	"siq-agent-security/apps/agentshield/internal/openshell"
 	"siq-agent-security/apps/agentshield/internal/pending"
 	"siq-agent-security/apps/agentshield/internal/product"
 	"siq-agent-security/apps/agentshield/internal/provenance"
+	"siq-agent-security/apps/agentshield/internal/rawcontent"
 	"siq-agent-security/apps/agentshield/internal/receipt"
 	"siq-agent-security/apps/agentshield/internal/rulepack"
 	"siq-agent-security/apps/agentshield/internal/runtimecheck"
@@ -40,10 +42,12 @@ import (
 
 // Deps wires the server.
 type Deps struct {
-	HermesOS      string // optional platform path policy injection for deterministic tests
-	HermesHome    string // explicit native profile root override, captured by launcher
-	HermesCLI     string // optional absolute Hermes executable
-	LocalAppData  string // native Windows home base, injected for deterministic tests
+	StopWriter    *state.Writer // current serve writer; required with RequestStop
+	RequestStop   func()        // nonblocking notification, after durable acceptance
+	HermesOS      string        // optional platform path policy injection for deterministic tests
+	HermesHome    string        // explicit native profile root override, captured by launcher
+	HermesCLI     string        // optional absolute Hermes executable
+	LocalAppData  string        // native Windows home base, injected for deterministic tests
 	Store         *state.Store
 	Engine        *receipt.Engine
 	Chain         *receipt.Chain
@@ -65,6 +69,7 @@ type Deps struct {
 
 // Server is the HTTP handler set.
 type Server struct {
+	serviceControl     *localcontrol.Control
 	stateDirectoryID   string
 	skillInstallations *skillinstall.Store
 	skillImports       *skillimport.Store
@@ -75,19 +80,23 @@ type Server struct {
 	adapterPlans       map[string]pendingAdapterPlan
 	fileObservations   map[string]pendingFileObservation
 
-	effects    *effectevidence.Store
-	observerMu sync.Mutex
-	observers  map[string]observerSession
-	provenance *provenance.Store
-	intents    *intent.Store
-	d          Deps
-	mux        *http.ServeMux
-	osMu       sync.Mutex
-	osAt       time.Time
-	osRow      PlatformInfo
-	osOK       bool
-	osCaps     *openshell.Capabilities
-	osDiag     openshell.Diagnosis
+	effects       *effectevidence.Store
+	observerMu    sync.Mutex
+	observers     map[string]observerSession
+	provenance    *provenance.Store
+	intents       *intent.Store
+	rawMu         sync.Mutex
+	rawStore      *rawcontent.Store
+	rawAuthority  *rawcontent.Authority
+	rawActivation rawcontent.Activation
+	d             Deps
+	mux           *http.ServeMux
+	osMu          sync.Mutex
+	osAt          time.Time
+	osRow         PlatformInfo
+	osOK          bool
+	osCaps        *openshell.Capabilities
+	osDiag        openshell.Diagnosis
 
 	pairMu          sync.Mutex
 	pairDisplay     string
@@ -123,6 +132,15 @@ func New(d Deps) (*Server, error) {
 	if err != nil {
 		return nil, err
 	}
+	if (d.StopWriter == nil) != (d.RequestStop == nil) {
+		return nil, errors.New("server: incomplete stop control dependencies")
+	}
+	if d.StopWriter != nil {
+		s.serviceControl, err = localcontrol.New(d.Key, s.stateDirectoryID, time.Now)
+		if err != nil {
+			return nil, err
+		}
+	}
 	s.intents, err = d.Store.IntentAuthority(d.Key)
 	if err != nil {
 		return nil, err
@@ -153,6 +171,17 @@ func New(d Deps) (*Server, error) {
 	if err := s.initSkillInstallations(); err != nil {
 		return nil, err
 	}
+	s.refreshRawContentLocked()
+	s.mux.HandleFunc("/v1/raw-task-content/status", s.auth(s.rawTaskContentStatus, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/activation", s.auth(s.rawTaskContentActivation, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/grants", s.auth(s.rawTaskContentGrants, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/grants/", s.auth(s.rawTaskContentGrant, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/capture-permits", s.rawTaskContentCapturePermit)
+	s.mux.HandleFunc("/v1/raw-task-content/captures", s.rawTaskContentCapture)
+	s.mux.HandleFunc("/v1/raw-task-content/native-captures", s.rawTaskContentNativeCapture)
+	s.mux.HandleFunc("/v1/raw-task-content/records/search", s.auth(s.rawTaskContentRecordSearch, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/records/", s.auth(s.rawTaskContentRecord, capAdmin))
+	s.mux.HandleFunc("/v1/raw-task-content/purge-expired", s.auth(s.rawTaskContentPurgeExpired, capAdmin))
 	s.mux.HandleFunc("/v1/skill-installations/update-plans/", s.auth(s.skillUpdatePlanRead, capAdmin))
 	s.mux.HandleFunc("/v1/skill-installations/updates", s.auth(s.skillUpdateCommit, capAdmin))
 	s.mux.HandleFunc("/v1/skill-installations/updates/", s.auth(s.skillUpdateOperation, capAdmin))
@@ -164,6 +193,7 @@ func New(d Deps) (*Server, error) {
 	s.mux.HandleFunc("/v1/skill-installations/grants/", s.auth(s.skillInstallGrantRuntime, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports", s.auth(s.skillImportCreate, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports/remote", s.auth(s.skillImportRemoteCreate, capAdmin))
+	s.mux.HandleFunc("/v1/skill-imports/git", s.auth(s.skillImportGitCreate, capAdmin))
 	s.mux.HandleFunc("/v1/skill-imports/", s.auth(s.skillImportRead, capAdmin))
 	s.mux.HandleFunc("/v1/runtime-identities", s.auth(s.runtimeIdentityCollection, capAdmin))
 	s.mux.HandleFunc("/v1/runtime-identities/", s.auth(s.runtimeIdentityOne, capAdmin))
@@ -204,6 +234,9 @@ func New(d Deps) (*Server, error) {
 	s.mux.HandleFunc("/v1/confirmations/", s.auth(s.confirmationResolve, capAdmin))
 	s.mux.HandleFunc("/v1/hold-status", s.auth(s.holdStatus, capDecision))
 	s.mux.HandleFunc("/v1/hold/", s.auth(s.hold))
+	s.mux.HandleFunc("/v1/task-activities/", s.auth(s.taskActivityDetail))
+	s.mux.HandleFunc("/v1/task-activities/search", s.auth(s.taskActivitySearch))
+	s.mux.HandleFunc("/v1/task-activities", s.auth(s.taskActivities))
 	s.mux.HandleFunc("/v1/receipts", s.auth(s.receipts))
 	s.mux.HandleFunc("/v1/admit", s.auth(s.admit))
 	s.mux.HandleFunc("/v1/admissions", s.auth(s.admissions))
@@ -213,6 +246,7 @@ func New(d Deps) (*Server, error) {
 	s.mux.HandleFunc("/v1/discovery/preview", s.auth(s.discoveryPreview))
 	s.mux.HandleFunc("/v1/discovery/scan", s.auth(s.discoveryScan))
 	s.mux.HandleFunc("/v1/adapter/diagnostics", s.auth(s.adapterDiagnostics, capAdmin))
+	s.mux.HandleFunc("/v1/grant-scenarios", s.auth(s.grantScenarios))
 	s.mux.HandleFunc("/v1/grants", s.auth(s.grants))
 	s.mux.HandleFunc("/v1/grants/", s.auth(s.grantAction))
 	s.mux.HandleFunc("/v1/config", s.auth(s.config))
@@ -235,6 +269,8 @@ func New(d Deps) (*Server, error) {
 	s.mux.HandleFunc("/v1/export", s.auth(s.exportBundle))
 	s.mux.HandleFunc("/v1/pair", s.pair)
 	s.mux.HandleFunc("/healthz", s.health)
+	s.mux.HandleFunc("/v1/service-control/challenge", s.serviceControlChallenge)
+	s.mux.HandleFunc("/v1/service-control/stop", s.serviceControlStop)
 	s.mux.HandleFunc("/healthz/instance", s.instanceHealth)
 	s.mux.HandleFunc("/v1/session/restore", s.restoreSession)
 	s.mux.HandleFunc("/v1/session/logout", s.auth(s.logoutSession))
@@ -413,6 +449,9 @@ func (s *Server) decide(w http.ResponseWriter, r *http.Request) {
 	resp["trifecta"] = d.Receipt.Trifecta
 	if d.Receipt.AuthorityReasonCode != "" {
 		resp["authority_reason_code"] = d.Receipt.AuthorityReasonCode
+	}
+	if d.Receipt.SkillAttribution != nil {
+		resp["skill_attribution"] = d.Receipt.SkillAttribution
 	}
 	if d.Receipt.PolicyAction != "" {
 		resp["policy_action"] = d.Receipt.PolicyAction
@@ -695,6 +734,24 @@ func (s *Server) admissions(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, 200, map[string]any{"admissions": list})
 }
 
+// grantScenarios lists the closed built-in scenario template catalog (UX-007).
+// Read-only and secret-free: templates carry only restriction metadata.
+func (s *Server) grantScenarios(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeJSON(w, 405, map[string]any{"error": "GET required"})
+		return
+	}
+	catalog := grant.Scenarios()
+	out := make([]map[string]any, 0, len(catalog))
+	for _, sc := range catalog {
+		out = append(out, map[string]any{
+			"id": sc.ID, "version": sc.Version, "name": sc.Name,
+			"description": sc.Description,
+		})
+	}
+	writeJSON(w, 200, map[string]any{"scenarios": out})
+}
+
 // grants: GET list; POST create from admission.
 func (s *Server) grants(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -718,6 +775,7 @@ func (s *Server) grants(w http.ResponseWriter, r *http.Request) {
 			SubjectType string `json:"subject_type"`
 			SubjectID   string `json:"subject_id"`
 			Redact      bool   `json:"redact_secrets"`
+			ScenarioID  string `json:"scenario_id"`
 		}
 		if err := readJSON(r, &body, 64<<10); err != nil || body.AdmissionID == "" || body.Platform == "" || body.SubjectID == "" {
 			writeJSON(w, 400, map[string]any{"error": "admission_id, platform, subject_id required"})
@@ -726,18 +784,30 @@ func (s *Server) grants(w http.ResponseWriter, r *http.Request) {
 		if body.SubjectType == "" {
 			body.SubjectType = "agent_instance"
 		}
+		scenario, err := grant.ResolveScenario(body.ScenarioID)
+		if err != nil {
+			writeJSON(w, 400, map[string]any{"error": err.Error()})
+			return
+		}
 		adm, err := s.d.Store.GetAdmission(body.AdmissionID)
 		if err != nil {
 			writeJSON(w, 404, map[string]any{"error": "admission not found"})
 			return
 		}
 		res, err := grant.Build(*adm, grant.Options{Subject: grant.Subject{Type: body.SubjectType, ID: body.SubjectID},
-			Platform: body.Platform, EnforcementMode: s.currentMode(), Key: s.d.Key, RedactSecrets: body.Redact})
+			Platform: body.Platform, EnforcementMode: s.currentMode(), Key: s.d.Key, RedactSecrets: body.Redact, Scenario: scenario})
 		if err != nil {
 			writeJSON(w, 400, map[string]any{"error": err.Error()})
 			return
 		}
 		if existing, seq, err := s.d.Store.GetGrantWithSeq(res.Grant.GrantID); err == nil && grant.IsLiveStatus(existing.Status) {
+			if (existing.Scenario == nil) != (res.Grant.Scenario == nil) ||
+				(existing.Scenario != nil && res.Grant.Scenario != nil && *existing.Scenario != *res.Grant.Scenario) {
+				writeJSON(w, http.StatusConflict, map[string]any{"error": "grant_scenario_conflict", "grant_id": existing.GrantID,
+					"state_revision": seq, "current_scenario": existing.Scenario,
+					"hint": "Review the existing grant before changing its scenario; current permissions are unchanged."})
+				return
+			}
 			writeJSON(w, 200, map[string]any{"grant": existing, "reused": true, "state_revision": seq})
 			return
 		}

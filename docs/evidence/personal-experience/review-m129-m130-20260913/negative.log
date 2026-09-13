@@ -1,0 +1,35 @@
+=== RUN   TestReviewerScenarioActuallyDeniesExec
+=== RUN   TestReviewerScenarioActuallyDeniesExec/hermes/
+    reviewer_scenario_test.go:30: scenario="" action=allow reason=granted by grt-aaaaaaaaaaaa-aff60f4b
+=== RUN   TestReviewerScenarioActuallyDeniesExec/hermes/no-exec
+    reviewer_scenario_test.go:30: scenario="no-exec" action=allow reason=granted by grt-aaaaaaaaaaaa-aff60f4b
+    reviewer_scenario_test.go:31: scenario no-exec permits process execution: allow
+=== RUN   TestReviewerScenarioActuallyDeniesExec/hermes/sandboxed
+    reviewer_scenario_test.go:30: scenario="sandboxed" action=allow reason=granted by grt-aaaaaaaaaaaa-aff60f4b
+    reviewer_scenario_test.go:31: scenario sandboxed permits process execution: allow
+=== RUN   TestReviewerScenarioActuallyDeniesExec/openclaw/
+    reviewer_scenario_test.go:30: scenario="" action=hold reason=tool exec requires human approval per grant grt-aaaaaaaaaaaa-8fe2c9b6
+=== RUN   TestReviewerScenarioActuallyDeniesExec/openclaw/no-exec
+    reviewer_scenario_test.go:30: scenario="no-exec" action=allow reason=granted by grt-aaaaaaaaaaaa-8fe2c9b6
+    reviewer_scenario_test.go:31: scenario no-exec permits process execution: allow
+=== RUN   TestReviewerScenarioActuallyDeniesExec/openclaw/sandboxed
+    reviewer_scenario_test.go:30: scenario="sandboxed" action=allow reason=granted by grt-aaaaaaaaaaaa-8fe2c9b6
+    reviewer_scenario_test.go:31: scenario sandboxed permits process execution: allow
+--- FAIL: TestReviewerScenarioActuallyDeniesExec (0.06s)
+    --- PASS: TestReviewerScenarioActuallyDeniesExec/hermes/ (0.01s)
+    --- FAIL: TestReviewerScenarioActuallyDeniesExec/hermes/no-exec (0.01s)
+    --- FAIL: TestReviewerScenarioActuallyDeniesExec/hermes/sandboxed (0.01s)
+    --- PASS: TestReviewerScenarioActuallyDeniesExec/openclaw/ (0.01s)
+    --- FAIL: TestReviewerScenarioActuallyDeniesExec/openclaw/no-exec (0.01s)
+    --- FAIL: TestReviewerScenarioActuallyDeniesExec/openclaw/sandboxed (0.01s)
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/receipt	0.065s
+=== RUN   TestReviewerFailedNotifyRespectsRetryWindow
+    reviewer_notify_test.go:16: within 15s coalesce window got 3 failed delivery attempts, want 1
+--- FAIL: TestReviewerFailedNotifyRespectsRetryWindow (0.00s)
+=== RUN   TestReviewerNotifierOutputDoesNotReachLog
+    reviewer_notify_test.go:25: notifier stderr is returned verbatim and forwarded to daemon logs
+--- FAIL: TestReviewerNotifierOutputDoesNotReachLog (0.00s)
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/notify	0.005s
+FAIL

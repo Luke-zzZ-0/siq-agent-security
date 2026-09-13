@@ -58,6 +58,54 @@ func TestCompletionRequiresActualSignedMaterialAndRetainsConflicts(t *testing.T)
 	}
 	check(task, nil, "incomplete")
 	check(task, []effectevidence.Record{r}, "verified")
+	// Task-detail projection must not borrow effects from another actor/session.
+	scopedAction := a
+	scopedAction.Platform, scopedAction.SessionID, scopedAction.AgentID = "hermes", "session-1", "agent-1"
+	subject := Subject{Platform: "hermes", SessionID: "session-1", AgentID: "agent-1"}
+	for _, mode := range []string{"matching", "platform", "session", "agent", "intent", "digest", "lookup mismatch", "tampered", "duplicate", "empty subject"} {
+		t.Run("subject/"+mode, func(t *testing.T) {
+			candidate := scopedAction
+			scope := subject
+			records := []effectevidence.Record{r}
+			switch mode {
+			case "platform":
+				candidate.Platform = "openclaw"
+			case "session":
+				candidate.SessionID = "session-2"
+			case "agent":
+				candidate.AgentID = "agent-2"
+			case "intent":
+				candidate.IntentID = "i2"
+			case "digest":
+				candidate.IntentDigest = strings.Repeat("d", 64)
+			case "lookup mismatch":
+				candidate.ActionID = "other"
+			case "tampered":
+				records[0].FindingCode = "tampered"
+			case "duplicate":
+				records = append(records, r)
+			case "empty subject":
+				scope.AgentID = ""
+			}
+			calls := 0
+			result, err := EvaluateForSubject(task, scope, records, key.Public(), func(string, string) (effectevidence.Action, error) { calls++; return candidate, nil }, time.Now())
+			invalid := mode == "lookup mismatch" || mode == "tampered" || mode == "duplicate" || mode == "empty subject"
+			if invalid {
+				if err == nil {
+					t.Fatal("invalid scoped evidence accepted")
+				}
+				return
+			}
+			want := "incomplete"
+			if mode == "matching" {
+				want = "verified"
+			}
+			if err != nil || result.Status != want || calls != 1 {
+				t.Fatalf("scoped completion %+v %v calls=%d", result, err, calls)
+			}
+		})
+	}
+
 	// Two independent observations of the same action disagree: retain conflict,
 	// instead of treating the negative record as an ordinary missing effect.
 	if err := os.Remove(path); err != nil {

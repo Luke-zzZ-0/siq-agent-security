@@ -18,8 +18,17 @@
  * Config: ~/.openclaw/siq-agent-security.json (legacy agentshield.json still read)
  *   { "endpoint": "http://127.0.0.1:47611", "tokenPath": "<state>/token",
  *     "enforcementMode": "block", "timeoutMs": 5000, "agentId": "default" }
+ *
+ * Managed runtime identity (written by the managed installer; camelCase keys):
+ *   { "runtimeIdentityId": "ri-<32hex>", "agentId": "hri-<32hex>",
+ *     "tokenPath": "<state>/runtime-identity-secrets/ri-<32hex>.token" }
+ * In managed mode the credential file must hold "ri-<32hex>.<64hex>" matching
+ * runtimeIdentityId, every session is enrolled via /v1/runtime-sessions before
+ * the first decide, and allowed calls plus their observed results are offered
+ * to /v1/raw-task-content/native-captures (the daemon decides whether raw
+ * content is actually stored; the adapter never sees raw-content settings).
  */
-import { appendFileSync, mkdirSync, readFileSync } from "node:fs";
+import { appendFileSync, closeSync, constants, fstatSync, lstatSync, mkdirSync, openSync, readFileSync, readSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
@@ -33,7 +42,13 @@ interface Config {
   timeoutMs: number;
   holdWaitMs: number;
   agentId: string;
+  runtimeIdentityId?: string;
+  configError?: boolean;
 }
+
+const RUNTIME_ID_RE = /^ri-[a-f0-9]{32}$/;
+const AGENT_ID_RE = /^hri-[a-f0-9]{32}$/;
+const MANAGED_TOKEN_RE = /^ri-[a-f0-9]{32}\.[a-f0-9]{64}$/;
 
 interface Decision {
   action: "allow" | "deny" | "hold" | "redact";
@@ -73,16 +88,22 @@ function loadConfig(): Config {
   const configDir = env("OPENCLAW_STATE_DIR") || join(homedir(), ".openclaw");
   for (const name of ["siq-agent-security.json", "agentshield.json"]) {
     try {
-      Object.assign(cfg, JSON.parse(readFileSync(join(configDir, name), "utf8")));
+      const parsed = JSON.parse(readFileSync(join(configDir, name), "utf8"));
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("invalid config");
+      Object.assign(cfg, parsed);
       break;
-    } catch {
-      /* try next */
+    } catch (error) {
+      if ((error as { code?: string }).code === "ENOENT") continue;
+      cfg.configError = true;
+      break; // An unreadable or malformed installed config never falls back.
     }
   }
   const endpoint = env("SIQ_AGENT_SECURITY_ENDPOINT", "AGENTSHIELD_ENDPOINT");
   if (endpoint) cfg.endpoint = endpoint;
   const mode = env("SIQ_AGENT_SECURITY_MODE", "AGENTSHIELD_MODE");
   if (mode) cfg.enforcementMode = mode as Mode;
+  if (!["block", "warn", "audit_only"].includes(cfg.enforcementMode)) cfg.configError = true;
+  if (!Number.isInteger(cfg.timeoutMs) || cfg.timeoutMs < 100 || cfg.timeoutMs > 10000) cfg.configError = true;
   if (!Number.isInteger(cfg.holdWaitMs) || cfg.holdWaitMs < 100 || cfg.holdWaitMs > 10000) cfg.holdWaitMs = 10000;
   return cfg;
 }
@@ -90,19 +111,49 @@ function loadConfig(): Config {
 const cfg = loadConfig();
 let token: string | null = null;
 
+function managed(): boolean {
+  return cfg.runtimeIdentityId !== undefined || String(cfg.agentId).startsWith("hri-");
+}
+
+function localEndpoint(): string | null {
+  try {
+    const url = new URL(cfg.endpoint);
+    if (url.protocol !== "http:" || !url.port || url.username || url.password ||
+      url.search || url.hash || url.pathname !== "/" ||
+      !["127.0.0.1", "[::1]", "localhost"].includes(url.hostname)) return null;
+    if (url.hostname === "localhost") url.hostname = "127.0.0.1";
+    return url.origin;
+  } catch { return null; }
+}
+
 function readToken(): string | null {
   if (token === null) {
     try {
-      token = readFileSync(cfg.tokenPath, "ascii").trim();
+      const info = lstatSync(cfg.tokenPath);
+      if (!info.isFile() || info.size > 512) throw new Error("invalid credential file");
+      const fd = openSync(cfg.tokenPath, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+      try {
+        const actual = fstatSync(fd);
+        if (!actual.isFile() || actual.size > 512 || actual.ino !== info.ino || actual.dev !== info.dev) throw new Error("credential changed");
+        const bytes = Buffer.alloc(513);
+        const count = readSync(fd, bytes, 0, bytes.length, 0);
+        token = count <= 512 ? bytes.subarray(0, count).toString("utf8").trim() : "";
+      } finally { closeSync(fd); }
     } catch {
       token = "";
+    }
+    if (managed() && !(MANAGED_TOKEN_RE.test(token) && token.startsWith((cfg.runtimeIdentityId ?? "") + "."))) {
+      token = ""; // A legacy global token must not silently act as the managed identity.
     }
   }
   return token || null;
 }
 
-async function post<T>(path: string, body: unknown, signal?: AbortSignal, remainingMs?: number): Promise<T | null> {
-  if (signal?.aborted) return null;
+async function post<T>(
+  path: string, body: unknown, signal?: AbortSignal, remainingMs?: number, expected = 200,
+): Promise<T | null> {
+  const endpoint = localEndpoint();
+  if (signal?.aborted || cfg.configError || !endpoint) return null;
   const tok = readToken();
   if (!tok) return null;
   const ctrl = new AbortController();
@@ -110,13 +161,14 @@ async function post<T>(path: string, body: unknown, signal?: AbortSignal, remain
   const abort = () => ctrl.abort();
   signal?.addEventListener("abort", abort, { once: true });
   try {
-    const res = await fetch(cfg.endpoint.replace(/\/$/, "") + path, {
+    const res = await fetch(endpoint + path, {
       method: "POST",
+      redirect: "error",
       headers: { "content-type": "application/json", authorization: `Bearer ${tok}` },
       body: JSON.stringify(body),
       signal: ctrl.signal,
     });
-    if (res.status !== 200) return null;
+    if (res.status !== expected) return null;
     const data = (await res.json()) as T;
     return data && typeof data === "object" ? data : null;
   } catch {
@@ -161,7 +213,8 @@ async function waitForLocalApproval(decision: Decision, call: Record<string, unk
 
 function failClosed(reason: string, tool = "", sessionId = "") {
   const mode = cfg.enforcementMode;
-  const outcome = mode === "block" ? "deny" : "allow";
+  const mustBlock = mode === "block" || managed() || cfg.configError === true || !localEndpoint();
+  const outcome = mustBlock ? "deny" : "allow";
   appendPending({
     schema: "pending_decision/v1",
     recorded_at: new Date().toISOString(),
@@ -173,7 +226,7 @@ function failClosed(reason: string, tool = "", sessionId = "") {
     reason: reason.startsWith("decision") ? reason : `decision service unavailable (${reason})`,
     signed: false,
   });
-  if (mode === "block") {
+  if (mustBlock) {
     return { block: true, blockReason: `siq-agent-security: decision service unavailable (${reason}); blocked (fail-closed)` };
   }
   console.warn(`siq-agent-security: decision service unavailable (${reason}); allowing in ${mode} mode`);
@@ -182,7 +235,7 @@ function failClosed(reason: string, tool = "", sessionId = "") {
 
 function appendPending(rec: Record<string, unknown>): void {
   try {
-    const root = cfg.tokenPath ? join(cfg.tokenPath, "..") : stateDir();
+    const root = cfg.tokenPath ? join(cfg.tokenPath, managed() ? "../.." : "..") : stateDir();
     const dir = join(root, "pending");
     mkdirSync(dir, { recursive: true, mode: 0o700 });
     appendFileSync(join(dir, "decisions.jsonl"), JSON.stringify(rec) + "\n", { mode: 0o600 });
@@ -191,11 +244,11 @@ function appendPending(rec: Record<string, unknown>): void {
   }
 }
 
-type Correlation = { expires: number; action_id: string; decision_receipt_id: string };
+type Correlation = { expires: number; action_id: string; decision_receipt_id: string; executable?: boolean; consumed?: boolean };
 const correlations = new Map<string, Correlation>();
 const correlationKey = (session: string, tool: string, call: string) => JSON.stringify([session, tool, call]);
 function rememberDecision(session: string, tool: string, call: string, decision: Decision): boolean {
-  if (!call || !decision.action_id) return true;
+  if (!call || !decision.action_id || !decision.receipt_id) return !managed();
   const now = Date.now();
   for (const [key, value] of correlations) if (value.expires <= now) correlations.delete(key);
   const key = correlationKey(session, tool, call);
@@ -204,13 +257,111 @@ function rememberDecision(session: string, tool: string, call: string, decision:
     return false;
   }
   if (correlations.size >= 2048) return false;
-  correlations.set(key, { expires: now + 300_000, action_id: decision.action_id, decision_receipt_id: decision.receipt_id });
+  correlations.set(key, { expires: now + 300_000, action_id: decision.action_id, decision_receipt_id: decision.receipt_id,
+    executable: decision.action === "allow" || (decision.action === "redact" && !!decision.params) });
   return true;
 }
 function decisionReference(session: string, tool: string, call: string): Record<string, string> {
   const value = correlations.get(correlationKey(session, tool, call));
-  return value && value.action_id && value.expires > Date.now()
-    ? { action_id: value.action_id, decision_receipt_id: value.decision_receipt_id } : {};
+  if (!value || !value.action_id || !value.executable || value.consumed || value.expires <= Date.now()) return {};
+  value.consumed = true;
+  return { action_id: value.action_id, decision_receipt_id: value.decision_receipt_id };
+}
+
+// Managed mode: every native session proves its runtime identity once per
+// tool call; the daemon binds it to the signed intent (Hermes parity).
+async function enrollRuntimeSession(session: string, signal?: AbortSignal, remainingMs?: number): Promise<boolean> {
+  if (!managed()) return true;
+  if (!RUNTIME_ID_RE.test(cfg.runtimeIdentityId ?? "") || !AGENT_ID_RE.test(cfg.agentId) ||
+    typeof session !== "string" || !session || session.length > 256) return false;
+  const result = await post<Record<string, unknown>>("/v1/runtime-sessions", {
+    schema_version: "local-runtime-session-enroll/v1", session_id: session,
+  }, signal, remainingMs);
+  if (!result) return false;
+  const expected = ["schema_version", "identity_id", "platform", "agent_id", "session_id",
+    "binding_id", "intent_id", "expires_at"];
+  const keys = Object.keys(result);
+  if (keys.length !== expected.length || !keys.every((k) => expected.includes(k))) return false;
+  return result.schema_version === "local-runtime-session-enrolled/v1" &&
+    result.identity_id === cfg.runtimeIdentityId &&
+    result.platform === "openclaw" &&
+    result.agent_id === cfg.agentId &&
+    result.session_id === session &&
+    typeof result.binding_id === "string" && /^bind-[a-f0-9]{64}$/.test(result.binding_id) &&
+    typeof result.intent_id === "string" && /^int-ri-[a-f0-9]{64}$/.test(result.intent_id) &&
+    typeof result.expires_at === "string" && Date.parse(result.expires_at) > Date.now();
+}
+
+interface RawField { path: string; value: string; secret: boolean; }
+
+// Flatten JSON-compatible host values into bounded JSON-pointer fields; the
+// server applies its own secret filtering and raw-content policy.
+function rawContentFields(tool: string, root: string, value: unknown): RawField[] | null {
+  if (typeof tool !== "string" || !tool) return null;
+  const fields: RawField[] = [{ path: "/tool/name", value: tool, secret: false }];
+  const append = (path: string, current: unknown, depth: number): boolean => {
+    if (depth > 32 || path.length > 256 || /[\x00-\x1f]/.test(path)) return false;
+    if (current !== null && typeof current === "object" && !Array.isArray(current)) {
+      const entries = Object.entries(current as Record<string, unknown>);
+      if (entries.length === 0) fields.push({ path, value: "{}", secret: false });
+      for (const [key, item] of entries) {
+        if (!key) return false;
+        const segment = key.replace(/~/g, "~0").replace(/\//g, "~1");
+        if (!append(`${path}/${segment}`, item, depth + 1)) return false;
+      }
+      return fields.length <= 1024;
+    }
+    if (Array.isArray(current)) {
+      if (current.length === 0) fields.push({ path, value: "[]", secret: false });
+      for (let index = 0; index < current.length; index++) {
+        if (!append(`${path}/${index}`, current[index], depth + 1)) return false;
+      }
+      return fields.length <= 1024;
+    }
+    if (typeof current === "number" && !Number.isFinite(current)) return false;
+    // Host payloads (e.g. OpenClaw tool-result carriers) carry undefined
+    // function-slot fields; they hold no content, so skip rather than abort.
+    if (current === undefined || typeof current === "function" || typeof current === "symbol") return true;
+    let encoded: string;
+    try {
+      const json = JSON.stringify(current);
+      if (json === undefined) return false;
+      encoded = json;
+    } catch {
+      return false;
+    }
+    if (!encoded || Buffer.byteLength(encoded, "utf8") > (1 << 20)) return false;
+    fields.push({ path, value: encoded, secret: false });
+    return fields.length <= 1024;
+  };
+  return append(root, value, 0) ? fields : null;
+}
+
+// Offer native raw content to the daemon; it owns the raw-content policy and
+// does the capture. Best effort with a hard 250 ms budget, like Hermes.
+async function captureNativeRawContent(
+  kind: "parameters" | "output", session: string, tool: string, value: unknown,
+): Promise<void> {
+  if (!RUNTIME_ID_RE.test(cfg.runtimeIdentityId ?? "") || !AGENT_ID_RE.test(cfg.agentId) ||
+    typeof session !== "string" || !session || session.length > 256) return;
+  const fields = rawContentFields(tool, kind === "parameters" ? "/tool/arguments" : "/tool/result", value);
+  if (!fields) return;
+  await post("/v1/raw-task-content/native-captures", {
+    schema_version: "local-raw-task-content-native-capture/v1",
+    platform: "openclaw",
+    agent_id: cfg.agentId,
+    session_id: session,
+    kind,
+    fields,
+  }, undefined, 250, 201);
+}
+
+// In managed mode the daemon binds the native session to the pinned instance
+// agent (cfg.agentId); a host-supplied agent id would fail the session
+// authorization and leak a forgeable agent identity into receipts.
+function reportedAgentId(ctx?: { agentId?: string }): string {
+  if (managed()) return cfg.agentId;
+  return ctx?.agentId ?? cfg.agentId;
 }
 
 export default definePluginEntry({
@@ -223,12 +374,23 @@ export default definePluginEntry({
         const hookDeadline = Date.now() + 12000;
         const call = {
           platform: "openclaw",
-          session_id: (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default",
-          agent_id: (ctx as { agentId?: string } | undefined)?.agentId ?? cfg.agentId,
+          session_id: (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? (managed() ? "" : "openclaw-default"),
+          agent_id: reportedAgentId(ctx as { agentId?: string } | undefined),
           tool: event.toolName,
           tool_call_id: event.toolCallId ?? "",
           params: event.params ?? {},
         };
+        // A repeated pre-hook invalidates even an earlier allow if this attempt
+        // later fails enrollment, is denied, or returns a malformed response.
+        const prior = correlations.get(correlationKey(call.session_id, call.tool, call.tool_call_id));
+        if (prior && prior.expires > Date.now()) {
+          prior.action_id = "";
+          prior.executable = false;
+          return { block: true, blockReason: "siq-agent-security: duplicate tool call" };
+        }
+        if (!(await enrollRuntimeSession(call.session_id, ctx?.abortSignal, hookDeadline - Date.now()))) {
+          return failClosed("instance session could not be verified", event.toolName, call.session_id);
+        }
         const decision = await post<Decision>(
           "/v1/decide",
           {
@@ -239,12 +401,18 @@ export default definePluginEntry({
           hookDeadline - Date.now(),
         );
         if (!decision) return failClosed("no response", event.toolName, (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default");
+        if (typeof decision.reason !== "string" || typeof decision.receipt_id !== "string" || !decision.receipt_id ||
+          (managed() && ["allow", "redact", "hold"].includes(decision.action) &&
+            (typeof decision.action_id !== "string" || !decision.action_id || !call.tool_call_id))) {
+          return failClosed("malformed decision reference", event.toolName, call.session_id);
+        }
         if (["allow", "redact", "hold"].includes(decision.action) && !rememberDecision(
           (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default",
           event.toolName, event.toolCallId ?? "", decision,
         )) return failClosed("decision correlation conflict or capacity", event.toolName);
         switch (decision.action) {
           case "allow":
+            await captureNativeRawContent("parameters", call.session_id, event.toolName, event.params ?? {});
             return undefined;
           case "deny":
             return { block: true, blockReason: `siq-agent-security denied: ${decision.reason} (receipt ${decision.receipt_id})` };
@@ -270,7 +438,11 @@ export default definePluginEntry({
                   const checked = await waitForLocalApproval(
                     decision, { ...call, params: finalParams }, Date.now() + 1000, signal,
                   );
-                  return checked.state === "approved" && !signal?.aborted;
+                  const ref = correlations.get(correlationKey(call.session_id, call.tool, call.tool_call_id));
+                  const approved = checked.state === "approved" && !signal?.aborted &&
+                    !!ref && ref.action_id === decision.action_id && !ref.consumed && !ref.executable && ref.expires > Date.now();
+                  if (ref) ref.executable = approved;
+                  return approved;
                 },
               },
             };
@@ -283,21 +455,23 @@ export default definePluginEntry({
     );
 
     api.on("after_tool_call", async (event, ctx) => {
+      const session = (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default";
       const result = (event as { result?: unknown }).result;
       const text = typeof result === "string" ? result : JSON.stringify(result ?? "");
+      const reference = decisionReference(session, event.toolName, event.toolCallId ?? "");
       await post("/v1/observe", {
         platform: "openclaw",
-        session_id: (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default",
-        agent_id: (ctx as { agentId?: string } | undefined)?.agentId ?? cfg.agentId,
+        session_id: session,
+        agent_id: reportedAgentId(ctx as { agentId?: string } | undefined),
         tool: event.toolName,
         tool_call_id: event.toolCallId ?? "",
         params: event.params ?? {},
-        ...decisionReference(
-          (event as { sessionKey?: string }).sessionKey ?? ctx?.sessionKey ?? "openclaw-default",
-          event.toolName, event.toolCallId ?? "",
-        ),
+        ...reference,
         result: text.slice(0, 64 * 1024),
       });
+      if (reference.action_id) {
+        await captureNativeRawContent("output", session, event.toolName, result);
+      }
     });
   },
 });

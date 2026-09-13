@@ -143,6 +143,17 @@ class Harness(fixture.Harness):
             any(c["code"] == "instance_authority" and c["status"] == "pass" for c in diagnosis["checks"]),
             "managed authority diagnosis missing",
         )
+        self.api(
+            "/v1/raw-task-content/activation",
+            {
+                "schema_version": "local-raw-task-content-activate/v1",
+                "actor_id": "automated-fixture-operator",
+                "retention_seconds": 3600,
+                "budget_bytes": 16 << 20,
+            },
+            expected=201,
+        )
+        self.raw_grant = None
         self.install_evidence = {
             "method": "managed_v3_preview_apply_and_public_cli_native_enable",
             "changed_file_count": len(plan["changes"]),
@@ -251,6 +262,7 @@ class Harness(fixture.Harness):
                 "params": {"path": str(self.workspace / "company-a/report.txt")},
             },
         ]
+        harness = self
 
         class Model(BaseHTTPRequestHandler):
             def log_message(self, *_):
@@ -344,6 +356,23 @@ class Harness(fixture.Harness):
                                 raise RuntimeError("allowed read missing: " + category)
                         else:
                             fixture.require("siq-agent-security" in text, "native block missing")
+                    if len(results) == 1 and harness.raw_grant is None:
+                        bindings = harness.api("/v1/intent-bindings")["items"]
+                        fixture.require(len(bindings) == 1, "native binding unavailable for raw grant")
+                        harness.raw_binding = bindings[0]
+                        harness.raw_grant = harness.api(
+                            "/v1/raw-task-content/grants",
+                            {
+                                "schema_version": "local-raw-task-content-grant-create/v1",
+                                "task_id": harness.raw_binding["task_id"],
+                                "kinds": ["parameters", "output"],
+                                "actor_id": "automated-fixture-operator",
+                                "duration_seconds": 3600,
+                                "retention_seconds": 3600,
+                                "max_plaintext_bytes": 65536,
+                            },
+                            expected=201,
+                        )
                     message = {"role": "assistant", "content": "SIQ_RUNTIME_CHECK_COMPLETE"}
                     finish = "stop"
                     if index < len(calls):
@@ -420,6 +449,49 @@ class Harness(fixture.Harness):
             fixture.require(
                 all(record["session_id"] == session for record in records), "receipts do not match native session"
             )
+            raw_records = self.api(
+                "/v1/raw-task-content/records/search",
+                {
+                    "schema_version": "local-raw-task-content-record-list/v1",
+                    "task_id": self.raw_binding["task_id"],
+                },
+            )["items"]
+            fixture.require(
+                len(raw_records) == 2 and {record["kind"] for record in raw_records} == {"parameters", "output"},
+                "native parameter/output ciphertext set incomplete: "
+                + json.dumps(
+                    {
+                        "records": raw_records,
+                        "grant": self.raw_grant,
+                        "status": self.api("/v1/raw-task-content/status"),
+                    },
+                    sort_keys=True,
+                ),
+            )
+            raw_content = {}
+            for record in raw_records:
+                content = self.api(
+                    f"/v1/raw-task-content/records/{record['record_id']}/read",
+                    {
+                        "schema_version": "local-raw-task-content-record-read/v1",
+                        "task_id": self.raw_binding["task_id"],
+                    },
+                )
+                fixture.require(content["contains_plaintext"] is True, "native raw read missing explicit marker")
+                raw_content[record["kind"]] = content["fields"]
+            parameter_fields = {field["path"]: field["value"] for field in raw_content["parameters"]}
+            output_fields = {field["path"]: field["value"] for field in raw_content["output"]}
+            fixture.require(
+                parameter_fields.get("/tool/name") == "read_file"
+                and parameter_fields.get("/tool/arguments/path")
+                == json.dumps(str(self.workspace / "company-a/report.txt")),
+                "native parameter plaintext does not match executed call",
+            )
+            fixture.require(
+                output_fields.get("/tool/name") == "read_file"
+                and "fixture-visible-company-a" in output_fields.get("/tool/result", ""),
+                "native output plaintext does not match actual result",
+            )
             first_requests = list(received)
             selfcheck = self.managed_selfcheck()
             signed_count = len(self.receipts())
@@ -493,6 +565,8 @@ class Harness(fixture.Harness):
                     "allowed_read",
                     "write_denied_before_execution",
                     "allowed_after_denial",
+                    "native_raw_parameters_captured_after_explicit_task_grant",
+                    "native_raw_output_captured_after_explicit_task_grant",
                     "receipt_chain_verified",
                     withdrawal["check"],
                     "revoked_calls_record_unsigned_denials",
@@ -502,6 +576,13 @@ class Harness(fixture.Harness):
                 "installation": self.install_evidence,
                 "managed_selfcheck": selfcheck,
                 "model_requests": first_requests,
+                "raw_content": {
+                    "record_count": len(raw_records),
+                    "kinds": sorted(record["kind"] for record in raw_records),
+                    "task_binding_source": "server-signed native session binding",
+                    "grant_id": self.raw_grant["grant_id"],
+                    "plaintext_verified_via_admin_read": True,
+                },
                 "revoked_model_requests": received,
                 "revoked_pending_denials": len(pending),
                 "auxiliary_requests": auxiliary,

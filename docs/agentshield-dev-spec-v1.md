@@ -574,19 +574,577 @@ CLI 成功以人类可读文本报告“已注册、尚未启动”；签名配�
 
 恢复重新验签和绑定后前滚到同一 target；不得通过恢复重签新目标或覆盖未知对象。此事务只完成配置文件切换，不代表 manager reload/启动/健康通过；上层尚需对应阶段恢复。强制停止旧任意版本不在该标记保证内，主 Writer 仍是防混跑前提。无需迁移状态的发行候选仍需上层逐次复验。
 
+### 3.11.12 Linux 产品升级与前滚恢复（UX-003/014）
+
+`service-upgrade --manifest FILE --binary FILE --confirm-upgrade [--recover ID]` 仅 Linux。先检查 v2 发行签名/兼容声明与候选 pin，再暂存并重新校验暂存内容；随后持生命周期锁复验当前源 unit 和系统归属。显式确认覆盖停止保护提示；未确认或候选无效时不停止服务。正常停止后获取主 Writer，准备并打印切换 ID，应用 §3.11.11，释放主锁后 reload、复验 target 配置、启动；active/正数 MainPID/目录健康绑定/发行版本一致才报告成功。
+
+失败保留候选、日志和旧配置，不自动回滚台账。`--recover ID` 重新验签候选并要求目标 unit 与日志逐字节一致，加载同一已签名事务；停止状态下恢复文件阶段后继续 reload/start。若该目标已运行且配置/健康/版本一致，则只读复用；其他运行状态拒绝恢复，不误停未知版本。任意阶段错误不声称升级完成；失败消息保留已知事务 ID。恢复不是新授权，也不接受替换目标。自动回退和跨 OS 系统集成仍是后续工作。
+
+失败启动恢复补充：同一已验证事务可在 manager 为 inactive 或 failed 且 MainPID=0 时重试，不要求上一尝试的 Result=success。不得把这种情况描述为正常停止；恢复写入前仍须 AcquireWriter 复验主锁，活跃/损坏锁拒绝，已证明死亡的旧锁仅按既有隔离规则处理。activating/deactivating、非零/未知 PID、未健康的 active 目标都不自动恢复或停止。首次升级仍要求正常停止读回，停止命令的成功语义保持不变。
+
+### 3.11.13 显式回退至原事务源配置（UX-003/014）
+
+`service-rollback --transaction ID --manifest OLD --binary OLD --confirm-rollback [--recover ID]` 只用于已完成配置切换的 Linux 用户服务。先只读验签原事务，校验旧版本 v2 发行清单/兼容声明/当前平台 pin，规范化 OLD 路径渲染结果必须逐字节等于原事务 SourceUnit；不能把任意旧版本当作该次回退目标。原程序位置与内容必须保留且通过验签，不覆盖未知程序；缺失时仅按 §3.11.16 明确恢复。
+
+回退从原 TargetUnit 到原 SourceUnit 创建新的签名切换事务，保留原记录；恢复回退须使用新的事务 ID，并重复原事务/旧候选绑定检查。显式确认覆盖短暂停止保护；已失败且无主进程的源可回退，仍须主 Writer 验证，未知进程状态不操作。成功要求旧发行版本/目录健康及 manager active/MainPID 读回一致。授权、撤销与台账均不回滚，旧任意二进制不获得新权限。
+
+正在恢复的原配置事务必须先完成前滚；当前不逆转半写入事务，旧二进制缺失仅按 §3.11.16 明确恢复，也不默默使用 v1 代替缺失的无迁移兼容声明。回退是用户显式动作，不在失败时自动触发。原 v1 切换日志保存的是源配置而非源可执行文件摘要；程序身份由操作者提供的已验签清单证明，不能自动推断或宣称恢复了历史构建的逐字节快照。后续制品安装需确保可恢复旧程序与清单可用；本入口不代表跨发行版本已通过原生验收。
+
+### 3.11.14 升级前本地程序副本留存（UX-003/014）
+
+首次 service-upgrade 在候选发行验证和暂存后、停止源服务前，保存当前 CLI 可执行文件的本地副本至 `client-snapshots/<sha256>/siq-agent-security[.exe]`，打印摘要路径；恢复既有事务不把当前调用者再次记作原版本。只处理 os.Executable 规范化后的普通文件，上限 128 MiB；流式复制并二次读取源核对内容稳定，排他发布、0700，复用已有 privateDirectory/publish。独立子目录 Writer 允许 daemon 运行中留存，失败不停止保护，不覆盖漂移对象。
+
+此副本属于本地观测材料，与发行验签通过的 client-releases 分开。它不授予执行信任，不替代回退的发行清单或历史事务摘要绑定，也不证明 daemon 内存映像与当前路径文件相同。本批只保证副本留存，尚不自动将缺失的原路径文件恢复为副本；后续需把原程序摘要绑定到新的签名切换合同。
+
+### 3.11.15 切换日志中的程序摘要（UX-003/014）
+
+新增 local-service-switch/v2，保留 v1 的原始签名兼容，额外必需 binary_bindings，严格包含 source_sha256 与 target_sha256 两个小写 SHA-256。新 PrepareServiceSwitchWithBinaries 入口将调用者已经核对的程序摘要纳入本地规范化签名；空值、非规范摘要及 v1 混入该字段均拒绝。底层仍只处理配置事务，不把摘要当作发行签名或运行进程身份证明。v2 的恢复、完成标记和目录绑定规则与 v1 相同。
+
+历史 v1 不补写、不推断程序摘要。CLI 后续接入须在停止前与启动前复核候选内容、在新升级日志记录旧快照/新候选摘要，并让回退核对原 source 摘要；本合同底层完成本身不代表 CLI 已具备这些保证。
+
+M53 命令接入：首次升级使用 v2，源摘要来自留存快照，源路径必须仍与当前 CLI 渲染的已归属 unit 一致且内容匹配；目标摘要来自通过发行验签的暂存文件。持生命周期锁后、停止前复核源与目标，取得主 Writer 后准备日志前再次核对源；目标在配置应用后、启动前复核。恢复 v2 必须提供与签名日志完全相同的摘要绑定，并复核实际目标，不要求旧源仍存在。历史 v1 可继续前滚恢复，但不伪造摘要。
+
+产品回退命令要求原事务为 v2，已验证旧候选摘要必须等于原 source_sha256；v1 原事务明确报告缺少历史程序身份，拒绝发起新的回退。反向事务交换源/目标摘要并保存为 v2；恢复反向事务仍须与原事务反向绑定一致。故障新版本允许损坏或丢失，只在回退目标上要求可执行文件内容完整，不把反向 source 摘要描述成新观测。所有摘要属于磁盘内容核对，仍不证明内存映像，也不抵抗同用户持续竞态改写。发行验签和无迁移声明要求保持。
+
+### 3.11.16 明确恢复缺失的历史程序（UX-003/014）
+
+Linux service-rollback 增加 --restore-missing-binary，与 --confirm-rollback 同时使用；--binary 仍指定原 source unit 的绝对程序路径。先验签原 v2 事务，规范化父目录并渲染 source unit，逐字节匹配才允许写入。已有普通文件沿用完整内容与发行校验；符号链接和其他对象拒绝，未知内容不覆盖。父目录必须存在，不创建外部目录。
+
+仅在目标缺失且明确选择恢复时，从当前状态目录 client-snapshots/<原 source_sha256>/siq-agent-security 读取完整快照；私有目录、普通文件、128 MiB 上限与历史摘要校验，并通过操作者提供的 v2 发行清单校验。持生命周期锁后重新验证快照和目标，复制至原路径同目录临时文件，核对复制摘要、0700、fsync，再以 os.Link 排他发布并同步父目录；竞态出现任何目标均拒绝，不覆盖。临时文件失败清理，已发布程序在后续回退失败时保留供重试。随后回退继续原有签名、锁、摘要和启动验证。
+
+这是已授权生命周期的受限外部文件写入：只恢复已签名源配置指向的缺失程序，候选必须同时匹配历史摘要与发行签名。快照本身不提供发行信任；不下载、不执行未验证副本、不回滚台账。无明确 flag 时缺失程序仍拒绝。跨 OS 实机与正式不同版本发行验收仍独立进行。
+
+### 3.11.17 复用本机已留存的发行清单（UX-003/014）
+
+回退可省略 --manifest：从原 source_sha256 对应的 client-releases/<摘要>/ 中只读选择已留存 manifest-<原文摘要>.json。不得遍历其他版本或网络获取；私有普通目录、清单普通文件与原文字节哈希必须匹配。最多读取目录 32 项、候选清单 8 份，各最多 1 MiB；超限或候选损坏拒绝。每份候选重新验证发行签名、v2 无迁移声明与实际旧程序内容，必须恰好有一份合格清单；多份合格时要求显式 --manifest，不能猜测发行版本。v1 等不满足兼容要求的历史清单不作为合格候选。没有合格清单时明确提示提供 --manifest。
+
+原程序缺失且显式 --restore-missing-binary 时，使用已核对的源快照进行清单匹配，随后按 §3.11.16 恢复，停止前仍复验清单和程序。无恢复选择时不读取快照来掩盖缺失程序。
+
+升级可选 --source-manifest FILE，用于首次从非暂存位置升级时留存旧发行材料：源快照必须通过该清单 v2 发行校验，然后复用 Stage 保存源程序和清单。失败不停止源服务。后续从已暂存候选升级时，其清单已经留存。此选项不放宽新候选或旧候选的发行信任，不自动制造清单；首次安装器自动登记仍是后续交付事项。
+
+### 3.11.18 Linux 首次后台启动入口（UX-003/004）
+
+`setup --confirm-setup [--port N] [--runtime]` 复用初始化、签名用户服务准备/注册和启动健康检查。明确确认表示初始化本机状态并启动当前程序的用户后台服务；不安装任何智能体钩子、不签发权限、不启用登录自启。无确认、无效参数和非 Linux 在写入前拒绝；systemd 用户管理器不可用则在初始化前报告失败。
+
+已有健康实例时先复验目录健康、当前程序 unit 的签名归属及 manager active/PID/注册 scope，再复用，不申请主 Writer、不换配对码或重启。其他情况复用 init 的不覆盖语义，然后 service-register、service-start；部分失败保留已完成步骤，重试仍逐步复验，不删除未知对象。显式端口与已有配置冲突由初始化/复用检查拒绝。成功输出实际端口的管理页面 URL 和独立 pair 操作提示；URL 不带令牌或配对码。没有真正权限生效证据时只报告管理服务就绪。
+
+`--runtime` 仅当前登录会话的注册，适合隔离测试；默认持久注册仍不隐式登录自启。本批只整合已有 Linux 生命周期，Windows/macOS 继续使用前台 start，后续完成对应系统后台入口和安装制品。
+
+### 3.11.19 本机管理页面入口（UX-003/004/012）
+
+`ui [--print]` 从当前状态配置取端口，固定 http://127.0.0.1:<端口>/，复用无代理、不跟随重定向的目录绑定健康检查后才输出或请求打开。默认调用系统浏览器入口，--print 仅输出 URL；不读取配对凭据、不生成配对码、不把令牌放 URL、不自动启动服务。参数只允许 --print，不接受任意地址。
+
+浏览器调用不经 shell：Linux xdg-open、macOS open、Windows rundll32.exe url.dll,FileProtocolHandler，传递固定生成的 loopback URL，10 秒超时、丢弃子进程输出。启动失败仍输出可手动访问的地址，并报告浏览器打开失败，不声称页面已渲染。命令成功只代表 OS 接受打开请求；浏览器/跨 OS 实机另验收。
+
+setup 新增 --open-ui，仅在既有初始化/注册/启动/健康成功后调用同一入口；已有健康服务也可打开。不改变登录自启、权限审批或配对策略。UI 打开失败不停止已启动服务，用户可手动访问输出 URL。
+
+### 3.11.20 已签名发行程序安装入口（UX-003/014）
+
+Linux `client-install --manifest FILE --binary FILE --confirm-install [--port N] [--runtime] [--open-ui]` 先验证候选发行签名与 v2 无迁移声明，再复用 Stage 保存稳定程序及清单。重新验证暂存文件，固定 SHA-256 目录身份和发行版本；只从该已验证路径执行 setup --confirm-setup，不从下载位置执行。子进程无 shell，明确传递同一状态目录，120 秒超时、输出丢弃；错误提示检查状态，不声称超时取消所有后台影响。
+
+setup 完成后父进程重新核对目录健康、发行版本、签名 unit 指向暂存程序以及 manager 活跃进程，再报告安装成功并输出稳定程序路径和管理地址。可选打开页面发生在上述验证之后。不同已有 unit 不被安装入口覆盖，升级使用 service-upgrade；重复同版本安装可复用，原下载文件移动不会影响后台程序路径。安装入口不修改 PATH、不启用登录自启、不授予智能体权限，不把交叉构建称为跨系统安装验收。无确认/非法参数/非 Linux 在落盘和执行前拒绝。
+
+### 3.11.21 明确启用和关闭用户登录自启（UX-003）
+
+Linux service-login --enable --confirm-enable 或 service-login --disable，在当前程序 unit 签名/manager 归属复验与生命周期锁内，只管理实际注册符号链接同目录下 default.target.wants/<当前 unit 名>。必须保留已归属注册链接，父目录普通且规范化；不存在 wants 目录可创建 0700，已存在只允许普通目录。新增链接排他指向当前已签名 source unit，已有链接只在目标完全一致时复用；关闭只删该精确匹配链接，未知对象/异目标拒绝，不执行广泛 systemctl disable。
+
+变更后同步目录、daemon-reload、读回 enabled/linked（runtime 对应 enabled-runtime/linked-runtime），与链接实际存在/缺失共同确认。启用不启动/重启当前服务，关闭不停止运行进程；运行权限不变。所有已归属生命周期读取支持 enabled 状态，但额外检查精确自启链接归属。注销仍要求先关闭自启，再正常停止，避免悄然保留第二入口。运行中可修改自启，不申请主 Writer。
+
+持久 registered 服务启用后作用于下次用户登录；runtime 注册的链接仅本登录会话有效，明确提示不代表持久登录自启。失败保留已操作链接，可按相同命令复验重试；不修改其他 wants 依赖。跨 OS 后台自启仍独立实施。
+
+### 3.11.22 保留数据的后台入口卸载（UX-003）
+
+Linux teardown --confirm-teardown 统一关闭当前实例自启、正常停止、注销注册入口，保留程序、源 unit、配置、身份、权限和历史文件。提示停止后 block 模式受控操作拒绝；不宣称卸载了智能体钩子或清除了数据。无确认/非法参数在状态写入前拒绝。
+
+全程生命周期锁，先验签当前程序 unit 与实例记录、拒绝未完成切换。已注册时调用精确关闭启动链接，再正常停止并确认 inactive/MainPID=0/Result=success；随后获取主 Writer，复验源归属并复用精确注销。已注销且 manager 明确 not-found/inactive/PID0 时仍取主锁确认无活动写入，再只读复用成功。未知注册/自启对象、异常进程状态或活动 Writer 不删除。
+
+中断保留步骤，可重复命令复验。若注册符号链接已删除但 reload 未完成，仅在 manager 正常停止且无自启链接时允许复用注销的 reload 恢复，不猜测删除未知入口。故障停止未符合原正常停止合同则拒绝注销，要求先排查；不擅自 reset-failed 或强杀。
+
+### 3.11.23 macOS LaunchAgent 配置导出（UX-003）
+
+macOS launch-agent-plist 只读导出当前已初始化实例的 plist，不写 Library/LaunchAgents，不 bootstrap、启动或隐式自启。复用 Linux 服务导出的配置普通文件/大小/JSON/实例身份与规范化程序路径检查；标签为 dev.siq.agent-security.<完整实例 ID>，不是全局共享服务名。
+
+配置按 Apple launchd 字段生成：ProgramArguments 为当前程序与 serve 两个字符串；EnvironmentVariables 只设置 SIQ_AGENT_SECURITY_STATE_DIR；RunAtLoad=false、KeepAlive=false、Umask=63、ExitTimeOut=30、stdout/stderr=/dev/null。路径必须规范绝对 POSIX 路径、合法 UTF-8、无控制字符；XML 特殊字符由标准库转义，空格/引号/dollar 等按路径原文保留，不经 shell，不扩大程序权限。
+
+固定 plist 样例由 Go 生成并由 Python plistlib 独立解析，验证 argv、环境和安全默认值；这不是 launchctl 实机证据。后续需增加 macOS 专属签名归属记录、bootstrap/readback/停止/恢复与安装路径控制，不复用 Linux unit_name 合同冒充跨平台注册。
+
+参考：[Apple LaunchAgent 编程指南](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html)、[Apple launchd.plist 字段定义](https://github.com/apple-oss-distributions/launchd/blob/main/man/launchd.plist.5)。
+
+### 3.11.24 macOS 配置签名归属与准备恢复（UX-003）
+
+新增 local-launch-agent-record/v1：instance_id、state_directory_id、label、plist_sha256、signature。label 固定 dev.siq.agent-security.<完整实例ID>，签名走本机规范化 Ed25519。记录存 launch-agent.json，配置存 <label>.plist，均只在状态目录发布，不改变既有 Linux user-service.json 合同。
+
+launch-agent-prepare 仅 macOS，复用只读 plist 渲染；持生命周期与主 Writer 后，先签名排他发布归属记录再排他发布配置。若记录存在须验签并完整匹配当前实例/目录/渲染内容；配置缺失可按相同签名意图重发，内容漂移或未知配置拒绝覆盖。底层只固定调用方渲染的配置字节，不解释任意 plist，不把记录当作 launchctl 已加载证据。VerifyLaunchAgent 只读且不修复。
+
+准备成功只输出签名记录，不注册、启动、自启或写用户 Library。下一阶段系统入口发布/归属读回复用该记录；跨 OS 路径、克隆目录身份、记录签名、配置漂移与中断恢复必须负向验证。
+
+### 3.11.25 macOS 用户目录注册发布（UX-003）
+
+launch-agent-register 仅 macOS，复用已签名 plist 准备，在生命周期与主 Writer 内向规范化当前用户 home/Library/LaunchAgents/<label>.plist 排他发布符号链接，指向状态目录内已验证 plist。home 必须存在；Library 与 LaunchAgents 可创建 0700，已存在必须普通目录，不跟随这两级目录符号链接。注册前后复验签名源内容。
+
+目标不存在时 os.Symlink 排他创建；已存在仅允许同一绝对源路径的精确符号链接，普通文件、悬空异目标、相对别名及其他链接不接管。同步新目录和链接所在目录并读回。失败保留签名配置供同命令重试，不自动删除未知对象或撤销其他服务。
+
+本入口只发布用户目录配置，不执行 launchctl、不保证当前登录会话已加载，更不代表保护已启用。模板 RunAtLoad/KeepAlive 保持 false。后续 bootstrap/readback 必须独立验证当前 GUI 用户域与同 label 配置归属；当前仅文件层验证，缺少 macOS 实机仍标待验收。
+
+### 3.11.26 macOS 已加载配置只读核对（UX-003）
+
+launch-agent-status 仅 macOS。先读取/验证当前程序渲染的 plist 签名归属和当前用户 Library/LaunchAgents 精确链接，不创建或修复文件。绝对 /bin/launchctl 在 15 秒/64 KiB 输出预算下执行；移除 LAUNCHD_SOCKET 环境覆盖，manageruid 必须等于非 root 当前 uid，managername 必须 Aqua，才查询当前域 list -x <已验证 label>。
+
+XML plist 使用标准库递归解析，限制 64 KiB/16 层/2048 元素，拒绝重复 key、命名空间、未知结构和非整数数值。逐项比较全部原渲染字段，ProgramArguments/EnvironmentVariables/label 等必须一致；额外字段仅允许整数 LastExitStatus、PID、OnDemand=true、LimitLoadToSessionType=Aqua；其他额外字段（含 Program/RootDirectory/WorkingDirectory/UserName/GroupName）视为未知配置并拒绝，不推断系统默认值。PID 若存在必须正整数；存在进程时再要求本实例目录健康才报告已运行，否则只报告已加载且未报告运行 PID。launchctl 失败不解释为任务不存在，禁止用无结构 print 文本替代。
+
+此兼容路径依据 Apple 开源 launchctl 的 list -x 实现，当前 macOS 是否提供该接口须实机验证。尚未支持的版本拒绝并保留现场，不隐式调用旧 load/unload 或不经验证启动。状态核对不证明完整进程内存身份，尚不启用 bootstrap/kickstart；后续加载动作依赖该只读前置。
+
+### 3.11.27 macOS 未加载状态的显式判定（UX-003）
+
+launch-agent-status 在签名源和注册链接核对后，先验证 GUI 用户域，再查询不带参数的 launchctl list。仅接受成功退出、完整换行结尾、64 KiB 内的 TSV：首行精确 PID/Status/Label，后续每行三列；PID 为正十进制整数或 -，Status 为规范有符号整数、- 或 Apple 历史实现的 ???，label 为非空无控制字符 UTF-8。拒绝重复 label、额外诊断、空行、缺列和截断；必须解析全部行才可判定目标 label 缺席。其他任务的名称和输出不落盘、不进入错误消息。
+
+目标缺席只表示查询时当前域未加载，状态命令输出“配置已注册，当前用户域未加载”，不代表后台停止、全系统不存在或授权后续覆盖。目标存在时仍执行 §3.11.26 的 XML 全字段归属核对，后续查询失败（包括两次查询间任务消失）保持未确认，不降格为缺席。列表中的 PID/Status 不用于归属或健康判断。此增量只读、不新增持久合同；未来加载必须重新核对域、源、链接及即时存在状态，不能复用历史查询结果。
+
+格式依据 Apple 公开历史 launchctl 源码 list_cmd/print_jobs；真实 macOS 兼容性仍待验收，不以模拟输出证明原生支持。
+
+### 3.11.28 macOS 显式加载（UX-003）
+
+launch-agent-load --confirm-load 仅 macOS，要求既有签名源和当前用户 Library/LaunchAgents 精确链接；不自动准备或修复。持 service-control 生命周期锁，复用完整 GUI 域枚举与已加载 XML 归属核对。已加载且归属一致时只复验文件并返回，不启动或重启。缺席时持主 Writer，立即再核对域、列表、签名源和链接，仅对仍缺席的实例执行 /bin/launchctl bootstrap gui/<当前 uid> <精确注册链接>；不使用 sudo、force、enable、旧 load 或目录批量加载。
+
+bootstrap 返回后重新核对源、链接和加载状态，只有当前域目标存在且完整 XML 与签名源相符才确认加载。命令失败或读回失败保持未确认，保留配置供用户检查和同命令重试，不自动 bootout 或删链接。主 Writer 与模板 RunAtLoad=false/KeepAlive=false 共同保留加载与启动边界；不因加载成功宣称保护运行。重复命令允许已运行且归属一致的任务，不占用该任务的主 Writer。文件复验不等于抵御同用户恶意并发替换，系统加载仍可能受外部会话操作影响；后续启动必须再验证归属。
+
+bootstrap GUI 域用法参考 CircleCI 官方 macOS runner 安装文档；当前 Linux 仅使用模拟控制器与临时目录验证流程，真实 macOS 加载和接口兼容性仍待验收。本命令不新增持久合同。
+
+### 3.11.29 macOS 显式启动与健康读回（UX-003）
+
+launch-agent-start --confirm-start 在生命周期锁内复用已注册配置加载流程。已加载配置报告正 PID 时只等待/检查当前实例健康，不重启；无 PID 时先获取并释放主 Writer 确认没有已知台账写者，再立即复验签名源、精确链接、GUI 域和加载配置。仍无 PID 才执行 kickstart gui/<uid>/<label>，不带 -k、不 enable 或替换任务。启动必须在释放主 Writer 后执行，让 serve 自行获取单写者锁；外部启动竞争由该锁拒绝，不声称消除同用户并发竞争。
+
+命令返回成功要求签名源/链接一致、已加载 XML 完整核对、正 PID 和当前目录健康 API 全部通过，并在健康返回后复核源/链接。健康最多轮询 10 秒（单次 manager/HTTP 请求另有自身超时），100 ms 间隔；配置/查询错误立即失败，无 PID 或健康未就绪可继续等候。超时和启动命令失败保留现场，不强制重启、结束进程或自动卸载。API 健康复用既有目录身份验证，不把 PID 声明当作 API 身份。
+
+Linux 模拟控制器测试不作为 macOS 原生启动证据；当前不声明 GUI 通知、退出恢复、自启或正式安装器完成。
+
+### 3.11.30 macOS 显式停止（UX-003）
+
+launch-agent-stop --confirm-stop 在生命周期锁内验证既有签名源、当前用户目录精确注册链接、GUI 域和已加载 XML。目标缺席不执行任何系统命令，只有主 Writer 可获取且归属文件复验一致才报告当前域未加载。目标有 PID 才执行当前已验证域的 stop <label>（Apple 历史 launchctl 接口），不 bootout、不 kill PID、不 disable、不删除配置；模板 KeepAlive=false，仍须真实系统验证停止语义。
+
+停止后最多轮询 35 秒（单次 manager 超时另计），每 100 ms 复验源/链接及完整 XML，直到 PID 消失。主动停止的任务必须存在整数 LastExitStatus=0，随后在主 Writer 内复验文件和最后一次 XML/PID，才能报告正常停止。进程仍存在、任务查询失败、异常退出或 Writer 冲突均返回未确认并保留现场；不将删除任务、查询失败或失联推断成正常退出。最初已无 PID 的任务仅报告无运行进程且台账可用，不捏造退出状态。此状态是瞬时读回，不保证外部程序不会随后重启服务。
+
+状态文件和用户注册链接保持原样，后续 launch-agent-start 可复用已加载配置。没有 macOS 实机时只用临时状态与模拟控制器验证，不计为原生停止或排空验收。
+
+### 3.11.31 macOS 注销与中断恢复（UX-003）
+
+launch-agent-unregister --confirm-unregister 复用生命周期锁，验证当前实例签名源、普通用户目录及精确注册链接，完整枚举/已加载 XML 核对后拒绝任何正 PID，提示先 stop。主 Writer 可获取后再次复验；已加载且无 PID 时只 bootout gui/<uid>/<label>，随后必须完整枚举证明目标缺席，才删除已复验的单个注册链接并同步其目录。保留 plist、签名归属、配置、密钥及历史，不删除目录或修改其他服务。
+
+bootout 返回失败、目标仍存在、域/源/链接漂移均失败保留现场。链接缺失只有当前域也缺席时才视为注销重试，仍须主 Writer 可获取；链接缺失但任务存在拒绝接管。bootout 成功而删除链接前中断可重试，删除后重复操作不再调用系统变更。未知普通文件/异目标链接不删除。注销只证明当前用户域未加载、没有该注册链接及写者冲突；不声称历史异常退出正常排空，也不抵御其他同用户进程在最终检查后重新注册。
+
+此为受限用户目录链接删除例外，无新增持久合同。依据既有 macOS GUI bootstrap/bootout 接口资料，Linux 只模拟验证，原生 macOS 停止→注销→重新注册启动仍待实机验收。
+
+### 3.11.32 macOS setup 整合入口（UX-003）
+
+setup --confirm-setup [--port N] [--open-ui] 在 macOS 接通现有初始化→签名准备/注册→加载/启动/健康验证。先验证非 root GUI 用户域，再读取配置；域不支持或 --runtime=true 时在任何初始化前拒绝（当前 macOS 仅用户目录注册，不冒用 Linux runtime 语义）。健康且归属一致的现有实例复用启动命令的只读就绪路径，不重新 init/register；显式端口与已有配置不符拒绝。
+
+未健康时复用 init 的不覆盖初始化，再调用 launch-agent-register 和 launch-agent-start --confirm-start；任一步失败保留已完成步骤，返回阶段提示，禁止继续下阶段或打开浏览器。启动成功后重新读取配置并核对当前目录健康才输出 URL；--open-ui 最后执行现有 ui。配对仍需用户显式执行，智能体权限不自动授予，不宣称登录自启已配置。Windows 暂保留明确未支持提示。
+
+命令编排的模拟测试只证明顺序、失败短路与重复分支；不能替代 macOS 系统目录、launchctl 或浏览器实机验收。Linux setup 路径语义保持，须回归其原生隔离旅程。
+
+### 3.11.33 macOS teardown 整合与重复恢复（UX-003）
+
+teardown --confirm-teardown 在 macOS 通过既有生命周期锁包装一次停止→注销事务编排，先核对当前签名实例与 pending 配置切换；pending 或归属错误拒绝继续。注册链接存在时复用正常停止/退出状态/Writer 校验，再执行注销；停止未确认时绝不执行卸载或删链接。注销失败保留已停止任务，重试复验后继续。
+
+注册链接已缺失时不重新注册、不调用 stop，而进入注销的缺席复验路径；只有当前 GUI 域也未加载且 Writer 可获取才视为已退出，链接缺失但仍加载保持拒绝。两阶段共享生命周期锁，各自主 Writer 保持已有释放边界。成功保留程序、配置、密钥、历史和原智能体钩子，提示 block 模式失联后受控操作拒绝；不声称已卸载平台接入。用户随后可 setup 复用保留配置。
+
+本地集成测试以真实临时状态/签名/链接和模拟 launchctl 验证状态转换、失败短路、重复执行与数据字节保留；macOS 实机排空与完整重装仍待验收，Linux teardown 语义不变且须回归。
+
+### 3.11.34 后台启动的显式状态目录（UX-003，Windows 前置）
+
+serve 增加 --state-dir <已存在规范绝对目录>。显式指定优先于新旧状态目录环境变量，仅绑定当前 serve 使用的 Store/锁/密钥/台账/健康响应，不修改进程环境或全局默认目录。不指定时保留原环境/平台默认行为。显式空值、相对路径、非规范路径、目录符号链接别名、非目录或不存在路径在状态写入前拒绝；serve 多余位置参数拒绝。
+
+Windows Task Scheduler 的 Exec 动作将通过该参数绑定实例目录，避免依赖任务引擎缓存的环境变量；不经过 cmd.exe/PowerShell 设置环境。该参数本身不实现 Windows 任务注册或原生生命周期。测试须证明显式目录不会写入环境指向的另一实例，且健康响应属于选定目录；Linux 子进程证据不能算 Windows 原生验收。
+
+### 3.11.35 Windows 用户任务配置导出（UX-003）
+
+task-xml 仅 Windows、无参数、只读。复用当前实例/配置/程序规范路径预检，通过标准库 os/user.Current 获取当前用户 SID，不接受调用方任意指定账户。输出 UTF-8 Task Scheduler 1.3 XML：名称/URI 绑定实例 ID，单一 Principal 为当前 SID、InteractiveToken、LeastPrivilege；单一 Exec 直接调用当前程序，参数为 serve --state-dir "规范目录"。不使用 shell/环境变量替换，不创建触发器，不注册/启动任务。
+
+路径仅支持本地盘符绝对路径，限制 260 个 UTF-16 单元，拒绝 UNC/设备路径、空分段、. 或 ..、末尾空格/点、控制字符及 Windows 保留字符；另拒绝百分号避免 Task Scheduler 环境展开。SID 必须规范数字结构且非 SYSTEM/LocalService/NetworkService。实例 ID 必须 64 位小写 hex。XML 由标准库转义；参数路径无引号和末尾反斜杠，使用双引号包围以支持空格和中文。
+
+Settings 明确 IgnoreNew、AllowStartOnDemand=true、Enabled=true、Hidden=false、ExecutionTimeLimit=PT0S、AllowHardTerminate=false，不要求网络/空闲/电池供电条件，不唤醒、不自动补启动。无密码/高权限/自动登录触发器；后续停止须实现可验证的正常退出通道，不能把强制结束任务视为正常排空。
+
+Go/Python 共用 XML 样例锁定输出及参数语义，XSD 格式依据 Microsoft 官方 schema；没有 Windows 实机时仅验证输出/跨编译，任务注册、签名归属、启动和正常退出仍待完成。
+
+### 3.11.36 Windows 任务签名归属与准备恢复（UX-003）
+
+新增 local-windows-task-record/v1，绑定 instance_id、state_directory_id、user_sid、task_name、xml_sha256 与规范签名。task_name 固定为根目录实例名 \\SIQ-Agent-Security-<instance_id>。记录位于状态目录 windows-task.json，源 XML 位于 SIQ-Agent-Security-<instance_id>.xml。SID 与 XML 都由当前用户/实例的固定渲染得到，不接受任意账户或外部 XML；SID 结构/范围检查与导出共用。
+
+task-prepare 仅 Windows、无参数，持生命周期与主 Writer，先签名归属意图排他发布，再发布 XML。重复准备必须完全匹配；记录已存在而 XML 缺失可按相同签名内容恢复。没有记录但 XML 已存在、源漂移、SID/实例/目录变化、未知记录或签名篡改均拒绝，不覆盖未知文件。只读 VerifyWindowsTask 不修复、不创建身份或占写锁。
+
+该记录只声明本地配置归属，不证明 Windows Task Scheduler 已注册或当前系统任务可信；后续系统注册必须独立完整读回配置和当前用户域。Go/Python 共用签名记录与 XML 样例，验证摘要、身份关联与规范 Ed25519 签名。Windows 原生文件权限/任务环境仍待实机验收。
+
+### 3.11.37 Windows 任务配置读回核对（UX-003）
+
+系统任务读回的 UTF-8 XML 必须与当前实例固定渲染的预期配置作完整结构比较，不能仅用 URI、Exec 或 SID 相同证明归属。比较保留叶节点文本（包括路径/参数空白）、命名空间与非 xmlns 属性；允许元素间格式空白、属性顺序及本配置单值子元素的顺序差异。缺失/新增字段、重复属性/同名子元素、触发器、额外动作、账户/权限/设置/路径变化一律拒绝。不能忽略未知系统字段以换取兼容。
+
+解析限制 64 KiB、深度 16、元素 256；只接受单根 Task 和官方命名空间、一个可选开头 XML 声明，拒绝 DTD/其他处理指令、混合内容、尾随根或文本、未闭合 XML、错误编码。任务引擎 UTF-16 输出须在后续传输边界显式转换后再调用，禁止猜测或截断。此批为无系统副作用的核对核心；系统查询、任务缺席证明、注册/启停仍待接入。实机发现引擎规范化差异须逐项核对官方语义并补证据后扩展，当前失败保留现场。
+
+### 3.11.38 Windows 系统任务只读查询（UX-003）
+
+新增 task-query（Windows、无参数）：重建当前实例/用户的预期 XML，核对本地签名归属与源文件后，只查询精确任务名。通过 GetSystemDirectoryW 获取 schtasks.exe 绝对路径，不信任 PATH/SystemRoot，不使用 shell、远程账户或管理员提权参数。执行 /Query /TN <签名任务名> /XML，15 秒超时与有界输出；任何退出失败、stderr 内容或超限都报未确认，不能推断缺席。
+
+仅接受 UTF-8（可带 BOM）或带 BOM 的 UTF-16LE/BE，严格验证代理对、奇数字节与声明一致性，转为 UTF-8 后交完整 XML 核对。成功后再次核对本地签名源，再输出已经核对的预期 XML；没有新增持久化状态或 JSON 合同。此命令证明单次配置读回匹配，不证明进程运行、健康、未来未被篡改或任务缺席。注册/启动仍待实施，查询失败不得授权覆盖未知任务。
+
+### 3.11.39 Windows 任务定点存在性查询（UX-003）
+
+新增 task-presence（Windows、无参数），仅对已有签名准备的实例操作。使用系统目录 WindowsPowerShell/v1.0/powershell.exe，固定内嵌脚本由 EncodedCommand 传递，无 profile、非交互，不设置 ExecutionPolicy bypass。用户数据仅以 stdin JSON 传递，不拼入脚本。脚本验证当前 WindowsIdentity SID 与请求一致，连接本机 Schedule.Service，再打开根目录，最后定点 GetTask；仅该 GetTask 的 COM ERROR_FILE_NOT_FOUND 被区分为 absent。连接/打开目录/权限/其他异常均失败。未知脚本返回、stderr、超时和超限拒绝；固定内部响应为 SIQ_TASK_PRESENT 或 SIQ_TASK_ABSENT。
+
+存在时仍通过 task-query 同一完整配置核对链路，不能仅凭同名宣布归属；缺席时再次核对本地签名源。成功 CLI 输出 present 或 absent，不创建任务。判定只是时间点观察，未来注册必须使用 TASK_CREATE 等排他机制，不能用先查询后覆盖替代排他创建。无 Windows 实机时仅验证 Go 编排和请求/响应边界，COM 异常包装与宿主执行须单独原生验收。
+
+### 3.11.40 Windows 用户任务排他注册（UX-003）
+
+新增 task-register --confirm-register；无确认或多余参数在准备/系统操作前拒绝。复用任务签名准备并持生命周期与主 Writer；拒绝 pending 服务切换。定点查询已存在时，只在完整读回匹配后复用；缺席时再次核对本地签名源，再调用固定 PowerShell 脚本的 TaskFolder.RegisterTask，flags 仅 TASK_CREATE=2，当前 SID、空密码、TASK_LOGON_INTERACTIVE_TOKEN=3。不使用 UPDATE/CREATE_OR_UPDATE，不自动启动或创建触发器。系统创建竞争失败不升级为覆盖或删除。
+
+创建/复用后独立通过 schtasks 完整读回与本地归属复验，成功输出预期 XML。失败保留签名配置和系统现场；创建已成功但读回失败时，下一次必须重新确认归属，不能自动删除可能已变更的任务。允许该明确注册命令向当前用户根任务文件夹创建精确实例任务，为当前生命周期开发的受限外部状态写入；无 Windows 宿主时只运行模拟控制器，原生注册及账户/ACL/序列化仍待验收。
+
+### 3.11.41 Windows 已注册任务按需启动（UX-003）
+
+新增 task-start --confirm-start，要求已完成 task-register。持生命周期锁，拒绝 pending 切换，完整查询签名绑定的系统任务；已有匹配目录健康服务只复用，不声称由本次命令启动。否则检查主 Writer 可用并在 Run 前释放，再复验系统配置，调用当前用户任务的 Run(null)，不传动态动作参数，不强制重启或改配置。
+
+成功以配置读回仍匹配且本地 API 目录健康为准，不以 Run 返回值或任务引擎 PID 代替服务健康。最多轮询 10 秒（另计每次有界系统查询与 HTTP 调用）；失败保留任务与状态，不能自动删除或强制结束。固定配置还拒绝程序/目录中的 $( 序列，避免 Task Scheduler 动作参数模板展开改变执行目标。无 Windows 时只模拟编排，真实运行、任务与健康进程关联、正常退出仍待验收。
+
+### 3.11.42 Windows 任务运行状态读回（UX-003）
+
+新增 task-runtime（Windows、无参数、只读），完整归属查询前后夹住当前 SID/精确任务的 State、GetInstances(0).Count、LastTaskResult 读取。脚本在取字段前后比较 State，变化即失败，避免把明显矛盾快照当稳定状态。接受 ready(3)/0 实例、running(4)/1 实例、queued(2)/0 实例；其他状态/数量及矛盾组合拒绝。GetInstances 可见性受当前用户安全上下文限制，必须先后核对当前 SID、LeastPrivilege 等完整配置，不能把任意任务的零实例数视作全机无进程。
+
+内部固定 ASCII 响应四段 SIQ_TASK_RUNTIME:state:count:last_result，无额外文本；数值必须规范十进制。LastTaskResult 接受有符号 32 位或无符号 32 位表示，保留值不直接推断本次退出。CLI 输出 state=<ready|running|queued> instances=<0|1> last_result=<数值>。不使用任务引擎 PID 作为服务 PID；该观察不是正常退出证明，后续仍需退出请求绑定、主 Writer 释放与当前退出结果关联。无 Windows 时仅模拟验证，不得宣称原生状态读取已通过。
+
+### 3.11.43 当前运行绑定的退出授权核心（UX-003）
+
+为跨平台正常退出增加 local-service-control-challenge/v1 与 local-service-stop-request/v1。两者包含 schema_version、action、boot_id、state_directory_id、expires_at（Unix 秒整数）及规范 Ed25519 signature；challenge 的 action 为 challenge，stop 请求为 stop，签名域由 schema/action 区分。每次服务构建随机生成 32 字节 boot_id；状态目录 ID 固定绑定当前实例，挑战有效期 30 秒。不得复用旧进程挑战，不把目录一致等同于同次运行。
+
+本机 CLI 以现有状态目录私钥验签挑战后签署不同域的 stop 请求；适配器 token、配对 bearer 和恢复 token 均不作为该核心的授权来源。控制器仅接受当前 boot/目录、有效签名、未过期且不超过未来 30 秒的请求。锁内执行接入层提供的必要持久化接受回调；回调失败不消费请求、不触发退出；成功后当前运行只消费一次，重放与并发重复拒绝。当前包只提供授权状态机，不直接关闭 HTTP、写审计或发信号；后续接入必须提供接受记录及排空通知。
+
+这不是同 UID 隔离：能读取私钥的同用户进程仍可签署请求。本批不添加 HTTP 端点/CLI，不宣称 Windows 退出已完成。Go/Python 共用规范签名样例，测试时间边界、跨启动/跨目录重放、篡改、并发与接受回调失败。
+
+### 3.11.44 退出请求接受记录（UX-003）
+
+新增 local-service-stop-acceptance/v1，字段 schema_version、action=stop_accepted、boot_id、state_directory_id、request_sha256（完整签名请求的规范 JSON 摘要）、accepted_at（Unix 秒）、signature。保存于状态目录 service-stop-<boot_id>.json，必须由仍持主 Writer 的服务写入，验证请求签名/时限与当前目录后排他发布；不覆盖未知文件。已有记录只有签名、boot/目录及请求摘要一致时才幂等复用，保留首次 accepted_at；记录篡改或另一请求不能覆盖。
+
+只读读取按当前目录与 boot_id 校验记录签名，不创建目录或修复。该记录证明本机服务接受过特定退出请求，不证明 HTTP 已排空、进程已退出或 Writer 已释放。后续 HTTP 接受回调必须使用该记录成功作为通知排空的前置；写入失败即拒绝，不绕过或清理历史。共享 Go/Python fixture 校验请求摘要、签名和关联字段。
+
+### 3.11.45 本机退出 HTTP 与排空联动（UX-003）
+
+新增 GET /v1/service-control/challenge 与 POST /v1/service-control/stop，仅在服务提供主 Writer 与退出通知回调时启用。继承 loopback、Host、Origin 校验，另要求 X-SIQ-Local-CLI: 1，并拒绝 Origin、Sec-Fetch-*、Authorization 和 Cookie；配对/适配器/恢复凭据不能替代签名。挑战返回既有签名合同。POST 只收 application/json，最多 4096 字节，严格拒绝重复/未知/缺失字段、尾随 JSON 和非法类型。
+
+验证 stop 当前 boot/目录/时限/签名后，在 Accept 必要回调中由服务持有的主 Writer 写接受记录；记录失败不消费、不通知退出。成功返回 202 及签名接受记录，随后通知 serve 既有停止 channel，复用 drainingHandler 和 HTTP Shutdown；响应仅表示已接受，不表示排空完成。重放拒绝，未配置的服务返回 503，所有控制响应 no-store。异常监听关闭/排空超时继续沿用原逻辑，不提前释放活跃 Handler 的 Writer。测试需覆盖请求边界、鉴权分离、记录失败重试及通知顺序；CLI 停止与最终退出验证另行接入。
+
+### 3.11.46 本机签名退出请求客户端（UX-003）
+
+新增 stop-request --confirm-stop，使用现有配置端口/状态目录与本机私钥，持生命周期锁但不获取服务主 Writer。先核对目录健康，再获取并验签当前运行挑战，签署 stop 请求；不发送 bearer/Cookie，禁代理与重定向。响应仅接受 202 JSON、限长、无未知字段或尾随内容。
+
+无论收到 202 还是请求传输失败，都以本机已签名接受记录核对同 boot、目录及完整请求摘要；202 响应还须与本机记录完全一致。传输失败但存在该请求的有效接受记录时可报告已接受，不重发停止、不生成新请求代替原请求。记录缺失/错误或响应与记录冲突均失败，不能报告已接受。
+
+CLI 输出既有 local-service-stop-acceptance/v1 JSON，仅表示退出请求被持久化接受，不表示进程已退出。最终 stop/task-stop 仍须后续排空结果/Writer/任务状态确认。明确参数之外无任意 URL、账户或路径选项；保持现有状态目录环境选择。
+
+### 3.11.47 本次排空结果记录（UX-003）
+
+新增 local-service-stop-result/v1，绑定 boot_id、state_directory_id、acceptance_sha256（完整签名接受记录规范摘要）、finished_at 与 status=drained|drain_failed 及签名。文件 service-stop-<boot_id>.result.json，仅在当前运行确实接受过签名 stop 后、HTTP handler 排空、刷新协程退出和运行检查收尾后由主 Writer 排他写入。无签名请求的信号退出不伪造该记录。
+
+运行检查收尾超过 5 秒仍等待其实际完成后才允许释放 Writer，同时将结果标为 drain_failed。HTTP Shutdown 或收尾报错也不能记 drained；写结果失败返回错误，禁止用缺失记录解释为成功。结果绑定原接受记录，不覆盖冲突/未知文件，重复只复用同一结果。只读核验同时验证接受记录和结果签名/目录/时序。
+
+drained 只证明上述收尾完成，写记录时服务仍持 Writer，客户端还必须确认 Writer 释放；不得提前称进程已退出。最终 stop/task-stop 客户端和 Windows 原生确认后续接入。
+
+### 3.11.48 本机停止完成确认与恢复（UX-003）
+
+新增 stop --confirm-stop [--recover <boot_id>]，持生命周期锁。默认先执行签名退出请求并取得接受记录；recover 只读取指定运行的签名接受记录，不发送新停止请求。等待最多 35 秒：排空结果缺失或主 Writer 忙时继续等；签名/目录/接受记录不匹配、drain_failed、读取错误或锁异常立即失败，不能解释成停止成功。
+
+仅在本次 drained 结果存在且成功取得主 Writer 后，再持锁复验接受记录与结果完全一致，释放临时 Writer 后输出签名结果。该检查证明此时该状态目录无活动 Writer，不声称暂停系统服务管理器或阻止以后重新启动。新实例已占 Writer 时不会用历史 drained 宣布完成，也不会用 recover 停止新实例。超时保留所有记录并提示原 boot_id，可用 recover 继续检查；不重发、不强制终止或删除任务。
+
+Windows task-stop 还需完整任务运行状态核对，后续接入；本 stop 命令不注销/禁用系统任务。
+
+### 3.11.49 Windows 任务正常停止编排（UX-003）
+
+新增 task-stop --confirm-stop，仅当前 Windows 已注册/签名实例。持生命周期锁，拒绝 pending 切换，先完整读回任务配置与运行状态；queued 或未知/冲突状态拒绝，不使用 Task Scheduler 强制结束或取消队列。原本 ready 时仅确认空闲与 Writer，不宣称本次正常退出，也不要求历史 LastTaskResult 为零。
+
+原本 running 时调用签名退出请求客户端，等待本次 drained 记录与 Writer 释放，再等待任务 ready/0 实例且 LastTaskResult=0。最终持主 Writer 再完整查询归属/运行状态，并复验本次接受/排空记录。排空等待与任务等待各最多 35 秒，另计有界系统调用；失败保留任务和数据，不能删配置或重发另一退出请求。命令不注销、不禁用任务，成功只描述本次检查时空闲与写锁释放。后续注销可复用此准备状态，但仍必须独立复验。
+
+没有 Windows 宿主时仅模拟运行状态，签名退出/结果沿用真实状态层；不可算原生 task-stop 验收。
+
+### 3.11.50 Windows 任务注销（UX-003）
+
+新增 task-unregister --confirm-unregister，仅删除当前用户签名绑定的实例任务。持生命周期与主 Writer，拒绝 pending 切换；先核对本地签名源和定点存在性。已缺席可幂等返回，仍保留签名源；存在时完整核对配置与 ready/0 实例，运行或排队拒绝并提示先停止。
+
+删除回调接收最后一次完整验过的系统 XML 快照。固定 PowerShell 脚本在同一当前用户 COM 会话内复验精确任务路径、XML 快照和 ready/0 实例，再对精确任务名 DeleteTask(name,0)。XML 用禁用 DTD/解析器的 XmlDocument 去除结构空白后按 OuterXml 严格比较；格式或字段无法确认均拒绝，不忽略差异。此检查缩小外部修改竞态窗口，但 Task Scheduler 不提供条件删除事务，不能保证对抗同权限用户在最后检查后替换任务。
+
+删除成功后再查询定点缺席及本地签名一致才输出成功；调用失败/响应丢失仍报错，重试通过定点缺席恢复，不重建/覆盖系统任务，不删除本地 XML、密钥、历史。仅本机当前用户，不强制结束、不提权、不批量删除。Windows 原生兼容与并发行为仍须实机验收。
+
+### 3.11.51 Windows setup 编排（UX-003）
+
+setup --confirm-setup [--port N] [--open-ui] 在 Windows 接入既有初始化、task-register、task-start 和目录健康检查；--runtime 拒绝，不静默改变持久性。写入前通过当前用户 SID 与本机 Task Scheduler 根目录只读 COM 预检；不可用时不初始化。复用 macOS 的阶段编排与本机配置/健康读取，不复制另一套状态逻辑。
+
+已有健康实例仍须 task-start 完整归属核对；显式端口不一致拒绝。未健康时初始化、排他注册、按需启动，最后重新读取端口并验证实例健康才报告就绪，可选打开管理页面。每阶段失败保留现场供重试，不自动卸载；浏览器失败可以返回错误但已就绪状态仍如实显示。不自动添加登录触发器。Windows 原生安装、COM 预检、启动与浏览器旅程仍须实机验收。
+
+### 3.11.52 Windows teardown 编排（UX-003）
+
+teardown --confirm-teardown 在 Windows 持生命周期锁贯穿正常停止和注销；先拒绝 pending 切换、核对签名归属与定点存在性。存在时复用 task-stop 核心，停止未确认不注销；已缺席跳过停止，进入注销核心的幂等缺席复验。停止后取得主 Writer，再复用 task-unregister 完整归属/空闲/缺席检查，锁忙即拒绝。
+
+任何失败保留现场，重试可恢复已经完成注销但响应中断的状态；不重建任务，不移除程序、配置、身份、历史或智能体钩子。成功说明后台入口已移除，钩子仍在且 block 模式服务不可达会拒绝。各平台原生验收仍按真实宿主证据单独登记。
+
+### 3.12 个人任务活动追溯（UX-011）
+
+第一阶段在 receipt 内新增只读任务聚合核心，输入完整回执快照、公钥和可选既有 Checkpoint，先复用 VerifyDetailed；前缀无效返回校验报告与错误，不产可信任务分组。报告保留历史完整性和新鲜度的独立状态，无检查点时不将前缀验签提升为完整历史证明。
+
+仅 IntentBinding=bound 且任务、意图、意图摘要、平台、会话、主体完整时分组；键为 chain_id/platform/session_id/agent_id/task_id/intent_id/intent_digest，避免同任务名跨主体/会话串记录。绑定已撤销但历史归属完整的记录仍保留归属，不因此声称其权限有效。缺少字段或 unbound 的记录逐条进入未归属索引，不根据时间、工具名或模型文字猜测关联。
+
+分组保持输入链顺序，仅返回原快照索引，不复制参数或持久化新事实；不从 allow/工具调用成功推导效果已核验。后续合同/API/任务详情需单独接 completion/effect 证据和可信 Skill 版本引用，当前核心不作为已完成 UX-011 或已提供用户入口。
+
+### 3.12.1 任务分组的结果核验范围（UX-011）
+
+completion 新增内部 EvaluateForSubject，输入已验签意图任务及完整 platform/session_id/agent_id 范围。每条候选证据仍验签并拒绝重复 ID，以可信历史 action/decision_receipt 读回任务、意图与主体；行动引用或任务引用矛盾拒绝，来自其他主体/会话/平台/意图版本的合法证据不计入本组。
+
+筛选后复用现有 Evaluate，使用本次读取的行动快照，避免重复 lookup 的状态差异。缺证据保留 incomplete，无效果要求保留 unknown/not_required；调用成功、自报或模型文本仍不能得到 verified。仅内部核心，不改变现有 task completion API 的范围语义，后续任务详情 API 必须显式使用本组完整范围。
+
+### 3.12.2 任务活动列表 API（UX-011）
+
+新增管理鉴权 GET /v1/task-activities，合同 local-task-activities/v1。view=tasks（默认）或 unassigned；limit 默认 50、1..100；offset 默认 0，后续页必须携带首屏 snapshot。未知/重复参数、非法数字拒绝 400；快照变化拒绝 409，前端须重载，不混合两个时间点的页。列表包含稳定 activity_id、归属类型、复合绑定（未归属为 null）、回执数量和首末 seq；未归属逐条列出。
+
+Engine 锁内限额读取完整链（10 万记录/64MiB），截断拒绝而非部分成功；核对读取尾部与当前 Engine 头相符，读取已配置的独立检查点，再调用聚合核心。快照 ID 绑定链 ID、记录数量与 tip hash。输出独立 prefix_valid/history_integrity/evidence_freshness，不暴露内部校验错误文本。完整性失败不返回列表，读取失败与空列表区别明确；Cache-Control no-store。列表尚不表示效果核验，任务详情后续接入独立结果核验。
+
+### 3.12.3 个人任务活动入口（UX-011/012）
+
+本地新增 /activities 与导航“任务活动”，保留 /receipts。任务/未归属视图及分页参数存 URL，刷新与返回保留；刷新按钮重新读取第一页。前端验证响应 schema、视图、offset、snapshot、归属关系、计数与分页边界；不接受跨请求页面。请求卸载或变更时取消并忽略旧响应，载入/错误期间隐藏旧列表和完整性结论。
+
+展示任务、平台、主体、会话与回执数量；未知归属解释缺少绑定，不猜测 Skill/任务。前缀有效、完整历史范围与结果核验分别表述。快照变化提示重新加载，断连和验签失败不当作无记录；本阶段不展示未实现的详情/结果已核验承诺。
+
+### 3.12.4 任务活动详情回执 API（UX-011）
+
+新增管理鉴权 GET /v1/task-activities/<activity_id>，合同 local-task-activity-detail/v1。沿用 view、limit、offset、snapshot；活动身份必须为 64 位小写十六进制并匹配完整绑定摘要（未归属按单条回执身份）。未知活动/错误视图 404，旧快照 409；所有详情来自同一个 Engine 锁内读取并验证的完整链快照。
+
+返回活动摘要、独立完整性状态及仅该活动的分页回执摘要：receipt_id/seq/hash/issued_at、平台/会话/主体、裁决动作/原因、工具、record_type、action_id/decision_receipt_id 与 matched_grant_id。首末序号保持原链顺序，不把中间其他任务回执纳入。没有 Params/ParamsExcerpt、文件内容或密钥；本阶段未加入 completion 状态，不能推导“效果已核验”。
+
+### 3.12.5 个人任务活动详情页（UX-011/012）
+
+新增 /activities/:id，列表提供“查看活动记录”，携带视图与当前 snapshot。详情显示任务/主体/会话、当前组回执的序号、时间、工具、裁决、原因及授权引用；不显示结果已核验标记。分页保持 snapshot，返回列表保留来源视图/列表偏移；刷新详情重新读取该活动第一页，404/409/不可用有独立提示。
+
+前端除校验 schema、活动 ID、分页和完整性外，还核对每条回执 seq 范围/顺序与绑定平台、会话、主体，拒绝跨组响应；不接受参数字段。路由改变与卸载取消旧请求，加载或错误隐藏过时内容。未知归属保留说明，历史完整性和实际效果不能由前缀验签推导。
+
+### 3.12.6 活动范围结果核验 API（UX-011）
+
+新增管理鉴权 GET /v1/task-activities/<id>/completion，local-task-activity-completion/v1。只接受 view/snapshot，不接受分页参数。先按完整链快照定位活动与复合绑定，再按 IntentID 读取并验证不可变意图，核对 TaskID/AgentID/Digest；缺少意图或未归属返回 result=null 和明确原因，不宣称完成。签名损坏/引用冲突返回错误。
+
+有有效绑定时读取该任务效果证据，复用 Engine.HistoricalEffectActions 和 completion.EvaluateForSubject，仅当前平台/会话/主体/意图版本可贡献结果。末尾重新核对回执快照未变化，变化返回 409；结果记录本次 evaluated_at，效果证据仍为有界读取时间点的核验，不代表未来状态不变。不接受请求中的模型完成声明，不改变既有 task completion API。
+
+### 3.12.7 活动详情结果核验展示（UX-011）
+
+详情读取完成后，用同一 activity 与 snapshot 请求 completion；面板独立展示已核验/未完成/冲突/未知及各要求的证据引用。校验响应活动绑定、快照、评估时间、状态与证据关系，verified 必须有非空要求且每项 verified/非空证据、无 incident，不接受 completed 或缺失证据的成功声明。
+
+缺少归属、缺少意图或未定义效果要求有明确说明。加载/请求失败隐藏旧核验结论，保留已校验回执详情；409 提醒刷新整个详情，不拼接不同快照。浏览器只显示服务端结果，不自行推导实际效果。证据引用当前为只读标识，后续接证据详情与导出。
+
+### 3.12.8 效果证据元数据查看（UX-011）
+
+复用管理鉴权 GET /v1/effect-evidence/:id（Store.Get 服务端验签），前端仅允许从已校验 completion 返回的 evidence_ids/incident_ids 中选择，按需读取且 cache=no-store。核对证据 ID 与 task_id，验证元数据结构后只投影来源、独立性、覆盖范围、执行状态、观测结果、时间、动作/回执引用与摘要，不展示文件/网络观测载荷。
+
+签名格式检查不是浏览器验签；浏览器不持有密钥，验签由既有服务端完成。元数据中的 completed/expected 不能自行提升任务结果。详情加载失败保留任务核验记录但显示证据当前不可用；更换证据或活动取消旧请求，不展示过期选中项。关闭详情返回选择按钮，保持键盘焦点。
+
+### 3.12.9 单活动脱敏导出核心（UX-011）
+
+内部导出投影先复用 ProjectTaskActivities 验证完整输入快照，再按七字段完整绑定选取回执；未知或不存在的绑定拒绝，不接受调用方提供序号列表。输入超过既有读取条数上限、选择超出调用方导出限额均拒绝，不产生部分成功。调用方仍须通过受限磁盘读取与引擎快照核对，切片核心不能证明磁盘完整性。
+
+仅输出顺序号、时间、原回执摘要、工具/回执标识的 SHA-256 引用和允许列表中的裁决值；自由文本原因、参数/摘录、主体/会话、路径、授权内容及效果原文均不复制。输入裁决不是 allow/deny/hold/redact 则输出 unknown。保留整链验证报告，但明确本投影不是原始签名回执链，不能用子集声称历史完整或任务效果成功。本阶段是内部类型，不新增对外合同；下载 API、独立签名封装及 UI 后续接入。
+
+### 3.12.10 单活动签名下载包（UX-011）
+
+新增 local-task-activity-export/v1：只包含活动摘要 ID、完整输入快照摘要、生成时间、源回执条数/链头、源前缀与历史状态、脱敏行、公开验签密钥及独立 local_canonical/v1 签名。attestation_scope 固定 share_projection_only；不复制原始回执签名，不包含参数/原因/主体原文，不声称任务效果成功。公开密钥须由接收方通过可信渠道核对，自带密钥只支持自洽检查。
+
+管理 GET /v1/task-activities/:id/export 必须指定 snapshot，仅允许 tasks 视图且不接受分页；未知归属明确拒绝。复用引擎受限快照和 M100 投影，最多导出 10000 行，超过限额失败而非截断。签名前采用引擎快照的验证报告，签名后再次核对当前快照；变化返回 409，不下载旧新混合包。响应 no-store、attachment、固定安全文件名。该版是操作回执摘要包，效果证据与 Skill 版本尚未纳入，不宣称完整任务证据包。
+
+### 3.12.11 个人活动摘要下载入口（UX-011/012）
+
+已归属活动详情提供“下载脱敏回执摘要”，点击时按当前 activity/snapshot 下载整组摘要，不随详情分页截断。前端严格检查字段白名单、范围、行数/顺序/首尾、摘要格式和签名格式；原样保存签名文档，不重写签名字段，不把格式校验称为密码学验签。未知归属不提供按钮。错误、超限及快照变化明确提示且不生成文件；详情变化取消请求，旧响应不得触发下载。界面说明不含参数原文、效果材料或 Skill 版本，签名证明摘要来源而非任务完成。
+
+### 3.12.12 历史授权来源关联核心（UX-011）
+
+内部 intent 历史读取以已验签回执的完整平台/会话/主体/任务/意图/摘要/Authority revision 和 matched Grant 为输入。读取并验签不可变 Binding 与 Intent，所有关系逐项匹配后返回历史 GrantReference 副本；缺失选择、缺失记录或关系不符返回错误，不回退当前 Grant。该接口不校验当前权限活跃性，不返回可执行 Grant，不用于裁决；已撤销/过期的历史仍可追溯。
+
+关联仅证明签名绑定所选择的授权/准入来源，不能据此声称具体 Skill 文件在某次工具调用中实际执行。Skill 内容摘要须进一步核验历史准入或安装清单；当前安装版本不能替代。核心不新增 wire 合同，服务端结果和界面后续接入。
+
+### 3.12.13 历史 Skill 内容来源核验核心（UX-011）
+
+在 M103 历史签名选择核验后，仅按选中 AdmissionID 读取不可变准入，通过本地公钥验签、ID 与内容摘要格式核对，投影 Skill 名称、声明版本及准入 content_hash。导入准入另经 importsource.Parse 验证规范来源和派生准入 ID，分别保留 import_id、artifact_digest、analysis_sha256；不能把 content_hash 当完整导入制品摘要。
+
+名称/版本限制长度与控制字符；版本缺失仍为未知，不从当前文件补齐。缺失/错误准入、篡改签名和非法导入来源拒绝，不返回部分可信结果。只返回元数据副本，不带路径、原文、事实规则或签名私钥。该内部结果证明历史授权所引用的分析内容来源，不证明安装、实际执行或当前权限有效；API/UI 后续接入。
+
+### 3.12.14 历史准入的受限磁盘读取（UX-011）
+
+新增独立历史读取入口，复用 state 既有普通文件/同对象复验/8 MiB 限额读取器；校验准入 ID，读取前后检查 admissions 目录不是链接且身份未改变，拒绝文件链接、目录与超限文件。JSON 禁止未知字段及尾随内容，文档 ID 须与请求 ID 相同。错误只返回稳定类别，缺失保留 os.ErrNotExist；读取不初始化或修改状态。
+
+读取器不单独证明签名，历史内容来源核心仍须验签并验证引用。既有 GetAdmission 行为不在本批改变，避免影响当前准入生命周期。文件层检查不声称能够隔离拥有同用户目录写权限的恶意并发进程。
+
+### 3.12.15 活动历史 Skill 来源查询（UX-011）
+
+管理 GET /v1/task-activities/:id/sources 使用现有 view/offset/limit/snapshot 参数，但 snapshot 必填。回执链完整受限读取/验签后，仅查询当前活动本页回执，返回 local-task-activity-sources/v1：活动 ID、快照、分页、各回执序号及 hash、状态和历史来源元数据。状态为 verified_source（签名历史来源）、unavailable（关联缺失或无法核验）、unattributed（未归属）；后两者 source=null。不把 verified_source 称为 Skill 执行证明。
+
+相同完整历史关联键仅读取一次；每请求最多 8 个不同键，超过返回 413，不输出半页。复用 M103–105，签名来源异常只显示稳定 unavailable，不输出路径或错误原文。结束再次核对链快照，变化返回 409。响应 no-store；不改变历史、权限、安装或原准入。前端另行接入。
+
+### 3.12.16 个人活动历史 Skill 来源面板（UX-011/012）
+
+活动详情提供按需展开的“历史 Skill 来源”面板，仅点击后读取本页来源，复用详情的活动 ID/快照/视图/分页。前端逐行核对 seq、receipt_hash 和 matched_grant_id，严格区分 verified_source、unavailable、unattributed，禁止未知字段与非法来源结构。展示声明版本、准入内容摘要，以及存在时的导入制品/分析摘要；版本缺失说明未声明。
+
+切换活动/分页/刷新会清空面板并取消旧请求；错误不保留旧可信来源，409 提醒刷新、413 提示缩小查询范围的限制。来源核验不是当前权限、安装或实际执行证明，界面始终说明。浏览器只做格式与关联检查，不自称密码学验签。
+
+### 3.12.17 全快照活动筛选查询（UX-011）
+
+新增管理 GET /v1/task-activities/search，复用 view/offset/limit/snapshot 和完整链快照验证，另支持 platform、agent_id、session_id、task_id 精确筛选及 q 标识关键词（Unicode 小写化后字面子串；仅任务/主体/会话/平台标识，不搜索参数原文）。各条件 AND；空值视为无条件，非空值最多 256 个 Unicode 字符/1024 字节，拒绝控制字符、非法 UTF-8、重复及未知参数，不执行正则表达式。
+
+先对完整已验证投影筛选，再分页；total 为全部匹配项数量，活动 ID 和源 snapshot 保持原身份，可进入原详情。未归属项仅按原回执字段过滤，不补造任务绑定。返回 local-task-activity-search/v1，包含完整 filters 回显与既有分页/完整性字段。源快照变化返回 409；不将无结果与读取失败混淆。UI 改条件须重置分页，后续页保留全部筛选条件。旧列表合同/行为不变。
+
+### 3.12.18 个人活动筛选与 URL 状态（UX-011/012）
+
+任务活动页提供关键词及平台、智能体、会话、任务精确条件，提交或清空条件时重置 offset/snapshot；切换已归属/未归属视图保留条件并重新读取。仅有空条件时复用原列表 API，存在任一条件时使用 search API。后续页携带全部条件和首屏 snapshot，详情链接与返回链接保留原筛选、视图、来源页和快照；刷新活动保留条件但获取新快照。
+
+筛选草稿不触发网络请求，明确提交后才写入 URL；浏览器前进/后退由 URL 恢复。前端按后端相同的字符、字节、控制符边界接受 URL/表单条件，并校验服务端 filters 原样回显、分页和活动范围。快照冲突清除旧结果并提示刷新；筛选无结果显示“没有匹配活动”，不伪装读取失败。页面说明搜索只覆盖标识字段，不搜索参数原文或 Skill 内容。
+
+### 3.12.19 完整脱敏追溯包核心（UX-011/013）
+
+新增 `local-task-trace-export/v1` 独立签名文档，组合同一活动快照的回执摘要、逐回执历史 Skill 来源状态、活动范围效果结论及其实际引用的效果证据元数据。构建前必须复验 M101 回执摘要包签名；来源行须与回执 seq/hash 一一对应。效果记录逐份验签、任务 ID 与结论引用一致，缺少引用、重复证据或其他任务材料拒绝，不生成部分签名包。
+
+共享包不输出任务/主体/会话、Skill 名称/版本、Grant/Admission/Import ID、工具、动作/裁决回执或证据 ID 原文；这些标识使用带 `sha256:` 前缀的不可逆引用。保留准入内容、制品、分析、权限和证据摘要，以及受控的状态/原因/来源类型/独立性/覆盖/执行结果与资源摘要；不包含参数、原因自由文本、文件/网络观测原文、签名私钥或原始记录签名。
+
+任一历史来源 unavailable、效果结论不是 verified 或结论本身 unavailable 时 `incomplete=true`。这表示共享包的核验材料不完整，不改写原始事实；conflicting 仍同时为 incomplete 并保留冲突状态。签名 `attestation_scope=redacted_trace_projection_only`，只证明本机对该脱敏投影签名，不证明自带公钥身份、完整历史、当前权限、实际 Skill 执行或任务成功。服务端快照编排、下载 API 与 UI 后续接入。
+
+### 3.12.20 完整追溯包下载 API（UX-011/013）
+
+新增管理 `GET /v1/task-activities/{activity_id}/trace-export?snapshot=...`，仅接受已归属任务视图、完整 64 位活动 ID 和必填源快照；不接受 offset/limit 或未归属视图。接口读取并验签完整回执链，按活动完整导出最多 10000 条回执，不允许调用方提交任务、来源或效果材料。历史来源由每条已验证回执的完整主体和 Grant 引用解析，同一请求最多读取 8 个不同来源键，超出返回 413；缺失或无效来源写为 `unavailable`，不以当前 Grant 或安装状态补造。
+
+完成结论复用活动详情的主体隔离核验，效果记录只从该任务的签名存储读取，导出核心仅保留结论实际引用的元数据。生成独立签名后再次读取回执快照，并以证据 ID/记录签名核对任务效果集合；发生变化返回 409 且不附下载头。鉴权、读取/验签或关联错误不返回部分文档；成功响应使用 `Cache-Control: no-store` 和附件下载头。该 API 仍受 §3.12.19 的证明范围限制，前端须将“完整追溯包”与仅含回执摘要的旧下载入口区分。
+
+### 3.12.21 完整追溯包前端入口（UX-011/012/013）
+
+已归属活动详情分别提供“下载脱敏回执摘要”和“下载完整脱敏追溯包”，文案明确前者不含效果/Skill 材料，后者包含历史来源状态、完成结论和被引用的效果元数据。完整下载必须携带详情的活动 ID 与快照；切换活动、分页或刷新时取消旧请求。浏览器按白名单验证根字段、回执/来源一一对应、完成状态约束、引用证据集合完全相等、incomplete 语义和限额，再保存全部字段值不变的签名文档；允许仅改变不参与规范签名的 JSON 空白格式。
+
+成功后展示包内 `incomplete` 状态；409 提示刷新详情，413 提示缩小活动范围，格式或关联错误不下载文件。界面不得宣称浏览器已完成密码学验签，并提示签名验证需要外部可信公钥。未归属活动不显示两个下载入口。
+
+### 3.12.22 独立原文内容仓边界（UX-013）
+
+默认不创建原文内容密钥或记录目录，也不从现有回执、Intent、效果证据或导出反向恢复原文。只有后续任务级管理授权可以初始化独立仓；初始化生成独立 32 字节随机密钥 `<state>/keys/raw-content.key`，不得复用签名密钥、管理/适配器凭据或把密钥写入配置/API。记录使用 AES-256-GCM、每条随机 12 字节 nonce 和绑定不可篡改元数据的 AAD；磁盘只保存 `local-raw-task-content-envelope/v1` 密文封套，路径为独立 `<state>/raw-task-content/`，不写入 receipts/effect-evidence/audit。
+
+首版默认按需原文保留 24 小时，允许 1 小时至 30 天；默认磁盘预算 64 MiB，允许 1 MiB 至 1 GiB；单条规范内容最大 1 MiB。内容按任务摘要关联，种类仅 input/parameters/output/note；进入加密仓前必须转为结构化字段并移除标为 secret 或命中内置凭据字段名/值模式的字段，封套只记录移除数量。无法分类、非法路径、控制字符、无效 UTF-8、重复字段、空内容、超限、预算不足均拒绝，不以截断内容伪装完整原文。
+
+过期读取失败；清理和用户删除只移除独立密文，不修改回执、检查点、效果证据或签名追溯包。密文缺失、过期、被清理和损坏必须在后续 API/UI 中区分；删除操作不能把原任务状态改成成功或失败。进程内互斥与既有单实例 Writer 共同约束写入，文件使用排他原子发布并拒绝链接/非普通文件。密钥丢失或损坏时现有密文不可恢复，须明确报错，不自动覆盖密钥。
+
+### 3.12.23 逐任务原文采集授权与撤销（UX-013）
+
+初始化独立密文仓或授权目录本身不允许采集。采集必须持有 `local-raw-task-content-grant/v1` 不可变签名授权；授权只保存任务和操作者的 sha256 引用，并固定内容种类、签发/过期时间、密文保留秒数和单条规范明文上限，不保存任务或操作者原始标识。授权由本机签名身份以 `local_canonical/v1` 签发；原文加密仍使用 §3.12.22 的独立随机密钥，两类密钥不得混用。
+
+授权采集窗口为 1 分钟至 24 小时；密文保留期为整数秒且在 1 小时至当前仓配置上限内；单条上限为 1 字节至 1 MiB。内容种类只能从 input/parameters/output/note 中选择、排序且不重复。每次采集都重新严格读取并验签授权，核对任务摘要、内容种类、窗口、保留期、单条大小和撤销墓碑；未生效、过期、跨任务、未授权种类、超限、未知字段、链接、篡改或异常权限均失败关闭。`Store` 不暴露写方法，生产写入只能经 `Authority.Capture`，使同进程调用方不能仅凭已初始化仓绕过授权。
+
+撤销使用独立 `local-raw-task-content-revocation/v1` 不可变签名墓碑，绑定授权 ID、完整授权签名和撤销操作者摘要；写请求必须携带预期授权签名作为 CAS 前置条件。相同期望值重试返回首份墓碑，错误期望值冲突，墓碑损坏失败关闭且不得恢复授权。采集与撤销在同一进程内串行，因此撤销返回后该授权不能再创建密文。撤销不删除此前密文；其读取、用户删除和到期清理由独立访问流程处理，且不改变默认脱敏事实链。授权目录只在显式管理初始化时创建，既有打开路径无副作用；管理 API、持续状态提示、读取/删除 UI 和诊断包排除检查在后续批次接入。
+
+### 3.12.24 原文仓签名启用状态与管理 API（UX-013）
+
+启用原文仓必须发布唯一不可变 `local-raw-task-content-activation/v1`，绑定 `enabled=true`、操作者摘要、启用时间、保留秒数、磁盘预算和独立加密密钥指纹，并由本机签名身份签名。该记录是重启后恢复限制的唯一事实源；只有密钥/目录而缺少启用记录视为 disabled，记录、签名或密钥指纹损坏视为 error，均不得自动补造或覆盖。相同限制重试返回首份记录，不同限制返回冲突。启用记录不包含任务范围，也不签发 Grant，`default_capture` 永远为 false。
+
+本地服务提供管理会话专用 `GET /v1/raw-task-content/status` 与 `GET|POST /v1/raw-task-content/activation`。状态响应使用 `local-raw-task-content-status/v1`，仅输出 disabled/ready/error、固定默认不采集及 ready 时的限制和启用时间；错误状态不回显路径、密钥或内部原因。POST 使用 `local-raw-task-content-activate/v1` 严格平面正文，字段必须恰好为 schema_version、actor_id、retention_seconds、budget_bytes，拒绝缺失、null、重复、未知、尾随 JSON、非整数及越界。首次成功返回 201 与签名 Activation，相同限制重试返回 200 与同一签名，不同限制返回 409。
+
+所有响应使用 `Cache-Control: no-store`；未配对请求为 401，决策凭据访问管理端点为 403。GET 每次重新读取并验签 Activation 及加密密钥绑定，不信任仅存在于内存的 ready 标志。启用/状态异常只使原文功能不可用，不阻断既有默认脱敏决策、回执和追溯读取。逐任务 Grant/Revoke 管理、运行时采集凭据、读取/删除和前端持续提示继续分批接入。
+
+### 3.12.25 逐任务 Grant/Revoke 管理 API（UX-013）
+
+启用后的管理服务提供 `GET|POST /v1/raw-task-content/grants`、`GET /v1/raw-task-content/grants/{grant_id}` 和 `POST /v1/raw-task-content/grants/{grant_id}/revoke`。创建使用 `local-raw-task-content-grant-create/v1`，字段恰好为 schema_version、task_id、kinds、actor_id、duration_seconds、retention_seconds、max_plaintext_bytes；撤销使用 `local-raw-task-content-revoke/v1`，字段恰好为 schema_version、expected_grant_signature、actor_id。两者使用严格请求解析并执行 §3.12.23 的范围、时间和大小边界；原始任务/操作者只用于请求期摘要计算，不回显、不写入 Grant/Revocation 文件。
+
+创建成功返回 201 与完整签名 Grant。单项读取返回 `local-raw-task-content-grant-view/v1`，明确 active/expired/revoked；只有 revoked 携带完整签名 Revocation，其余必须为 null。集合读取返回 `local-raw-task-content-grants/v1`，按 Grant ID 稳定排序，最多 4096 条；读取先验证整个授权目录，每份 Grant、关联墓碑、签名、时间和当前 Activation 限制，任一损坏即整体失败，不返回部分可信列表。过期仅改变投影视图，不删除授权。
+
+撤销必须命中存在的 Grant，错误预期签名返回 409；正确请求返回 200 与终态签名墓碑，相同期望值重试返回首份墓碑。无管理会话为 401，决策凭据为 403，未启用为 409，不存在为 404，容量耗尽为 507，状态损坏为 503；所有响应 no-store。每次操作先重新验证 Activation 与独立密钥绑定。该管理 API 不提供采集正文或读取密文能力；运行时采集必须另行使用与任务/实例绑定的最小凭据，不能复用管理会话或通用决策令牌。
+
+### 3.12.26 运行时原文采集许可与写入 API（UX-013）
+
+原文采集使用两步运行时协议。`POST /v1/raw-task-content/capture-permits` 只接受已发行实例凭据，严格请求字段恰好为 schema_version、platform、agent_id、session_id、task_id、grant_id、expected_grant_signature、kind、ttl_seconds。服务端先用既有 Runtime Identity 重新认证实例并解析已签名会话绑定，要求 task_id 等于该绑定的服务端任务，随后重新验证 §3.12.23 的 active Grant、完整 Grant 签名、任务摘要及内容种类。管理会话、全局决策凭据、自检凭据、未绑定/跨实例/跨会话凭据均不得签发许可。
+
+成功返回签名 `local-raw-task-content-capture-permit/v1`。许可包含随机 ID、Grant ID 与完整预期签名，以及运行时身份、会话、绑定和任务的 sha256 引用、单一内容种类、签发/到期时间和签名；不包含实例凭据、原始身份、会话或任务文本。请求期限为 10 至 300 秒，实际到期点取请求期限、Grant 到期和运行时绑定到期三者最早值；上游权限已到期则拒绝。许可不落盘、不延长任何权限，签名只证明本机在签发时完成了这些绑定检查。
+
+`POST /v1/raw-task-content/captures` 使用同一实例凭据，严格请求字段恰好为 schema_version、platform、agent_id、session_id、task_id、permit、fields。服务端每次写入都重新认证实例及会话绑定、重新读取 Activation/密钥、验证许可签名和半开有效期，并重新验证当前 Grant、Grant 签名和撤销状态；许可中的四个摘要引用必须分别匹配当前实例身份、会话、绑定和任务，内容 kind 必须与许可一致。结构化 fields 每项只允许 path、value、secret 三个必填字段，重复/未知/null、控制字符、非法路径、超限和全部被过滤均拒绝；secret 及内置凭据模式沿用 §3.12.22 整项删除。
+
+成功返回 201 与 `local-raw-task-content-capture-result/v1`，只包含创建的密文封套元数据，不返回许可之外的明文或解密结果。实例撤销、会话/Intent/权限 Grant 失效、原文 Grant 撤销、许可过期、任一签名或磁盘状态损坏均失败关闭；失败不创建部分密文，也不影响默认脱敏决策。所有响应 no-store。许可允许在自身窗口内按相同 task/kind 重用，实际写入仍受逐条大小、全仓磁盘预算和每次权限复验约束；首版不把它表述为单次令牌。原生适配器调用与真实平台端到端验证另行交付。
+
+### 3.12.27 原文记录管理读取、删除与过期清理（UX-013）
+
+原文访问只提供给配对后的本地管理会话，决策、实例、自检和观察凭据均不能读取或删除。`POST /v1/raw-task-content/records/search` 接收字段恰好为 schema_version、task_id 的 `local-raw-task-content-record-list/v1`，返回该任务的 `local-raw-task-content-records/v1` 元数据清单；原始 task_id 只在请求期计算摘要，不进入响应或磁盘。清单按 record_id 稳定排序，区分 active/expired，不返回 nonce、ciphertext 或明文。读取前须验证整个有界内容目录及每条 AES-GCM 认证，任一损坏则整体失败，不提供可能误导用户的部分清单。
+
+`POST /v1/raw-task-content/records/{record_id}/read` 接收字段恰好为 schema_version、task_id 的 `local-raw-task-content-record-read/v1`。仅 active 且任务摘要匹配时返回 `local-raw-task-content-record-content/v1`，包含经凭据过滤后的 path/value 字段与记录元数据；响应明确 `contains_plaintext=true` 并使用 no-store。任务不匹配按状态损坏失败，不允许使用 record_id 枚举其他任务。过期返回 410，缺失返回 404，密钥或认证损坏返回 503。
+
+`POST /v1/raw-task-content/records/{record_id}/delete` 接收 `local-raw-task-content-record-delete/v1`，字段恰好为 schema_version、task_id、confirm_record_id，且确认 ID 必须与路径一致。删除 active 或 expired 密文，不改写原任务、回执、效果证据、追溯包、Grant 或 Revocation；成功返回 `local-raw-task-content-record-deleted/v1`。`POST /v1/raw-task-content/purge-expired` 接收字段恰好为 schema_version、confirm_expired_only=true 的请求，先认证整个内容目录再仅删除达到半开到期边界的记录，返回删除项数和释放的封套字节数。清理遇到损坏时不得先删除已扫描的其他项。
+
+所有请求严格拒绝缺失、null、重复、未知字段、尾随 JSON、非法任务/记录 ID；每次操作重新验证 Activation 和独立密钥。访问接口本身不增加原文 Grant、不会恢复过期或撤销的采集权限，也不把读取/删除事件写进原文；后续 UI 必须在展示明文前二次明确动作，并持续标识这是可删除辅助内容。
+
+### 3.12.28 原文仓持续状态与隐私设置界面（UX-012/013）
+
+个人控制台在已配对管理会话内持续轮询 `/v1/raw-task-content/status`，顶栏始终区分“原文记录关闭”“原文仓已启用，按任务授权”“原文仓状态异常”和“状态不可用”。ready 只能表述仓已启用，不得暗示任一任务正在采集；顶栏不得显示任务、Grant、记录或操作者标识。页面卸载或管理会话失效时取消请求和计时器，不把状态写入 localStorage/sessionStorage。
+
+设置页提供独立隐私面板。disabled 时展示默认不保存原文、secret 始终排除、原文不进入脱敏追溯包等边界；启用必须填写当前管理会话的 actor_id、选择 1 小时至 30 天保留期和 1 MiB 至 1 GiB 磁盘预算，并勾选一次明确确认后才提交。ready 时展示签名 Activation 的启用时间及固定限制，明确首版不能原地改写，修改需后续迁移设计。error 时不得提供覆盖或重置按钮，只给出状态检查建议。
+
+过期清理只能在 ready 状态下显示，要求独立勾选“仅清理已到期密文”后调用 §3.12.27；成功展示删除项数和释放字节，失败清除旧成功结果并提示重新读取。前端对 status、activation 和 purge result 执行完整字段白名单、类型、范围、时间及条件关系校验；格式不兼容视为服务错误。设置页不读取或展示任一任务明文，逐任务 Grant 与记录管理在任务详情的后续界面完成。
+
+### 3.12.29 任务详情原文授权与二次查看界面（UX-013）
+
+仅有完整可信 Binding 的任务活动详情可显示原文面板；未归属活动不得猜测 task_id 或开放任何原文操作。面板先读取 §3.12.28 仓状态。disabled 只引导用户前往隐私设置，error/不可用撤下全部旧授权与记录，ready 才并行读取完整 Grant 投影和该任务的记录元数据。前端计算 `sha256(task_id)`，只展示 task_ref 与当前任务一致的 Grant，并要求 records 中每项 task_ref 一致；任何字段、摘要关系、状态关系、重复 ID 或时间关系不合法时整块失败关闭。
+
+创建采集授权必须由用户选择至少一种 input/parameters/output/note、授权有效期、原文保留期和单条上限，显示当前人工身份，并勾选“仅授权此任务且仍按运行时身份复验”后才提交。保留期不得超过 Activation 固定上限。成功响应必须精确匹配当前任务摘要及请求的 kinds、保留期和单条上限；新授权不代表平台已接入采集。active Grant 的撤销需要独立确认，使用页面刚读取的完整 Grant 签名作 CAS；expired/revoked 不再提供撤销动作。
+
+记录清单默认只显示种类、创建/到期时间、大小、已排除 secret 数量及 active/expired 状态。读取明文是单记录二次动作：先显示记录 ID 与“将把辅助原文显示在当前页面”的确认，用户勾选后才调用 read；响应必须为 active、记录 ID/任务摘要/元数据与所选记录一致。关闭查看、切换记录、刷新详情、请求失败或组件卸载时立即清除前端明文状态；不得写浏览器存储、下载文件、复制到剪贴板或混入回执/追溯包。
+
+删除 active 或 expired 记录都要求单独选择目标并确认完整 record_id，成功响应的 record_id 必须相同且 deleted=true，随后重新读取元数据；删除不改变 Grant、任务、回执或结果证据。所有写入进行时禁用相互竞争的授权、撤销、读取和删除动作；错误不能保留旧成功或旧明文。浏览器只做合同和当前选择关系校验，密码学验真继续由本地服务完成。
+
+### 3.12.30 默认导出与诊断的原文隔离（UX-013）
+
+`siq-agent-security export`、管理端 `/v1/export`、单任务回执摘要和完整脱敏追溯包必须继续从明确的结构化事实对象投影，不得遍历、打包或引用 `<state>/raw-task-content/`。即使该目录内存在可识别原文、损坏封套或未知文件，默认导出也不能读取其内容、路径名、记录 ID、Grant/Activation 或目录存在状态；原文仓异常不得阻断默认脱敏导出。
+
+回归测试在真实状态目录的原文内容子目录植入唯一哨兵，再分别执行 CLI 全局导出、HTTP 全局导出、任务回执摘要和完整脱敏追溯包，要求响应中既无哨兵也无 `raw-task-content` 路径标记。测试哨兵不构成有效密文；测试目标是固定“白名单投影而非状态目录打包”的架构边界。未来若新增支持诊断包、崩溃报告或日志收集，必须复用此排除原则并增加该入口的独立哨兵测试，不能依靠文件扩展名或调用方约定。
+
+原文明文仍只允许通过 §3.12.27 的单记录、管理会话、显式 POST 读取；任何导出原文的产品需求必须另建版本化合同、二次确认、最小范围和本地文件权限设计，不得扩展现有默认导出格式。
+
+### 3.12.31 服务生命周期内的原文自动到期清理（UX-013）
+
+`serve` 启动后立即尝试一次原文到期清理，此后每 15 分钟重试，退出时随服务维护上下文停止并等待协程结束。自动清理不需要管理会话的人工确认，只执行与 §3.12.27 相同的 expired-only 存储操作；设置页的手动清理仍保留独立确认。仓未启用时启动检查必须是无副作用的成功空操作，不创建密钥、Activation、权限目录或内容目录。
+
+每次自动清理先重新验证签名 Activation、独立密钥绑定及完整有界密文目录，再删除达到半开到期边界的封套。任一 Activation、密钥、目录项、封套结构或 AES-GCM 认证异常时整次失败关闭，不得先删除其他记录；当前 Grant、Revocation、回执、效果证据和任务事实均不得修改。清理与管理读取、删除、采集通过同一原文仓互斥边界串行。
+
+自动清理失败只表示辅助原文仓需要人工检查，不得停止、降级或阻断默认脱敏决策 API、回执读取及导出。后台循环不得记录任务、记录 ID、正文、密文或密钥信息；失败在下一周期重新验证，不自动修复或覆盖损坏状态。固定 15 分钟周期使 1 小时最短保留期的到期删除延迟上界清晰，同时避免为每份原文建立持久化计时器。
+
+### 3.12.32 原生适配器的运行时原文采集桥（UX-013）
+
+薄适配器不能持有管理会话、原文 Grant 签名或服务端生成的原始 task_id。`POST /v1/raw-task-content/native-captures` 仅接受已发行 Runtime Identity bearer，正文 `local-raw-task-content-native-capture/v1` 字段恰好为 schema_version、platform、agent_id、session_id、kind、fields。服务端以凭据和原生 session 重新解析当前签名 Binding 及其 task_id；请求和响应不回显 task_id、Binding、Grant 或许可。
+
+服务端完整验证原文仓和全部 Grant/Revocation 后，只在该任务与 kind 恰好匹配一份 active Grant 时继续；无匹配拒绝，重叠授权按冲突失败，不能由适配器猜测使用哪份权限。随后内部签发绑定 Runtime Identity、session、Binding、任务和精确 Grant 的 10 秒许可，并在同一请求内立即通过 §3.12.26 的许可路径复验和写入。跨实例、跨会话、撤销、到期、密钥/签名损坏、内容超限或 secret 过滤后为空均不创建封套。
+
+首个原生调用方为已管理的 Hermes 插件。pre_tool_call 只有在正常裁决允许后才尝试保存最终可执行参数；post_tool_call 只有能以真实 tool_call_id 关联同一允许裁决时，才在既有观察上报后尝试保存实际结果。阻断调用即使宿主仍触发 post hook，也不得采集参数或阻断提示文本；无稳定关联时不猜测输出归属。自检身份和旧全局决策凭据不调用该入口。参数和结果只接受可完整表示的 JSON 结构，展开为有界 JSON Pointer 字段，使嵌套凭据键可由 §3.12.22 整项排除；深度、字段数、路径或编码超限时放弃整次辅助采集，不截断后伪称原文完整。
+
+原文采集是最长 250ms 的本机辅助请求。不可达、未启用、无匹配/重叠 Grant、过滤拒绝或写入失败不得改变已完成的工具裁决、原生执行结果或默认脱敏观察；也不得生成未签名的“决策失败”记录。成功响应仍只返回 `local-raw-task-content-capture-result/v1` 元数据。该桥接证明组件合同联通，不代替固定 Hermes 版本的原生完整会话与三系统实机验收；OpenClaw 和 WorkBuddy 须分别设计其 Runtime Identity/session 接入，不能借用 Hermes 证据。
+
+### 3.12.33 阶段审查修正：原生安装、凭据与执行关联
+
+OpenClaw 托管实例沿用 §3.12.32 的 Runtime Identity/session 与原文桥，但仅证明已验证版本和宿主的接入。配置错误不得回退旧凭据；决策 bearer 仅发送至显式端口的 HTTP loopback，localhost 固定解析为 127.0.0.1，禁止 URL 用户信息、路径、查询、片段和重定向。托管身份验证或决策不可用在所有执行模式下拒绝；普通非托管策略的 advisory 语义保留。
+
+输出原文的关联必须来自同 session/tool/call 的有效允许裁决，且只能消费一次；重复 pre/post 保留失效标记直到关联 TTL 到期。hold 在最终执行复验通过前不具备输出采集资格；拒绝、缺少 action/receipt/call 引用或已消费关联均不得采集输出。辅助原文采集失败仍不改变正常决策。
+
+SkillClaim 中的 Skill ID、摘要、Grant ID 是调用方声明；即使匹配本机已批准权限，也不单独构成“当前执行来自该 Skill”的证据。缺少可信运行时执行来源绑定时不得标记 verified 或满足要求 verified 的门禁。
+
+### 3.12.34 场景模板与后台通知的阶段验收修复
+
+场景 ID/版本签入 Grant。场景约束必须在声明过滤、平台工具投影、Runtime Identity 的工具/效果包络以及逐调用规范化效果检查中一致生效。no-exec 拒绝 process.exec 和 unknown；no-network 拒绝 network.request、message.send、process.exec 和 unknown（无法从任意解释器命令证明不出网）；sandboxed 仅允许已识别的只读/工具调用效果，拒绝未知、执行、写入、删除、出网和凭据读取。名称不宣称 OS 沙箱。模板只收紧权限，不能把原审批工具变成直接允许；已有 v1 场景 Grant 也在读回/裁决时适用这些约束。无场景的既有行为保留；普通 policy 的 warn/audit_only 仍遵循原 advisory 合同。
+
+POST /v1/grants 只有既有 live Grant 的场景 ID/版本与本次请求一致时才能返回 reused。不同场景（包括基线与场景互换）返回 409 grant_scenario_conflict、当前版本及场景，指引显式处理既有授权；不改变现有状态、签名、DesiredPolicy 或审计序列，不自动覆盖/撤销有效权限。未知场景仍为 400。场景目录接口为管理面只读 GET，返回既有 scenarios 数组形状。只读工具仍须满足原有路径授权，选择场景不会隐式增加文件读取权限。
+
+桌面通知默认关闭；正文只含待确认数量。失败投递维护独立的下次重试时刻，15 秒内不重复启动通知子进程；成功合并、归零和失败重试分别处理，归零不能清除尚未到期的失败退避。命令直接 argv 执行、最长 5 秒，stdout/stderr 直接丢弃，不收集进内存，不把命令路径、参数、输出或底层异常写日志。日志仅可使用固定失败/超时/不可用类别。Linux notify-send 是当前默认通知器，其他 OS 和真实桌面投递继续独立验收。
+
+### 3.12.35 M131/M132 获取边界与新版检查合同
+
+Git CLI 克隆暂不具备经验证的连接地址固定、逐跳地址约束及完整获取预算；生产 CreateGit/CheckUpstream 必须在启动 Git 前拒绝，返回独立 git_transport_unavailable 类别（503），不能仅凭 HTTPS URL 校验宣称公网安全。保留无运行配置入口的本地 fixture 获取缝用于算法测试，不代表生产 Git 获取可用。恢复该能力须重新完成安全传输与真实平台验收。HTTPS ZIP 继续复用有界下载、完整 DNS 结果校验、连接地址固定和重定向验证。
+
+管理员 POST `/v1/skill-installations/operations/{id}/update-check` 使用 `local-skill-update-check/v1`；schema_version、remote_url、actor_id 是必填平铺键，未知/重复键拒绝。remote_url 最多 4096 字符，与导入一致；git 必须为空，ZIP 必须为原导入 URL 且摘要绑定，本地来源不支持。请求不增加权限、不写持久业务记录；允许私有一次性暂存并在成功/失败/取消后清理。
+
+结果 `local-skill-update-check-result/v1` 绑定 install_id，携带检查时间、git 提交或 ZIP 摘要、内容差异与总数。总数为零时 up_to_date、requires_confirmation=false、空差异；总数大于零时 new_version、requires_confirmation=true。差异最多 200，超出时明确 truncated；权限差异固定 deferred_to_update_comparison。该结果只描述检查时的上游快照，不授予安装或执行权；后续导入与更新确认须重新验证，不能把检查响应作为授权。
+
+新版检查使用独立错误映射，不改变旧安装流程：Git 传输未支持 → 503 skill_update_source_unavailable；获取/存储不可用 → 503 skill_install_unavailable；URL 策略拒绝 → 400 skill_update_url_blocked；来源绑定变化 → 409 skill_install_changed；限额 → 413；取消/超时 → 408。UI 不显示底层异常或原始链接，错误不产生“已是最新”结果。
+
+个人控制台从已安装 Skill 发起显式新版检查，ZIP 需输入原链接（不持久保存），展示检查中、失败、无差异或需要确认及截断差异。切换安装/离开组件取消请求并清空旧结果。发现变化后链接至现有更新审阅流程，仍需重新导入候选和用户确认，不自动安装。后台定期自动检查与真实 OS 更新旅程继续独立验收。
+
 ## 4. 平台适配器规格
 
 ### 4.1 OpenClaw（P0）
 
-**安装门禁（L1）**：`~/.openclaw/openclaw.json`
-
-```json5
-security: { installPolicy: { enabled: true, targets: ["skill","plugin"],
-  exec: { source: "exec", command: "<abs path>/siq-agent-security", args: ["policy-exec","--json"],
-          timeoutMs: 10000, trustedDirs: ["<dir>"] } } }
-```
-
-`siq-agent-security policy-exec`：stdin 读 OpenClaw 请求（含 staged 路径与 `skill.installSpec`）→ 对 staged 目录跑 §3.6 → 输出 `{"decision":"allow|warn|block","reason":...}`：quarantine → block；admit_with_conditions → warn（附「安装后请 grant」）；admit → allow。任何内部错误 → block（OpenClaw 自身在 exec 失败时也 fail-closed）。
+**安装检查入口**：使用 SIQ 的 Skill 导入、检查与确认安装流程。已验证的 OpenClaw 2026.5.12 不接受顶层 `security.installPolicy`，安装器不得注入该字段，也不得据此声称原生安装已被拦截。`policy-exec` 保留为具备明确调用合同的外部宿主接口。历史本产品写入的字段仅在安装记录归属及完整内容匹配后移除；未知用户配置保留。
 
 **运行时（L2）**：插件 `adapters/runtime/openclaw-agentshield/`（TypeScript，`definePluginEntry`）：
 
@@ -596,9 +1154,9 @@ security: { installPolicy: { enabled: true, targets: ["skill","plugin"],
 - `before_tool_call`（priority 10）：POST `/v1/decide`；映射 `deny → {block:true, blockReason}`、`hold → {requireApproval:{title, description, severity:"warning", timeoutMs}}`、`redact → {params}`、`allow → undefined`。
 - `after_tool_call`：POST `/v1/observe`（结果截断 64 KiB 后发送，服务端再脱敏）。
 - 超时：插件侧 5 s；OpenClaw 钩子 15 s fail-closed 兜底。
-- 配置：`~/.openclaw/siq-agent-security.json` 保存 `endpoint`、`token_path`、`enforcement_mode`。
+- 配置：`~/.openclaw/siq-agent-security.json` 保存 `endpoint`、`tokenPath`、`enforcementMode`；托管配置增加 `runtimeIdentityId` 和固定 `agentId`。
 
-**卸载**：`siq-agent-security adapter uninstall openclaw` 删除插件目录并把 `openclaw.json` 恢复到 `<state>/backups/` 中的副本。
+**卸载**：`siq-agent-security adapter uninstall openclaw` 按归属移除本插件注册及自建文件，保留无关配置；不整文件覆盖用户改动。
 - **安装首备（DEV07-A）：** 改写已有用户配置前，以 `*.siq-agent-security.orig`（O_EXCL、0600）保存首次见到的原文；重装不得覆盖。坏 JSON、指向配置的 symlink、未知 `enforcement_mode` 拒绝且不改写。配置写入同目录暂存+Rename。
 - **外科卸载（DEV07-B）：** OpenClaw/CodeBuddy 在活配置上剥离本产品 `installPolicy`/hooks，保留安装后用户字段；冲突（坏 JSON 等）返回 `RecoveryPlan`，不静默整文件回滚。首备仅供人工恢复参考。
 - OpenClaw 重装记录保留先前由本产品创建的插件目录/文件及本产品配置的归属；损坏的既有安装记录拒绝继续。卸载同时移除本插件运行时注册，不把“安装资产存在”当作原生运行时已验收。
@@ -1351,3 +1909,27 @@ ADR-047 管理入口：POST /v1/skill-installations/updates 提交 update-commit
 个人版从已安装记录进入 /skill-updates，固定 install_id；候选列表限同平台/实例的独立导入授权。比较展示原签名安装基线与新候选的内容、规则和设置差异，未批准候选仅可审阅，准备前须人工批准并重新比较。准备明确固定当前移除范围及原比较签名，更新操作以 update_id 深链保存；刷新先 GET 查询事务，尚无事务才 GET 复验计划，不自动写入或重新批准。计划刷新后须人工重新比较才可勾选首次更新确认。
 
 新页面对比较、计划、事务及请求范围做字段和关系检查，不把客户端形状检查称为密码学验签。确认提交使用原计划签名与操作者；已开始事务继续使用原声明，恢复另需明确勾选。写响应丢失先 GET 查询，查询失败清空可执行状态并保留原操作链接，绝不自动重发 POST。更新成功只显示新版文件发布的历史记录，并引导单独准备实例权限；终止不代表旧版本仍可运行，按实际移除证据说明。跨系统通知、远端新版轮询及真实平台支持声明不随本页面提升。
+
+### 独立原文内容仓（ADR-048）
+
+采用 §3.12.22 的独立密钥、AES-256-GCM 封套和任务摘要关联。原文仓是可删除的辅助内容层，不是审计事实源；签名链保持默认脱敏且不引用密文文件身份。创建密钥、任务授权、采集、读取和删除分阶段接入，任何阶段都不得因仓不可用阻断已有默认脱敏决策与追溯读取。
+
+任务授权采用 §3.12.23 的独立签名 Grant 与终态 Revocation，不把“仓已初始化”解释为采集许可。授权只携带摘要身份和最小范围，写入口在存储对象上保持包内私有；所有外部采集必须实时复验授权及撤销。撤销与采集串行，撤销不追溯删除已采集密文，也不改变任何审计或效果事实。该决定先落核心与跨语言合同，再由管理鉴权 API/UI 暴露，不提供无授权兼容写路径。
+
+启用采用 §3.12.24 的不可变签名 Activation，防止配置限制在重启后漂移。存在密钥不等于已启用，错误签名或错误密钥绑定不自动修复；管理状态每次从磁盘事实重建。首版启用后限制不可原地改写，后续如需调整应设计带前序绑定的新版本，而不是覆盖 Activation。
+
+Grant/Revoke 管理采用 §3.12.25 的严格、管理会话专用入口，列表是完整验签投影而不是目录枚举结果。响应保持摘要身份，原始任务和操作者不进入磁盘授权。管理令牌不作为采集能力；采集调用方仍需单独完成运行时身份、任务授权和结构化字段边界校验。
+
+运行时采集采用 §3.12.26 的短时签名许可，并继续要求同一实例凭据逐次认证。许可绑定当前签名会话、任务和原文 Grant，不持久化、不独立成为 bearer credential；因此复制许可不能脱离原实例凭据或借给其他会话使用。采集前后都不向审计链写入明文，返回值只暴露密文封套元数据。管理会话、全局决策凭据和自检凭据均不能替代实例凭据。
+
+原文管理访问采用 §3.12.27 的本地管理会话专用 POST 入口，使原始任务 ID 不出现在 URL 或响应中。列表先对完整内容目录执行 AEAD 认证；显式读取才返回过滤后的明文，删除和过期清理只作用于独立密文文件。首版不额外创建含任务/记录访问轨迹的明文日志；既有管理 HTTP 访问日志不得记录正文。
+
+持续状态与隐私设置采用 §3.12.28。顶栏只显示仓级状态，避免把 ready 混同为活动采集；启用和过期清理各自要求明确确认。浏览器只做合同形状与字段关系检查，不声称完成 Activation 密码学验签，签名可信性由本地服务每次读取时复验。
+
+任务详情原文管理采用 §3.12.29。授权创建、终态撤销、元数据清单、明文二次查看与单条删除保持为彼此独立的显式动作；任务摘要关系由前端校验用于防止错页展示，服务端仍是签名与密文真实性的权威。明文只在当前查看组件内存中短暂存在，任何关闭、刷新或错误都撤下。
+
+默认导出隔离采用 §3.12.30。现有全局与任务导出保持结构化白名单投影，不读取原文目录；每个现有入口用独立磁盘哨兵回归验证。未来新增诊断或崩溃包时必须先具备同类排除测试。
+
+自动到期清理采用 §3.12.31，由 `serve` 生命周期持有启动即执行、15 分钟周期和退出取消边界。它调用原文仓的完整认证后 expired-only 清理，不建立逐记录计时器、不写审计或权限记录；禁用为无副作用空操作，损坏只隔离本次清理而不阻断默认服务。
+
+原生适配器采集桥采用 §3.12.32。Runtime Identity 与签名 Binding 是服务端恢复任务范围的唯一来源，适配器不接收原始 task_id 或管理端 Grant。服务端只接受唯一匹配的 active Grant，并内部签发、消费 §3.12.26 许可。Hermes 先接参数/结果的有界 JSON Pointer 投影，辅助采集失败不反转既有裁决或伪造观察；其他平台仍需独立完成身份与会话绑定。

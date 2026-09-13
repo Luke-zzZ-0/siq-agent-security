@@ -34,7 +34,7 @@ func TestRemovalRevokesBeforeCleaningAndNeverTouchesReusedPath(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	identityStore, err := runtimeidentity.Open(s.authority.Dir, s.key, intents, func(string) error { return nil })
+	identityStore, err := runtimeidentity.Open(s.authority.Dir, s.key, intents, func(string) (string, error) { return "hermes", nil })
 	if err != nil {
 		t.Fatal(err)
 	}

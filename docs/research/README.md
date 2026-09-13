@@ -15,10 +15,13 @@ SIQ Agent Security studies how agent tool proposals are constrained by trusted i
 | Research design | [Questions](research-questions.md) · [Evaluation protocol](evaluation-protocol.md) | Hypotheses, task units and retrospective scope |
 | Data and claims | [Dataset card](dataset-card.md) · [Claims and evidence](claims-evidence.md) | Corpus origins, denominators and supported conclusions |
 | Reproduction | [Run guide](../../REPRODUCIBILITY.md) · [Archived results](result-reproduction.md) | Reproduce fixed controls and inspect verification records |
+| Contributor fixture run | [Four core scenarios, 2026-09-11](core-scenarios-reproduction-20260911.md) | Linux CPU run of all 23 controls with new evidence and setup failures recorded; no external-reproduction claim |
 | Community | [Contribution guide](../../CONTRIBUTING.md) · [Starter tasks](community-backlog.md) | Select a scoped contribution |
 | Reuse and citation | [License scope](../../LICENSES/README.md) · [CITATION.cff](../../CITATION.cff) | Attribute software and research materials correctly |
 
 ## Source and historical identity
+
+Optional Skill distribution: [pinned vercel-labs/skills compatibility checks](skills-distribution.md). These verify project copy installation and removal; they do not establish runtime enforcement or alter frozen evaluation populations.
 
 The [V5 competition snapshot](../hackathon/final-submission-state.md) remains frozen at its recorded source and denominators. Research work starts on `codex/research-open-source-r1`, based on `e72e8b36a71ae7f7f1fecd587bbe6eb2353f24d2`. New measurements live under this directory and do not replace V5 results.
 
@@ -29,3 +32,5 @@ There is no published paper, DOI, independent reproduction badge or statisticall
 ## Progress and release operations
 
 The [execution ledger](../open-source-research-tasks-20260908.md) distinguishes completed repository engineering from pending experimental, external reproduction, archival and publication work. The [operations report](operations-20260908.md) records actual remote changes and release blockers.
+
+Optional repository review services: [CodeFlow and SonarCloud setup](code-review-services.md). Configuration tests do not establish that external services are authorized or scanning.

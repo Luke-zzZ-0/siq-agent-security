@@ -47,11 +47,11 @@ func fixture(t *testing.T) (*Store, CreateRequest, *grant.Grant) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	s, err := Open(dir, key, intents, func(id string) error {
+	s, err := Open(dir, key, intents, func(id string) (string, error) {
 		if id != instance {
-			return ErrUnavailable
+			return "", ErrUnavailable
 		}
-		return nil
+		return "hermes", nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -70,6 +70,89 @@ func create(t *testing.T, s *Store, req CreateRequest) (Record, string) {
 		t.Fatal(err)
 	}
 	return r, string(b)
+}
+
+// openClawFixture issues a Store whose Grant and resolver both use platform
+// "openclaw"; every other credential rule must hold unchanged.
+func openClawFixture(t *testing.T) (*Store, CreateRequest) {
+	t.Helper()
+	key, _ := signing.FromSeed(bytes.Repeat([]byte{7}, 32))
+	instance := "hi-" + strings.Repeat("3", 32)
+	agent, _ := AgentID(instance)
+	adm := admission.Admission{AdmissionID: "adm-runtime-identity-openclaw", ContentHash: strings.Repeat("b", 64), Verdict: "admit", DeclaredFacts: []admission.DeclaredFact{{Domain: "tool", Action: "tool.invoke", Resource: admission.Resource{Type: "tool", Value: "read_file"}, Effect: "allow", State: "declared", Authority: "skill_manifest"}}}
+	result, err := grant.Build(adm, grant.Options{Platform: "openclaw", Subject: grant.Subject{Type: "agent_instance", ID: agent}, Now: time.Date(2026, 9, 13, 0, 0, 0, 0, time.UTC), Key: key})
+	if err != nil {
+		t.Fatal(err)
+	}
+	g, err := grant.Approve(result.Grant, grant.Approval{ActorType: "human", ActorID: "fixture-operator", ApprovedAt: "2026-09-13T00:00:00Z", Channel: "console"}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	g, err = grant.MarkDeployed(g, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	intents, err := intent.Open(dir, key, func(id string) (*grant.Grant, int, error) {
+		if id != g.GrantID {
+			return nil, 0, os.ErrNotExist
+		}
+		return &g, 3, nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	s, err := Open(dir, key, intents, func(id string) (string, error) {
+		if id != instance {
+			return "", ErrUnavailable
+		}
+		return "openclaw", nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return s, CreateRequest{SchemaVersion: "local-runtime-identity-create/v1", InstanceID: instance, GrantID: g.GrantID, ExpectedGrantRevision: 3, ActorID: "fixture-operator", SessionTTLSeconds: 28800}
+}
+
+func TestOpenClawIdentityIssuedAndPlatformLocked(t *testing.T) {
+	s, req := openClawFixture(t)
+	r, token := create(t, s, req)
+	if r.Platform != "openclaw" {
+		t.Fatal("wrong platform", r.Platform)
+	}
+	if _, err := s.Authenticate(token); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.Enroll(token, "openclaw-native"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.AuthorizeSession(token, "openclaw", r.AgentID, "openclaw-native"); err != nil {
+		t.Fatal("own platform rejected", err)
+	}
+	for _, platform := range []string{"hermes", "codebuddy"} {
+		if _, err := s.AuthorizeSession(token, platform, r.AgentID, "openclaw-native"); err == nil {
+			t.Fatal("cross-platform session accepted", platform)
+		}
+	}
+	// An identity whose signed platform was edited (even resignable metadata
+	// drift) must fail closed on read.
+	record := r
+	record.Platform = "hermes"
+	if err := os.WriteFile(s.recordPath(r.IdentityID), mustJSON(t, record), 0600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.Authenticate(token); err == nil {
+		t.Fatal("tampered platform accepted")
+	}
+}
+
+func mustJSON(t *testing.T, v any) []byte {
+	t.Helper()
+	b, err := json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return b
 }
 func TestIdentityIssuanceRestartRevocationAndReplacement(t *testing.T) {
 	s, req, _ := fixture(t)
@@ -285,12 +368,12 @@ func TestIdentityCorruptAndAliasedRecordsFailClosed(t *testing.T) {
 func TestIdentityInterruptedPublicationCannotAuthenticate(t *testing.T) {
 	s, req, _ := fixture(t)
 	calls := 0
-	s.resolve = func(string) error {
+	s.resolve = func(string) (string, error) {
 		calls++
 		if calls > 1 {
-			return ErrUnavailable
+			return "", ErrUnavailable
 		}
-		return nil
+		return "hermes", nil
 	}
 	if _, err := s.Create(req); err == nil {
 		t.Fatal("interrupted create accepted")

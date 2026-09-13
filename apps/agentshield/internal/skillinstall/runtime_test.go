@@ -64,7 +64,7 @@ func TestInstalledRuntimeBindingAndImmediateInvalidation(t *testing.T) {
 			if err != nil || !sameDocument(result, again) {
 				t.Fatal("retry mutated authority", err)
 			}
-			ri, err := runtimeidentity.Open(s.authority.Dir, s.key, intents, func(string) error { return nil })
+			ri, err := runtimeidentity.Open(s.authority.Dir, s.key, intents, func(string) (string, error) { return "hermes", nil })
 			if err != nil {
 				t.Fatal(err)
 			}

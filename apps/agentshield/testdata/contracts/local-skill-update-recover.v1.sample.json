@@ -1,7 +1,7 @@
 {
   "schema_version": "local-skill-update-recover/v1",
-  "update_id": "sup-1570bc15760c73a92e67c12c0e590b0c6c2fd5002d55df5dfa9c9f332a601213",
-  "claim_signature": "f26e7b76b04f1dda2731b6fc8b5e640dd9e4c61b4d352879ab8ac96deed668e911da277f6be4e7896a49504dcd5d965005029a3aeeda4df615be0c505bfc6106",
+  "update_id": "sup-d0d5b6e23366a9b7020c4ba40cef2a664af5027fbe91409a5f7c571b69d99ffd",
+  "claim_signature": "13892db603d895eb652bd579036ddf3bc7213b050969396c0e3ec6fb8ee7d8fdf315ad5cd63f404375be6e1a4ae01205a9a34c58e418e99fcd20dfdf9af6480e",
   "actor_id": "human",
   "confirm_recovery": true
 }

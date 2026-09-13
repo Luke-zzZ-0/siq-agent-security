@@ -1,0 +1,9 @@
+{
+  "schema_version": "local-service-stop-acceptance/v1",
+  "action": "stop_accepted",
+  "boot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_directory_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "request_sha256": "7c62b58b939aaf66da537b77bc7a1ddd734629b575a4572ea701799f94f45966",
+  "accepted_at": 1700000000,
+  "signature": "58d06c69d911fe9ab059d5815608f31d45ac973903a138dc4bcbda59a53303c77ad310955f31774c462f4b7d815135de75c31581dda76b19fe8b145559c4a00a"
+}

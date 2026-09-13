@@ -358,3 +358,81 @@ func TestRemoteSkillImportHTTPStrictAdminAndBounds(t *testing.T) {
 		t.Fatal("invalid remote request persisted", err)
 	}
 }
+
+func TestGitSkillImportHTTPAdminStrictAndBounds(t *testing.T) {
+	s, local := skillImportHTTPFixture(t)
+	req := skillimport.GitCreateRequest{SchemaVersion: "local-skill-import-git-create/v1", ImportID: local.ImportID, URL: "https://127.0.0.1/org/skill.git", ActorID: local.ActorID}
+	route := "/v1/skill-imports/git"
+	for _, credential := range []string{"", token} {
+		r := loopbackRequest("POST", route, req)
+		if credential != "" {
+			r.Header.Set("Authorization", "Bearer "+credential)
+		}
+		w := httptest.NewRecorder()
+		s.Handler().ServeHTTP(w, r)
+		want := 401
+		if credential != "" {
+			want = 403
+		}
+		if w.Code != want {
+			t.Fatal("git admin boundary", w.Code)
+		}
+	}
+	code, out := call(t, s, "POST", route, token, req)
+	if code != 400 || out["error"] != "skill_import_url_blocked" {
+		t.Fatal("private git host accepted", code, out)
+	}
+	if code, _ := call(t, s, "GET", route, token, nil); code != 405 {
+		t.Fatal("git path dispatched as ID", code)
+	}
+	raw, _ := json.Marshal(req)
+	var fields map[string]any
+	_ = json.Unmarshal(raw, &fields)
+	bodies := []string{string(raw) + " {}", "null", "[]", strings.Replace(string(raw), `"url":`, `"URL":`, 1), strings.Replace(string(raw), `"url":`, `"url":"https://ignored.example.com/s.git","url":`, 1), strings.TrimSuffix(string(raw), "}") + `,"extra":true}`}
+	for name := range fields {
+		for _, mode := range []string{"missing", "null", "bool"} {
+			copy := map[string]any{}
+			for k, v := range fields {
+				copy[k] = v
+			}
+			switch mode {
+			case "missing":
+				delete(copy, name)
+			case "null":
+				copy[name] = nil
+			case "bool":
+				copy[name] = true
+			}
+			data, _ := json.Marshal(copy)
+			bodies = append(bodies, string(data))
+		}
+	}
+	for _, body := range bodies {
+		r := loopbackRequest("POST", route, nil)
+		r.Body = io.NopCloser(strings.NewReader(body))
+		r.Header.Set("Authorization", "Bearer "+s.bootAdmin)
+		w := httptest.NewRecorder()
+		s.Handler().ServeHTTP(w, r)
+		if w.Code != 400 || !strings.Contains(w.Body.String(), "skill_import_invalid") {
+			t.Fatal("git body contract", w.Code, w.Body.String())
+		}
+	}
+	s.skillImportMu.Lock()
+	code, _ = call(t, s, "POST", route, token, req)
+	s.skillImportMu.Unlock()
+	if code != 429 {
+		t.Fatal("git bypassed slot", code)
+	}
+	records, err := os.ReadDir(filepath.Join(s.d.Store.Dir, "skill-imports", "records"))
+	if err != nil || len(records) != 0 {
+		t.Fatal("invalid git request persisted", err)
+	}
+}
+
+func TestGitDisabledTransportErrorIsExplicit(t *testing.T) {
+	w := httptest.NewRecorder()
+	skillImportError(w, skillimport.ErrGitTransportUnavailable)
+	if w.Code != 503 || !strings.Contains(w.Body.String(), `"error":"skill_import_git_transport_unavailable"`) {
+		t.Fatal(w.Code, w.Body.String())
+	}
+}

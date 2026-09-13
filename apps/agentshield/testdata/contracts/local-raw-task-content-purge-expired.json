@@ -1,0 +1,4 @@
+{
+  "schema_version": "local-raw-task-content-purge-expired/v1",
+  "confirm_expired_only": true
+}

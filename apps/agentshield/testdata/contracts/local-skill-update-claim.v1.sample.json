@@ -1,16 +1,16 @@
 {
   "schema_version": "local-skill-update-claim/v1",
-  "update_id": "sup-1570bc15760c73a92e67c12c0e590b0c6c2fd5002d55df5dfa9c9f332a601213",
+  "update_id": "sup-d0d5b6e23366a9b7020c4ba40cef2a664af5027fbe91409a5f7c571b69d99ffd",
   "plan": {
     "schema_version": "local-skill-update-plan/v1",
-    "update_id": "sup-1570bc15760c73a92e67c12c0e590b0c6c2fd5002d55df5dfa9c9f332a601213",
+    "update_id": "sup-d0d5b6e23366a9b7020c4ba40cef2a664af5027fbe91409a5f7c571b69d99ffd",
     "request_id": "up-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "record": {
       "schema_version": "local-skill-install-record/v1",
-      "install_id": "sin-5a50c2ff7199e7bfe41d3e31d1e9359dec09c6e59e2a2a6d8ff9989ccd263c89",
+      "install_id": "sin-6a6570c82f0e5f80227b0d6399556852e2ff3048c14f501e2c7e2334fd90a94d",
       "plan": {
         "schema_version": "local-skill-install-plan/v1",
-        "plan_id": "sip-5a50c2ff7199e7bfe41d3e31d1e9359dec09c6e59e2a2a6d8ff9989ccd263c89",
+        "plan_id": "sip-6a6570c82f0e5f80227b0d6399556852e2ff3048c14f501e2c7e2334fd90a94d",
         "request_id": "is-dddddddddddddddddddddddddddddddd",
         "source": {
           "schema_version": "local-skill-import-permission-source/v1",
@@ -20,8 +20,8 @@
         },
         "grant_id": "grt-si-4444444444444444444444444444444444444444444444444444444444444444",
         "grant_revision": 0,
-        "grant_signature": "ca180991de79c7f73b523ac74546402569694f7127fbac45bb468ed0575689e73001d2f1f883e9f5c627496c5409907e8f6377533098268dffdc6313943f9506",
-        "grant_permission_digest": "433cf318f1221ca9588abd2076344791e2cd9f86d9c7e6c87cbf7dddb2856193",
+        "grant_signature": "a0dfa4d7c0a67b528a5084f1c1a6e21ff426fddf9bd131f5ce6e25dbe7ea5d3d4674c186ac7c1400170d384fe5b0c944b8a0db4d1c4405308d4729cb76b44005",
+        "grant_permission_digest": "c6cf095f18119205b3868d9889de11cf31afb15bb6525e43adedac8fb9195564",
         "platform": "hermes",
         "instance_id": "hi-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "directory_name": "example",
@@ -34,20 +34,20 @@
         "total_bytes": 135,
         "installed": false,
         "runtime_verified": false,
-        "signature": "4ba8727555e3c8fab9df31919bcf7627917e1504dd6692acb825e375d082b94a20785926b07d95688ab2b193a8e6cb7140d1470706b3ad57e387e07abe08fb09"
+        "signature": "40fe91c870aa7ed5ebaac97a25279785b3c7bb996696e1bd3f161471af5f708aa6bba2bec7a0d036aee74028f677980bd5e08589bd604abbe40439c1a2e57200"
       },
       "claim_signature": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       "recorded_status": "installed_unverified",
       "operation": {
         "schema_version": "local-skill-install-operation/v1",
-        "install_id": "sin-5a50c2ff7199e7bfe41d3e31d1e9359dec09c6e59e2a2a6d8ff9989ccd263c89",
-        "plan_id": "sip-5a50c2ff7199e7bfe41d3e31d1e9359dec09c6e59e2a2a6d8ff9989ccd263c89",
+        "install_id": "sin-6a6570c82f0e5f80227b0d6399556852e2ff3048c14f501e2c7e2334fd90a94d",
+        "plan_id": "sip-6a6570c82f0e5f80227b0d6399556852e2ff3048c14f501e2c7e2334fd90a94d",
         "claim_signature": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
         "status": "installed_unverified",
         "actor_id": "human",
         "recorded_at": "2026-09-11T05:00:03Z",
         "runtime_verified": false,
-        "signature": "39c1e50afd9a38f52304853f1add337c4838766601a7cf9070be7b1d2d45b8ecd75f9e742379fbcc71b9749fd20a1e14d296dd2f19c9a30d58848d8a687b9a0c"
+        "signature": "d6e7be41a196e34bd1a88e2b8068942f4cbb68b4d080e071f4c2c215ea7bfba62972913754ee9cfcd4b676def42173d7038e31e127f56ec7b76a61111e3a6e07"
       }
     },
     "candidate_source": {
@@ -58,10 +58,10 @@
     },
     "candidate_grant_id": "grt-si-5555555555555555555555555555555555555555555555555555555555555555",
     "candidate_revision": 1,
-    "candidate_signature": "a5eebee1874cb92579202ce5b293e38deb0c6d9a9cd5188c19da4392a6659ababa09491af1500c0a6e393d96a644f4056eab89881052e45ae4e669c1591ad600",
-    "candidate_permission_digest": "36661f8752377a8c20945f1e659dc6ab5c55a0a94decac14e9bd848a46e84eaf",
+    "candidate_signature": "5a0308cab0e7f27b117ed2d2f4232645ca6bde87b3da619b8dba42f72547e84108b0472c140ed4abae50463b6dc38df38a349cb401c8cb173368bc4534a27901",
+    "candidate_permission_digest": "45af35cfec2e23a9af84274cc1f8066da26708f6e001096893ee78f2b533699a",
     "previous_revision": 0,
-    "previous_signature": "ca180991de79c7f73b523ac74546402569694f7127fbac45bb468ed0575689e73001d2f1f883e9f5c627496c5409907e8f6377533098268dffdc6313943f9506",
+    "previous_signature": "a0dfa4d7c0a67b528a5084f1c1a6e21ff426fddf9bd131f5ce6e25dbe7ea5d3d4674c186ac7c1400170d384fe5b0c944b8a0db4d1c4405308d4729cb76b44005",
     "binding_signature": "",
     "retained_install_id": "",
     "revoke_previous_grant": true,
@@ -73,12 +73,12 @@
     "platform_changes": false,
     "runtime_verified": false,
     "requires_confirmation": true,
-    "signature": "64e05937b9f41aab64286cab622bd64c6e02dda4a8ec702461a8a4bb121b99ce29c118800152553d28fe49b54fcf011e4070134e24687277082421e5d03bbc09"
+    "signature": "0a4f76cc2265f4fa58a2fed2c3822456b594dcb5517131dc8d7182bbf4d6f5d2aaaa037e675b7c45662ca2e83f0a601e375140db3e9411e1f07478e11da7b706"
   },
   "replacement_plan": {
     "schema_version": "local-skill-install-plan/v1",
-    "plan_id": "sip-d5cc0bb6eae360f11ec341a1a0626951ac4c9d4dfb8cab83c70f4c481882e1e7",
-    "request_id": "is-4fd58997507d19593e22b60bb3e3abfd",
+    "plan_id": "sip-e2e1ea589912607489227f49f8222335bbfbd9c34223749a7122ece5b52883bb",
+    "request_id": "is-c5df36ece0afe4f8e0bc43cfcdb5426b",
     "source": {
       "schema_version": "local-skill-import-permission-source/v1",
       "import_id": "si-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -87,8 +87,8 @@
     },
     "grant_id": "grt-si-5555555555555555555555555555555555555555555555555555555555555555",
     "grant_revision": 1,
-    "grant_signature": "a5eebee1874cb92579202ce5b293e38deb0c6d9a9cd5188c19da4392a6659ababa09491af1500c0a6e393d96a644f4056eab89881052e45ae4e669c1591ad600",
-    "grant_permission_digest": "36661f8752377a8c20945f1e659dc6ab5c55a0a94decac14e9bd848a46e84eaf",
+    "grant_signature": "5a0308cab0e7f27b117ed2d2f4232645ca6bde87b3da619b8dba42f72547e84108b0472c140ed4abae50463b6dc38df38a349cb401c8cb173368bc4534a27901",
+    "grant_permission_digest": "45af35cfec2e23a9af84274cc1f8066da26708f6e001096893ee78f2b533699a",
     "platform": "hermes",
     "instance_id": "hi-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "directory_name": "example",
@@ -101,9 +101,9 @@
     "total_bytes": 133,
     "installed": false,
     "runtime_verified": false,
-    "signature": "04b6edacabe14255ddbeab82f756d63efd6f078e63c671e226fb69d86f3da0e36461e07f6c91c53cb7dd4923476c835d6e7068b19d407201412b2ae2da67ca0f"
+    "signature": "3035a65f5e796d5d499626daf2389989413f5c4996bd271c26db0291e65ee5391696c4c8df07358f01da7608370888b434f9814783de9428d88b8d1c07ae1208"
   },
   "actor_id": "human",
   "created_at": "2026-09-11T05:10:02Z",
-  "signature": "f26e7b76b04f1dda2731b6fc8b5e640dd9e4c61b4d352879ab8ac96deed668e911da277f6be4e7896a49504dcd5d965005029a3aeeda4df615be0c505bfc6106"
+  "signature": "13892db603d895eb652bd579036ddf3bc7213b050969396c0e3ec6fb8ee7d8fdf315ad5cd63f404375be6e1a4ae01205a9a34c58e418e99fcd20dfdf9af6480e"
 }

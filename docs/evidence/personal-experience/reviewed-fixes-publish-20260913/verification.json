@@ -1,0 +1,70 @@
+{
+  "recorded_at": "2026-09-13T07:00:05.248674+00:00",
+  "branch": "codex/reviewed-stage-fixes-20260913",
+  "remote_main_baseline": "b6f186d",
+  "scope": "completed foundations through M130 and reviewed M124-M130 fixes; M131 excluded",
+  "checks": "passed",
+  "counts": {
+    "web": 70,
+    "hermes": 109,
+    "openclaw_managed": 47,
+    "schema": 197
+  },
+  "builds": {
+    "linux/amd64": {
+      "exit_code": 0,
+      "sha256": "5fc1f8baca56c0dc5ffa200d4525293198c4844e7e5998ddd92eef3015548bf8",
+      "error": ""
+    },
+    "linux/arm64": {
+      "exit_code": 0,
+      "sha256": "8fdca81d872a76c5ab6ee01becb46de5864028302c0b2c66dfe1ba43b5a8b6e0",
+      "error": ""
+    },
+    "darwin/arm64": {
+      "exit_code": 0,
+      "sha256": "3d3f37c6654f07767afd4994a14e9fb213dbfea69954285ef6673c08b7ed0426",
+      "error": ""
+    },
+    "windows/amd64": {
+      "exit_code": 0,
+      "sha256": "d9ba3835cffe9f4d3657e03b418ce1d6a8070dd30ec247c2a14e6b1574a22ad9",
+      "error": ""
+    }
+  },
+  "log_sha256": {
+    "go.log": "b5fdd981b214495950b7c3b1107af059c0099945ec8c1a56583e07d65542e65e",
+    "vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "race.log": "0d1cf2a36f2ad930bdf338700b7004530983f5c1d356998781a5fa4ee88ca9c2",
+    "contracts.log": "874a023aa1af7332c54cc3d16716d93df58f74da17e13d6916c4bc90f86375a1",
+    "hermes.log": "63eb7b5f7b88de9f6d437b6719c835cbb0eaf20f6c5a2589180e31f752999a8e",
+    "openclaw.log": "57934bfaf190670b65a2b36d67950db71ff3a2e4938aa24c2ca0240f08761768",
+    "openclaw-contract.log": "755ce267ccf4aca18d51d8b4fc67f561f499879ea38775a2381b23ce89783983",
+    "npm-ci.log": "bf4c17ca399910c1c5ab20b379797b9ea5713811b218fa4c3aa350bf7ffbdd0c",
+    "web-test.log": "b0fb6392761d465d186e04e9ac244128884e426318168a12660019e85e6e61ee",
+    "web-build.log": "85479d51e0489375d01599e75434bbd61eb5ba40c21f087ca675bd91b2aadaff",
+    "web-local.log": "c8fd4bd25a376444c08d2670613772964b2f65441789e5c447d43e4e9ff8b87d"
+  },
+  "source_sha256": {
+    "apps/agentshield/cmd/agentshield/desktop_notify_test.go": "69754da16a73d2ec4ca8f194fe2e76fecd9b63f904c2512e39a0265274ca709e",
+    "apps/agentshield/internal/grant/grant.go": "01fa77f7897eb5b2efbc305e11014a2accd8c6894daa16c21039306ecec80b62",
+    "apps/agentshield/internal/grant/patch.go": "ce26695d4228d644a6d4af3e8c16e17ec1f9623a8e6693685e0d71e90cb0819f",
+    "apps/agentshield/internal/grant/runtime_tools.go": "63d6fd0bb2795e2248bd1be575997381ff9d9ec1847624d2068eb18aeab6b30d",
+    "apps/agentshield/internal/grant/scenario.go": "c84c162de60549bc1c07e0e80285bad4d59741854370ae6688c3b9a722e39762",
+    "apps/agentshield/internal/grant/scenario_test.go": "97369aa4c6925a09eb4d70a16aca74aa26702f3c3e3d800e4334be107c486a0b",
+    "apps/agentshield/internal/notify/notify.go": "455cac1dedc49980c218ca51085f6963aad2398d462818fa2c2a356ff6350324",
+    "apps/agentshield/internal/receipt/engine.go": "6f95f5e210b26891ac494b39e09324b90507b51fd8aa44da530e190e7a4ecfee",
+    "apps/agentshield/internal/runtimeidentity/session.go": "cd66456e14c90ad3d6979346e5b2e3d2b7f5218a4bd54742565b0b0f9b52284e",
+    "apps/agentshield/internal/runtimeidentity/session_test.go": "b12240ace0e5ffef9d15d2df499798f1e75529347f161c3c0a4b3dcce228fda3",
+    "apps/agentshield/internal/server/server.go": "f9b5dcc0d6477ef95f51b00769b432726edf139ddc13d5bae1669e1b8e1dac4b",
+    "apps/agentshield/internal/receipt/reviewer_scenario_test.go": "1686eccab97f0c5837e0c4bef6f478e32987b114b56337d868df4eb4841ba4bd",
+    "apps/agentshield/internal/server/reviewer_scenario_test.go": "8345ca3e6acc191912012d9d17f2f9e74a3b6e64c9cf6b1b4b4b4e78be4f0a34",
+    "apps/agentshield/internal/notify/reviewer_notify_test.go": "2092cbed28d94ffba3cc33948552039dd02db5706d84b7f727d4980baf92a023"
+  },
+  "limitations": [
+    "No main merge or release",
+    "No new native Windows/macOS, WorkBuddy or desktop notification acceptance",
+    "No LAN acceptance"
+  ],
+  "log_normalization": "web-test.log trailing blank line removed for git diff --check; test output unchanged"
+}

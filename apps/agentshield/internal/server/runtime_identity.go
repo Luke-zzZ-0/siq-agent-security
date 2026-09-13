@@ -17,7 +17,87 @@ func readRuntimeIdentity(w http.ResponseWriter, r *http.Request, out any, fields
 	return readStrictFlatRequest(w, r, out, "runtime_identity_invalid_request", fields...)
 }
 func readStrictFlatRequest(w http.ResponseWriter, r *http.Request, out any, errorCode string, fields ...string) bool {
-	raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, 16<<10))
+	return readStrictRequestLimit(w, r, out, errorCode, 16<<10, fields...)
+}
+
+func uniqueJSONValue(raw []byte) bool {
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	var walk func() bool
+	walk = func() bool {
+		token, err := dec.Token()
+		if err != nil {
+			return false
+		}
+		delim, compound := token.(json.Delim)
+		if !compound {
+			return true
+		}
+		switch delim {
+		case '{':
+			seen := map[string]bool{}
+			for dec.More() {
+				key, err := dec.Token()
+				name, ok := key.(string)
+				if err != nil || !ok || seen[name] {
+					return false
+				}
+				seen[name] = true
+				if !walk() {
+					return false
+				}
+			}
+			end, err := dec.Token()
+			return err == nil && end == json.Delim('}')
+		case '[':
+			for dec.More() {
+				if !walk() {
+					return false
+				}
+			}
+			end, err := dec.Token()
+			return err == nil && end == json.Delim(']')
+		default:
+			return false
+		}
+	}
+	if !walk() {
+		return false
+	}
+	var extra any
+	return dec.Decode(&extra) == io.EOF
+}
+
+func exactJSONObject(raw []byte, fields ...string) bool {
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	first, err := dec.Token()
+	if err != nil || first != json.Delim('{') {
+		return false
+	}
+	required := make(map[string]bool, len(fields))
+	for _, field := range fields {
+		required[field] = true
+	}
+	for dec.More() {
+		key, err := dec.Token()
+		name, ok := key.(string)
+		if err != nil || !ok || !required[name] {
+			return false
+		}
+		delete(required, name)
+		var value json.RawMessage
+		if dec.Decode(&value) != nil || bytes.Equal(bytes.TrimSpace(value), []byte("null")) || !uniqueJSONValue(value) {
+			return false
+		}
+	}
+	if end, err := dec.Token(); err != nil || end != json.Delim('}') || len(required) != 0 {
+		return false
+	}
+	var extra any
+	return dec.Decode(&extra) == io.EOF
+}
+
+func readStrictRequestLimit(w http.ResponseWriter, r *http.Request, out any, errorCode string, limit int64, fields ...string) bool {
+	raw, err := io.ReadAll(http.MaxBytesReader(w, r.Body, limit))
 	fail := func() bool {
 		writeJSON(w, 400, map[string]string{"error": errorCode})
 		return false
@@ -45,7 +125,7 @@ func readStrictFlatRequest(w http.ResponseWriter, r *http.Request, out any, erro
 		}
 		delete(required, name)
 		var value json.RawMessage
-		if dec.Decode(&value) != nil || bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
+		if dec.Decode(&value) != nil || bytes.Equal(bytes.TrimSpace(value), []byte("null")) || !uniqueJSONValue(value) {
 			return fail()
 		}
 	}
@@ -65,7 +145,16 @@ func readStrictFlatRequest(w http.ResponseWriter, r *http.Request, out any, erro
 }
 func (s *Server) initRuntimeIdentities() error {
 	var err error
-	s.runtimeIdentities, err = runtimeidentity.Open(s.d.Store.Dir, s.d.Key, s.intents, func(id string) error { _, e := s.resolveAdapterOptions(adapterinstall.Hermes, id); return e })
+	s.runtimeIdentities, err = runtimeidentity.Open(s.d.Store.Dir, s.d.Key, s.intents, func(id string) (string, error) {
+		// Instance IDs are content-derived (hi-...), so exactly one platform's
+		// discovery can own a given ID; try each supported product once.
+		for _, platform := range []string{adapterinstall.Hermes, adapterinstall.OpenClaw} {
+			if _, e := s.resolveAdapterOptions(platform, id); e == nil {
+				return platform, nil
+			}
+		}
+		return "", adapterinstall.ErrPlanChanged
+	})
 	return err
 }
 func runtimeIdentityError(w http.ResponseWriter, err error) {

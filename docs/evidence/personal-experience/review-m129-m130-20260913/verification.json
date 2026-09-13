@@ -1,0 +1,70 @@
+{
+  "schema_version": "independent-stage-acceptance/v1",
+  "recorded_at": "2026-09-13T06:36:56.033984+00:00",
+  "stages": [
+    "M129",
+    "M130"
+  ],
+  "status": "changes_required",
+  "findings": {
+    "P1": [
+      "scenario_execution_not_denied",
+      "changed_scenario_silently_reused"
+    ],
+    "P2": [
+      "failed_delivery_retries_inside_window",
+      "notifier_output_reaches_daemon_log"
+    ]
+  },
+  "baseline": {
+    "grant_notify_receipt_state": "pass",
+    "server_and_cli_targeted": "pass_with_2_skips",
+    "targeted_race": "pass",
+    "targeted_vet": "pass"
+  },
+  "negative_acceptance": "four finding groups reproduced; expected-to-deny assertions fail on current implementation",
+  "reviewed_source_sha256": {
+    "apps/agentshield/internal/grant/scenario.go": "7bf5066ee7c0fa77e94aa8ae126af3b68c3c1f5182180e6556fcc3066d323309",
+    "apps/agentshield/internal/grant/grant.go": "d6fdb9e71aa00599094c0d0c0cbb3a358731f447e25fc589a453dc75dd851f56",
+    "apps/agentshield/internal/grant/runtime_tools.go": "5d3d4c88730cad000967893626994dd2c05280fce75eeffa22dac15428265601",
+    "apps/agentshield/internal/notify/notify.go": "afe5e7e8676d254fd00cdd638b2a33c34068c625505360a7931b964f7dccaf8f",
+    "apps/agentshield/internal/notify/notify_test.go": "8416047d1c892ab43b774480c2ab9fcd71820fbaea017c1d23659ee26c7fd0a6",
+    "apps/agentshield/cmd/agentshield/desktop_notify.go": "20b218910f1bcf089bb21379c4a39c96830b6398d954f9a7bb8cf6caa2839498",
+    "apps/agentshield/cmd/agentshield/desktop_notify_test.go": "7302a579fdccf9aa7402d0acb0a1b61063707c0366e53833adb2c77c26964b3a",
+    "apps/agentshield/internal/server/server.go": "6d5aa6db1333ef21c8c54235e2ab01f3df9d9d1232d57ffa275ad69ef2e116b2",
+    "apps/agentshield/internal/server/grant_scenarios_test.go": "080cfb2c643757bc3e846eacea94aca0ad121f773db57507ac4650ddfb584f0d",
+    "apps/agentshield/internal/receipt/engine.go": "9104207bf77970971ee740cd8d1242e2718a1a520a63c26a65d412064493aa52",
+    "apps/agentshield/internal/state/state.go": "fbb376d7d6baa32fdb5f0ddcbaae36140285d44ac6017502d693fc4d5df58af8",
+    "packages/contracts/grant.schema.json": "df119060dee0f90f3e7f1c9c942ade6a93cafd7ac2ed4bbab8273ce4af94cbff"
+  },
+  "unchanged_in_workspace_at_report": {
+    "apps/agentshield/internal/grant/scenario.go": true,
+    "apps/agentshield/internal/grant/grant.go": true,
+    "apps/agentshield/internal/grant/runtime_tools.go": true,
+    "apps/agentshield/internal/notify/notify.go": true,
+    "apps/agentshield/internal/notify/notify_test.go": true,
+    "apps/agentshield/cmd/agentshield/desktop_notify.go": true,
+    "apps/agentshield/cmd/agentshield/desktop_notify_test.go": true,
+    "apps/agentshield/internal/server/server.go": true,
+    "apps/agentshield/internal/server/grant_scenarios_test.go": true,
+    "apps/agentshield/internal/receipt/engine.go": true,
+    "apps/agentshield/internal/state/state.go": true,
+    "packages/contracts/grant.schema.json": true
+  },
+  "artifact_sha256": {
+    "baseline.log": "3a9b604ebee1bfd25b3d338e102a2cc17d129493dd7dffb61833caaaf8ddd95a",
+    "integration.log": "4548a12896152bbdfdb937f82c20e168248d4284817096bb1808837935ec5fdc",
+    "race.log": "b33c720aec238e6ac4528eab7cb86844ec75fc6f7c1d94f6fe698663edc6b8ea",
+    "negative.log": "255b41d3e205e91df15f1bfeab9d90b66dce8cf78e66ec8bfcc1b39a1386b3f9",
+    "negative-server.log": "ab104413605eab944f2d7a80667bddcbb939ebcc15817f96f6aff44d9b025429",
+    "vet.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reviewer-negative-tests.patch": "ac008f8482740f9d86c30f085a43867e3026ec4bd707084b41c9afdd77d2c673"
+  },
+  "limitations": [
+    "Git Skill import remains in progress and excluded",
+    "Decision engine tests, not execution of real shell tools",
+    "No real secret used; notifier output test uses synthetic marker",
+    "No OS desktop delivery or Windows/macOS native acceptance",
+    "Production source and user services unchanged; reviewer tests in isolated copy only"
+  ]
+}

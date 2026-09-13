@@ -6,6 +6,7 @@ import { useLocalSession } from './session';
 import { ConfirmationProvider, useConfirmations } from './confirmations';
 import { ConfirmationNotificationProvider } from './components/ConfirmationNotifications';
 import { platformTierText, hasOpenShellL3 } from './format';
+import RawContentStatusIndicator from './components/RawContentStatusIndicator';
 
 interface NavItem {
   to: string;
@@ -30,6 +31,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
       { to: '/skill-imports', label: '导入 Skill', icon: 'shield' },
       { to: '/installed-skills', label: '已安装 Skill', icon: 'shield' },
       { to: '/grants', label: '签发', icon: 'policies' },
+      { to: '/activities', label: '任务活动', icon: 'audit' },
       { to: '/receipts', label: '回执', icon: 'audit' },
       { to: '/bindings', label: '运行时绑定', icon: 'bindings' },
     ],
@@ -53,6 +55,7 @@ function readCollapsed(): boolean {
 }
 
 function currentTitle(pathname: string): string {
+  if (pathname.startsWith('/activities/')) return '活动详情';
   if (pathname === '/skill-updates') return '更新 Skill';
   if (pathname.startsWith('/agents/')) return '智能体详情';
   const exact = NAV_ITEMS.find((item) => item.to === pathname);
@@ -169,6 +172,7 @@ function LocalLayout() {
           </button>
           <span className="topbar-title">{currentTitle(location.pathname)}</span>
           <span className="topbar-tags">
+            <RawContentStatusIndicator />
             <span className="topbar-phase">
               <span aria-hidden="true" />
               本地模式 · 单用户

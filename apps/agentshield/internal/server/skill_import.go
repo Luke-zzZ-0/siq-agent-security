@@ -15,6 +15,8 @@ import (
 func skillImportError(w http.ResponseWriter, err error) {
 	status, code := 503, "skill_import_unavailable"
 	switch {
+	case errors.Is(err, skillimport.ErrGitTransportUnavailable):
+		status, code = 503, "skill_import_git_transport_unavailable"
 	case errors.Is(err, importsource.ErrInvalid):
 		status, code = 409, "skill_import_permission_source_invalid"
 	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
@@ -150,6 +152,34 @@ func (s *Server) skillImportRemoteCreate(w http.ResponseWriter, r *http.Request)
 	ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
 	defer cancel()
 	record, analysis, reused, err := s.skillImports.CreateRemote(ctx, req)
+	if err != nil {
+		skillImportError(w, err)
+		return
+	}
+	status := 201
+	if reused {
+		status = 200
+	}
+	writeJSON(w, status, skillimport.NewResult(record, analysis, reused))
+}
+
+func (s *Server) skillImportGitCreate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "no-store")
+	if r.Method != http.MethodPost {
+		w.WriteHeader(405)
+		return
+	}
+	var req skillimport.GitCreateRequest
+	if !readStrictFlatRequest(w, r, &req, "skill_import_invalid", "schema_version", "import_id", "url", "ref", "sub_dir", "expected_commit", "actor_id") {
+		return
+	}
+	if !s.skillImportSlot(w) {
+		return
+	}
+	defer s.skillImportMu.Unlock()
+	ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
+	defer cancel()
+	record, analysis, reused, err := s.skillImports.CreateGit(ctx, req)
 	if err != nil {
 		skillImportError(w, err)
 		return

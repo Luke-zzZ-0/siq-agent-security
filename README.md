@@ -80,6 +80,8 @@ SIQ Agent Security 将用户授权、参数来源、工具执行和实际效果�
 
 ## 从这里开始
 
+需要用 `vercel-labs/skills` 分发 SIQ Skill 时，先运行[固定版本的分发兼容验证](docs/research/skills-distribution.md)。安装内容一致性与二进制准备、准入授权、运行时保护分别验收。
+
 | 你的目标 | 推荐入口 | 可以获得什么 |
 | :--- | :--- | :--- |
 | 管理本机智能体与 Skill | [个人管理端](#个人管理端linux-源码体验) · [操作指南](AGENTSHIELD.md) | 启动本地服务、配对后管理；按平台验证范围启用保护 |

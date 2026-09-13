@@ -12,6 +12,48 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def check_history(binary, config, token):
+    """Root commits, merged side branches and merge-only additions remain visible."""
+    with tempfile.TemporaryDirectory(prefix="siq-scanner-history-") as directory:
+        root = Path(directory)
+        repository = root / "repository"
+        repository.mkdir()
+
+        def git(*arguments):
+            return subprocess.run(["git", *arguments], cwd=repository,
+                                  capture_output=True, timeout=30, check=True)
+
+        def commit_file(name):
+            (repository / name).write_text(f'token = "{token}"\n')
+            git("add", name)
+            git("commit", "-qm", "synthetic scanner fixture")
+
+        git("init", "-q", "-b", "main")
+        git("config", "user.name", "Scanner calibration")
+        git("config", "user.email", "scanner@example.invalid")
+        git("config", "commit.gpgsign", "false")
+        commit_file("root.env")
+        git("checkout", "--orphan", "independent")
+        git("rm", "-rf", ".")
+        commit_file("independent.env")
+        git("checkout", "main")
+        git("merge", "--allow-unrelated-histories", "--no-commit", "independent")
+        (repository / "merge-only.env").write_text(f'token = "{token}"\n')
+        git("add", "merge-only.env")
+        git("commit", "-qm", "merge synthetic fixtures")
+        git("rm", "root.env", "independent.env", "merge-only.env")
+        git("commit", "-qm", "remove fixtures from current tree")
+        report = root / "report.json"
+        result = subprocess.run([str(binary.resolve()), "git", str(repository),
+            "--config", str(config.resolve()), "--redact", "--log-opts=--full-history -m HEAD",
+            "--report-format", "json", "--report-path", str(report)],
+            capture_output=True, timeout=30, check=False)
+        rows = json.loads(report.read_text()) if report.exists() else []
+        detected = {row["File"] for row in rows if row["RuleID"] == "github-pat"}
+        if result.returncode != 1 or not {"root.env", "independent.env", "merge-only.env"} <= detected:
+            raise SystemExit("scanner history calibration failed: root, side branch or merge addition missed")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--binary", type=Path, required=True)
@@ -58,11 +100,13 @@ def main():
         historical_rows = [row for row in rows if row["File"].endswith(historical_path) and row["RuleID"] == "github-pat"]
         if len(historical_rows) != 1 or historical_rows[0]["StartLine"] != 2:
             raise SystemExit("scanner calibration failed: historical test exception is not exact")
+    check_history(args.binary, args.config, token)
     summary = {"status": "passed", "synthetic_only": True, "checks": [
         "ordinary credential detected", "new credential in allowed test path detected",
         "new credential in hash-evidence path detected", "exact fixture exception restricted to test path",
         "private-key block detected", "source hash metadata is not a secret",
-        "historical synthetic value exception is exact and path-restricted"], "raw_values_retained": False}
+        "historical synthetic value exception is exact and path-restricted",
+        "removed credentials in root, independent history and merge-only additions detected"], "raw_values_retained": False}
     if args.out:
         with args.out.open("x") as output:
             output.write(json.dumps(summary, indent=2) + "\n")

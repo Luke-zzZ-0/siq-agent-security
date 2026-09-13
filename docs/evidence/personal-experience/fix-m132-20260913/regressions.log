@@ -1,0 +1,24 @@
+=== RUN   TestReviewerGitFetchRejectsPrivateDNSBeforeGit
+--- PASS: TestReviewerGitFetchRejectsPrivateDNSBeforeGit (0.00s)
+=== RUN   TestUpstreamFailureAndCancellationCleanTemporaryFiles
+--- PASS: TestUpstreamFailureAndCancellationCleanTemporaryFiles (0.06s)
+=== RUN   TestProductionGitGateDoesNotInvokeTransport
+--- PASS: TestProductionGitGateDoesNotInvokeTransport (0.00s)
+PASS
+ok  	siq-agent-security/apps/agentshield/internal/skillimport	0.072s
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_unavailable
+=== RUN   TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_download_failed
+--- PASS: TestReviewerUpdateCheckPreservesFetchAvailability (0.29s)
+    --- PASS: TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_unavailable (0.17s)
+    --- PASS: TestReviewerUpdateCheckPreservesFetchAvailability/skill_import_download_failed (0.12s)
+PASS
+ok  	siq-agent-security/apps/agentshield/internal/skillinstall	0.306s
+=== RUN   TestReviewerChangingScenarioIsNotSilentlyIgnored
+--- PASS: TestReviewerChangingScenarioIsNotSilentlyIgnored (0.05s)
+=== RUN   TestGitDisabledTransportErrorIsExplicit
+--- PASS: TestGitDisabledTransportErrorIsExplicit (0.00s)
+=== RUN   TestUpdateCheckErrorResponses
+--- PASS: TestUpdateCheckErrorResponses (0.00s)
+PASS
+ok  	siq-agent-security/apps/agentshield/internal/server	0.063s

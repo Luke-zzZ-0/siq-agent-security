@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-service-stop-request.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "action",
+    "boot_id",
+    "state_directory_id",
+    "expires_at",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-service-stop-request/v1"
+    },
+    "action": {
+      "const": "stop"
+    },
+    "boot_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "state_directory_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "expires_at": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    }
+  }
+}

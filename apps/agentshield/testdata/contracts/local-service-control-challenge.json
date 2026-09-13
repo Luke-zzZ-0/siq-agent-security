@@ -1,0 +1,8 @@
+{
+  "schema_version": "local-service-control-challenge/v1",
+  "action": "challenge",
+  "boot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state_directory_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "expires_at": 1700000030,
+  "signature": "5486a8f6ce3059a1b5ab5959cf1c3f2861eb73ade3a786c445ce5c672694b47b34405b324a78e008aa4ceda304e7834473a58893afff5b073211ca5dd5448602"
+}

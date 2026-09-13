@@ -23,9 +23,14 @@ const sandbox = {
   exports: exportsObject,
   process: { env: { OPENCLAW_STATE_DIR: '/isolated-profile' }, platform: 'linux' },
   console: { warn() {} },
-  setTimeout, clearTimeout, AbortController,
+  setTimeout, clearTimeout, AbortController, URL, Buffer,
   require(name) {
     if (name === 'node:fs') return {
+      constants: { O_RDONLY: 0, O_NOFOLLOW: 0 },
+      lstatSync() { return { isFile: () => true, size: 64, ino: 1, dev: 1 }; },
+      fstatSync() { return { isFile: () => true, size: 64, ino: 1, dev: 1 }; },
+      openSync() { return 1; }, closeSync() {},
+      readSync(fd, buffer) { buffer.write('t'.repeat(64)); return 64; },
       readFileSync(p) {
         if (p.endsWith('/token')) return 't'.repeat(64);
         configReads.push(p);

@@ -28,15 +28,108 @@ def test_managed_enrollment_precedes_decision_and_observation(server, mode):
     srv, token = server
     mod = load(mode, f"http://127.0.0.1:{srv.server_port}", token)
     managed(mod, token)
-    _Fake.decision = {"action": "allow", "reason": "ok", "receipt_id": "r"}
-    assert mod._pre_tool_call("read_file", {}, session_id="native-session") is None
-    mod._post_tool_call("read_file", {}, result="ok", session_id="native-session")
-    assert [row[0] for row in _Fake.seen] == ["/v1/runtime-sessions", "/v1/decide", "/v1/observe"]
+    _Fake.decision = {"action": "allow", "reason": "ok", "receipt_id": "r", "action_id": "act-1"}
+    assert mod._pre_tool_call("read_file", {}, session_id="native-session", tool_call_id="call-1") is None
+    mod._post_tool_call("read_file", {}, result="ok", session_id="native-session", tool_call_id="call-1")
+    assert [row[0] for row in _Fake.seen] == [
+        "/v1/runtime-sessions",
+        "/v1/decide",
+        "/v1/raw-task-content/native-captures",
+        "/v1/observe",
+        "/v1/raw-task-content/native-captures",
+    ]
     assert all(row[1] == "Bearer " + token.read_text() for row in _Fake.seen)
     assert _Fake.seen[0][2] == {
         "schema_version": "local-runtime-session-enroll/v1", "session_id": "native-session",
     }
     assert "c" * 64 not in str([row[2] for row in _Fake.seen])
+
+
+def test_managed_native_raw_capture_is_scoped_flattened_and_best_effort(server):
+    srv, token = server
+    mod = load("block", f"http://127.0.0.1:{srv.server_port}", token)
+    managed(mod, token)
+    _Fake.decision = {"action": "allow", "reason": "ok", "receipt_id": "r", "action_id": "act-raw"}
+    arguments = {
+        "path": "/work/report.md",
+        "api_key": "PRIVATE_API_KEY",
+        "nested": {"authorization": "Bearer " + "A" * 32, "safe": "keep"},
+    }
+    assert mod._pre_tool_call(
+        "read_file", arguments, session_id="native-session", tool_call_id="raw-call"
+    ) is None
+    capture = [row for row in _Fake.seen if row[0] == "/v1/raw-task-content/native-captures"][-1]
+    assert capture[1] == "Bearer " + token.read_text()
+    body = capture[2]
+    assert set(body) == {"schema_version", "platform", "agent_id", "session_id", "kind", "fields"}
+    assert body["kind"] == "parameters" and body["session_id"] == "native-session"
+    fields = {field["path"]: field["value"] for field in body["fields"]}
+    assert fields["/tool/arguments/path"] == '"/work/report.md"'
+    assert fields["/tool/arguments/api_key"] == '"PRIVATE_API_KEY"'
+    assert fields["/tool/arguments/nested/safe"] == '"keep"'
+    assert "task_id" not in body and "grant_id" not in body and "permit" not in body
+
+    _Fake.status = 503
+    mod._post_tool_call(
+        "read_file", arguments, result={"result": "kept", "token": "PRIVATE_TOKEN"},
+        session_id="native-session", tool_call_id="raw-call",
+    )
+    assert _Fake.seen[-1][0] == "/v1/raw-task-content/native-captures"
+
+    unmanaged = load("block", f"http://127.0.0.1:{srv.server_port}", token)
+    _Fake.status = 200
+    _Fake.seen = []
+    _Fake.decision = {"action": "allow", "reason": "ok", "receipt_id": "r"}
+    assert unmanaged._pre_tool_call("read_file", {}, session_id="legacy") is None
+    unmanaged._post_tool_call("read_file", {}, result="ok", session_id="legacy")
+    assert not any(row[0] == "/v1/raw-task-content/native-captures" for row in _Fake.seen)
+
+
+def test_managed_blocked_post_result_is_not_captured(server):
+    srv, token = server
+    mod = load("block", f"http://127.0.0.1:{srv.server_port}", token)
+    managed(mod, token)
+    _Fake.decision = {"action": "deny", "reason": "blocked", "receipt_id": "r"}
+    assert mod._pre_tool_call(
+        "write_file", {"path": "/blocked"}, session_id="native-session", tool_call_id="blocked-call"
+    )["action"] == "block"
+    mod._post_tool_call(
+        "write_file", {"path": "/blocked"}, result="siq-agent-security blocked",
+        session_id="native-session", tool_call_id="blocked-call",
+    )
+    assert not any(row[0] == "/v1/raw-task-content/native-captures" for row in _Fake.seen)
+
+
+@pytest.mark.parametrize("flow", ["duplicate_post", "duplicate_pre", "missing_reference"])
+def test_native_output_requires_single_unused_allow_reference(server, flow):
+    srv, token = server
+    mod = load("block", f"http://127.0.0.1:{srv.server_port}", token)
+    managed(mod, token)
+    _Fake.decision = {"action": "allow", "reason": "ok", "receipt_id": "r"}
+    if flow != "missing_reference":
+        _Fake.decision["action_id"] = "act-1"
+    kwargs = {"session_id": "native-session", "tool_call_id": "one-call"}
+    assert mod._pre_tool_call("read_file", {}, **kwargs) is None
+    if flow == "duplicate_pre":
+        _Fake.decision = {"action": "deny", "reason": "denied", "receipt_id": "r2"}
+        assert mod._pre_tool_call("read_file", {}, **kwargs)["action"] == "block"
+    mod._post_tool_call("read_file", {}, result="first", **kwargs)
+    mod._post_tool_call("read_file", {}, result="duplicate", **kwargs)
+    outputs = [row for row in _Fake.seen if row[0] == "/v1/raw-task-content/native-captures" and row[2]["kind"] == "output"]
+    assert len(outputs) == (1 if flow == "duplicate_post" else 0)
+
+
+def test_native_raw_flattening_rejects_partial_or_unbounded_values(server):
+    srv, token = server
+    mod = load("block", f"http://127.0.0.1:{srv.server_port}", token)
+    assert mod._raw_content_fields("tool", "/tool/arguments", {str(i): i for i in range(1024)}) is None
+    value = {}
+    cursor = value
+    for index in range(34):
+        cursor[str(index)] = {}
+        cursor = cursor[str(index)]
+    assert mod._raw_content_fields("tool", "/tool/arguments", value) is None
+    assert mod._raw_content_fields("tool", "/tool/arguments", {"bad\nkey": "value"}) is None
 
 
 @pytest.mark.parametrize("mode", ["block", "warn", "audit_only"])

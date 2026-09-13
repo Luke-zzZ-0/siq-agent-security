@@ -74,6 +74,14 @@ func TestCmdExportWritesFile(t *testing.T) {
 	t.Setenv("AGENTSHIELD_SIGNING_KEY_SEED", "")
 	t.Setenv("HOME", filepath.Join(dir, "home"))
 	_ = os.MkdirAll(filepath.Join(dir, "home"), 0o700)
+	rawDir := filepath.Join(dir, "raw-task-content", "content")
+	if err := os.MkdirAll(rawDir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	const rawSentinel = "PRIVATE_RAW_CONTENT_MUST_NOT_ENTER_CLI_EXPORT"
+	if err := os.WriteFile(filepath.Join(rawDir, "raw-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.json"), []byte(rawSentinel), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	out := filepath.Join(dir, "bundle.json")
 	if err := cmdExport([]string{"--out", out}); err != nil {
 		t.Fatal(err)
@@ -84,6 +92,9 @@ func TestCmdExportWritesFile(t *testing.T) {
 	}
 	if !bytes.Contains(raw, []byte(`"format": "agentshield.export.v1"`)) {
 		t.Fatalf("format: %s", raw[:min(200, len(raw))])
+	}
+	if bytes.Contains(raw, []byte(rawSentinel)) || bytes.Contains(raw, []byte("raw-task-content")) {
+		t.Fatal("raw content store must not enter CLI export")
 	}
 	var doc map[string]any
 	if json.Unmarshal(raw, &doc) != nil {

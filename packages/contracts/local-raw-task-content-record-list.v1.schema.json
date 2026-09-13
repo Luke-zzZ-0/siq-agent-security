@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-record-list.v1.schema.json",
+  "title": "Raw task content metadata list request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-record-list/v1" },
+    "task_id": { "type": "string", "minLength": 1, "maxLength": 256 }
+  }
+}

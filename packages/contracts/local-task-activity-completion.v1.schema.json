@@ -1,0 +1,394 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "local-task-activity-completion/v1"
+    },
+    "snapshot": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activity_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "attribution": {
+          "enum": [
+            "bound",
+            "unknown"
+          ]
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "chain_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "platform": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "session_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "agent_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "task_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "intent_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "intent_digest": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "chain_id",
+                "platform",
+                "session_id",
+                "agent_id",
+                "task_id",
+                "intent_id",
+                "intent_digest"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "first_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_seq": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "activity_id",
+        "attribution",
+        "binding",
+        "receipt_count",
+        "first_seq",
+        "last_seq"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "attribution": {
+                "const": "bound"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "binding": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "chain_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "platform": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "session_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "agent_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "task_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "intent_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "intent_digest": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "chain_id",
+                  "platform",
+                  "session_id",
+                  "agent_id",
+                  "task_id",
+                  "intent_id",
+                  "intent_digest"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "binding": {
+                "type": "null"
+              },
+              "receipt_count": {
+                "const": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason_code": {
+      "enum": [
+        "evaluated",
+        "attribution_unknown",
+        "intent_missing"
+      ]
+    },
+    "result": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "schema_version": {
+              "const": "completion-status/v1"
+            },
+            "task_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "status": {
+              "enum": [
+                "verified",
+                "incomplete",
+                "conflicting",
+                "unknown"
+              ]
+            },
+            "reason_code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "requirements": {
+              "type": "array",
+              "maxItems": 128,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "requirement_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "status": {
+                    "enum": [
+                      "verified",
+                      "incomplete",
+                      "conflicting",
+                      "unknown"
+                    ]
+                  },
+                  "reason_code": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "evidence_ids": {
+                    "type": "array",
+                    "maxItems": 8192,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    }
+                  }
+                },
+                "required": [
+                  "requirement_id",
+                  "status",
+                  "reason_code",
+                  "evidence_ids"
+                ]
+              }
+            },
+            "incident_ids": {
+              "type": "array",
+              "maxItems": 8192,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          },
+          "required": [
+            "schema_version",
+            "task_id",
+            "status",
+            "reason_code",
+            "requirements",
+            "incident_ids"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "snapshot",
+    "activity",
+    "evaluated_at",
+    "reason_code",
+    "result"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "reason_code": {
+            "const": "evaluated"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "schema_version": {
+                "const": "completion-status/v1"
+              },
+              "task_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "status": {
+                "enum": [
+                  "verified",
+                  "incomplete",
+                  "conflicting",
+                  "unknown"
+                ]
+              },
+              "reason_code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "requirements": {
+                "type": "array",
+                "maxItems": 128,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "requirement_id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "status": {
+                      "enum": [
+                        "verified",
+                        "incomplete",
+                        "conflicting",
+                        "unknown"
+                      ]
+                    },
+                    "reason_code": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "evidence_ids": {
+                      "type": "array",
+                      "maxItems": 8192,
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      }
+                    }
+                  },
+                  "required": [
+                    "requirement_id",
+                    "status",
+                    "reason_code",
+                    "evidence_ids"
+                  ]
+                }
+              },
+              "incident_ids": {
+                "type": "array",
+                "maxItems": 8192,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                }
+              }
+            },
+            "required": [
+              "schema_version",
+              "task_id",
+              "status",
+              "reason_code",
+              "requirements",
+              "incident_ids"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "result": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

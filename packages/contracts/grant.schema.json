@@ -22,6 +22,27 @@
   "properties": {
     "grant_id": { "type": "string" },
     "admission_id": { "type": "string", "description": "来源 admission.admission_id；一次 grant 只服务一次准入结论" },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill_id", "content_hash"],
+      "description": "签发来源的 Skill 版本身份（UX-007）。携带本对象的 grant 仅在运行时归属精确验证（skill_id+content_hash+版本）后可行使；缺省表示基线 grant，不受 Skill 归属约束。",
+      "properties": {
+        "skill_id": { "type": "string", "maxLength": 128 },
+        "version": { "type": "string", "maxLength": 64 },
+        "content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "description": "签发时应用的场景模板身份（UX-007）。模板只能收敛声明事实（移除声明，永不新增）；缺省表示未应用场景模板。",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
     "subject": {
       "type": "object",
       "additionalProperties": false,

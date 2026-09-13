@@ -56,6 +56,72 @@ func TestOpenClawRuntimeRegistrationRoundTrip(t *testing.T) {
 	}
 }
 
+func TestOpenClawPreservesForeignInstallPolicy(t *testing.T) {
+	opts := testOpts(t, OpenClaw)
+	oc := filepath.Join(opts.Home, ".openclaw", "openclaw.json")
+	_ = os.MkdirAll(filepath.Dir(oc), 0o700)
+	// Even a matching executable name does not transfer ownership to SIQ.
+	policy := map[string]any{"exec": map[string]any{"command": opts.Binary}, "custom": true}
+	_ = os.WriteFile(oc, encodePlanJSON(map[string]any{"security": map[string]any{"installPolicy": policy, "other": true}}), 0o600)
+	for i := 0; i < 2; i++ {
+		if _, err := Install(opts); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if _, err := Uninstall(opts); err != nil {
+		t.Fatal(err)
+	}
+	doc, err := readJSONObject(oc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(doc["security"], map[string]any{"installPolicy": policy, "other": true}) {
+		t.Fatal("foreign configuration was changed")
+	}
+}
+
+func TestOpenClawLegacyPolicyRequiresFullMatch(t *testing.T) {
+	policy := openClawInstallPolicy(Options{Binary: "/owned/siq"})
+	var decoded map[string]any
+	_ = json.Unmarshal(encodePlanJSON(policy), &decoded)
+	if !sameOpenClawLegacyPolicy(decoded, "/owned/siq") {
+		t.Fatal("legacy policy not recognized")
+	}
+	decoded["targets"] = []any{"foreign-target"}
+	if sameOpenClawLegacyPolicy(decoded, "/owned/siq") {
+		t.Fatal("executable match cannot authorize deletion")
+	}
+}
+
+func TestOpenClawMigratesOwnedLegacyPolicy(t *testing.T) {
+	opts := testOpts(t, OpenClaw)
+	if _, err := Install(opts); err != nil {
+		t.Fatal(err)
+	}
+	oc := filepath.Join(opts.Home, ".openclaw", "openclaw.json")
+	doc, err := readJSONObject(oc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc["security"] = map[string]any{"installPolicy": openClawInstallPolicy(opts)}
+	if err := os.WriteFile(oc, encodePlanJSON(doc), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Install(opts); err != nil {
+		t.Fatal(err)
+	}
+	doc, err = readJSONObject(oc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := doc["security"]; exists {
+		t.Fatal("owned legacy configuration still blocks the public host")
+	}
+	if _, err := Uninstall(opts); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestOpenClawRuntimeRegistrationRejectsDisabledOrMalformed(t *testing.T) {
 	for _, raw := range []string{
 		`{"plugins":{"enabled":false}}`, `{"plugins":{"deny":["siq-agent-security"]}}`,

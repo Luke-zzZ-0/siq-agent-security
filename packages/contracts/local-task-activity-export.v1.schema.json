@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local-task-activity-export.v1.schema.json",
+  "title": "Signed redacted activity receipt projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "attestation_scope",
+    "activity_id",
+    "snapshot",
+    "generated_at",
+    "source_count",
+    "source_tip_hash",
+    "source_last_seq",
+    "prefix_valid",
+    "history_integrity",
+    "public_key_base64",
+    "signing_schema",
+    "signature",
+    "receipts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-task-activity-export/v1"
+    },
+    "attestation_scope": {
+      "const": "share_projection_only"
+    },
+    "activity_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "snapshot": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "source_tip_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_last_seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "prefix_valid": {
+      "const": true
+    },
+    "history_integrity": {
+      "enum": [
+        "verified",
+        "unknown",
+        "failed"
+      ]
+    },
+    "public_key_base64": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{43}=$"
+    },
+    "signing_schema": {
+      "const": "local_canonical/v1"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    },
+    "receipts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "seq",
+          "issued_at",
+          "receipt_ref",
+          "tool_ref",
+          "action",
+          "source_hash"
+        ],
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "issued_at": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "receipt_ref": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "tool_ref": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "action": {
+            "enum": [
+              "allow",
+              "deny",
+              "hold",
+              "redact",
+              "unknown"
+            ]
+          },
+          "source_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
+  }
+}

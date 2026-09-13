@@ -1,0 +1,12 @@
+{
+  "schema_version": "local-raw-task-content-grant-create/v1",
+  "task_id": "fixture-task",
+  "kinds": [
+    "input",
+    "output"
+  ],
+  "actor_id": "fixture-operator",
+  "duration_seconds": 3600,
+  "retention_seconds": 7200,
+  "max_plaintext_bytes": 4096
+}

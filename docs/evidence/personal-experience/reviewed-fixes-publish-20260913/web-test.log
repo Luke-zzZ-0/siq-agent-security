@@ -1,0 +1,12 @@
+
+> @siq-agent-security/web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /tmp/siq-review-fixes-publish-20260913/apps/web
+
+
+ Test Files  21 passed (21)
+      Tests  70 passed (70)
+   Start at  14:57:39
+   Duration  414ms (transform 2.43s, setup 0ms, import 2.84s, tests 316ms, environment 1ms)

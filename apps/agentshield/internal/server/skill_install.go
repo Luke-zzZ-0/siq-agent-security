@@ -50,6 +50,10 @@ func (s *Server) initSkillInstallations() error {
 func skillInstallError(w http.ResponseWriter, err error) {
 	status, code := 503, "skill_install_unavailable"
 	switch {
+	case errors.Is(err, skillinstall.ErrUpdateURLBlocked):
+		status, code = 400, "skill_update_url_blocked"
+	case errors.Is(err, skillinstall.ErrUpdateSourceUnavailable):
+		status, code = 503, "skill_update_source_unavailable"
 	case errors.Is(err, skillinstall.ErrRemovalPending):
 		status, code = 409, "skill_install_removal_pending"
 	case errors.Is(err, skillinstall.ErrRecoveryRequired):
@@ -223,6 +227,29 @@ func (s *Server) skillInstallOperation(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
 		defer cancel()
 		result, err := s.skillInstallations.CompareUpdate(ctx, parts[0], req)
+		if err != nil {
+			skillInstallError(w, err)
+			return
+		}
+		writeJSON(w, 200, result)
+		return
+	}
+	if len(parts) == 2 && parts[0] != "" && parts[1] == "update-check" {
+		if r.Method != http.MethodPost {
+			w.WriteHeader(405)
+			return
+		}
+		var req skillinstall.UpdateCheckRequest
+		if !readStrictFlatRequest(w, r, &req, "skill_install_invalid", "schema_version", "remote_url", "actor_id") {
+			return
+		}
+		if !s.skillInstallSlot(w) {
+			return
+		}
+		defer s.skillImportMu.Unlock()
+		ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
+		defer cancel()
+		result, err := s.skillInstallations.CheckUpdate(ctx, parts[0], req)
 		if err != nil {
 			skillInstallError(w, err)
 			return

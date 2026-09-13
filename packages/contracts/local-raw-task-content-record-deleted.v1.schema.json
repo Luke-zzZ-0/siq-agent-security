@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://siq.dev/contracts/local-raw-task-content-record-deleted.v1.schema.json",
+  "title": "Raw task content deletion result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "deleted"],
+  "properties": {
+    "schema_version": { "const": "local-raw-task-content-record-deleted/v1" },
+    "record_id": { "type": "string", "pattern": "^raw-[a-f0-9]{32}$" },
+    "deleted": { "const": true }
+  }
+}

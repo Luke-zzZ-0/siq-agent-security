@@ -7,3 +7,6 @@ LICENSES/third-party/cookie-1.1.1--LICENSE whitespace=-blank-at-eof
 LICENSES/third-party/debug-4.3.7--package__LICENSE whitespace=-blank-at-eof
 LICENSES/third-party/dompurify-3.2.1--package__LICENSE whitespace=-blank-at-eof
 site/vendor/mermaid-bundled-notices.txt whitespace=-blank-at-eol
+
+# Preserve the byte-exact legacy Pages vendor archive and its checksums.
+docs/archive/gh-pages-9a4ebdc/vendor/** -whitespace

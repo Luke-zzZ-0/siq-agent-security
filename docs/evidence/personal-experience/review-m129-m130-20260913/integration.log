@@ -1,0 +1,22 @@
+=== RUN   TestDesktopNotifierConfiguredCommandWins
+--- PASS: TestDesktopNotifierConfiguredCommandWins (0.00s)
+=== RUN   TestDesktopNotifierUnsupportedPlatformWithoutOverrideStaysSilent
+    desktop_notify_test.go:34: platform has a native default notifier; nothing to assert
+--- SKIP: TestDesktopNotifierUnsupportedPlatformWithoutOverrideStaysSilent (0.00s)
+=== RUN   TestStartDesktopNotifyDisabledAndUnsupportedAreNoOps
+    desktop_notify_test.go:49: platform has a native default notifier; nothing to assert
+--- SKIP: TestStartDesktopNotifyDisabledAndUnsupportedAreNoOps (0.00s)
+=== RUN   TestPendingConfirmationsCountsOnlyPending
+--- PASS: TestPendingConfirmationsCountsOnlyPending (0.03s)
+=== RUN   TestDesktopNotifyConfigValidation
+--- PASS: TestDesktopNotifyConfigValidation (0.00s)
+=== RUN   TestDispatcherPendingCountBindsDeliveryErrorToLog
+--- PASS: TestDispatcherPendingCountBindsDeliveryErrorToLog (0.00s)
+PASS
+ok  	siq-agent-security/apps/agentshield/cmd/agentshield	0.039s
+=== RUN   TestGrantScenarioCatalogEndpoint
+--- PASS: TestGrantScenarioCatalogEndpoint (0.01s)
+=== RUN   TestGrantCreateWithScenarioRestrictsAndBinds
+--- PASS: TestGrantCreateWithScenarioRestrictsAndBinds (0.07s)
+PASS
+ok  	siq-agent-security/apps/agentshield/internal/server	0.090s

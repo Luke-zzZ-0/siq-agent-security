@@ -1,0 +1,6 @@
+=== RUN   TestReviewerChangingScenarioIsNotSilentlyIgnored
+    reviewer_scenario_test.go:23: requested no-exec but got reused=true scenario=<nil> status=pending_approval
+--- FAIL: TestReviewerChangingScenarioIsNotSilentlyIgnored (0.05s)
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/server	0.058s
+FAIL
