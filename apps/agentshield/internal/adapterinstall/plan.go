@@ -70,7 +70,10 @@ type planPayload struct {
 
 // Plan contains private configuration material. Only View may be serialized
 // into an HTTP response or CLI output. Durable recovery material is encrypted.
-type Plan struct{ payload planPayload }
+type Plan struct {
+	payload      planPayload
+	instanceRoot os.FileInfo // Process-local preview binding, never recovery material.
+}
 
 func (p *Plan) View() PlanView { return p.payload.View }
 
@@ -307,6 +310,12 @@ func Prepare(opts Options, action string) (*Plan, error) {
 		}
 	}
 	p := &Plan{payload: planPayload{View: view, Options: opts, ExpectedRevision: rev, Record: rec, Files: []fileChange{}, Inputs: map[string]fileImage{}, BinaryDigest: binaryDigest}}
+	if opts.Instance != nil {
+		p.instanceRoot, err = inspectInstanceRoot(opts.Instance)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if opts.Platform == Trae {
 		p.payload.View.NextSteps = append(p.payload.View.NextSteps, "当前平台没有工具钩子，可继续静态检查与盘点。")
 	} else if action == "install" {
@@ -325,6 +334,9 @@ func Prepare(opts Options, action string) (*Plan, error) {
 		p.payload.View.NextSteps = append(p.payload.View.NextSteps, "仍需在目标 Hermes profile 启用插件；本次不自动重启会话。")
 	}
 	p.payload.View.NextSteps = append(p.payload.View.NextSteps, "配置应用后检查诊断，并在方便时重启目标会话、验证实际调用；此操作不产生运行验证结论。")
+	if err := p.verifyInstanceRoot(); err != nil {
+		return nil, err
+	}
 	digest, err := p.digest()
 	if err != nil {
 		return nil, err

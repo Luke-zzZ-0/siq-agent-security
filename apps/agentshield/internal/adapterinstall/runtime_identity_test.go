@@ -16,6 +16,7 @@ func managedTestOptions(t *testing.T) Options {
 	t.Helper()
 	o := testOpts(t, Hermes)
 	root := filepath.Join(o.Home, ".hermes", "profiles", "work")
+	putTestFile(t, filepath.Join(root, "config.yaml"), []byte("model: work\n"), 0600)
 	o.Instance = &InstanceTarget{ID: hermeshome.Identifier(root), Name: "work", ConfigDir: root}
 	o.RuntimeIdentityID = "ri-" + strings.Repeat("a", 32)
 	// This is only a file-transaction fixture; signature verification is a server/core responsibility.
@@ -78,6 +79,7 @@ func openClawManagedTestOptions(t *testing.T) Options {
 	t.Helper()
 	o := testOpts(t, OpenClaw)
 	root := filepath.Join(o.Home, ".openclaw")
+	putTestFile(t, filepath.Join(root, "config.yaml"), []byte("model: fixture\n"), 0600)
 	o.Instance = &InstanceTarget{ID: hermeshome.Identifier(root), Name: "default", ConfigDir: root}
 	o.RuntimeIdentityID = "ri-" + strings.Repeat("b", 32)
 	raw, _ := json.Marshal(map[string]any{"identity_id": o.RuntimeIdentityID, "instance_id": o.Instance.ID, "agent_id": "hri-" + strings.TrimPrefix(o.Instance.ID, "hi-"), "platform": OpenClaw})

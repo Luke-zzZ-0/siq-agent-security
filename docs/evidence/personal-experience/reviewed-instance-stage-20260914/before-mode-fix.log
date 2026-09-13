@@ -1,0 +1,5 @@
+--- FAIL: TestUnicodeAndSpaceConfigPathsRestoreBytesAndModes (0.15s)
+    backup_restore_test.go:94: surgical restore lost the original mode
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/adapterinstall	0.154s
+FAIL

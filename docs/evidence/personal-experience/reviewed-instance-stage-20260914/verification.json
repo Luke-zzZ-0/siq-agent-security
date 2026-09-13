@@ -1,0 +1,39 @@
+{
+  "base_commit": "412d3b733107eb277722448813741cb812a2b6cd",
+  "source_dirty": true,
+  "candidate_files_sha256": {
+    "apps/agentshield/internal/adapterinstall/backup_restore_test.go": "694b3e82cd66c0e9e33013c3483ad3b3050ff3abfbfe924b1d841baa78bdfda2",
+    "apps/agentshield/internal/adapterinstall/instance_root.go": "a04fe51fbba5d1f7999ced000c7b289daff4161432e14c296428972e5d551731",
+    "apps/agentshield/internal/adapterinstall/instance_root_test.go": "cad4ced4e0bc68e53e8d588c3038ed4ca020e81c03f1a2825c7a4f55f4526b54",
+    "apps/agentshield/internal/adapterinstall/instance_test.go": "f32076076b722ea3d18ed255ef99d4ec3158ce49cf1742f1f007b49e5a82fd1f",
+    "apps/agentshield/internal/adapterinstall/plan.go": "0bf6088954df3c4446cbd9a782c23b943bbf4335eadaa4bacefa55ee475f7ba8",
+    "apps/agentshield/internal/adapterinstall/plan_uninstall.go": "f6c9578457a17b43686039f765e4e0410f896d4f6d00e4da92de9e7e28c7367b",
+    "apps/agentshield/internal/adapterinstall/runtime_identity_test.go": "97fe2626c84ccda0fb77639ff00867340d856cd84632ed485ca5f0888b6bda5b",
+    "apps/agentshield/internal/adapterinstall/transaction.go": "1c9b9be0f38ddd97437dc1fb5af70b89f4acd375565a5a5988b5c4572a26276f",
+    "apps/agentshield/internal/hermeshome/roots_test.go": "2b47898a88bcd14c91f750a12942e75f3a210fc8df15e1322adabadaa98df26e",
+    "docs/agentshield-dev-spec-v1.md": "12c4fc9576f026e89618ae28a0704b6f47da0b51a42067c56ebbe2f306b89b12",
+    "scripts/personal-experience/config-restore-journey-smoke.py": "61cceb08285df31ea099ddb72bdff3937224037daab2f334126ddc789e006132"
+  },
+  "tests": {
+    "go_test_packages": 39,
+    "go_vet": true,
+    "race_packages": [
+      "adapterinstall",
+      "hermeshome"
+    ],
+    "native_journey": {
+      "os": "linux",
+      "arch": "arm64",
+      "checks": 13,
+      "passed": true
+    },
+    "crossbuild_targets": [
+      "linux/amd64",
+      "linux/arm64",
+      "darwin/arm64",
+      "windows/amd64"
+    ],
+    "CGO_ENABLED": "0"
+  },
+  "scope": "N04 instance-root binding and surgical restore modes; not N02/N03/N05/N06/N08 acceptance"
+}

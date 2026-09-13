@@ -1,0 +1,85 @@
+{
+  "schema_version": "personal-config-restore-journey-smoke/v1",
+  "recorded_at": "2026-09-13T22:59:08.302067+00:00",
+  "passed": true,
+  "binary_sha256": "9c277724b1132caf8fe5ad6d8e0774c2d046e68307d392f3b9c754b62c458d39",
+  "harness_sha256": "61cceb08285df31ea099ddb72bdff3937224037daab2f334126ddc789e006132",
+  "native_cli_sha256": "4e623fce245c1fe6e70ae0edd3248b376ceaf94d560d63f5881cc7a3415ec609",
+  "native_entrypoint": "public hermes chat --oneshot against a named non-default profile",
+  "discovery": {
+    "instances_seen": 4,
+    "target": "工作 区B",
+    "target_source": "named_profile"
+  },
+  "installation": {
+    "method": "managed_v3_preview_apply_named_profile",
+    "changed_file_count": 6
+  },
+  "signed": {
+    "receipts": 5,
+    "session_id": "20260914_065859_ac8dba",
+    "checks": [
+      "allowed_read",
+      "write_denied_before_execution"
+    ]
+  },
+  "offline_block": {
+    "pending_denials": 3,
+    "session_id": "20260914_065902_1a449c"
+  },
+  "restart_recovery": {
+    "receipts_after_restart": 13,
+    "offline_denials_promoted": 3,
+    "session_id": "20260914_065905_768f17"
+  },
+  "uninstall_restore": {
+    "config_restored_semantically": true,
+    "config_mode_before": "0o640",
+    "config_mode_after": "0o600",
+    "native_cli_normalize_note": "restore runs through the real Hermes CLI, which rewrites config.yaml in normalized form; server-side guards assert semantic equality",
+    "product_files_removed": 3,
+    "profile_files_after_uninstall": [
+      "SOUL.md",
+      "audio_cache/",
+      "bin/",
+      "cache/",
+      "config.yaml",
+      "config.yaml.siq-agent-security.orig",
+      "cron/",
+      "hooks/",
+      "image_cache/",
+      "logs/",
+      "memories/",
+      "pairing/",
+      "plugins/",
+      "sandboxes/",
+      "sessions/",
+      "skills/",
+      "state.db",
+      "state.db.fts_rebuild.lock",
+      "state.db.quarantine.lock"
+    ],
+    "identity_status": "revoked"
+  },
+  "checks": [
+    "non_ascii_named_profile_discovered_not_active",
+    "default_work_profile_untouched_throughout",
+    "preview_does_not_mutate_host",
+    "managed_install_uses_issued_identity",
+    "native_enable_preserves_user_settings",
+    "allowed_read",
+    "write_denied_before_execution",
+    "offline_fail_closed_unsigned_denials",
+    "daemon_restart_same_port_repairs_serving",
+    "recovered_session_reuses_issued_identity",
+    "uninstall_restores_config_semantically",
+    "uninstall_revokes_runtime_identity",
+    "receipt_chain_verified"
+  ],
+  "limitations": [
+    "isolated named profile; browser approval and OS isolation are separate evidence",
+    "synthetic model and operator; no real-user interaction",
+    "product directories emptied of owned files may remain after uninstall (file-scoped ownership)",
+    "config.yaml.siq-agent-security.orig recovery snapshot is retained after uninstall by design (immutable first-seen copy referenced by recovery guidance)"
+  ]
+}

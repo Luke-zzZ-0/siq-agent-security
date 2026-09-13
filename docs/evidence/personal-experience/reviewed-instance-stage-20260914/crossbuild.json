@@ -1,0 +1,18 @@
+[
+  {
+    "target": "linux/amd64",
+    "exit_code": 0
+  },
+  {
+    "target": "linux/arm64",
+    "exit_code": 0
+  },
+  {
+    "target": "darwin/arm64",
+    "exit_code": 0
+  },
+  {
+    "target": "windows/amd64",
+    "exit_code": 0
+  }
+]

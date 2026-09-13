@@ -259,6 +259,10 @@ func (p *Plan) verifyCurrent() error {
 			return ErrPlanChanged
 		}
 	}
+	// Path-derived IDs and missing file images do not detect root replacement.
+	if err := p.verifyInstanceRoot(); err != nil {
+		return err
+	}
 	for path, before := range p.payload.Inputs {
 		current, err := readImage(p.payload.Options.Home, path)
 		if err != nil || !sameImage(current, before) {
