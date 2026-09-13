@@ -1,5 +1,10 @@
 # 个人体验当前交接（K002，2026-09-11）
 
+> **2026-09-13 N01 最新交付：开发与 Linux 最低验收已完成。** 状态协议 v2、实例绑定、递归备份和可重入迁移、发行兼容检查、真实旧程序拒写均已落盘。其余 OS 原生验证见 N07/N09，未提交或推送。见 [完成报告](evidence/personal-experience/n01-completion-20260913-190637/report.md) 与 [接续台账](personal-experience-closure-progress-20260913.md)。
+
+
+> **2026-09-13 早前独立审查（历史）：当时 N01 仍为 doing。** Ornith 的自动迁移完成声明未通过验收，入口防护修复已落盘且通过组件/Linux 验证；完整迁移、旧程序拒写和跨 OS 验收继续待办。当前工作树 `/tmp/siq-personal-closure`，未提交或推送。执行接续见 [新台账](personal-experience-closure-progress-20260913.md)，详见 [审查报告](evidence/personal-experience/ornith-n01-review-fixes-20260913-182231/report.md)。
+
 > 当前执行入口（2026-09-13）：[后续开发任务书 v2.0](personal-experience-lan-team-next-development-taskbook-20260913-160928.md)。全部已核查分支已通过 PR #32 合入 main `983b820`；后续从最新 `origin/main` 新建工作树，先个人闭环再 LAN。本文下方的旧基线、未提交/未合并表述和完成度数字均为各阶段历史记录，不代表当前状态。
 
 > 2026-09-13 M132 审查修复：获取失败分类、请求/结果合同与个人检查入口已补齐；生产 Git 获取在具备完整安全传输前明确拒绝，HTTPS ZIP 新版检查可用。回归与浏览器验证见 [本批记录](evidence/personal-experience/stage-fixes-m132-20260913.md)。UX-010 保持 doing，自动定期检查、Git 安全传输和原生更新验收继续待办。

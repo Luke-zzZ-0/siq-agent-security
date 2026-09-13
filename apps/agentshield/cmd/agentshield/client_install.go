@@ -49,7 +49,7 @@ func cmdClientInstall(args []string, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	staged, version, err := prepareClientInstallation(dir, *manifest, *binary, clientrelease.CheckUpgrade, clientrelease.Stage)
+	staged, version, err := prepareClientInstallation(dir, *manifest, *binary, checkUpgradeForCurrentState, clientrelease.Stage)
 	if err != nil {
 		return err
 	}

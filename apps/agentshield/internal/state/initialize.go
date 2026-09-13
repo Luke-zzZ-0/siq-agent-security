@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -71,6 +72,9 @@ func (s *Store) Initialize(w *Writer, port int) (InitializationResult, error) {
 	if err != nil || pid != os.Getpid() || pid != w.pid || owner != w.owner {
 		return result, ErrWriterBusy
 	}
+	if err := s.EnforceStateCompatibility(w, ""); err != nil {
+		return result, err
+	}
 	directoryID, err := s.DirectoryID()
 	if err != nil {
 		return result, err
@@ -102,6 +106,7 @@ func (s *Store) Initialize(w *Writer, port int) (InitializationResult, error) {
 	if err != nil && !missingInstance {
 		return result, errors.New("state: invalid or unsupported local instance record; restore it before initializing")
 	}
+	fresh := missingConfig && missingInstance && s.pristineInitialization()
 	if missingInstance {
 		var id [32]byte
 		if _, err := rand.Read(id[:]); err != nil {
@@ -127,5 +132,32 @@ func (s *Store) Initialize(w *Writer, port int) (InitializationResult, error) {
 			return result, err
 		}
 	}
+	if err := s.publishInitialStateFormat(w, fresh); err != nil {
+		return result, err
+	}
 	return InitializationResult{SchemaVersion: "local-client-initialization/v1", Status: "initialized", InstanceID: instance.InstanceID, StateDirectoryID: directoryID, Port: cfg.Port}, nil
+}
+
+// Missing client configuration alone does not mean there is no older state.
+// Open may have created an empty scaffold; only that scaffold and our lock are
+// pristine. Keys, grants, unknown directories and other files require migration.
+func (s *Store) pristineInitialization() bool {
+	allowed := map[string]bool{".": true, LockFile: true}
+	for _, name := range coreStateDirs {
+		allowed[name] = true
+	}
+	e := filepath.WalkDir(s.Dir, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(s.Dir, path)
+		if err != nil {
+			return err
+		}
+		if !allowed[rel] || (rel != LockFile && !entry.IsDir()) {
+			return errors.New("existing historical state")
+		}
+		return nil
+	})
+	return e == nil
 }

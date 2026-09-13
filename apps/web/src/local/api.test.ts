@@ -25,6 +25,17 @@ describe('local session recovery', () => {
     await expect(boot()).rejects.toThrow('不兼容');
   });
 
+  it('shows actionable state recovery on boot and does not mistake it for a connection failure', async () => {
+    const { boot } = await import('./api');
+    vi.mocked(fetch).mockResolvedValueOnce(response({ error: 'state_incompatible', detail: '/private/never-display' }, 503));
+    const error = await boot().catch((err: Error) => err);
+    expect(error).toBeInstanceOf(Error);
+    expect(String(error)).toContain('state-status');
+    expect(String(error)).toContain('state-migrate --confirm');
+    expect(String(error)).not.toContain('/private/never-display');
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
   it('pairs with an HttpOnly recovery cookie request and uses only the returned bearer for admin calls', async () => {
     const { pair, localApi } = await import('./api');
     vi.mocked(fetch).mockResolvedValueOnce(response(sessionResponse)).mockResolvedValueOnce(response({ version: 'test' }));

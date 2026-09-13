@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"time"
@@ -57,7 +58,7 @@ func privateRead(path string, limit int64) ([]byte, error) {
 	if !info.Mode().IsRegular() || info.Size() > limit || runtime.GOOS != "windows" && info.Mode().Perm()&0o077 != 0 {
 		return nil, errors.New("adapter: private recovery file invalid")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -70,15 +71,15 @@ func privateRead(path string, limit int64) ([]byte, error) {
 }
 
 func publishFile(path string, raw []byte, mode os.FileMode, replace bool) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+	if err := statefs.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".siq-adapter-pending-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".siq-adapter-pending-*")
 	if err != nil {
 		return err
 	}
 	tmp := f.Name()
-	defer os.Remove(tmp)
+	defer statefs.Remove(tmp)
 	if err := f.Chmod(mode); err != nil {
 		_ = f.Close()
 		return err
@@ -95,9 +96,9 @@ func publishFile(path string, raw []byte, mode os.FileMode, replace bool) error 
 		return err
 	}
 	if replace {
-		return os.Rename(tmp, path)
+		return statefs.Rename(tmp, path)
 	}
-	return os.Link(tmp, path)
+	return statefs.Link(tmp, path)
 }
 
 func backupAEAD(dir string, create bool) (cipher.AEAD, error) {
@@ -276,7 +277,7 @@ func writeImage(home, path string, before, after fileImage) error {
 		if !before.Exists {
 			return nil
 		}
-		return os.Remove(path)
+		return statefs.Remove(path)
 	}
 	return publishFile(path, after.Data, os.FileMode(after.Mode), before.Exists)
 }
@@ -343,7 +344,7 @@ func Apply(p *Plan) (*Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	guard, err := state.AcquireWriter(filepath.Join(st.Dir, "adapter-write"))
+	guard, err := state.AcquireScopedWriter(st.Dir, "adapter-write")
 	if err != nil {
 		return nil, err
 	}
@@ -436,7 +437,7 @@ func recoverOperation(dir, platform, key string) (*Result, error) {
 	if !known[platform] {
 		return nil, errors.New("adapter: unknown platform")
 	}
-	guard, err := state.AcquireWriter(filepath.Join(dir, "adapter-write"))
+	guard, err := state.AcquireScopedWriter(dir, "adapter-write")
 	if err != nil {
 		return nil, err
 	}

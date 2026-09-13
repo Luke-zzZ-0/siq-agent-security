@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"sync"
@@ -60,7 +61,7 @@ func NewStore(stateDir string, key *signing.Key) (*Store, error) {
 		return nil, ErrState
 	}
 	s := &Store{dir: filepath.Join(stateDir, "effect-evidence"), key: key}
-	if err := os.MkdirAll(s.dir, 0700); err != nil {
+	if err := statefs.MkdirAll(s.dir, 0700); err != nil {
 		return nil, ErrState
 	}
 	if err := s.checkDir(); err != nil {
@@ -91,7 +92,7 @@ func (s *Store) get(id string, now time.Time) (Record, error) {
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 64<<10 {
 		return r, ErrState
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return r, ErrState
 	}
@@ -136,7 +137,7 @@ func (s *Store) selectRecords(now time.Time, match func(Record) bool) ([]Record,
 	if err := s.checkDir(); err != nil {
 		return nil, err
 	}
-	f, err := os.Open(s.dir)
+	f, err := statefs.Open(s.dir)
 	if err != nil {
 		return nil, ErrState
 	}
@@ -210,7 +211,7 @@ func (s *Store) submit(input Evidence, action Action, observer Source, now time.
 	if !errors.Is(err, ErrNotFound) {
 		return Record{}, err
 	}
-	f, err := os.Open(s.dir)
+	f, err := statefs.Open(s.dir)
 	if err != nil {
 		return Record{}, ErrState
 	}
@@ -235,19 +236,19 @@ func (s *Store) submit(input Evidence, action Action, observer Source, now time.
 	if err != nil || len(payload) > 64<<10 {
 		return Record{}, ErrInvalid
 	}
-	tmp, err := os.CreateTemp(s.dir, ".effect-*")
+	tmp, err := statefs.CreateTemp(s.dir, ".effect-*")
 	if err != nil {
 		return Record{}, ErrState
 	}
 	name := tmp.Name()
-	defer os.Remove(name)
+	defer statefs.Remove(name)
 	_, writeErr := io.Copy(tmp, bytes.NewReader(payload))
 	syncErr := tmp.Sync()
 	closeErr := tmp.Close()
 	if writeErr != nil || syncErr != nil || closeErr != nil {
 		return Record{}, ErrState
 	}
-	if err = os.Link(name, filepath.Join(s.dir, e.EvidenceID+".json")); err != nil {
+	if err = statefs.Link(name, filepath.Join(s.dir, e.EvidenceID+".json")); err != nil {
 		return Record{}, ErrState
 	}
 	return r, nil

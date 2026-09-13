@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strconv"
 	"strings"
 	"unicode"
@@ -97,7 +98,7 @@ func currentServicePaths() (string, string, error) {
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 65536 {
 		return "", "", errors.New("service-unit: valid configuration required")
 	}
-	f, err := os.Open(filepath.Join(dir, "config.json"))
+	f, err := statefs.Open(filepath.Join(dir, "config.json"))
 	if err != nil {
 		return "", "", errors.New("service-unit: configuration unavailable")
 	}

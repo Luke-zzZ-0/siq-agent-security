@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strconv"
 	"strings"
@@ -102,8 +103,11 @@ func Open(dir string) (*Store, error) {
 	if dir == "" {
 		return nil, errors.New("state: directory required")
 	}
-	for _, sub := range []string{"", "keys", "admissions", "grants", "policies", "evidence", "receipts", "checkpoints", "inventory", "backups", "logs", "assets", "findings", "commits", "challenges", "intents", "intent-bindings", "action-correlation"} {
-		if err := os.MkdirAll(filepath.Join(dir, sub), 0o700); err != nil {
+	if err := RequireStateCompatibility(dir); err != nil {
+		return nil, err
+	}
+	for _, sub := range append([]string{""}, coreStateDirs...) {
+		if err := statefs.MkdirAll(filepath.Join(dir, sub), 0o700); err != nil {
 			return nil, err
 		}
 	}
@@ -112,7 +116,7 @@ func Open(dir string) (*Store, error) {
 
 // LoadConfig returns config.json or defaults (block / 47611 / console).
 func (s *Store) LoadConfig() (Config, error) {
-	raw, err := os.ReadFile(filepath.Join(s.Dir, "config.json"))
+	raw, err := statefs.ReadFile(filepath.Join(s.Dir, "config.json"))
 	if errors.Is(err, os.ErrNotExist) {
 		return decodeConfig(nil)
 	}
@@ -168,14 +172,20 @@ func (c Config) SessionIdleTTL() time.Duration {
 // SaveConfig writes config.json (the one file that is rewritten; it holds no
 // security decisions).
 func (s *Store) SaveConfig(cfg Config) error {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return err
+	}
 	raw, _ := json.MarshalIndent(cfg, "", "  ")
-	return os.WriteFile(filepath.Join(s.Dir, "config.json"), raw, 0o600)
+	return statefs.WriteFile(filepath.Join(s.Dir, "config.json"), raw, 0o600)
 }
 
 // Token returns the decision-API bearer token, generating it once (0600).
 func (s *Store) Token() (string, error) {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return "", err
+	}
 	p := filepath.Join(s.Dir, "token")
-	if raw, err := os.ReadFile(p); err == nil {
+	if raw, err := statefs.ReadFile(p); err == nil {
 		t := strings.TrimSpace(string(raw))
 		if len(t) >= 32 {
 			return t, nil
@@ -187,7 +197,7 @@ func (s *Store) Token() (string, error) {
 		return "", err
 	}
 	t := hex.EncodeToString(b)
-	f, err := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	f, err := statefs.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if err != nil {
 		if errors.Is(err, os.ErrExist) {
 			return s.Token()
@@ -207,6 +217,9 @@ func (s *Store) Token() (string, error) {
 // are never overwritten: identical bytes are idempotent; same identity with
 // later timestamps keeps the first write; a different identity is an error.
 func (s *Store) PutAdmission(res *admission.Result) error {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return err
+	}
 	base := filepath.Join(s.Dir, "admissions", res.Admission.AdmissionID)
 	cardPath := base + ".skill-card.md"
 	if err := writeNewCompatible(cardPath, []byte(res.SkillCard), func([]byte) bool {
@@ -233,7 +246,7 @@ func (s *Store) GetAdmission(id string) (*admission.Admission, error) {
 	if !safeID(id) {
 		return nil, errors.New("state: invalid admission id")
 	}
-	raw, err := os.ReadFile(filepath.Join(s.Dir, "admissions", id+".json"))
+	raw, err := statefs.ReadFile(filepath.Join(s.Dir, "admissions", id+".json"))
 	if err != nil {
 		return nil, err
 	}
@@ -249,7 +262,7 @@ func (s *Store) SkillCard(id string) (string, error) {
 	if !safeID(id) {
 		return "", errors.New("state: invalid admission id")
 	}
-	raw, err := os.ReadFile(filepath.Join(s.Dir, "admissions", id+".skill-card.md"))
+	raw, err := statefs.ReadFile(filepath.Join(s.Dir, "admissions", id+".skill-card.md"))
 	if err != nil {
 		return "", err
 	}
@@ -258,7 +271,7 @@ func (s *Store) SkillCard(id string) (string, error) {
 
 // ListAdmissions returns all admissions (newest decided_at first).
 func (s *Store) ListAdmissions() ([]admission.Admission, error) {
-	entries, err := os.ReadDir(filepath.Join(s.Dir, "admissions"))
+	entries, err := statefs.ReadDir(filepath.Join(s.Dir, "admissions"))
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +280,7 @@ func (s *Store) ListAdmissions() ([]admission.Admission, error) {
 		if !strings.HasSuffix(e.Name(), ".json") {
 			continue
 		}
-		raw, err := os.ReadFile(filepath.Join(s.Dir, "admissions", e.Name()))
+		raw, err := statefs.ReadFile(filepath.Join(s.Dir, "admissions", e.Name()))
 		if err != nil {
 			return nil, err
 		}
@@ -372,7 +385,7 @@ func (s *Store) GetChallengeWithSeq(id string) (*grant.ApprovalChallenge, int, e
 
 // ListGrants returns the latest version of every grant.
 func (s *Store) ListGrants() ([]grant.Grant, error) {
-	entries, err := os.ReadDir(filepath.Join(s.Dir, "grants"))
+	entries, err := statefs.ReadDir(filepath.Join(s.Dir, "grants"))
 	if err != nil {
 		return nil, err
 	}
@@ -403,7 +416,7 @@ func (s *Store) ListGrants() ([]grant.Grant, error) {
 		if err := s.checkGrantCommit(id, latest[id]); err != nil {
 			return nil, err
 		}
-		raw, err := os.ReadFile(p)
+		raw, err := statefs.ReadFile(p)
 		if err != nil {
 			return nil, err
 		}
@@ -493,6 +506,9 @@ func (s *Store) SkillAttribution(platform, sessionID, agentID string, claim *rec
 // PutDesiredPolicy stores the derived policy as policies/<id>.v<version>.json.
 // The file is Sync'd before close so a successful return means durable bytes.
 func (s *Store) PutDesiredPolicy(dp grant.DesiredPolicy) error {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return err
+	}
 	id, _ := dp["policy_id"].(string)
 	if !safeID(id) {
 		return errors.New("state: invalid policy id")
@@ -510,7 +526,7 @@ func (s *Store) PutDesiredPolicy(dp grant.DesiredPolicy) error {
 	}
 	raw = append(raw, '\n')
 	dir := filepath.Join(s.Dir, "policies")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
 	return publishCommitFile(filepath.Join(dir, fmt.Sprintf("%s.v%d.json", id, v)), raw)
@@ -519,9 +535,9 @@ func (s *Store) PutDesiredPolicy(dp grant.DesiredPolicy) error {
 // writeDurable creates path exclusively, Syncs, then closes. Identical content
 // at an existing path is treated as idempotent success (same as writeNew).
 func writeDurable(path string, data []byte) error {
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	f, err := statefs.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if errors.Is(err, os.ErrExist) {
-		existing, readErr := os.ReadFile(path)
+		existing, readErr := statefs.ReadFile(path)
 		if readErr != nil {
 			return readErr
 		}
@@ -535,16 +551,16 @@ func writeDurable(path string, data []byte) error {
 	}
 	if _, err := f.Write(data); err != nil {
 		_ = f.Close()
-		_ = os.Remove(path)
+		_ = statefs.Remove(path)
 		return err
 	}
 	if err := f.Sync(); err != nil {
 		_ = f.Close()
-		_ = os.Remove(path)
+		_ = statefs.Remove(path)
 		return err
 	}
 	if err := f.Close(); err != nil {
-		_ = os.Remove(path)
+		_ = statefs.Remove(path)
 		return err
 	}
 	return nil
@@ -554,6 +570,9 @@ func writeDurable(path string, data []byte) error {
 // evidence_id, content_hash and source_locator is idempotent; a different
 // identity at that path is an error and does not replace the file.
 func (s *Store) PutEvidence(id string, doc any) error {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return err
+	}
 	if !safeID(id) {
 		return errors.New("state: invalid evidence id")
 	}
@@ -570,9 +589,9 @@ func (s *Store) PutEvidence(id string, doc any) error {
 var ErrConflict = errors.New("state: immutable path exists with different content")
 
 func writeNew(path string, data []byte) error {
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	f, err := statefs.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if errors.Is(err, os.ErrExist) {
-		existing, readErr := os.ReadFile(path)
+		existing, readErr := statefs.ReadFile(path)
 		if readErr != nil {
 			return readErr
 		}
@@ -596,7 +615,7 @@ func writeNewCompatible(path string, data []byte, sameIdentity func(existing []b
 	if err == nil || !errors.Is(err, ErrConflict) {
 		return err
 	}
-	existing, readErr := os.ReadFile(path)
+	existing, readErr := statefs.ReadFile(path)
 	if readErr != nil {
 		return readErr
 	}

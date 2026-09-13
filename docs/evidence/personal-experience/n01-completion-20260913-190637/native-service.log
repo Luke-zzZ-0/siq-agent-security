@@ -1,0 +1,10 @@
+=== RUN   TestNativeServeSignedStop
+--- PASS: TestNativeServeSignedStop (0.10s)
+=== RUN   TestNativeStopRequestCLI
+--- PASS: TestNativeStopRequestCLI (0.10s)
+=== RUN   TestNativeStopCLI
+--- PASS: TestNativeStopCLI (0.20s)
+=== RUN   TestNativeServeExplicitDirectory
+--- PASS: TestNativeServeExplicitDirectory (0.08s)
+PASS
+ok  	siq-agent-security/apps/agentshield/cmd/agentshield	0.489s

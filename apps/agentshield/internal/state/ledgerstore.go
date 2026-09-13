@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strconv"
 	"strings"
@@ -45,7 +46,7 @@ func (s *Store) LatestSeq(subdir, fileID string) (int, []byte, error) {
 		return -1, nil, errors.New("state: invalid file id")
 	}
 	dir := filepath.Join(s.Dir, subdir)
-	entries, err := os.ReadDir(dir)
+	entries, err := statefs.ReadDir(dir)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return -1, nil, nil
@@ -73,7 +74,7 @@ func (s *Store) LatestSeq(subdir, fileID string) (int, []byte, error) {
 	if best < 0 {
 		return -1, nil, nil
 	}
-	raw, err := os.ReadFile(bestPath)
+	raw, err := statefs.ReadFile(bestPath)
 	if err != nil {
 		return -1, nil, err
 	}
@@ -92,7 +93,7 @@ func (s *Store) PutVersioned(subdir, fileID string, doc any) error {
 	dir := filepath.Join(s.Dir, subdir)
 	for n := 0; n <= 10000; n++ {
 		p := filepath.Join(dir, fmt.Sprintf("%s.%d.json", fileID, n))
-		if err := os.Link(tmp, p); err == nil {
+		if err := statefs.Link(tmp, p); err == nil {
 			return nil
 		} else if !errors.Is(err, os.ErrExist) {
 			return fmt.Errorf("state: exclusive version publication failed: %w", err)
@@ -121,7 +122,7 @@ func (s *Store) PutVersionedCAS(subdir, fileID string, expected int, doc any) (i
 	}
 	next := expected + 1
 	p := filepath.Join(s.Dir, subdir, fmt.Sprintf("%s.%d.json", fileID, next))
-	if err := os.Link(tmp, p); err != nil {
+	if err := statefs.Link(tmp, p); err != nil {
 		if errors.Is(err, os.ErrExist) {
 			head, _, _ := s.LatestSeq(subdir, fileID)
 			return head, &RevisionConflictError{Expected: expected, Actual: head}
@@ -132,30 +133,33 @@ func (s *Store) PutVersionedCAS(subdir, fileID string, expected int, doc any) (i
 }
 
 func (s *Store) stageVersion(subdir, fileID string, doc any) (tmp string, cleanup func(), err error) {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return "", nil, err
+	}
 	if !safeID(fileID) {
 		return "", nil, errors.New("state: invalid file id")
 	}
 	dir := filepath.Join(s.Dir, subdir)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return "", nil, err
 	}
 	raw, err := json.MarshalIndent(doc, "", "  ")
 	if err != nil {
 		return "", nil, err
 	}
-	f, err := os.CreateTemp(dir, ".pending-*")
+	f, err := statefs.CreateTemp(dir, ".pending-*")
 	if err != nil {
 		return "", nil, err
 	}
 	if err := f.Chmod(0o600); err != nil {
 		_ = f.Close()
-		_ = os.Remove(f.Name())
+		_ = statefs.Remove(f.Name())
 		if runtime.GOOS != "windows" {
 			return "", nil, err
 		}
 	}
 	tmp = f.Name()
-	cleanup = func() { _ = os.Remove(tmp) }
+	cleanup = func() { _ = statefs.Remove(tmp) }
 	if _, err := f.Write(raw); err != nil {
 		_ = f.Close()
 		cleanup()
@@ -176,7 +180,7 @@ func (s *Store) stageVersion(subdir, fileID string, doc any) (tmp string, cleanu
 // LatestVersioned returns the newest JSON document per fileID in subdir.
 func (s *Store) LatestVersioned(subdir string) ([][]byte, error) {
 	dir := filepath.Join(s.Dir, subdir)
-	entries, err := os.ReadDir(dir)
+	entries, err := statefs.ReadDir(dir)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, nil
@@ -207,7 +211,7 @@ func (s *Store) LatestVersioned(subdir string) ([][]byte, error) {
 	}
 	var out [][]byte
 	for _, p := range files {
-		raw, err := os.ReadFile(p)
+		raw, err := statefs.ReadFile(p)
 		if err != nil {
 			return nil, err
 		}
@@ -227,12 +231,15 @@ type AuditEvent struct {
 
 // AppendAudit appends one JSON line to audit.jsonl.
 func (s *Store) AppendAudit(ev AuditEvent) error {
+	if err := RequireStateCompatibility(s.Dir); err != nil {
+		return err
+	}
 	raw, err := json.Marshal(ev)
 	if err != nil {
 		return err
 	}
 	p := filepath.Join(s.Dir, "audit.jsonl")
-	f, err := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o600)
+	f, err := statefs.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o600)
 	if err != nil {
 		return err
 	}
@@ -253,7 +260,7 @@ func (s *Store) tailLegacyAudit(n int) ([]AuditEvent, error) {
 		n = 200
 	}
 	p := filepath.Join(s.Dir, "audit.jsonl")
-	f, err := os.Open(p)
+	f, err := statefs.Open(p)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, nil

@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "state_directory_id",
+    "instance_id",
+    "source_marker_sha256",
+    "target",
+    "entries"
+  ],
+  "properties": {
+    "schema": {
+      "const": "state-migration-plan/v1"
+    },
+    "state_directory_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_marker_sha256": {
+      "type": "string",
+      "pattern": "^(absent|[a-f0-9]{64})$"
+    },
+    "target": {
+      "title": "Instance-bound local state format v2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "program_version",
+        "format_version",
+        "published_at",
+        "min_reader",
+        "min_writer",
+        "state_directory_id",
+        "instance_id"
+      ],
+      "properties": {
+        "schema": {
+          "const": "state-format/v2"
+        },
+        "program_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "format_version": {
+          "const": 2
+        },
+        "published_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "min_reader": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min_writer": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state_directory_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "instance_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "description": "Runtime validates instance/directory binding, reader and writer ranges, duplicate keys and the 4096 byte limit. Not an authorization or same-UID isolation boundary."
+    },
+    "entries": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "mode",
+          "directory",
+          "size",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mode": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 511
+          },
+          "directory": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 134217728
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^([a-f0-9]{64})?$"
+          }
+        }
+      }
+    }
+  },
+  "description": "Internal immutable plan. Runtime also requires canonical bytes, safe sorted unique paths, source/instance bindings, aggregate budget and verified backup. No caller-provided plan path."
+}

@@ -18,6 +18,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
@@ -58,21 +59,21 @@ func Load(stateDir string) (*Key, error) {
 		return nil, errors.New("signing: state directory required (fail closed)")
 	}
 	dir := filepath.Join(stateDir, "keys")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return nil, err
 	}
 	path := filepath.Join(dir, "signing.seed")
-	if raw, err := os.ReadFile(path); err == nil {
+	if raw, err := statefs.ReadFile(path); err == nil {
 		return decodeSeedFile(path, raw)
 	}
 	seed := make([]byte, ed25519.SeedSize)
 	if _, err := rand.Read(seed); err != nil {
 		return nil, err
 	}
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	f, err := statefs.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if err != nil {
 		if errors.Is(err, os.ErrExist) {
-			raw, rerr := os.ReadFile(path)
+			raw, rerr := statefs.ReadFile(path)
 			if rerr != nil {
 				return nil, rerr
 			}
@@ -181,7 +182,7 @@ func LoadExisting(stateDir string) (*Key, error) {
 	if !info.Mode().IsRegular() || info.Size() > 1024 {
 		return nil, errors.New("signing: invalid existing identity file")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return nil, err
 	}

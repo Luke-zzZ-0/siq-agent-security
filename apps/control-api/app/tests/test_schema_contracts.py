@@ -2704,3 +2704,54 @@ def test_update_check_contracts(name: str) -> None:
         assert list(validator.iter_errors(data | {"content_changes": data["content_changes"] * 201}))
     else:
         assert list(validator.iter_errors(data | {"actor_id": " "}))
+
+
+def test_local_state_format_marker_contract() -> None:
+    from jsonschema import FormatChecker
+
+    schema = json.loads((CONTRACTS / "local-state-format.v1.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema, format_checker=FormatChecker())
+    fixture = CONTRACTS.parents[1] / "apps/agentshield/testdata/contracts/local-state-format.json"
+    data = json.loads(fixture.read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+        assert list(validator.iter_errors({**data, field: None}))
+    for patch in (
+        {"format_version": -1}, {"format_version": 1.5}, {"format_version": True},
+        {"format_version": "1"}, {"schema": "state-format/v2"},
+        {"program_version": ""}, {"program_version": "x" * 129},
+        {"published_at": "invalid"}, {"migration": "automatically-allowed"},
+    ):
+        assert list(validator.iter_errors({**data, **patch}))
+    # Representing a future format is distinct from the runtime accepting it.
+    validator.validate({**data, "format_version": 999})
+
+
+@pytest.mark.parametrize(("schema_name", "sample"), [
+    ("local-state-format.v2", "local-state-format-v2"),
+    ("local-state-status.v1", "local-state-status"),
+    ("local-state-migration-result.v1", "local-state-migration-result"),
+    ("local-state-migration-plan.v1", "local-state-migration-plan"),
+    ("skill-manifest.v3", "skill-manifest.v3.sample"),
+])
+def test_n01_state_protocol_contracts(schema_name: str, sample: str) -> None:
+    from jsonschema import FormatChecker
+
+    schema = json.loads((CONTRACTS / f"{schema_name}.schema.json").read_text())
+    Draft7Validator.check_schema(schema)
+    validator = Draft7Validator(schema, format_checker=FormatChecker())
+    fixture = CONTRACTS.parents[1] / "apps/agentshield/testdata/contracts" / f"{sample}.json"
+    data = json.loads(fixture.read_text())
+    validator.validate(data)
+    for field in schema["required"]:
+        assert list(validator.iter_errors({k: v for k, v in data.items() if k != field}))
+        assert list(validator.iter_errors(data | {field: None}))
+    assert list(validator.iter_errors(data | {"unknown": "rejected"}))
+    if schema_name == "local-state-format.v2":
+        assert list(validator.iter_errors(data | {"min_writer": 0}))
+        assert list(validator.iter_errors(data | {"instance_id": "not-an-identity"}))
+    elif schema_name == "skill-manifest.v3":
+        capability = data["state_compatibility"]
+        assert list(validator.iter_errors(data | {"state_compatibility": capability | {"reader_version": 0}}))

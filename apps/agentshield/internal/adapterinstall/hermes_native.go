@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"time"
@@ -82,13 +83,13 @@ func newNativeStage(cli string) (*nativeStage, error) {
 	if cli == "" {
 		return nil, ErrNativeCLI
 	}
-	dir, err := os.MkdirTemp("", "siq-hermes-config-")
+	dir, err := statefs.MkdirTemp("", "siq-hermes-config-")
 	if err != nil {
 		return nil, err
 	}
 	stage := &nativeStage{dir: dir, cli: cli}
 	for _, name := range []string{"home", "profile", "bundled", "verify"} {
-		if err := os.Mkdir(filepath.Join(dir, name), 0700); err != nil {
+		if err := statefs.Mkdir(filepath.Join(dir, name), 0700); err != nil {
 			stage.close()
 			return nil, err
 		}
@@ -100,7 +101,7 @@ func newNativeStage(cli string) (*nativeStage, error) {
 	}
 	stage.env = append(stage.env, "HOME="+filepath.Join(dir, "home"), "USERPROFILE="+filepath.Join(dir, "home"), "LOCALAPPDATA="+filepath.Join(dir, "home"), "HERMES_BUNDLED_PLUGINS="+filepath.Join(dir, "bundled"), "HERMES_ENABLE_PROJECT_PLUGINS=0", "PYTHONDONTWRITEBYTECODE=1", "PYTHONNOUSERSITE=1", "NO_COLOR=1")
 	plugin := filepath.Join(dir, "profile", "plugins", product.PluginDir())
-	if err := os.MkdirAll(plugin, 0700); err != nil {
+	if err := statefs.MkdirAll(plugin, 0700); err != nil {
 		stage.close()
 		return nil, err
 	}
@@ -109,17 +110,17 @@ func newNativeStage(cli string) (*nativeStage, error) {
 		stage.close()
 		return nil, err
 	}
-	if err := os.WriteFile(filepath.Join(plugin, "plugin.yaml"), manifest, 0600); err != nil {
+	if err := statefs.WriteFile(filepath.Join(plugin, "plugin.yaml"), manifest, 0600); err != nil {
 		stage.close()
 		return nil, err
 	}
-	if err := os.WriteFile(filepath.Join(plugin, "__init__.py"), []byte("# Metadata-only staging; no runtime plugin execution.\n"), 0600); err != nil {
+	if err := statefs.WriteFile(filepath.Join(plugin, "__init__.py"), []byte("# Metadata-only staging; no runtime plugin execution.\n"), 0600); err != nil {
 		stage.close()
 		return nil, err
 	}
 	return stage, nil
 }
-func (n *nativeStage) close() { _ = os.RemoveAll(n.dir) } // Only our private, newly created temporary tree.
+func (n *nativeStage) close() { _ = statefs.RemoveAll(n.dir) } // Only our private, newly created temporary tree.
 func (n *nativeStage) command(profile string, args ...string) ([]byte, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
 	defer cancel()
@@ -161,7 +162,7 @@ func (n *nativeStage) document(raw []byte) (map[string]any, error) {
 	}
 	nested := "siq_adapter_document:\n  " + strings.ReplaceAll(string(raw), "\n", "\n  ") + "\n"
 	path := filepath.Join(n.dir, "verify", "config.yaml")
-	if err := os.WriteFile(path, []byte(nested), 0600); err != nil {
+	if err := statefs.WriteFile(path, []byte(nested), 0600); err != nil {
 		return nil, err
 	}
 	encoded, err := n.command("verify", "config", "get", "siq_adapter_document", "--json")
@@ -332,7 +333,7 @@ func (p *Plan) prepareHermesNative(uninstall bool) error {
 	if err != nil {
 		return err
 	}
-	if err := os.WriteFile(filepath.Join(stage.dir, "profile", "config.yaml"), before.Data, 0600); err != nil {
+	if err := statefs.WriteFile(filepath.Join(stage.dir, "profile", "config.yaml"), before.Data, 0600); err != nil {
 		return err
 	}
 	if uninstall {

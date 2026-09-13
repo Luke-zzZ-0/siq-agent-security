@@ -1,0 +1,10 @@
+{
+  "schema": "state-format/v2",
+  "program_version": "n01-fixture",
+  "format_version": 2,
+  "published_at": "2026-09-13T10:00:00Z",
+  "min_reader": 2,
+  "min_writer": 2,
+  "state_directory_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "instance_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}

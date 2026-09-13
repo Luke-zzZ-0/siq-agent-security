@@ -3,6 +3,7 @@ package openshell
 import (
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"unicode"
 )
@@ -120,7 +121,7 @@ func readActiveGatewayName() string {
 		dirs = append(dirs, filepath.Join(home, ".config"))
 	}
 	for _, dir := range dirs {
-		raw, err := os.ReadFile(filepath.Join(dir, "openshell", "active_gateway"))
+		raw, err := statefs.ReadFile(filepath.Join(dir, "openshell", "active_gateway"))
 		if err != nil {
 			continue
 		}

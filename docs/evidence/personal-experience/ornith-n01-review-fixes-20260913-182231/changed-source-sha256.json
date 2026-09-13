@@ -1,0 +1,162 @@
+[
+  {
+    "path": "apps/agentshield/cmd/agentshield/codebuddy_hook_test.go",
+    "sha256": "36afa902df9a2868b72499138a7964eb86e94fe66e45eccf0c554adb4199fa6c"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_load.go",
+    "sha256": "ef9c2bd38544412fb1b5902bde68b6eb8a6495bdde703507065077aa15cc6c31"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/launch_agent_prepare.go",
+    "sha256": "4faa012a85a4622cef878d61f3aacdc6d048e2a258e1eeda6c3b2c89fb02c788"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/main.go",
+    "sha256": "281385e4ad6fd3042063f03c1298011e718fba987e68d4d0e910274d494d9903"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/p3_cli_test.go",
+    "sha256": "270937540faa09e2e4f111d524e514822a8ee22ad89e98be519465976945331d"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_control.go",
+    "sha256": "e014be7425fcbd990baa0822a73832117b05fc866eed1f659b278a73c38f3fce"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_login.go",
+    "sha256": "37a96f0298b784278f9726bc27e03e4190023ace6c618ae7b99307d4f770d6f9"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_prepare.go",
+    "sha256": "19d5c3e52ddcbfb7dedcbae97dd374dc0b9ac1d16f9429423ce1e23a5c4d3d03"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_rollback.go",
+    "sha256": "fb703944b99a5530d1a5fff1aa54a233d426cc8393987c3580bf56fbfe26941f"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_unregister.go",
+    "sha256": "172571fce47cb58a9c8e2a812b6ba4db4a0eb22318f03cfd3326ff8bf162cf78"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/service_upgrade.go",
+    "sha256": "1745e2439ac1188387357483cfa9459cd35eb09d9be9e1478b374eacfa1f2e81"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_compatibility.go",
+    "sha256": "838f53f2ad4fb799b266f3fcfb98b3f67a9a3b026ed8c6df6619a7aa29563cab"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/state_compatibility_test.go",
+    "sha256": "cd533f09dd87bd22d2741bb21f04c72711e8c77b00752ea96ecee98e4b823023"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/stop_request.go",
+    "sha256": "f4fdaefbcf360ff685537f14e38742702fe5b557047123b63bd4a3dbd9308568"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/teardown.go",
+    "sha256": "13ba80768c52463e834deed2c0a54fae119da21e58bab85bc3f34cc753d3c794"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/teardown_windows_task.go",
+    "sha256": "f794cebc54e72dd2ed7a5feadad66f864c9ae645b370d2a4ba5d223aa942d10c"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_prepare.go",
+    "sha256": "48f92b4f895a2679b3ca36ebb80c416201e4ae38fddf0c54f48798452acf2a69"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_start.go",
+    "sha256": "9ee00ec9807e20b0eab0d770dd4ed7d0045e70a4aba84b23ba5e7c911b12dbe7"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_stop.go",
+    "sha256": "3a71f13e78d4fd039d3f301e1fa517a5cf977244456a75dfd38d6c14df6fc518"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/windows_task_unregister.go",
+    "sha256": "73c641b7fbb0e0241efb3dbc81c23b17122460df234048bccb3218b6388a32d8"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/install_test.go",
+    "sha256": "64dfac8c9290fe4274cd2aeeb188309f25f1b83cf78861f54bcf2335b1a421e9"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/transaction.go",
+    "sha256": "07fc86352bcd123828f557e25b5f2b5ff6678ed9480a1d72ad87774d9f4eb4b2"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/transaction_test.go",
+    "sha256": "586b9f104ad3803d414651f5efc771bdd7bad6d4dab2c2d160397563e928fe44"
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/snapshot.go",
+    "sha256": "1225ceae2e39330b6ce38ae62e313ceac924d4160460a9d07137841bba3465a0"
+  },
+  {
+    "path": "apps/agentshield/internal/clientrelease/stage.go",
+    "sha256": "f67d2474d92a98abe96f76a0f5552e11704e079a81b3f4da2c05db64742780be"
+  },
+  {
+    "path": "apps/agentshield/internal/server/raw_task_content.go",
+    "sha256": "71a65200d9400569a7ece5204cf864a7e2eda1c1cc64c0d414883ccfd4db613f"
+  },
+  {
+    "path": "apps/agentshield/internal/server/server.go",
+    "sha256": "4e762cd52c1b7240ec22cb341ebc5b7be54f235be0b76d33932d291d3aa261bc"
+  },
+  {
+    "path": "apps/agentshield/internal/server/state_compatibility_test.go",
+    "sha256": "b8ee281dc95c3ecf2f48e1d4d0511cd2c0083cfa5211220ec7cfa682f72e0e8a"
+  },
+  {
+    "path": "apps/agentshield/internal/state/commit.go",
+    "sha256": "8552b70fd61c6b0eb5beffe1535f1da1e4922aeb12639be4a467261af0fce445"
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility.go",
+    "sha256": "b52afeb4bfa953e511f44e36a9480d2cfc7b5c7346a3b6641415d43ac1c3b7b0"
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility_review_test.go",
+    "sha256": "db25328d30cb4e160d9bdb226dc9a09fc543377c24884cab0fa66a76f09d5910"
+  },
+  {
+    "path": "apps/agentshield/internal/state/compatibility_test.go",
+    "sha256": "d1af0659574600d1b89d55e936fc4bf490b742ac7805e8ec92caf2df5d9cf66e"
+  },
+  {
+    "path": "apps/agentshield/internal/state/initialize.go",
+    "sha256": "32636c644273f45d52fd74884df6ff5a535a38347e65727a16d652e3d5061fea"
+  },
+  {
+    "path": "apps/agentshield/internal/state/ledgerstore.go",
+    "sha256": "1a3e2480932c9e8f4242eb76b195dfa7e158a0157cef4c98d0bb7f9b4735c416"
+  },
+  {
+    "path": "apps/agentshield/internal/state/state.go",
+    "sha256": "fccd49f28b980e6e99d594f1f837d1db99f00fb7e5a2d02d5cbb06ea153d04e0"
+  },
+  {
+    "path": "apps/agentshield/internal/state/writer.go",
+    "sha256": "78c96e8e2cffb8751763c566f8cf3047755dcecbfdcfad23de61248c9573b134"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-state-format.json",
+    "sha256": "681a752b4d85f4fb40cd76eaa4f6d264421fe3daa14cee3c62082db019504c9b"
+  },
+  {
+    "path": "apps/control-api/app/tests/test_schema_contracts.py",
+    "sha256": "f5d5b9607f520452cef1e2eec612af05eea6b63a80b0fae6a56d9c757dabf50c"
+  },
+  {
+    "path": "docs/agentshield-dev-spec-v1.md",
+    "sha256": "de96d7f4eb89b89832e40e831edc00e3860ec6bdc89dfe91ac1a3f22f7b7eb9d"
+  },
+  {
+    "path": "packages/contracts/local-state-format.v1.schema.json",
+    "sha256": "94c40ae18489934a845654186ae62aa0404e337b9d2a0275a6d801f41f9438b6"
+  }
+]

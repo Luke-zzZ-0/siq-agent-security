@@ -3,8 +3,8 @@ package skillimport
 import (
 	"context"
 	"io"
-	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"time"
@@ -42,7 +42,7 @@ func (s *Store) List(ctx context.Context) (Listing, error) {
 	if err := checkDirs(dir); err != nil {
 		return result, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return result, ErrUnavailable
 	}

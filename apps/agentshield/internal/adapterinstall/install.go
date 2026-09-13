@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -278,7 +279,7 @@ func readJSONObject(path string) (map[string]any, error) {
 	if err := refuseSymlink(path); err != nil {
 		return nil, err
 	}
-	data, err := os.ReadFile(path)
+	data, err := statefs.ReadFile(path)
 	if errors.Is(err, os.ErrNotExist) {
 		return map[string]any{}, nil
 	}
@@ -336,7 +337,7 @@ func newestRecord(stateDir, platform string) (*Record, error) {
 		return record, err
 	}
 	dir := filepath.Join(stateDir, "backups", "adapters")
-	entries, err := os.ReadDir(dir)
+	entries, err := statefs.ReadDir(dir)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, fmt.Errorf("%w for %s", errNoInstallRecord, platform)
@@ -422,7 +423,7 @@ func Status(opts Options) (*Result, error) {
 	case CodeBuddy:
 		p := filepath.Join(opts.configRoot(), "settings.json")
 		if exists(p) {
-			raw, _ := os.ReadFile(p)
+			raw, _ := statefs.ReadFile(p)
 			if strings.Contains(string(raw), "hook codebuddy") && product.Mentions(string(raw)) {
 				note = "installed"
 				paths = []string{p}

@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sync"
 	"time"
 )
@@ -42,7 +43,7 @@ func Open(dir string, key *signing.Key) (*Store, error) {
 	}
 	for _, name := range []string{"provenance-issuers", "provenance-issuer-revocations", "provenance-assertions"} {
 		p := filepath.Join(dir, name)
-		if err := os.MkdirAll(p, 0700); err != nil {
+		if err := statefs.MkdirAll(p, 0700); err != nil {
 			return nil, err
 		}
 		fi, err := os.Lstat(p)
@@ -65,11 +66,11 @@ func publishRecord(path string, value any) error {
 	if err != nil || len(raw) > maxRecordBytes {
 		return failure("provenance_record_invalid")
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".provenance-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".provenance-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(raw); err == nil {
 		err = f.Sync()
 	}
@@ -80,7 +81,7 @@ func publishRecord(path string, value any) error {
 	if closeErr != nil {
 		return closeErr
 	}
-	return os.Link(f.Name(), path)
+	return statefs.Link(f.Name(), path)
 }
 func readRecord(path string, out any) error {
 	fi, err := os.Lstat(path)
@@ -90,7 +91,7 @@ func readRecord(path string, out any) error {
 	if !fi.Mode().IsRegular() || fi.Size() > maxRecordBytes {
 		return failure("provenance_record_invalid")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return err
 	}
@@ -147,7 +148,7 @@ func (s *Store) registerIssuer(i Issuer) (Issuer, error) {
 	} else if !errors.Is(err, os.ErrNotExist) {
 		return Issuer{}, failure("provenance_state_unavailable")
 	}
-	f, err := os.Open(filepath.Join(s.dir, "provenance-issuers"))
+	f, err := statefs.Open(filepath.Join(s.dir, "provenance-issuers"))
 	if err != nil {
 		return Issuer{}, err
 	}

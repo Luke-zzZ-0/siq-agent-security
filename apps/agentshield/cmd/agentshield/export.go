@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 
 	"siq-agent-security/apps/agentshield/internal/export"
@@ -97,5 +98,5 @@ func cmdExport(args []string) error {
 		_, err = os.Stdout.Write(raw)
 		return err
 	}
-	return os.WriteFile(*out, raw, 0o600)
+	return statefs.WriteFile(*out, raw, 0o600)
 }

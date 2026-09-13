@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Local state format marker (not a migration authorization)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "program_version", "format_version", "published_at"],
+  "properties": {
+    "schema": {"const": "state-format/v1"},
+    "program_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "format_version": {"type": "integer", "minimum": 0},
+    "published_at": {"type": "string", "format": "date-time"}
+  },
+  "description": "Version numbers are representable here; the current runtime only accepts format 1. Unknown/old formats require an independently implemented migration. Readers also reject duplicate JSON keys, invalid UTF-8 and input over 4096 bytes. ProgramVersion is informational. This marker is not authenticated authority or same-UID isolation."
+}

@@ -126,6 +126,9 @@ func New(d Deps) (*Server, error) {
 	if d.RecoveryToken != "" && (len(d.RecoveryToken) != 64 || d.RecoveryToken == d.Token) {
 		return nil, errors.New("server: invalid recovery credential")
 	}
+	if err := state.RequireStateCompatibility(d.Store.Dir); err != nil {
+		return nil, err
+	}
 	s := &Server{d: d, mux: http.NewServeMux()}
 	var err error
 	s.stateDirectoryID, err = d.Store.DirectoryID()
@@ -300,6 +303,10 @@ func (s *Server) Handler() http.Handler {
 			return
 		}
 		if s.rejectBadOrigin(w, r) {
+			return
+		}
+		if err := state.RequireStateCompatibility(s.d.Store.Dir); err != nil {
+			writeJSON(w, http.StatusServiceUnavailable, map[string]string{"error": "state_incompatible"})
 			return
 		}
 		s.mux.ServeHTTP(w, r)

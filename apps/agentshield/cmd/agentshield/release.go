@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 
 	"siq-agent-security/apps/agentshield/internal/product"
 	"siq-agent-security/apps/agentshield/internal/skillmanifest"
@@ -19,7 +20,7 @@ func cmdReleaseManifest(args []string) error {
 	out := fs.String("out", "", "output path (default: <skill-dir>/skill-manifest.json)")
 	version := fs.String("version", skillmanifest.DefaultVersion, "skill and binary version")
 	urlBase := fs.String("url-base", skillmanifest.DefaultURLBase, "unpublished GitHub Release URL prefix")
-	clientCompatible := fs.Bool("client-compatible", false, "emit v2 signed declaration for a verified no-migration client release")
+	clientCompatible := fs.Bool("client-compatible", false, "emit v3 signed client declaration with explicit state reader/writer support")
 	doBuild := fs.Bool("build", false, "cross-compile four targets into --bin-dir before hashing")
 	writeBootstrap := fs.Bool("write-bootstrap", false, "embed the signing public key in bootstrap.sh and bootstrap.ps1")
 	if err := fs.Parse(args); err != nil {
@@ -56,7 +57,7 @@ func cmdReleaseManifest(args []string) error {
 		if *binDir == "" {
 			*binDir = filepath.Join(os.TempDir(), "siq-agent-security-release-bin")
 		}
-		if err := os.MkdirAll(*binDir, 0o755); err != nil {
+		if err := statefs.MkdirAll(*binDir, 0o755); err != nil {
 			return err
 		}
 		if err := crossCompile(*binDir, *version); err != nil {

@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"time"
@@ -45,7 +46,7 @@ func OpenChain(stateDir, chainID string, key *signing.Key) (*Chain, error) {
 		return nil, errors.New("receipt: signing key required")
 	}
 	dir := filepath.Join(stateDir, "receipts", chainID)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return nil, err
 	}
 	c := &Chain{dir: dir, chainID: chainID, key: key, seq: -1, head: GenesisPrev, now: func() time.Time { return time.Now().UTC() }}
@@ -79,7 +80,7 @@ func (c *Chain) Append(r *Receipt) error {
 		return err
 	}
 	day := c.now().Format("2006-01-02")
-	f, err := os.OpenFile(filepath.Join(c.dir, day+".jsonl"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
+	f, err := statefs.OpenFile(filepath.Join(c.dir, day+".jsonl"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
 	if err != nil {
 		return err
 	}
@@ -97,27 +98,27 @@ func (c *Chain) Append(r *Receipt) error {
 	c.seq = r.Seq
 	c.head = r.Hash
 	headPath := filepath.Join(c.dir, "HEAD")
-	tmp, err := os.CreateTemp(c.dir, ".head-*")
+	tmp, err := statefs.CreateTemp(c.dir, ".head-*")
 	if err != nil {
 		return err
 	}
 	tmpName := tmp.Name()
 	if _, err := fmt.Fprintf(tmp, "%d %s\n", c.seq, c.head); err != nil {
 		_ = tmp.Close()
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	if err := tmp.Sync(); err != nil {
 		_ = tmp.Close()
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	if err := tmp.Close(); err != nil {
-		_ = os.Remove(tmpName)
+		_ = statefs.Remove(tmpName)
 		return err
 	}
-	if err := os.Rename(tmpName, headPath); err != nil {
-		_ = os.Remove(tmpName)
+	if err := statefs.Rename(tmpName, headPath); err != nil {
+		_ = statefs.Remove(tmpName)
 		return err
 	}
 	if c.cpStore != nil {
@@ -169,7 +170,7 @@ func VerifyHashSignature(pub ed25519.PublicKey, contentHashHex, sigHex string) b
 }
 
 func (c *Chain) files() ([]string, error) {
-	entries, err := os.ReadDir(c.dir)
+	entries, err := statefs.ReadDir(c.dir)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +194,7 @@ func (c *Chain) Read() ([]Receipt, error) {
 	var out []Receipt
 	for fi, p := range files {
 		lastFile := fi == len(files)-1
-		f, err := os.Open(p)
+		f, err := statefs.Open(p)
 		if err != nil {
 			return nil, err
 		}
@@ -382,7 +383,7 @@ func (c *Chain) walkVerified(visit func(Receipt) error) error {
 	seq := 0
 	prev := GenesisPrev
 	for _, p := range files {
-		f, err := os.Open(p)
+		f, err := statefs.Open(p)
 		if err != nil {
 			return err
 		}

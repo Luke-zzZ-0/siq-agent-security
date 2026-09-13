@@ -1,0 +1,16 @@
+## legacy marker (format_version 0) -> migrated in place
+siq-agent-security 0.0.0-dev serving on http://127.0.0.1:4774  mode=block  state=/tmp/tmp.tSNX10PYbg
+marker after migration:
+{
+  "schema": "state-format/v1",
+  "program_version": "0.0.0-dev",
+  "format_version": 1,
+  "writer_pid": 3698797,
+  "writer_owner": "d549c67622abe43b",
+  "published_at": "2026-09-13T09:47:53.936999915Z"
+}
+
+backups produced:
+migration-2026-09-13T09:47:53.936497351Z
+legacy grant preserved (bytes identical):
+{"grant_id":"keep-me","status":"effective"}

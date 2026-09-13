@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 )
 
 // SnapshotPath locates an intact local observation, not a trusted release.
@@ -68,11 +69,11 @@ func RestoreSnapshot(directory, digest, target string) error {
 		return err
 	}
 	defer source.Close()
-	temp, err := os.CreateTemp(parent, ".siq-restore-*")
+	temp, err := statefs.CreateTemp(parent, ".siq-restore-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(temp.Name())
+	defer statefs.Remove(temp.Name())
 	defer temp.Close()
 	h := sha256.New()
 	n, err := io.Copy(io.MultiWriter(temp, h), io.LimitReader(source, maxBinaryBytes+1))
@@ -89,11 +90,11 @@ func RestoreSnapshot(directory, digest, target string) error {
 		return err
 	}
 	// Unlike stage reuse, any destination that appears during copying is refused.
-	if err = os.Link(temp.Name(), target); err != nil {
+	if err = statefs.Link(temp.Name(), target); err != nil {
 		return err
 	}
 	if runtime.GOOS != "windows" {
-		d, err := os.Open(parent)
+		d, err := statefs.Open(parent)
 		if err != nil {
 			return err
 		}

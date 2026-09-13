@@ -18,6 +18,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"sync"
 	"syscall"
@@ -34,6 +35,7 @@ import (
 	"siq-agent-security/apps/agentshield/internal/server"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/stateformat"
 	"siq-agent-security/apps/agentshield/internal/threat"
 	"siq-agent-security/apps/agentshield/internal/ui"
 )
@@ -46,12 +48,24 @@ var Version = "0.0.0-dev"
 const RulepackPubEnv = product.EnvRulepackPub
 
 func main() {
+	state.ProgramVersion = Version
 	if len(os.Args) < 2 {
 		usage()
 		os.Exit(2)
 	}
+	if err := checkCommandState(os.Args[1]); err != nil {
+		fmt.Fprintln(os.Stderr, product.Name+":", err)
+		if errors.Is(err, state.ErrIncompatibleState) {
+			fmt.Fprintln(os.Stderr, stateformat.RecoveryMessage())
+		}
+		os.Exit(1)
+	}
 	var err error
 	switch os.Args[1] {
+	case "state-migrate":
+		err = cmdStateMigrate(os.Args[2:], os.Stdout)
+	case "state-status":
+		err = cmdStateStatus(os.Args[2:], os.Stdout)
 	case "version":
 		fmt.Printf("%s %s (%s/%s)\n", product.Name, Version, runtime.GOOS, runtime.GOARCH)
 	case "rulepack":
@@ -170,6 +184,9 @@ func main() {
 	}
 	if err != nil {
 		fmt.Fprintln(os.Stderr, product.Name+":", err)
+		if errors.Is(err, state.ErrIncompatibleState) {
+			fmt.Fprintln(os.Stderr, stateformat.RecoveryMessage())
+		}
 		os.Exit(1)
 	}
 }
@@ -178,6 +195,8 @@ func usage() {
 	n := product.Name
 	fmt.Fprintf(os.Stderr, `usage:
   %[1]s version
+  %[1]s state-status        # read-only compatibility diagnosis
+  %[1]s state-migrate --confirm # explicit backed-up metadata migration; stop this instance first
   %[1]s rulepack            # effective rule pack summary (JSON)
   %[1]s scan <file>...      # static threat scan, one JSON result per line
   %[1]s admit <skill-dir> [--trust trusted|community|unknown] [--out <dir>] [--card]
@@ -313,11 +332,11 @@ func cmdInventory(args []string) error {
 	}
 	raw, _ := json.MarshalIndent(rep, "", "  ")
 	if *out != "" {
-		if err := os.WriteFile(*out, raw, 0o600); err != nil {
+		if err := statefs.WriteFile(*out, raw, 0o600); err != nil {
 			return err
 		}
 	}
-	_ = os.WriteFile(filepath.Join(dir, "inventory", time.Now().UTC().Format("20060102T150405Z")+".json"), raw, 0o600)
+	_ = statefs.WriteFile(filepath.Join(dir, "inventory", time.Now().UTC().Format("20060102T150405Z")+".json"), raw, 0o600)
 	_, err = os.Stdout.Write(append(raw, '\n'))
 	return err
 }
@@ -412,7 +431,7 @@ func codeBuddyClient() (adapters.Decider, string, string) {
 		return nil, "block", dir
 	}
 	// Credential creation belongs to the daemon. A hook only reads its token.
-	raw, err := os.ReadFile(filepath.Join(dir, "token"))
+	raw, err := statefs.ReadFile(filepath.Join(dir, "token"))
 	tok := strings.TrimSpace(string(raw))
 	if err != nil || len(tok) < 32 {
 		return nil, cfg.EnforcementMode, dir
@@ -455,6 +474,9 @@ func cmdServe(args []string) error {
 	if err != nil {
 		return err
 	}
+	if err := state.RequireStateCompatibility(dir); err != nil {
+		return err
+	}
 	if _, err := os.Lstat(filepath.Join(dir, "config.json")); errors.Is(err, os.ErrNotExist) {
 		return errors.New("serve: configuration missing; run siq-agent-security init with the same state directory first")
 	} else if err != nil {
@@ -484,6 +506,13 @@ func cmdServe(args []string) error {
 		return fmt.Errorf("serve: %w", err)
 	}
 	defer func() { _ = writer.Release() }()
+	// N01: enforce the state directory reader/writer compatibility contract
+	// BEFORE key generation and any background write task. A future-format or
+	// corrupt directory is rejected with a stable, machine-checkable error; a
+	// recognized unversioned directory remains unchanged under the writer lock.
+	if err := st.EnforceStateCompatibility(writer, Version); err != nil {
+		return err
+	}
 	if err := st.CheckServiceSwitchPending(); err != nil {
 		return err
 	}
@@ -694,7 +723,7 @@ func cmdAdmit(args []string) error {
 	}
 	var cardRef *string
 	if *out != "" {
-		if err := os.MkdirAll(*out, 0o700); err != nil {
+		if err := statefs.MkdirAll(*out, 0o700); err != nil {
 			return err
 		}
 	}
@@ -714,18 +743,18 @@ func cmdAdmit(args []string) error {
 	if *out != "" {
 		base := filepath.Join(*out, res.Admission.AdmissionID)
 		cardPath := base + ".skill-card.md"
-		if err := os.WriteFile(cardPath, []byte(res.SkillCard), 0o600); err != nil {
+		if err := statefs.WriteFile(cardPath, []byte(res.SkillCard), 0o600); err != nil {
 			return err
 		}
 		admJSON, _ := json.MarshalIndent(res.Admission, "", "  ")
-		if err := os.WriteFile(base+".json", admJSON, 0o600); err != nil {
+		if err := statefs.WriteFile(base+".json", admJSON, 0o600); err != nil {
 			return err
 		}
 		evDir := filepath.Join(*out, "evidence")
-		_ = os.MkdirAll(evDir, 0o700)
+		_ = statefs.MkdirAll(evDir, 0o700)
 		for _, ev := range res.Evidence {
 			evJSON, _ := json.Marshal(ev)
-			if err := os.WriteFile(filepath.Join(evDir, ev.EvidenceID+".json"), evJSON, 0o600); err != nil {
+			if err := statefs.WriteFile(filepath.Join(evDir, ev.EvidenceID+".json"), evJSON, 0o600); err != nil {
 				return err
 			}
 		}
@@ -816,7 +845,7 @@ func cmdScan(paths []string) error {
 	a := threat.New(p)
 	enc := json.NewEncoder(os.Stdout)
 	for _, path := range paths {
-		content, err := os.ReadFile(path)
+		content, err := statefs.ReadFile(path)
 		if err != nil {
 			return err
 		}

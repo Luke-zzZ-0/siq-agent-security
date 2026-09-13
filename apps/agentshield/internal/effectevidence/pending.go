@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 
 	"siq-agent-security/apps/agentshield/internal/canon"
@@ -52,7 +53,7 @@ func (p PendingFile) valid() bool {
 }
 func (s *Store) pendingDir() (string, error) {
 	dir := s.dir + "-pending"
-	if err := os.MkdirAll(dir, 0700); err != nil {
+	if err := statefs.MkdirAll(dir, 0700); err != nil {
 		return "", ErrState
 	}
 	info, err := os.Lstat(dir)
@@ -78,7 +79,7 @@ func (s *Store) getPending(id string) (PendingFile, error) {
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 64<<10 {
 		return p, ErrState
 	}
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return p, ErrState
 	}
@@ -120,7 +121,7 @@ func (s *Store) SavePendingFile(p PendingFile) (PendingFile, error) {
 	if err != nil {
 		return PendingFile{}, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return PendingFile{}, ErrState
 	}
@@ -140,19 +141,19 @@ func (s *Store) SavePendingFile(p PendingFile) (PendingFile, error) {
 	if err != nil || len(raw) > 64<<10 {
 		return PendingFile{}, ErrInvalid
 	}
-	tmp, err := os.CreateTemp(dir, ".pending-*")
+	tmp, err := statefs.CreateTemp(dir, ".pending-*")
 	if err != nil {
 		return PendingFile{}, ErrState
 	}
 	name := tmp.Name()
-	defer os.Remove(name)
+	defer statefs.Remove(name)
 	_, we := tmp.Write(raw)
 	se := tmp.Sync()
 	ce := tmp.Close()
 	if we != nil || se != nil || ce != nil {
 		return PendingFile{}, ErrState
 	}
-	if os.Link(name, filepath.Join(dir, p.ID+".json")) != nil {
+	if statefs.Link(name, filepath.Join(dir, p.ID+".json")) != nil {
 		return PendingFile{}, ErrState
 	}
 	return p, nil

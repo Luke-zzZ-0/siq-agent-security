@@ -1,0 +1,55 @@
+package main
+
+import (
+	"encoding/json"
+	"errors"
+	"flag"
+	"io"
+	"siq-agent-security/apps/agentshield/internal/clientrelease"
+	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/stateformat"
+)
+
+func cmdStateMigrate(args []string, out io.Writer) error {
+	fs := flag.NewFlagSet("state-migrate", flag.ContinueOnError)
+	fs.SetOutput(io.Discard)
+	confirm := fs.Bool("confirm", false, "confirm versioned backup and metadata migration")
+	if e := fs.Parse(args); e != nil {
+		return e
+	}
+	if !*confirm || fs.NArg() != 0 {
+		return errors.New("请先停止本实例，使用 state-migrate --confirm 确认备份并迁移状态；不会恢复旧权限")
+	}
+	dir, e := state.DefaultDir()
+	if e != nil {
+		return e
+	}
+	result, e := (&state.Store{Dir: dir}).MigrateState(Version)
+	if e != nil {
+		return e
+	}
+	return json.NewEncoder(out).Encode(result)
+}
+func cmdStateStatus(args []string, out io.Writer) error {
+	if len(args) != 0 {
+		return errors.New("state-status: no arguments expected")
+	}
+	dir, e := state.DefaultDir()
+	if e != nil {
+		return e
+	}
+	c, e := state.CheckStateCompatibility(dir)
+	result := map[string]any{"schema": "local-state-status/v1", "compatible": e == nil, "status": c.Status, "format_version": c.Format, "reader_version": stateformat.ReaderVersion, "writer_version": stateformat.WriterVersion}
+	if e != nil {
+		result["recovery"] = stateformat.RecoveryMessage()
+	}
+	return json.NewEncoder(out).Encode(result)
+}
+
+func checkUpgradeForCurrentState(manifest, binary string) (string, error) {
+	dir, e := state.DefaultDir()
+	if e != nil {
+		return "", e
+	}
+	return clientrelease.CheckUpgradeForState(dir, manifest, binary)
+}

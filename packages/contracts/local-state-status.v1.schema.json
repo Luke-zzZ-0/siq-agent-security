@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "compatible",
+    "status",
+    "format_version",
+    "reader_version",
+    "writer_version"
+  ],
+  "properties": {
+    "schema": {
+      "const": "local-state-status/v1"
+    },
+    "compatible": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "legacy_unversioned",
+        "future",
+        "corrupt",
+        "empty",
+        "unsupported_legacy"
+      ]
+    },
+    "format_version": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reader_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "writer_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "recovery": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "compatible": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "recovery"
+        ]
+      }
+    }
+  ]
+}

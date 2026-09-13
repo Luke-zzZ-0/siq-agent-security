@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 	"unicode"
@@ -83,7 +84,7 @@ func privateDir(path string) error {
 	if err := checkDirs(filepath.Dir(path)); err != nil {
 		return err
 	}
-	if err := os.Mkdir(path, 0700); err != nil && !os.IsExist(err) {
+	if err := statefs.Mkdir(path, 0700); err != nil && !os.IsExist(err) {
 		return ErrUnavailable
 	}
 	if err := checkDirs(path); err != nil {
@@ -162,7 +163,7 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 	if err = checkDirs(filepath.Join(s.dir, "blobs")); err != nil {
 		return nil, nil, false, err
 	}
-	dirs, err := os.Open(filepath.Join(s.dir, "blobs"))
+	dirs, err := statefs.Open(filepath.Join(s.dir, "blobs"))
 	if err != nil {
 		return nil, nil, false, ErrUnavailable
 	}
@@ -175,7 +176,7 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 		return nil, nil, false, ErrLimit
 	}
 	blob := s.blob(req.ImportID)
-	if err = os.Mkdir(blob, 0700); err != nil {
+	if err = statefs.Mkdir(blob, 0700); err != nil {
 		if os.IsExist(err) {
 			return nil, nil, false, ErrConflict
 		}
@@ -184,11 +185,11 @@ func (s *Store) create(ctx context.Context, req CreateRequest, source, locator s
 	published := false
 	defer func() {
 		if !published {
-			_ = os.RemoveAll(blob)
+			_ = statefs.RemoveAll(blob)
 		}
 	}()
 	payload := filepath.Join(blob, "payload")
-	if err = os.Mkdir(payload, 0700); err != nil {
+	if err = statefs.Mkdir(payload, 0700); err != nil {
 		return nil, nil, false, ErrUnavailable
 	}
 	var snapshot tree
@@ -293,11 +294,11 @@ func publish(path string, raw []byte) error {
 	if err := privateDir(filepath.Dir(path)); err != nil {
 		return err
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".import-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".import-*")
 	if err != nil {
 		return ErrUnavailable
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(raw); err == nil {
 		err = f.Sync()
 	}
@@ -305,7 +306,7 @@ func publish(path string, raw []byte) error {
 	if err != nil || closeErr != nil {
 		return ErrUnavailable
 	}
-	if err = os.Link(f.Name(), path); err != nil {
+	if err = statefs.Link(f.Name(), path); err != nil {
 		if os.IsExist(err) {
 			return ErrConflict
 		}

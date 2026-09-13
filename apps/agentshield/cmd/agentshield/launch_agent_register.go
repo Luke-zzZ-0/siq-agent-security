@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -22,7 +23,7 @@ func launchAgentLabelValid(label string) bool {
 	return err == nil && len(raw) == 32 && hex.EncodeToString(raw) == value
 }
 func syncLaunchAgentDirectory(path string) error {
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return err
 	}
@@ -34,7 +35,7 @@ func ordinaryLaunchDirectory(path string, create bool) error {
 		return errors.New("launch-agent: absolute canonical directory required")
 	}
 	if create {
-		if err := os.Mkdir(path, 0700); err != nil && !errors.Is(err, os.ErrExist) {
+		if err := statefs.Mkdir(path, 0700); err != nil && !errors.Is(err, os.ErrExist) {
 			return err
 		}
 	}
@@ -103,7 +104,7 @@ func publishLaunchRegistration(home, source, label string) (string, error) {
 		}
 	}
 	link := filepath.Join(directory, label+".plist")
-	if err := os.Symlink(source, link); err != nil && !errors.Is(err, os.ErrExist) {
+	if err := statefs.Symlink(source, link); err != nil && !errors.Is(err, os.ErrExist) {
 		return "", err
 	}
 	if err := verifyLaunchRegistration(link, source); err != nil {

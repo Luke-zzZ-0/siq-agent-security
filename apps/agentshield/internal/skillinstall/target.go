@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -27,7 +28,7 @@ func privateDirectory(path string) error {
 	if err := checkDirectories(filepath.Dir(path)); err != nil {
 		return err
 	}
-	if err := os.Mkdir(path, 0700); err != nil && !os.IsExist(err) {
+	if err := statefs.Mkdir(path, 0700); err != nil && !os.IsExist(err) {
 		return ErrUnavailable
 	}
 	if err := checkDirectories(path); err != nil {
@@ -56,7 +57,7 @@ func targetPath(target Target, name string) (string, error) {
 	if err := checkDirectories(parent); err != nil {
 		return "", err
 	}
-	dir, err := os.Open(parent)
+	dir, err := statefs.Open(parent)
 	if err != nil {
 		return "", ErrUnavailable
 	}

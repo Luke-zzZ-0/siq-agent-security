@@ -15,6 +15,9 @@ func TestClientCompatibilityContractAndTampering(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Keep the historical v2 fixture byte stable; v3 has its own contract test.
+	m.ManifestVersion = 2
+	m.StateCompatibility = nil
 	if err = Sign(m, key); err != nil {
 		t.Fatal(err)
 	}

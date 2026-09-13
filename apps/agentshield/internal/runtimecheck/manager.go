@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -25,7 +26,7 @@ func New(o Options) (*Manager, error) {
 	m := &Manager{o: o, plans: map[string]pendingPlan{}}
 	m.launchHost = m.launch
 	for _, dir := range []string{m.dir(), filepath.Dir(m.materials("unused"))} {
-		if err := os.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
+		if err := statefs.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
 			return nil, errors.New("runtime_check_storage_unavailable")
 		}
 		info, err := os.Lstat(dir)

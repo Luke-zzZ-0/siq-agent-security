@@ -1,0 +1,12 @@
+
+> @siq-agent-security/web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /tmp/siq-personal-closure/apps/web
+
+
+ Test Files  22 passed (22)
+      Tests  73 passed (73)
+   Start at  16:32:42
+   Duration  307ms (transform 1.30s, setup 0ms, import 1.61s, tests 246ms, environment 1ms)

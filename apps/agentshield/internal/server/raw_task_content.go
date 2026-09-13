@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"siq-agent-security/apps/agentshield/internal/state"
 	"strings"
 	"time"
 
@@ -183,6 +184,9 @@ func (s *Server) refreshRawContentLocked() string {
 // A disabled optional store is a successful no-op. Invalid signed state fails
 // this cleanup closed without making the default decision service unavailable.
 func (s *Server) PurgeExpiredRawContent(now time.Time) error {
+	if err := state.RequireStateCompatibility(s.d.Store.Dir); err != nil {
+		return err
+	}
 	s.rawMu.Lock()
 	defer s.rawMu.Unlock()
 	switch s.refreshRawContentLocked() {

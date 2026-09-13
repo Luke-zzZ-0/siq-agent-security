@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/canon"
 	"siq-agent-security/apps/agentshield/internal/signing"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"sync"
 	"time"
@@ -35,7 +36,7 @@ func Open(dir string, key *signing.Key, grantLookups ...GrantLookup) (*Store, er
 		return nil, errors.New("intent: directory and key required")
 	}
 	for _, name := range []string{"intents", "intent-bindings", "intent-binding-revocations", "intent-revocations", "context-assertions"} {
-		if err := os.MkdirAll(filepath.Join(dir, name), 0700); err != nil {
+		if err := statefs.MkdirAll(filepath.Join(dir, name), 0700); err != nil {
 			return nil, err
 		}
 	}
@@ -91,11 +92,11 @@ func digest(m map[string]any) (string, error) {
 
 // Publish a complete fsynced file exclusively; never expose a partially written authority.
 func publish(path string, b []byte) error {
-	f, err := os.CreateTemp(filepath.Dir(path), ".intent-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".intent-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(b); err == nil {
 		err = f.Sync()
 	}
@@ -106,7 +107,7 @@ func publish(path string, b []byte) error {
 	if closeErr != nil {
 		return closeErr
 	}
-	return os.Link(f.Name(), path)
+	return statefs.Link(f.Name(), path)
 }
 func readRecord(path string, out any) error {
 	fi, err := os.Lstat(path)
@@ -116,7 +117,7 @@ func readRecord(path string, out any) error {
 	if !fi.Mode().IsRegular() || fi.Size() > maxRecordBytes {
 		return violation("intent_invalid_record")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return err
 	}
@@ -134,7 +135,7 @@ func readRecord(path string, out any) error {
 	return nil
 }
 func recordIDs(dir string) ([]string, error) {
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +180,7 @@ func (s *Store) checkEvidence(c Contract) error {
 		if err != nil || !fi.Mode().IsRegular() || fi.Size() > maxRecordBytes {
 			return violation("intent_evidence_missing")
 		}
-		raw, err := os.ReadFile(p)
+		raw, err := statefs.ReadFile(p)
 		if err != nil || json.Unmarshal(raw, &evidence) != nil || evidence.EvidenceID != id {
 			return violation("intent_evidence_missing")
 		}

@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 )
 
 func unitAbsent(p map[string]string) bool {
@@ -39,7 +40,7 @@ func unregisterUserUnit(control userSystemctl, path, name string) error {
 		if err = verifyUserUnit(p, path, runtimeUserUnit(p)); err != nil {
 			return err
 		}
-		if err = os.Remove(fragment); err != nil {
+		if err = statefs.Remove(fragment); err != nil {
 			return err
 		}
 	} else if !errors.Is(err, os.ErrNotExist) {
@@ -72,7 +73,7 @@ func cmdServiceUnregister(args []string, out io.Writer) (resultErr error) {
 	if err != nil {
 		return err
 	}
-	lifecycle, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	lifecycle, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

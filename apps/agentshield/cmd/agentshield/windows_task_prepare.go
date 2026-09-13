@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
-	"path/filepath"
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
 )
@@ -31,7 +30,7 @@ func withPreparedWindowsTask(args []string, apply func(*state.Store, *signing.Ke
 	if err != nil {
 		return err
 	}
-	lifecycle, err := state.AcquireWriter(filepath.Join(dir, "service-control"))
+	lifecycle, err := state.AcquireScopedWriter(dir, "service-control")
 	if err != nil {
 		return err
 	}

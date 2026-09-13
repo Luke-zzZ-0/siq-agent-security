@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -115,7 +116,7 @@ func Scan(o Options) Result {
 			result.Issues = append(result.Issues, "unsafe_profiles_directory")
 			continue
 		}
-		file, err := os.Open(profiles)
+		file, err := statefs.Open(profiles)
 		if os.IsNotExist(err) {
 			continue
 		}

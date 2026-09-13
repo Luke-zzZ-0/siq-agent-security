@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 )
 
@@ -34,7 +35,7 @@ func privateDir(dir string) error {
 	if err := checkAncestors(filepath.Dir(dir)); err != nil {
 		return err
 	}
-	if err := os.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
+	if err := statefs.Mkdir(dir, 0700); err != nil && !errors.Is(err, os.ErrExist) {
 		return err
 	}
 	if err := checkAncestors(dir); err != nil {
@@ -53,11 +54,11 @@ func publish(path string, b []byte) error {
 	if err := privateDir(filepath.Dir(path)); err != nil {
 		return err
 	}
-	f, err := os.CreateTemp(filepath.Dir(path), ".runtime-identity-*")
+	f, err := statefs.CreateTemp(filepath.Dir(path), ".runtime-identity-*")
 	if err != nil {
 		return err
 	}
-	defer os.Remove(f.Name())
+	defer statefs.Remove(f.Name())
 	if _, err = f.Write(b); err == nil {
 		err = f.Sync()
 	}
@@ -68,7 +69,7 @@ func publish(path string, b []byte) error {
 	if closeErr != nil {
 		return closeErr
 	}
-	return os.Link(f.Name(), path)
+	return statefs.Link(f.Name(), path)
 }
 func readJSON(path string, out any) error {
 	if err := checkAncestors(filepath.Dir(path)); err != nil {
@@ -81,7 +82,7 @@ func readJSON(path string, out any) error {
 	if !info.Mode().IsRegular() || info.Size() > maxRecordBytes || (runtime.GOOS != "windows" && info.Mode().Perm()&0077 != 0) {
 		return ErrInvalid
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return err
 	}
@@ -179,7 +180,7 @@ func recordIDs(dir string, limit int) ([]string, error) {
 	if err := checkAncestors(dir); err != nil {
 		return nil, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return nil, err
 	}

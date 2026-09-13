@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -510,7 +511,7 @@ func programDigest(path string) (string, error) {
 	if !filepath.IsAbs(path) || err != nil || !info.Mode().IsRegular() || info.Size() > 256<<20 {
 		return "", errors.New("adapter: program path unavailable")
 	}
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return "", errors.New("adapter: program unreadable")
 	}

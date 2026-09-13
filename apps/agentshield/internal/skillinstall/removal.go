@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -107,7 +108,7 @@ func (s *Store) pendingGrantRemoval(ctx context.Context, grantID string) error {
 	if err := checkDirectories(dir); err != nil {
 		return err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return ErrUnavailable
 	}

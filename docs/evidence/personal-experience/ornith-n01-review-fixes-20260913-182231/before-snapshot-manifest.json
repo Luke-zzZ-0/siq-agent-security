@@ -1,0 +1,85 @@
+{
+  "snapshot": "/home/maoyd/siq/.review-snapshots/ornith-n01-20260913",
+  "files": [
+    {
+      "path": "apps/agentshield/cmd/agentshield/main.go",
+      "sha256": "dad2d837714abdd6f1c79ce4c7b2d16e66eb44bbeeace8c7d00bd7df77d1b749"
+    },
+    {
+      "path": "apps/agentshield/internal/state/commit.go",
+      "sha256": "b942d832bf5060fd7df9bbe88bed97339af4cd150d21b52a7e321ca28dd10378"
+    },
+    {
+      "path": "apps/agentshield/internal/state/compatibility.go",
+      "sha256": "3102ff3435f0b4d4fb202a416d07718e998f94fe7f4c07afa7a17fa35d707dce"
+    },
+    {
+      "path": "apps/agentshield/internal/state/compatibility_test.go",
+      "sha256": "64d5b6beb8d66ff8d0b05ed2d5c16b493f06dc24daea1af140f5c97fe0d37cef"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/go-all.log",
+      "sha256": "6af0073a26ea3eefe1e375c23a43a923be67e20799ae225e3fe99f0fe36c146e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/report.md",
+      "sha256": "754ba590cdfcfe76b617e1a31d894178070e0ae3e11723eab68dd3f18d0dbeff"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/verification.json",
+      "sha256": "0af885ad2283acd6039b8f79e68159448f0b1aa1fc86450a69751035527448d5"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n00-baseline-20260913/web-test.log",
+      "sha256": "26ba7905cbe4dff4ed52fb7bbdb562814684009dfb61b8f78ba3cf1ce5d0be06"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/drill.log",
+      "sha256": "d079170f7f5f07e19a8fb21dedadd92086eed776e2b72c317dedc7f7536e9829"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/go-all.log",
+      "sha256": "6af0073a26ea3eefe1e375c23a43a923be67e20799ae225e3fe99f0fe36c146e"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/report.md",
+      "sha256": "4ecc487e92158673159dfd37ec0a71d5a4a4d4cf7d953125672f87d454c3cd05"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/verification.json",
+      "sha256": "20137e9ced37ca09573a57eaec3a46912675407e37a6985399d4bd8ecddc9b2a"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n01-state-compatibility/write-entry-coverage.md",
+      "sha256": "85692e3c6cd5cd43160a9c1509e9835204767c6c81b71908fe7bcd0d058b9299"
+    },
+    {
+      "path": "reproduction.log",
+      "sha256": "36eb67fc0fd5fefabce72e35f55dc7ff6414773d468e61fc363af5a28ad34baf"
+    },
+    {
+      "path": "reproduction_test.go",
+      "sha256": "24be8a0d035ee8ad12986c78ffd7d9a0f82be21c98fe983e53edea92181a712f"
+    },
+    {
+      "path": "working.diff",
+      "sha256": "3cdbb974a3d4cbe50c7b9c39eb3ef97f610df90f99a3be450b8ea0070af46084"
+    }
+  ]
+}

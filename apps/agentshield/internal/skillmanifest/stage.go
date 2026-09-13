@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 )
 
 // StageVerifiedBinary copies src into a private 0700 directory under stageRoot,
@@ -36,20 +37,20 @@ func StageVerifiedBinary(src, stageRoot, wantSHA256 string) (stagedPath string, 
 	if want != "" && srcSum != want {
 		return "", fmt.Errorf("skillmanifest: source sha256 %s != required %s", srcSum, want)
 	}
-	if err := os.MkdirAll(stageRoot, 0o700); err != nil {
+	if err := statefs.MkdirAll(stageRoot, 0o700); err != nil {
 		return "", err
 	}
-	dir, err := os.MkdirTemp(stageRoot, "bin.*")
+	dir, err := statefs.MkdirTemp(stageRoot, "bin.*")
 	if err != nil {
 		return "", err
 	}
 	cleanup := true
 	defer func() {
 		if cleanup {
-			_ = os.RemoveAll(dir)
+			_ = statefs.RemoveAll(dir)
 		}
 	}()
-	if err := os.Chmod(dir, 0o700); err != nil {
+	if err := statefs.Chmod(dir, 0o700); err != nil {
 		return "", err
 	}
 	leaf := filepath.Base(src)
@@ -76,7 +77,7 @@ func StageVerifiedBinary(src, stageRoot, wantSHA256 string) (stagedPath string, 
 
 // HashFileDigest returns the sha256 hex digest of a regular file.
 func HashFileDigest(path string) (string, error) {
-	f, err := os.Open(path)
+	f, err := statefs.Open(path)
 	if err != nil {
 		return "", err
 	}
@@ -96,27 +97,27 @@ func HashFileDigest(path string) (string, error) {
 }
 
 func copyFileExclusive(src, dest string, mode os.FileMode) error {
-	in, err := os.Open(src)
+	in, err := statefs.Open(src)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
-	out, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
+	out, err := statefs.OpenFile(dest, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode)
 	if err != nil {
 		return err
 	}
 	if _, err := io.Copy(out, in); err != nil {
 		_ = out.Close()
-		_ = os.Remove(dest)
+		_ = statefs.Remove(dest)
 		return err
 	}
 	if err := out.Sync(); err != nil {
 		_ = out.Close()
-		_ = os.Remove(dest)
+		_ = statefs.Remove(dest)
 		return err
 	}
 	if err := out.Close(); err != nil {
-		_ = os.Remove(dest)
+		_ = statefs.Remove(dest)
 		return err
 	}
 	return nil

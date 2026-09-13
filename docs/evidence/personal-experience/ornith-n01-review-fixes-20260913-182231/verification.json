@@ -1,0 +1,78 @@
+{
+  "schema_version": "personal-experience-verification/v1",
+  "batch": "N01-review-fixes",
+  "created_at": "2026-09-13T10:26:44.324568+00:00",
+  "base_head": "ff99317450784c9563f5b6a2308c98e8262df98d",
+  "uncommitted_changes": true,
+  "task_status": "doing",
+  "scope": "Strict format guard repairs; no automatic migration or old-binary compatibility claim",
+  "validation": [
+    {
+      "command": "go test ./...",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "go-all.log"
+    },
+    {
+      "command": "go vet ./...",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "vet.log"
+    },
+    {
+      "command": "gofmt -l .",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "gofmt.log"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "exit_code": 0,
+      "log": "diff-check.log"
+    },
+    {
+      "command": "go test -race ./internal/state ./internal/server ./cmd/agentshield",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "race.log"
+    },
+    {
+      "command": "pytest app/tests/test_schema_contracts.py",
+      "cwd": "apps/control-api",
+      "exit_code": 0,
+      "log": "contracts.log"
+    },
+    {
+      "command": "ruff check app/tests/test_schema_contracts.py",
+      "cwd": "apps/control-api",
+      "exit_code": 0,
+      "log": "ruff.log"
+    },
+    {
+      "command": "SIQ_TEST_SERVE_DIRECTORY=1 SIQ_TEST_SERVE_STOP=1 SIQ_TEST_BINARY=/tmp/siq-ornith-fix-builds/agentshield-linux-arm64 go test ./cmd/agentshield -run 'TestNative(ServeExplicitDirectory|ServeSignedStop|StopRequestCLI|StopCLI)$' -count=1 -v",
+      "cwd": "apps/agentshield",
+      "exit_code": 0,
+      "log": "native-service.log"
+    },
+    {
+      "command": "python3 native-format-drill.py",
+      "cwd": ".",
+      "exit_code": 0,
+      "log": "native-format.json"
+    }
+  ],
+  "builds": "build-results.json",
+  "native_platforms": [
+    "linux/arm64"
+  ],
+  "not_verified": [
+    "full migration and crash recovery",
+    "supported old binary writer rejection",
+    "macOS native",
+    "Windows native",
+    "all independent persistence modules",
+    "entire legacy worktree delta"
+  ],
+  "before_snapshot": "/home/maoyd/siq/.review-snapshots/ornith-n01-20260913"
+}

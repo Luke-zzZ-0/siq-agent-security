@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 )
 
@@ -31,7 +32,7 @@ func Append(stateDir string, rec Record) error {
 		return nil // no state dir → skip quietly (adapters may still decide)
 	}
 	dir := filepath.Join(stateDir, "pending")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := statefs.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
 	if rec.Schema == "" {
@@ -46,7 +47,7 @@ func Append(stateDir string, rec Record) error {
 		return err
 	}
 	path := filepath.Join(dir, "decisions.jsonl")
-	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
+	f, err := statefs.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
 	if err != nil {
 		return err
 	}

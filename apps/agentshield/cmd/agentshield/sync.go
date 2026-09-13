@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 	"time"
 
@@ -26,7 +27,7 @@ func cmdSync(args []string) error {
 	}
 	secret := strings.TrimSpace(os.Getenv("SIQ_AS_EDGE_SECRET"))
 	if strings.TrimSpace(*secretFile) != "" {
-		raw, err := os.ReadFile(*secretFile)
+		raw, err := statefs.ReadFile(*secretFile)
 		if err != nil {
 			return fmt.Errorf("sync: cannot read secret-file")
 		}

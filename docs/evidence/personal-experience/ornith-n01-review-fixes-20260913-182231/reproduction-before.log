@@ -1,0 +1,17 @@
+--- FAIL: TestReviewFutureStateOpenMustNotCreateDirectories (0.00s)
+    compatibility_review_test.go:5: Open accepted future state
+    compatibility_review_test.go:5: Open mutated rejected state: 18 entries
+--- FAIL: TestReviewFutureStateWriterMustNotQuarantineLock (0.00s)
+    compatibility_review_test.go:8: AcquireWriter accepted future state
+--- FAIL: TestReviewRejectTrailingJSONAndDuplicateVersion (0.00s)
+    compatibility_review_test.go:11: ambiguous JSON accepted
+    compatibility_review_test.go:11: ambiguous JSON accepted
+--- FAIL: TestReviewCorruptStatusReturned (0.00s)
+    compatibility_review_test.go:14: status="" error=state: state directory format marker is corrupt: marker is not valid state-format/v1
+--- FAIL: TestReviewMigrationCopiesNestedGrant (0.02s)
+    compatibility_review_test.go:17: migration backup omitted nested grant
+--- FAIL: TestReviewMigrationPersistsProgress (0.00s)
+    compatibility_review_test.go:20: persisted progress=-1
+FAIL
+FAIL	siq-agent-security/apps/agentshield/internal/state	0.027s
+FAIL

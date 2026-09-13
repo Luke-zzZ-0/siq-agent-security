@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 )
 
 const recoveryFile = "admin-recovery.token"
@@ -22,7 +23,7 @@ func (s *Store) ReadRecoveryToken() (string, error) {
 	if !info.Mode().IsRegular() || info.Size() != 64 || (runtime.GOOS != "windows" && info.Mode().Perm()&0o077 != 0) {
 		return "", errors.New("state: invalid recovery credential file or permissions")
 	}
-	raw, err := os.ReadFile(p)
+	raw, err := statefs.ReadFile(p)
 	if err != nil {
 		return "", err
 	}

@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
@@ -25,7 +26,7 @@ func (r ObserverRevocation) unsigned() map[string]any {
 }
 func (s *Store) revocationDir() (string, error) {
 	dir := filepath.Join(filepath.Dir(s.dir), "effect-observer-revocations")
-	if os.MkdirAll(dir, 0700) != nil {
+	if statefs.MkdirAll(dir, 0700) != nil {
 		return "", ErrState
 	}
 	info, err := os.Lstat(dir)
@@ -51,7 +52,7 @@ func (s *Store) getObserverRevocation(owner string) (ObserverRevocation, error) 
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 4096 {
 		return r, ErrState
 	}
-	raw, err := os.ReadFile(path)
+	raw, err := statefs.ReadFile(path)
 	if err != nil {
 		return r, ErrState
 	}
@@ -90,7 +91,7 @@ func (s *Store) RevokeObserver(owner string, now time.Time) (ObserverRevocation,
 	if err != nil {
 		return ObserverRevocation{}, err
 	}
-	f, err := os.Open(dir)
+	f, err := statefs.Open(dir)
 	if err != nil {
 		return ObserverRevocation{}, ErrState
 	}
@@ -111,19 +112,19 @@ func (s *Store) RevokeObserver(owner string, now time.Time) (ObserverRevocation,
 	if err != nil {
 		return r, ErrInvalid
 	}
-	tmp, err := os.CreateTemp(dir, ".revocation-*")
+	tmp, err := statefs.CreateTemp(dir, ".revocation-*")
 	if err != nil {
 		return r, ErrState
 	}
 	name := tmp.Name()
-	defer os.Remove(name)
+	defer statefs.Remove(name)
 	_, we := tmp.Write(raw)
 	se := tmp.Sync()
 	ce := tmp.Close()
 	if we != nil || se != nil || ce != nil {
 		return ObserverRevocation{}, ErrState
 	}
-	if os.Link(name, filepath.Join(dir, owner+".json")) != nil {
+	if statefs.Link(name, filepath.Join(dir, owner+".json")) != nil {
 		return ObserverRevocation{}, ErrState
 	}
 	return r, nil

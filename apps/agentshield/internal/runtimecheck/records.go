@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
@@ -36,11 +37,11 @@ func (m *Manager) persist(r *record) error {
 	if err != nil || len(raw) > 64<<10 || !idPattern.MatchString(next.Result.ID) {
 		return errors.New("runtime_check_record_failed")
 	}
-	tmp, err := os.CreateTemp(m.dir(), ".pending-*")
+	tmp, err := statefs.CreateTemp(m.dir(), ".pending-*")
 	if err != nil {
 		return errors.New("runtime_check_record_failed")
 	}
-	defer os.Remove(tmp.Name())
+	defer statefs.Remove(tmp.Name())
 	if _, err = tmp.Write(raw); err == nil {
 		err = tmp.Sync()
 	}
@@ -49,14 +50,14 @@ func (m *Manager) persist(r *record) error {
 		return errors.New("runtime_check_record_failed")
 	}
 	path := filepath.Join(m.dir(), fmt.Sprintf("%s.%06d.json", next.Result.ID, next.Revision))
-	if err = os.Link(tmp.Name(), path); err != nil {
+	if err = statefs.Link(tmp.Name(), path); err != nil {
 		return errors.New("runtime_check_record_failed")
 	}
 	*r = next
 	return nil
 }
 func (m *Manager) records() (map[string]record, error) {
-	entries, err := os.ReadDir(m.dir())
+	entries, err := statefs.ReadDir(m.dir())
 	if err != nil || len(entries) > 2048 {
 		return nil, errors.New("runtime_check_history_unavailable")
 	}
@@ -70,7 +71,7 @@ func (m *Manager) records() (map[string]record, error) {
 		if err != nil || !info.Mode().IsRegular() || info.Size() > 64<<10 {
 			return nil, errors.New("runtime_check_record_invalid")
 		}
-		f, err := os.Open(path)
+		f, err := statefs.Open(path)
 		if err != nil {
 			return nil, errors.New("runtime_check_record_invalid")
 		}

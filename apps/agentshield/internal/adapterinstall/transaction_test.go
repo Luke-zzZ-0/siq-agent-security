@@ -45,6 +45,11 @@ func assertBefore(t *testing.T, p *Plan) {
 
 func TestPlanReadOnlyAndPinsNoOpInputs(t *testing.T) {
 	o := testOpts(t, Hermes)
+	// Preview must also leave a fresh, empty state directory untouched.
+	o.StateDir = t.TempDir()
+	if err := os.Chmod(o.StateDir, 0700); err != nil {
+		t.Fatal(err)
+	}
 	p := testPlan(t, o, "install")
 	if exists(filepath.Join(o.Home, ".hermes")) {
 		t.Fatal("preview wrote platform")
@@ -210,7 +215,7 @@ func TestTransactionAuditFailureAndEncryptedRecovery(t *testing.T) {
 
 func TestRecoveryCannotTakeActiveWriter(t *testing.T) {
 	o := testOpts(t, Hermes)
-	guard, err := state.AcquireWriter(filepath.Join(o.StateDir, "adapter-write"))
+	guard, err := state.AcquireScopedWriter(o.StateDir, "adapter-write")
 	if err != nil {
 		t.Fatal(err)
 	}

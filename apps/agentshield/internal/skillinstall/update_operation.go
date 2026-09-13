@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"siq-agent-security/apps/agentshield/internal/statefs"
 	"time"
 )
 
@@ -208,7 +209,7 @@ func (s *Store) updateOperationCapacity(ctx context.Context, original string) er
 	if err := checkDirectories(p); err != nil {
 		return err
 	}
-	f, err := os.Open(p)
+	f, err := statefs.Open(p)
 	if err != nil {
 		return ErrUnavailable
 	}
@@ -267,7 +268,7 @@ func (s *Store) prepareUpdateInstallation(ctx context.Context, c *UpdateClaim) e
 		if err := checkDirectories(parent); err != nil {
 			return err
 		}
-		f, err := os.Open(parent)
+		f, err := statefs.Open(parent)
 		if err != nil {
 			return ErrUnavailable
 		}
@@ -298,7 +299,7 @@ func (s *Store) prepareUpdateInstallation(ctx context.Context, c *UpdateClaim) e
 	if err := checkDirectories(parent); err != nil {
 		return err
 	}
-	f, err := os.Open(parent)
+	f, err := statefs.Open(parent)
 	if err != nil {
 		return ErrUnavailable
 	}
@@ -310,10 +311,10 @@ func (s *Store) prepareUpdateInstallation(ctx context.Context, c *UpdateClaim) e
 	if len(names) >= maxStages {
 		return ErrLimit
 	}
-	if err := os.Mkdir(path, 0700); err != nil {
+	if err := statefs.Mkdir(path, 0700); err != nil {
 		return ErrConflict
 	}
-	if err := os.Mkdir(filepath.Join(path, "payload"), 0700); err != nil {
+	if err := statefs.Mkdir(filepath.Join(path, "payload"), 0700); err != nil {
 		return ErrUnavailable
 	}
 	_, err = s.imports.CopyForInstallation(ctx, p.Source.ImportID, filepath.Join(path, "payload"))
