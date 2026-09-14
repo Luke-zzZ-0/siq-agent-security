@@ -1,0 +1,99 @@
+{
+  "schema_version": "windows-state-native-smoke/v1",
+  "os": "windows",
+  "architecture": "AMD64",
+  "binary_sha256": "4608870f09d5d6481d71ca722329f33de1d3a9124d474ef31ff7273d6ea6a66d",
+  "checks": {
+    "future_reader": {
+      "status": "pass",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": false,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "82a75e800d70d359ae4d1128186f33fdae31bb2971bcffae431ea185e5dd9c2a",
+      "after_tree_sha256": "82a75e800d70d359ae4d1128186f33fdae31bb2971bcffae431ea185e5dd9c2a",
+      "entries": 21
+    },
+    "future_writer": {
+      "status": "pass",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": false,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "ee7e44014e06d01c33146ae04c1ccb9a3b97a8c12e56a70789ff416e869c9f5d",
+      "after_tree_sha256": "ee7e44014e06d01c33146ae04c1ccb9a3b97a8c12e56a70789ff416e869c9f5d",
+      "entries": 21
+    },
+    "duplicate_key": {
+      "status": "pass",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": false,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "84f59cbdff74edc66b0a5ce6db8a8d1dc0f0350e53bd21430ae2a76c5ab8046f",
+      "after_tree_sha256": "84f59cbdff74edc66b0a5ce6db8a8d1dc0f0350e53bd21430ae2a76c5ab8046f",
+      "entries": 21
+    },
+    "wrong_instance": {
+      "status": "pass",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": false,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "c15ca67177eb6a55e2bb8a2828e4341b9e442f1c9e0a53694b9d53a38a53034e",
+      "after_tree_sha256": "c15ca67177eb6a55e2bb8a2828e4341b9e442f1c9e0a53694b9d53a38a53034e",
+      "entries": 21
+    },
+    "wrong_directory": {
+      "status": "pass",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": false,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "b7b8b24f33a1caf86f83e2fd1cbb707ad160e3c57c662a5b659c465f6bd899ca",
+      "after_tree_sha256": "b7b8b24f33a1caf86f83e2fd1cbb707ad160e3c57c662a5b659c465f6bd899ca",
+      "entries": 21
+    },
+    "nested_future_parent": {
+      "status": "fail",
+      "method": "native_cli",
+      "state_status_exit": 0,
+      "state_status_compatible": true,
+      "init_exit": 1,
+      "pubkey_exit": 1,
+      "writer_refused_as_incompatible": true,
+      "reader_refused_as_incompatible": true,
+      "business_tree_unchanged": true,
+      "before_tree_sha256": "f23d53a73bf3a02c4dc73dd7b8d8528d2dbb77f26ea5925ed2886b1910de8fe3",
+      "after_tree_sha256": "f23d53a73bf3a02c4dc73dd7b8d8528d2dbb77f26ea5925ed2886b1910de8fe3",
+      "entries": 22
+    }
+  },
+  "scope": "isolated native compatibility refusal; synthetic invalid markers",
+  "limits": [
+    "not old-to-new migration",
+    "not ACL preservation certification",
+    "not power-loss recovery",
+    "private fixtures retained for inspection"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "method": "native_cli",
+  "label": "candidate-runtime-running",
+  "source_dirty": false,
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "command": "siq-agent-security task-runtime",
+  "state_directory": "<NATIVE_TEST_ROOT>\\states\\lifecycle-candidate-ebc472f2-中文 空格",
+  "exit_code": 0,
+  "duration_ms": 18495,
+  "stdout": "state=running instances=1 last_result=267009\n",
+  "stderr": ""
+}

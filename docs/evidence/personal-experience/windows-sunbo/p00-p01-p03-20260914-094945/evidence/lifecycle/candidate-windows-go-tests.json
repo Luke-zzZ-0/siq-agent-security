@@ -1,0 +1,23 @@
+{
+  "method": "native_go_tests",
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "source_clean_at_start": true,
+  "source_clean_at_end": true,
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "go_version": "go version go1.27.1 windows/amd64",
+  "command": "go test -p 1 -count=1 -timeout=10m ./cmd/agentshield -run ^Test(Windows|StateStatusReportsAncestorBarrier)",
+  "working_directory": "<REPO>\\apps\\agentshield",
+  "process_environment": {
+    "TEMP": "<NATIVE_TEST_ROOT>\\temp",
+    "CGO_ENABLED": "0",
+    "TMP": "<NATIVE_TEST_ROOT>\\temp"
+  },
+  "started_utc": "2026-09-14T01:04:08.0308939Z",
+  "completed_utc": "2026-09-14T01:08:51.3982330Z",
+  "exit_code": 0,
+  "duration_ms": 282193,
+  "stdout": "ok  \tsiq-agent-security/apps/agentshield/cmd/agentshield\t185.584s\n",
+  "stderr": "",
+  "log_sha256": "73f42b232e578d9f31bb8f619f10ac9e2fc78d8673d761982328db00f377b3a7"
+}

@@ -1,0 +1,46 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "checks": [
+    {
+      "os": "windows",
+      "arch": "amd64",
+      "command": "go build -trimpath -o <private-binary> ./cmd/agentshield",
+      "started_at": "2026-09-14T00:48:21.642203+00:00",
+      "exit_code": 0,
+      "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "native_build": true
+    },
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "command": "go build -trimpath -o <private-binary> ./cmd/agentshield",
+      "started_at": "2026-09-14T00:48:51.271966+00:00",
+      "exit_code": 0,
+      "binary_sha256": "f19aec196861c5b2df5a82dfcee1a804e4978dfb63e469ab904b44085221b3c9",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "native_build": false
+    },
+    {
+      "os": "linux",
+      "arch": "arm64",
+      "command": "go build -trimpath -o <private-binary> ./cmd/agentshield",
+      "started_at": "2026-09-14T00:49:54.431180+00:00",
+      "exit_code": 0,
+      "binary_sha256": "bd89a7d51c01feba5682d9158b2e4c9ee5405285365274ffc8ae561d5adc0ec4",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "native_build": false
+    },
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "command": "go build -trimpath -o <private-binary> ./cmd/agentshield",
+      "started_at": "2026-09-14T00:52:04.052486+00:00",
+      "exit_code": 0,
+      "binary_sha256": "f93733a26902693aa73d8d56defe5d37dbb5d392552f33eae345508037eb855b",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "native_build": false
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "checked_at": "2026-09-14T01:36:28.2388039Z",
+  "scope": "executable paths under this batch private native root, after full Go and race",
+  "owned_processes_remaining": 0,
+  "processes": [],
+  "writer_locks_deleted": false
+}

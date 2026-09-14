@@ -1,0 +1,19 @@
+{
+  "source_state": "development-exploration",
+  "harness_sha256": "b33194a51c0b1b0d74624e99c02c8a12efc45df0e3752267f8f3246bc05f398e",
+  "guard_recursive_failure": false,
+  "cases": [
+    {
+      "inside_allowed": true,
+      "traversal_denied": false,
+      "case": "baseline",
+      "exit_code": 0
+    },
+    {
+      "inside_allowed": true,
+      "traversal_denied": true,
+      "case": "fixed",
+      "exit_code": 0
+    }
+  ]
+}

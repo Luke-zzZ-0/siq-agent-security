@@ -1,0 +1,12 @@
+{
+  "method": "native_cli",
+  "label": "final-register",
+  "source_dirty": true,
+  "binary_sha256": "6920c7c8518408ca835f69ab5770b4d13010a5323fba4f9ebfdaaa338fe9dd1b",
+  "command": "siq-agent-security task-register --confirm-register",
+  "state_directory": "<PRIVATE_ROOT>\\states\\lifecycle-fixed-中文 空格",
+  "exit_code": 1,
+  "duration_ms": 22318,
+  "stdout": "",
+  "stderr": "siq-agent-security: task: system configuration does not match owned configuration\n"
+}

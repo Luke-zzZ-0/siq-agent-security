@@ -1,0 +1,10 @@
+ImportError while loading conftest '<repo>\apps\control-api\app\tests\conftest.py'.
+app\tests\conftest.py:23: in <module>
+    from app.main import app
+app\main.py:22: in <module>
+    from app.routers import bindings, environments, export, findings, inventory, policies, threat
+app\routers\environments.py:43: in <module>
+    from app.signing import public_key_base64
+app\signing.py:15: in <module>
+    import fcntl
+E   ModuleNotFoundError: No module named 'fcntl'

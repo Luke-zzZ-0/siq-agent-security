@@ -1,0 +1,21 @@
+{
+  "scope": "Evidence summary field-name correction only; no test result, raw evidence, runtime source or scanner rule changes",
+  "first_evidence_commit": "7d84888350533e7eccc507be8c6884885b9cf5f9",
+  "original_verification_sha256": "cfd90575cd58fa999b3205b98606f9dfc415786027fc218510881921ea33d41e",
+  "first_ci_job": "https://github.com/maoyadongsh/siq-agent-security/actions/runs/34797331765/job/103832870506",
+  "first_ci_gitleaks_exit": 1,
+  "first_ci_reported_findings": 2,
+  "local_archive_scanner_version": "8.24.2",
+  "official_windows_archive_sha256": "cc47fdc0364964e2d346fbbcbe4cc87f34d490b2647508fb05930d0ec2fbff07",
+  "local_archive_findings": [
+    {
+      "rule": "generic-api-key",
+      "file": "verification.json",
+      "line_before_correction": 170,
+      "classification": "Public Go test command falsely recognized through its key-prefixed JSON label; no credential value"
+    }
+  ],
+  "correction": "Rename the focused Go command/exit-code summary fields; retain their exact values and all raw evidence. The first evidence commit and original summary bytes are retained privately for review.",
+  "history": "Only the author-owned latest unmerged evidence commit is revised; push uses an exact expected-previous-head lease. Implementation candidate remains ebc472f2e46aa7de837afe9d6a0ed422eef51cd0.",
+  "validation": "Corrected archive and fresh final-head CI results are recorded in the PR description; the original failure is not relabeled as a pass."
+}

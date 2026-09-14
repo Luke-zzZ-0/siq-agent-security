@@ -1,0 +1,58 @@
+{
+  "method": "native_cli",
+  "browser_rendering_tested": false,
+  "results": [
+    {
+      "mode": "enterprise",
+      "route": "/",
+      "status": 200,
+      "expected_entry": "/src/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "enterprise",
+      "route": "/demo",
+      "status": 200,
+      "expected_entry": "/src/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "enterprise",
+      "route": "/overview",
+      "status": 200,
+      "expected_entry": "/src/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "enterprise",
+      "cleanup": "started process terminated",
+      "port_closed": true
+    },
+    {
+      "mode": "local",
+      "route": "/",
+      "status": 200,
+      "expected_entry": "/src/local/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "local",
+      "route": "/demo",
+      "status": 200,
+      "expected_entry": "/src/local/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "local",
+      "route": "/overview",
+      "status": 200,
+      "expected_entry": "/src/local/main.tsx",
+      "passed": true
+    },
+    {
+      "mode": "local",
+      "cleanup": "started process terminated",
+      "port_closed": true
+    }
+  ]
+}

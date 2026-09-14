@@ -1,0 +1,13 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "method": "native_com_and_cli",
+  "fixture": "same instance name with extra unsigned Description",
+  "registered_by_test": true,
+  "all_three_operations_rejected_for_configuration_mismatch": true,
+  "system_definition_unchanged": true,
+  "never_run": true,
+  "state_files_hashes_and_attributes_unchanged": true,
+  "exact_fixture_deleted": true,
+  "final_absent": true
+}

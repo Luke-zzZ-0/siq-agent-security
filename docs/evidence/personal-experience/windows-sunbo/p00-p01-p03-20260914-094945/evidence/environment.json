@@ -1,0 +1,126 @@
+{
+  "schema_version": "windows-host-environment/v1",
+  "recorded_at": "2026-09-14T00:54:17.9762291Z",
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "purpose": "Current host metadata accompanying candidate-bound Hermes component diagnostics; not three-host native acceptance",
+  "os": {
+    "caption": "Microsoft Windows 11 专业工作站版",
+    "display_version": "25H2",
+    "version": "10.0.26200",
+    "powershell_process_architecture": "X64",
+    "build": "26200.8875",
+    "test_volume_filesystem": "NTFS",
+    "architecture": "X64",
+    "powershell_version": "7.6.5"
+  },
+  "tools": {
+    "uv": "uv 0.12.13 (0ebbd9274 2026-09-10 x86_64-pc-windows-msvc)",
+    "npm": "11.18.0",
+    "system_python": "Python 3.13.7",
+    "go": "go version go1.27.1 windows/amd64",
+    "go_env": {
+      "CGO_ENABLED": "1",
+      "GOARCH": "amd64",
+      "GOHOSTARCH": "amd64",
+      "GOHOSTOS": "windows",
+      "GOOS": "windows"
+    },
+    "git": "git version 2.51.0.windows.1",
+    "node": "v22.20.0"
+  },
+  "binary": {
+    "sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+    "vcs_modified": false,
+    "vcs_revision": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+    "vcs_metadata_observed": true
+  },
+  "browsers": [
+    {
+      "method": "file_metadata_only",
+      "smoke_browser_not_inferred": true,
+      "name": "Microsoft Edge",
+      "file_version": "153.0.4234.32"
+    },
+    {
+      "method": "file_metadata_only",
+      "smoke_browser_not_inferred": true,
+      "name": "Google Chrome",
+      "file_version": "152.0.7977.83"
+    }
+  ],
+  "hosts": {
+    "openclaw": {
+      "desktop_product_version": "2026.9.3+84928c4370bc52d7f19127c65a637c7a28aab46e",
+      "current_runtime_metadata_read_succeeded": true,
+      "windows_siq_wsl_file_boundary_tested": false,
+      "guest_from_same_date_inventory": "Ubuntu 24.04.4 LTS",
+      "guest_architecture": "x86_64",
+      "desktop_installed": true,
+      "runtime_integration_tested": false,
+      "existing_wsl_gateway_running": true,
+      "windows_siq_wsl_network_boundary_tested": false,
+      "runtime_package_version": "2026.9.4",
+      "kernel_from_same_date_inventory": "6.6.87.2-microsoft-standard-WSL2",
+      "runtime_node_version": "v24.19.0",
+      "desktop_file_version": "2026.9.3.0",
+      "runtime_platform": "wsl2",
+      "windows_native_cli_verified": false
+    },
+    "hermes": {
+      "runtime_release_date": "2026.9.11",
+      "runtime_python": "Python 3.11.16",
+      "component_test": "See hermes-native-diagnostics.json and provenance.json",
+      "full_native_execution_verified": false,
+      "paid_model_calls": false,
+      "runtime_platform": "windows-native",
+      "isolated_profile": "HERMES_HOME in a new private test child",
+      "version_method": "source_metadata_and_interpreter_version",
+      "runtime_version": "0.21.2",
+      "installed": true
+    },
+    "workbuddy": {
+      "capability_status": "unverified",
+      "desktop_open_observed_same_date": true,
+      "pre_execution_veto_contract_verified": false,
+      "product_version": "5.5.6.0",
+      "runtime_platform": "windows-native-desktop",
+      "runtime_integration_tested": false,
+      "official_hook_category_documented": true,
+      "file_version": "5.5.6",
+      "version_method": "current_executable_metadata",
+      "isolated_profile_contract_verified": false,
+      "installed": true
+    }
+  },
+  "isolation": {
+    "parent_acl_protected": true,
+    "path_virtualization_note": "Use new workspace private root for fixture data; do not assume a short AppData path is visible across MSIX and Task Scheduler boundaries",
+    "all_aces_full_control": true,
+    "new_private_test_child": true,
+    "parent_reparse": false,
+    "parent_explicit_ace_count": 3
+  },
+  "official_sources_checked_date": "2026-09-14",
+  "official_sources": [
+    "https://docs.openclaw.ai/platforms/windows",
+    "https://hermes-agent.nousresearch.com/docs/user-guide/windows-native",
+    "https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins",
+    "https://hermes-agent.nousresearch.com/docs/developer-guide/tools-runtime",
+    "https://www.codebuddy.cn/docs/workbuddy/Plugins"
+  ],
+  "privacy": {
+    "private_paths_archived": false,
+    "raw_startup_logs_archived": false,
+    "paid_model_calls": false,
+    "raw_config_archived": false,
+    "usernames_or_sid_archived": false,
+    "chat_history_read": false
+  },
+  "limits": [
+    "Metadata and process/platform facts do not prove discovery or runtime protection",
+    "OpenClaw WSL2 is not Windows native runtime",
+    "WorkBuddy Hook category does not prove supported veto or isolated profile",
+    "Unrelated OS/platform acceptance rows remain not_run"
+  ]
+}

@@ -1,0 +1,5 @@
+# Preserve byte-exact Windows evidence; CRLF is expected in captured JSON/text.
+* whitespace=cr-at-eol
+# Captured console output contains native CR/CRLF, padding and final blank lines.
+# Its original bytes and recorded digests must not be rewritten for formatting.
+*.log -whitespace

@@ -1,0 +1,136 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty_before": false,
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "runner_sha256": "dbe331d238fe0edeb00ecc7d0edd8f91133f950b2009a8c5a4a0aa4e502e2c86",
+  "started_at": "2026-09-14T00:52:16.791902+00:00",
+  "os": "Windows",
+  "architecture": "",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "mode": "web",
+  "commands": [
+    {
+      "label": "node-version",
+      "argv": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--version"
+      ],
+      "cwd": "<WORKSPACE>",
+      "exit_code": 0,
+      "elapsed_seconds": 0.865,
+      "log": "node-version.log",
+      "log_sha256": "a2b821afd4e4bfa296f90391e3108eca40a048dd7d6ac21bf16c0971c16e7be6"
+    },
+    {
+      "label": "npm-version",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "--version"
+      ],
+      "cwd": "<WORKSPACE>",
+      "exit_code": 0,
+      "elapsed_seconds": 13.001,
+      "log": "npm-version.log",
+      "log_sha256": "a2b532864547b23ee12ed271317cd6fb9b0a06464d90e27f67ab9005576a9df0"
+    },
+    {
+      "label": "npm-ci",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "ci"
+      ],
+      "cwd": "<WORKSPACE>\\apps\\web",
+      "exit_code": 0,
+      "elapsed_seconds": 130.443,
+      "log": "npm-ci.log",
+      "log_sha256": "b9c5e74d29250ad7dd3abbf2970d1f45b31aae7876ec889bed6e9343974451f2"
+    },
+    {
+      "label": "web-tests",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "test"
+      ],
+      "cwd": "<WORKSPACE>\\apps\\web",
+      "exit_code": 0,
+      "elapsed_seconds": 24.751,
+      "log": "web-tests.log",
+      "log_sha256": "e1a35094b8370c8937c0eb9fd58110964b049bfe476be7c61dc53f1740532c59"
+    },
+    {
+      "label": "build-enterprise",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "run",
+        "build"
+      ],
+      "cwd": "<WORKSPACE>\\apps\\web",
+      "exit_code": 0,
+      "elapsed_seconds": 36.976,
+      "log": "build-enterprise.log",
+      "log_sha256": "923b3b3be72930da8a00a5d5fa226fedc927f1bf62304d7047000b0aa450e6b0"
+    },
+    {
+      "label": "build-local",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "run",
+        "build:local"
+      ],
+      "cwd": "<WORKSPACE>\\apps\\web",
+      "exit_code": 0,
+      "elapsed_seconds": 34.095,
+      "log": "build-local.log",
+      "log_sha256": "75c6abdf165cccdcd4b19315b5b8d23f261915e8bf8de4d7b39eadf04f5103ef"
+    },
+    {
+      "label": "dev-local-help",
+      "argv": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "run",
+        "dev:local",
+        "--",
+        "--help"
+      ],
+      "cwd": "<WORKSPACE>\\apps\\web",
+      "exit_code": 0,
+      "elapsed_seconds": 4.814,
+      "log": "dev-local-help.log",
+      "log_sha256": "b75a96f2c1f6e54f5433176151d425c3cabfdd1a6db7437f33459e72acd14710"
+    },
+    {
+      "label": "dev-http-entries",
+      "argv": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "<WORKSPACE>\\.tmp\\win-task-native\\formal\\web-launcher\\check-dev.mjs"
+      ],
+      "cwd": "<WORKSPACE>",
+      "exit_code": 0,
+      "elapsed_seconds": 23.698,
+      "log": "dev-http-entries.log",
+      "log_sha256": "7617f37cbd549a24b8fd05df9cf1bf1269739e6ffc5bf27701c0e1e62a3b6a25"
+    },
+    {
+      "label": "embed-byte-check",
+      "argv": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "<WORKSPACE>\\.tmp\\win-task-native\\formal\\web-launcher\\check-embed.mjs"
+      ],
+      "cwd": "<WORKSPACE>",
+      "exit_code": 0,
+      "elapsed_seconds": 1.558,
+      "log": "embed-byte-check.log",
+      "log_sha256": "bf8725f8f497f01f00b8579b597ac2488af7b234d1ae7454b27e4b5e9b1b8651"
+    }
+  ],
+  "source_files": {
+    "apps/web/package.json": "6d04a571300564c13c2bca5236635288b2fc6e120c59416aaa668d0446ab24df",
+    "apps/web/package-lock.json": "55f894ae8d414b5a0877b19509a12e54db7b92702b616ace3336ed70470e1907",
+    "apps/web/scripts/vite-local.mjs": "904f62c994ba8ed25ab57bdc5d7d1dddd303e0cbd34648fc6dbfc73ea28c7949"
+  },
+  "status": "pass",
+  "finished_at": "2026-09-14T00:56:56.472817+00:00",
+  "source_dirty_after": false,
+  "candidate_after": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "binary_sha256_after": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74"
+}

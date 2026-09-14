@@ -1,0 +1,662 @@
+{
+  "scope": "installation_source_review_only; no WorkBuddy execution or user configuration reads; not native acceptance",
+  "archive_size": 297844411,
+  "archive_entries": 20474,
+  "installed_product_metadata_unverified": {
+    "productName": "WorkBuddy",
+    "applicationName": "WorkBuddy",
+    "dataFolderName": ".workbuddy",
+    "genieVersion": "5.5.6",
+    "commit": "5f9692923c93033111c51ad7b003eb80204a9b75",
+    "date": "2026-09-10T10:36:20.308Z"
+  },
+  "metadata_file_sha256": {
+    "app.asar.unpacked/cli/product.json": "8f0822e68372ed1046e499f06c944cbd55ec170e49511d3bd478808593b58047",
+    "app.asar.unpacked/cli/package.json": "33697b29c19b73658a6986d813f469b59f9f0a31f1f08dfbd5ccf7cccf8cd819"
+  },
+  "modules": [
+    {
+      "path": "app.asar/package.json",
+      "size": 5032,
+      "sha256": "6f74f42f656d2156948bf7be945d0268e140b6d9f7b55645a7060717fc2e0c8c",
+      "anchors": [
+        {
+          "literal": "\"version\"",
+          "matches": [
+            {
+              "character_offset": 61,
+              "line_1based": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/app-instance.js",
+      "size": 6145,
+      "sha256": "34cbbd4dd2c6cb00b82453a7cc6fc902e3b0caddf2905342e1e5c1cbc7047158",
+      "anchors": [
+        {
+          "literal": "process.env.CODEBUDDY_CONFIG_DIR = configDir",
+          "matches": [
+            {
+              "character_offset": 3656,
+              "line_1based": 81
+            }
+          ]
+        },
+        {
+          "literal": "setPath(\"userData\"",
+          "matches": [
+            {
+              "character_offset": 4860,
+              "line_1based": 99
+            }
+          ]
+        },
+        {
+          "literal": "setPath(\"sessionData\"",
+          "matches": [
+            {
+              "character_offset": 4946,
+              "line_1based": 100
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/workbuddy-paths.js",
+      "size": 8579,
+      "sha256": "6ace7c90a1f783b7430bf09e94668394bfa96177c2911486844022cff5ed3f52",
+      "anchors": [
+        {
+          "literal": "function getWorkbuddyUserDataDir",
+          "matches": [
+            {
+              "character_offset": 3305,
+              "line_1based": 84
+            }
+          ]
+        },
+        {
+          "literal": "WORKBUDDY_USER_DATA_DIR",
+          "matches": [
+            {
+              "character_offset": 3362,
+              "line_1based": 85
+            }
+          ]
+        },
+        {
+          "literal": "function getWorkbuddySessionDataDir",
+          "matches": [
+            {
+              "character_offset": 3722,
+              "line_1based": 96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/workbuddy-product-config.js",
+      "size": 41781,
+      "sha256": "0f74f11fba13777c1929ffef99741793e4e2e200cf641987ef18bee9d90b9cdf",
+      "anchors": [
+        {
+          "literal": "function resolveWorkbuddyConfigDir",
+          "matches": [
+            {
+              "character_offset": 18555,
+              "line_1based": 443
+            }
+          ]
+        },
+        {
+          "literal": "function ensureWorkbuddyCustomUserDataDirEnv",
+          "matches": [
+            {
+              "character_offset": 24127,
+              "line_1based": 584
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/index.js",
+      "size": 1727750,
+      "sha256": "ec942efea2e701c589c9d065c9499a25f8011f66d4f496dd280471fb092ad07f",
+      "anchors": [
+        {
+          "literal": "acquireSingletonLock()",
+          "matches": [
+            {
+              "character_offset": 1530860,
+              "line_1based": 39795
+            },
+            {
+              "character_offset": 1536367,
+              "line_1based": 39911
+            }
+          ]
+        },
+        {
+          "literal": "function normalizeInheritedFallbackEnv",
+          "matches": [
+            {
+              "character_offset": 1481820,
+              "line_1based": 38411
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/legacy-auth-session-migrator.js",
+      "size": 3420,
+      "sha256": "7eefe09ad385205e260a6b7cac480dd8fc4266d010d145d8795a3f1d5c0d6a1f",
+      "anchors": [
+        {
+          "literal": "function getLegacyWorkbuddyIdeVscdbPath",
+          "matches": [
+            {
+              "character_offset": 502,
+              "line_1based": 11
+            }
+          ]
+        },
+        {
+          "literal": "APPDATA",
+          "matches": [
+            {
+              "character_offset": 874,
+              "line_1based": 21
+            }
+          ]
+        },
+        {
+          "literal": "state.vscdb",
+          "matches": [
+            {
+              "character_offset": 1141,
+              "line_1based": 28
+            }
+          ]
+        },
+        {
+          "literal": "safeStorage.decryptString",
+          "matches": [
+            {
+              "character_offset": 2148,
+              "line_1based": 51
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/launch-args.js",
+      "size": 396157,
+      "sha256": "dc2862b64b53f5760069fd99bde8fa7ad6817d38c8581a1acf0b30fbe395cd14",
+      "anchors": [
+        {
+          "literal": "getLegacyAppDataDir",
+          "matches": [
+            {
+              "character_offset": 199269,
+              "line_1based": 5823
+            },
+            {
+              "character_offset": 199352,
+              "line_1based": 5825
+            },
+            {
+              "character_offset": 208006,
+              "line_1based": 6014
+            },
+            {
+              "character_offset": 208181,
+              "line_1based": 6019
+            },
+            {
+              "character_offset": 213538,
+              "line_1based": 6181
+            },
+            {
+              "character_offset": 213752,
+              "line_1based": 6186
+            },
+            {
+              "character_offset": 230947,
+              "line_1based": 6666
+            },
+            {
+              "character_offset": 231575,
+              "line_1based": 6677
+            },
+            {
+              "character_offset": 235393,
+              "line_1based": 6771
+            },
+            {
+              "character_offset": 235559,
+              "line_1based": 6774
+            },
+            {
+              "character_offset": 235772,
+              "line_1based": 6779
+            },
+            {
+              "character_offset": 347146,
+              "line_1based": 9427
+            },
+            {
+              "character_offset": 347953,
+              "line_1based": 9444
+            },
+            {
+              "character_offset": 348407,
+              "line_1based": 9454
+            }
+          ]
+        },
+        {
+          "literal": "legacy_history_migration",
+          "matches": [
+            {
+              "character_offset": 187127,
+              "line_1based": 5504
+            },
+            {
+              "character_offset": 187527,
+              "line_1based": 5511
+            },
+            {
+              "character_offset": 240600,
+              "line_1based": 6919
+            }
+          ]
+        },
+        {
+          "literal": "legacy_mcp_oauth_migration",
+          "matches": [
+            {
+              "character_offset": 241021,
+              "line_1based": 6926
+            }
+          ]
+        },
+        {
+          "literal": "WORKBUDDY_USER_DATA_DIR",
+          "matches": [
+            {
+              "character_offset": 239540,
+              "line_1based": 6885
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/node.js",
+      "size": 510681,
+      "sha256": "ae1dd6eccf31d0572fcda9814e96150e8af415476140e2e540412eb31b1b0d90",
+      "anchors": [
+        {
+          "literal": "args.push(\"--settings\", JSON.stringify(settingsPayload))",
+          "matches": [
+            {
+              "character_offset": 263632,
+              "line_1based": 7396
+            }
+          ]
+        },
+        {
+          "literal": "CLI_STATIC_MANAGED_ENV",
+          "matches": [
+            {
+              "character_offset": 71059,
+              "line_1based": 2024
+            },
+            {
+              "character_offset": 78132,
+              "line_1based": 2239
+            },
+            {
+              "character_offset": 78858,
+              "line_1based": 2252
+            }
+          ]
+        },
+        {
+          "literal": "function buildCliProcessEnv",
+          "matches": [
+            {
+              "character_offset": 72534,
+              "line_1based": 2083
+            }
+          ]
+        },
+        {
+          "literal": "readTextFile: false",
+          "matches": [
+            {
+              "character_offset": 69033,
+              "line_1based": 1968
+            }
+          ]
+        },
+        {
+          "literal": "writeTextFile: false",
+          "matches": [
+            {
+              "character_offset": 69056,
+              "line_1based": 1969
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/tar.js",
+      "size": 1512284,
+      "sha256": "0edf1e1a2fea2f9dd92119255d790af63d9759c270bdd10fdda2ea3378a3307e",
+      "anchors": [
+        {
+          "literal": "PLUGIN_METADATA_DIRS",
+          "matches": [
+            {
+              "character_offset": 65315,
+              "line_1based": 1798
+            },
+            {
+              "character_offset": 67600,
+              "line_1based": 1868
+            },
+            {
+              "character_offset": 67871,
+              "line_1based": 1875
+            },
+            {
+              "character_offset": 97075,
+              "line_1based": 2690
+            },
+            {
+              "character_offset": 99553,
+              "line_1based": 2752
+            },
+            {
+              "character_offset": 99841,
+              "line_1based": 2762
+            },
+            {
+              "character_offset": 105519,
+              "line_1based": 2906
+            },
+            {
+              "character_offset": 109529,
+              "line_1based": 3011
+            },
+            {
+              "character_offset": 1139850,
+              "line_1based": 33422
+            },
+            {
+              "character_offset": 1142261,
+              "line_1based": 33491
+            }
+          ]
+        },
+        {
+          "literal": "function mergeEnabledPlugins",
+          "matches": [
+            {
+              "character_offset": 1235096,
+              "line_1based": 35588
+            }
+          ]
+        },
+        {
+          "literal": "function readSessionSettingsSummary",
+          "matches": [
+            {
+              "character_offset": 1236189,
+              "line_1based": 35611
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/sidecar-manager.js",
+      "size": 101066,
+      "sha256": "9a5670b296d79e3c0be824c36e9258245e33eda70e77978b99035d8fb2ff74e7",
+      "anchors": [
+        {
+          "literal": "cli/dist/codebuddy.js",
+          "matches": [
+            {
+              "character_offset": 85540,
+              "line_1based": 2041
+            }
+          ]
+        },
+        {
+          "literal": "\"--setting-sources\"",
+          "matches": [
+            {
+              "character_offset": 73623,
+              "line_1based": 1757
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/src.js",
+      "size": 67040,
+      "sha256": "22cf7520d6badb00eb828cf1cc294714f276e1b710e017ccb5cb9a255e842104",
+      "anchors": [
+        {
+          "literal": "--user-data-dir=",
+          "matches": [
+            {
+              "character_offset": 20266,
+              "line_1based": 642
+            },
+            {
+              "character_offset": 20414,
+              "line_1based": 645
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar/main/e2b-filesystem.js",
+      "size": 622315,
+      "sha256": "c03b6a9b21beb90e93d9573896929e81f65d338cd551625ef16da0d9b8391dc0",
+      "anchors": [
+        {
+          "literal": "--workspace-folder",
+          "matches": [
+            {
+              "character_offset": 608982,
+              "line_1based": 17862
+            },
+            {
+              "character_offset": 609369,
+              "line_1based": 17868
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar.unpacked/cli/dist/codebuddy.js",
+      "size": 23317873,
+      "sha256": "eb018e35d80673db02ebdaa7547b72f43d130d660c9c907c338d35e2f7b42ff7",
+      "anchors": [
+        {
+          "literal": "\"deny\"===eu.permissionDecision",
+          "matches": [
+            {
+              "character_offset": 7986945,
+              "line_1based": 398
+            }
+          ]
+        },
+        {
+          "literal": "\"hooks/hooks.json\"",
+          "matches": [
+            {
+              "character_offset": 10577653,
+              "line_1based": 885
+            }
+          ]
+        },
+        {
+          "literal": "CODEBUDDY_DISABLE_EXTENDED_PLUGIN_HOOKS",
+          "matches": [
+            {
+              "character_offset": 10577676,
+              "line_1based": 885
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar.unpacked/cli/dist/web-ui/docs/cn/cli/hooks.md",
+      "size": 35813,
+      "sha256": "ae95e9deb57fd864b2450396c8897b6edbd1f85e38efc6dc105773111b314185",
+      "anchors": [
+        {
+          "literal": "### 简单方式",
+          "matches": [
+            {
+              "character_offset": 15469,
+              "line_1based": 594
+            }
+          ]
+        },
+        {
+          "literal": "其他退出代码",
+          "matches": [
+            {
+              "character_offset": 15821,
+              "line_1based": 600
+            }
+          ]
+        },
+        {
+          "literal": "#### PreToolUse 决策控制",
+          "matches": [
+            {
+              "character_offset": 16935,
+              "line_1based": 641
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar.unpacked/cli/dist/web-ui/docs/cn/cli/plugins-reference.md",
+      "size": 39589,
+      "sha256": "0842a6faf5336f864f75a1c3cb5b810d01eb7343a3d933f88bd8c131a7755e05",
+      "anchors": [
+        {
+          "literal": "### 必需字段",
+          "matches": [
+            {
+              "character_offset": 7908,
+              "line_1based": 327
+            }
+          ]
+        },
+        {
+          "literal": "### 组件路径字段",
+          "matches": [
+            {
+              "character_offset": 8893,
+              "line_1based": 351
+            }
+          ]
+        },
+        {
+          "literal": ".workbuddy-plugin/plugin.json",
+          "matches": [
+            {
+              "character_offset": 6855,
+              "line_1based": 288
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar.unpacked/resources/plugins/workbuddy-builtin/builtin-plugins/sheetagent/.codebuddy-plugin/plugin.json",
+      "size": 930,
+      "sha256": "232a586cfe49390a5ad2c83e1cb878e5fde670ade3bbf841e1b85b59db72f925",
+      "anchors": [
+        {
+          "literal": "\"hooks\"",
+          "matches": [
+            {
+              "character_offset": 401,
+              "line_1based": 18
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app.asar.unpacked/resources/plugins/workbuddy-builtin/builtin-plugins/sheetagent/hooks/hooks.json",
+      "size": 514,
+      "sha256": "9708877e0af1afa9ce46ba7c62a376d319110683d8d89cdad1750538e1b7e162",
+      "anchors": [
+        {
+          "literal": "PreToolUse",
+          "matches": []
+        },
+        {
+          "literal": "SubagentStop",
+          "matches": [
+            {
+              "character_offset": 133,
+              "line_1based": 8
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "flag_scan": {
+    "packed_main_js_files_scanned": 167,
+    "matching_files": [
+      {
+        "file": "main/e2b-filesystem.js",
+        "sha256": "c03b6a9b21beb90e93d9573896929e81f65d338cd551625ef16da0d9b8391dc0",
+        "literal_counts": {
+          "--user-data-dir": 0,
+          "--extensions-dir": 0,
+          "--profile": 0,
+          "--workspace": 2
+        }
+      },
+      {
+        "file": "main/src.js",
+        "sha256": "22cf7520d6badb00eb828cf1cc294714f276e1b710e017ccb5cb9a255e842104",
+        "literal_counts": {
+          "--user-data-dir": 3,
+          "--extensions-dir": 0,
+          "--profile": 0,
+          "--workspace": 0
+        }
+      }
+    ]
+  },
+  "offset_unit": "Unicode code point index after UTF-8 decoding; lines count LF and are 1-based"
+}

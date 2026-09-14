@@ -1,0 +1,10 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "method": "native_tcp_listener",
+  "port": 47623,
+  "listener_created_by_test": true,
+  "owned_listener_still_bound": true,
+  "unknown_processes_stopped": false,
+  "task_start_exit_code": 1
+}

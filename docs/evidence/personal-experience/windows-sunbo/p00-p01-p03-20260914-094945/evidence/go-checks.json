@@ -1,0 +1,47 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "checks": [
+    {
+      "name": "gofmt",
+      "command": "gofmt.exe -l .",
+      "cwd": "apps/agentshield",
+      "started_at": "2026-09-14T00:50:18.432693+00:00",
+      "finished_at": "2026-09-14T00:50:21.303689+00:00",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_bytes": 0,
+      "no_formatting_changes": true
+    },
+    {
+      "name": "vet",
+      "command": "go.exe vet ./...",
+      "cwd": "apps/agentshield",
+      "started_at": "2026-09-14T00:50:22.305708+00:00",
+      "finished_at": "2026-09-14T00:52:53.494160+00:00",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_bytes": 0
+    },
+    {
+      "name": "test-all",
+      "command": "go.exe test -json -p 2 -count=1 ./...",
+      "cwd": "apps/agentshield",
+      "started_at": "2026-09-14T00:52:54.359436+00:00",
+      "finished_at": "2026-09-14T01:27:34.139282+00:00",
+      "exit_code": 1,
+      "log_sha256": "c2029645386d6f28e9fef82633c377ca5528893a20215dbad40fd9738c745a14",
+      "output_bytes": 2366867
+    },
+    {
+      "name": "test-race-boundary",
+      "command": "go.exe test -race -p 1 -count=1 ./internal/stateformat ./internal/statefs",
+      "cwd": "apps/agentshield",
+      "started_at": "2026-09-14T01:27:35.631035+00:00",
+      "finished_at": "2026-09-14T01:33:43.793559+00:00",
+      "exit_code": 0,
+      "log_sha256": "858cdc852d4022b2c85a665d13a5fdd3d9e970ddea00a834e8b214a6cc9a80fa",
+      "output_bytes": 134
+    }
+  ]
+}
