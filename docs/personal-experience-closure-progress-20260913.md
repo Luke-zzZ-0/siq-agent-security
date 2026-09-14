@@ -1,8 +1,8 @@
 # 个人体验闭环接续进度（2026-09-13）
 
-当前任务书：[v3.0](personal-experience-lan-team-next-development-taskbook-20260913-192253.md)。N01 已通过 PR #35 提交、推送并合入 main `0d4133f03ec23bb13af5765f3c731138e5595e7a`；本次 N00 分支/旧工作树核查见 [整合报告](evidence/personal-experience/main-integration-20260913-191341/report.md)。后续从最新 `origin/main` 创建独立工作树，先执行 N02/N04。
+当前任务书：[v4.0](personal-experience-lan-team-next-development-taskbook-20260914-112027.md)。PR #45 已合入 main `4464dfbc8e66c8ec1fb2590b286351595fcd9667`；本批验收报告见下文。N01 原有最低门槛保持有效，N05/N06 尚未通过，N09 仍 partial。
 
-**最新结论：N01 已完成开发及 Linux 最低验收门槛。** 本轮补齐版本协议、递归备份、可恢复迁移、签名发行兼容检查及用户恢复指引，详见 [N01 完成报告](evidence/personal-experience/n01-completion-20260913-190637/report.md)。Windows/macOS 原生材料仍待 N07/N09；N00 由独立分支/旧树核查关闭；个人总体进度不因此自动完成。前一轮 Ornith 审查及失败证据保留为历史。
+**继承结论：N01 已完成开发及 Linux 最低验收门槛。** 本轮补齐版本协议、递归备份、可恢复迁移、签名发行兼容检查及用户恢复指引，详见 [N01 完成报告](evidence/personal-experience/n01-completion-20260913-190637/report.md)。Windows/macOS 原生材料仍待 N07/N09；N00 由独立分支/旧树核查关闭；个人总体进度不因此自动完成。前一轮 Ornith 审查及失败证据保留为历史。
 
 | 任务 | 原任务映射 | 状态 | 当前证据/下一步 |
 | --- | --- | --- | --- |
@@ -25,7 +25,7 @@
 
 ## 2026-09-14 独立阶段复核
 
-本批接受范围、暂缓原因和验证详见 [GLM 成果复核报告](evidence/personal-experience/glm-stage-review-20260914/report.md)。下列旧执行顺序为 v3 历史；新任务书将在本批实际合并后固定基线，优先可信归属、审批重试及原生验收。
+本批接受范围、暂缓原因和验证详见 [GLM 成果复核报告](evidence/personal-experience/glm-stage-review-20260914/report.md)。下列旧执行顺序为 v3 历史；v4 已固定本批合并基线，优先可信归属、审批重试及原生验收。
 
 ## 下一执行批次（v3 历史）
 
@@ -34,3 +34,17 @@
 3. 优先 N02 安全 Git 与 N04 平台能力核验。N03/N07 可依赖 N01 的签名状态支持范围继续；未知 Git/平台能力仍保持拒绝或 unknown。
 4. N07/N09 补充 Windows/macOS 实机升级、失败恢复与生命周期材料，测试密钥和验证构建不作正式发行证明。
 5. N09 未验收前不进入团队。当前 N01 完成不等于整个个人产品、三平台或 LAN 目标完成。
+
+## v4 执行批次
+
+| 批次 | 目标映射 | 状态/交付边界 |
+| --- | --- | --- |
+| R01 | N05 | todo：可信宿主执行上下文、同调用绑定及权限交集 |
+| R02 | N06 | todo：服务端重试链、一次副作用与不确定结果恢复 |
+| R03 | N02 | partial：组件已合入，真网验收及生产启用待办 |
+| R04 | N03/N08 | partial：来源调度与 UI 已合入，原生更新与停用体验待办 |
+| R05 | N04 | partial：诊断已合入，真实平台能力继续 |
+| R06 | N07 | partial：sunbo/Luke 继续对应 OS 实机与适配 |
+| R07 | N09 | partial：v2 校验已合入，逐行原生验收未完成 |
+
+T01–T06 保持 todo，依赖 R07/N09 关闭；本次未发布产品制品。
