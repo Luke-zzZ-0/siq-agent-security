@@ -1,0 +1,26 @@
+{
+  "cgo_enabled": false,
+  "native_os_acceptance": false,
+  "builds": [
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "sha256": "e08d74b9f8e2686418b4f6e8e2ec239409f15b9e399b38f13672d0661ba76b08"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64",
+      "sha256": "af4fd85357b18ed60bf13e7f3c44fb1b6e37d7714a540ea73a96785cbe8d337c"
+    },
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "sha256": "1a7092bbd6ad85bfcf5c8b6c662ccbae3bca4384c230e078445b964407263fdd"
+    },
+    {
+      "os": "windows",
+      "arch": "amd64",
+      "sha256": "ae2b41f1a7bc38bce8211257e3bfcfd52ef3532044e676f7f79a45986ae72105"
+    }
+  ]
+}

@@ -283,6 +283,11 @@ def main():
                     outcomes["instance_catalog_retry_recovers_without_reopening"] = True
                     if args.hermes_cli:
                         dialog.get_by_role("checkbox").uncheck()
+                    # No permission has been confirmed in this connection-only fixture.
+                    # The protected default must remain disabled until the user chooses
+                    # the explicitly limited connection-component path.
+                    expect(dialog.get_by_role("button", name="确认应用")).to_be_disabled()
+                    dialog.get_by_label("接入方式", exact=True).select_option("connection")
                     expect(dialog.get_by_role("button", name="确认应用")).to_be_enabled()
                     assert not (home / ".hermes/plugins/siq-agent-security/plugin.yaml").exists()
                     expect(dialog.get_by_text("安装当前版本的工具调用适配器文件", exact=True).first).to_be_visible()
@@ -314,6 +319,7 @@ def main():
                     hermes_row.get_by_role("button", name="管理实例", exact=True).click()
                     if args.hermes_cli:
                         page.get_by_role("dialog").get_by_role("checkbox").uncheck()
+                    page.get_by_role("dialog").get_by_label("接入方式", exact=True).select_option("connection")
                     page.get_by_role("dialog").get_by_role("button", name="确认应用").click()
                     expect(hermes_row.get_by_text("发现安装文件", exact=True)).to_be_visible()
                     hermes_row.get_by_text("查看接入诊断", exact=True).click()
@@ -345,6 +351,7 @@ def main():
                         work_id = selector.locator("option").filter(has_text="work ·").get_attribute("value")
                         selector.select_option(work_id)
                         expect(dialog.get_by_role("checkbox")).to_be_checked()
+                        dialog.get_by_label("接入方式", exact=True).select_option("connection")
                         expect(dialog.get_by_role("button", name="确认应用")).to_be_enabled(timeout=45000)
                         assert work_config.read_bytes() == original_work
                         page.screenshot(path=str(args.out_dir / "hermes-native-preview.png"), full_page=True)

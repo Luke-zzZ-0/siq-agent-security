@@ -1,0 +1,5 @@
+ok  	siq-agent-security/apps/agentshield/internal/skillimport	6.574s
+ok  	siq-agent-security/apps/agentshield/internal/skillinstall	118.434s
+ok  	siq-agent-security/apps/agentshield/internal/server	41.694s
+ok  	siq-agent-security/apps/agentshield/internal/adapterinstall	9.695s
+ok  	siq-agent-security/apps/agentshield/internal/rawcontent	1.576s

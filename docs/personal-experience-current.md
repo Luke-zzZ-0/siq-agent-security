@@ -1,3 +1,7 @@
+# 个人体验当前交接
+
+> 2026-09-14：GLM 未提交成果已完成选择性独立复核，接受与暂缓范围见 [报告](evidence/personal-experience/glm-stage-review-20260914/report.md) 和 [台账](personal-experience-closure-progress-20260913.md)。N05/N06 源实现未通过，N09 未完成；下方旧阶段表述保留为历史。合并后由新任务书固定后续执行基线。
+
 # 个人体验当前交接（K002，2026-09-11）
 
 > **当前执行入口：[后续开发任务书 v3.0](personal-experience-lan-team-next-development-taskbook-20260913-192253.md)。** N01 已经 PR #35 提交、推送并合入 main `0d4133f`，代码与 Linux 最低验收完成；N00 分支/旧树核查完成。下一批 N02 安全 Git 与 N04 平台能力，Windows/macOS 原生验收继续 N07/N09。见 [接续台账](personal-experience-closure-progress-20260913.md)。下方 v2 和未提交表述保留为历史。
