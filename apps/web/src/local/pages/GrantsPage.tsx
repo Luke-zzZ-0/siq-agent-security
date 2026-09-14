@@ -8,6 +8,7 @@ import SimpleTable, { type TableColumn } from '@/components/SimpleTable';
 import { localApi } from '../api';
 import type { Grant, GrantFact } from '../types';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 import GrantResourceDialog from '../components/GrantResourceDialog';
 import {
   domainLabel,
@@ -29,6 +30,7 @@ export default function GrantsPage() {
   const [rows, setRows] = useState<Grant[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const guard = useLoadGuard();
   const [selected, setSelected] = useState<Grant | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [msgErr, setMsgErr] = useState(false);
@@ -58,9 +60,9 @@ export default function GrantsPage() {
 
   const load = () => {
     setLoading(true);
-    localApi
-      .grants()
+    guard(() => localApi.grants())
       .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
         setRows(data.grants ?? []);
         setError(null);
         setLoading(false);

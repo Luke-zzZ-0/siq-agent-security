@@ -8,7 +8,7 @@ import { domainLabel, severityLabel, severityTag, verdictLabel, verdictTag } fro
 import { importIdPattern, newImportId, skillImportErrorText } from '../skillImports';
 import type { SkillImportListItem, SkillImportRequest, SkillImportResult, SkillImportSourceKind } from '../types';
 
-const sourceLabel = (kind: string) => kind === 'https_zip' ? 'HTTPS ZIP' : kind === 'local_zip' ? '本地 ZIP' : '本地目录';
+const sourceLabel = (kind: string) => kind === 'https_zip' ? 'HTTPS ZIP' : kind === 'local_zip' ? '本地 ZIP' : kind === 'git' ? 'Git 仓库' : '本地目录';
 const formatTime = (time: string) => new Date(time).toLocaleString();
 const bytesLabel = (bytes: number) => bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MiB` : bytes >= 1024 ? `${(bytes / 1024).toFixed(1)} KiB` : `${bytes} B`;
 
@@ -20,6 +20,9 @@ export default function SkillImportsPage() {
   const [url, setUrl] = useState('');
   const [archivePath, setArchivePath] = useState('');
   const [expectedSHA256, setExpectedSHA256] = useState('');
+  const [repoRef, setRepoRef] = useState('');
+  const [repoSubDir, setRepoSubDir] = useState('');
+  const [repoCommit, setRepoCommit] = useState('');
   const [kind, setKind] = useState<SkillImportSourceKind>('local_dir');
   const [items, setItems] = useState<SkillImportListItem[]>([]);
   const [result, setResult] = useState<SkillImportResult | null>(null);
@@ -83,10 +86,14 @@ export default function SkillImportsPage() {
   };
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (busy || creating.current || !(kind === 'https_zip' ? url.trim() : path.trim()) || !actorId.trim()) return;
+    if (busy || creating.current || !(kind === 'local_dir' || kind === 'local_zip' ? path.trim() : url.trim()) || !actorId.trim()) return;
     if (selected) return;
     if (kind === 'https_zip') {
       void create({ schema_version: 'local-skill-import-remote-create/v1', import_id: newImportId(), url: url.trim(), archive_path: archivePath.trim(), expected_sha256: expectedSHA256.trim(), actor_id: actorId.trim() });
+      return;
+    }
+    if (kind === 'git') {
+      void create({ schema_version: 'local-skill-import-git-create/v1', import_id: newImportId(), url: url.trim(), ref: repoRef.trim(), sub_dir: repoSubDir.trim(), expected_commit: repoCommit.trim(), actor_id: actorId.trim() });
       return;
     }
     void create({ schema_version: 'local-skill-import-create/v1', import_id: newImportId(), source_kind: kind, path: path.trim(), actor_id: actorId.trim() });
@@ -103,13 +110,13 @@ export default function SkillImportsPage() {
     <div className="import-columns">
       <section className="panel import-panel" aria-labelledby="import-source-heading">
         <h2 id="import-source-heading">{selected ? '当前导入' : '添加 Skill'}</h2>
-        <p className="page-desc">从本机目录、ZIP 或 HTTPS 下载链接添加 Skill。所选 Skill 目录须包含 SKILL.md。</p>
+        <p className="page-desc">从本机目录、ZIP、HTTPS 下载链接添加 Skill（仓库导入暂未开放）。所选 Skill 目录须包含 SKILL.md。</p>
         {selected ? <p className="import-identity">导入编号 <code>{selected}</code></p> : null}
         {!selected ? <form onSubmit={submit}>
           <fieldset disabled={locked} className="import-fields">
             <div className="field"><label htmlFor="import-kind">来源类型</label>
               <select id="import-kind" value={kind} onChange={(e) => setKind(e.target.value as SkillImportSourceKind)}>
-                <option value="local_dir">本地目录</option><option value="local_zip">本地 ZIP</option><option value="https_zip">HTTPS ZIP 下载链接</option>
+                <option value="local_dir">本地目录</option><option value="local_zip">本地 ZIP</option><option value="https_zip">HTTPS ZIP 下载链接</option><option value="git" disabled>github.com 公开仓库（暂未开放）</option>
               </select></div>
             {kind === 'https_zip' ? <>
               <div className="field"><label htmlFor="import-url">HTTPS ZIP 下载链接</label>
@@ -121,6 +128,19 @@ export default function SkillImportsPage() {
               <div className="field"><label htmlFor="import-sha256">预期 SHA256（可选）</label>
                 <input id="import-sha256" value={expectedSHA256} onChange={(e) => setExpectedSHA256(e.target.value)} pattern="[a-f0-9]{64}" maxLength={64} autoComplete="off" spellCheck={false} />
                 <small className="muted-text">填写来源方提供的 64 位小写摘要；不一致时停止导入。</small></div>
+            </> : kind === 'git' ? <>
+              <div className="field"><label htmlFor="import-git-url">仓库地址</label>
+                <input id="import-git-url" type="url" value={url} onChange={(e) => setUrl(e.target.value)} required maxLength={4096} autoComplete="off" spellCheck={false} placeholder="https://github.com/owner/skill-repo" aria-describedby="import-git-url-help" />
+                <small id="import-git-url-help" className="muted-text">仓库入口尚待真实网络验收，当前暂未开放；导入时会固定仓库地址与提交，不接受本机或内网地址。</small></div>
+              <div className="field"><label htmlFor="import-git-ref">分支或标签（可选）</label>
+                <input id="import-git-ref" value={repoRef} onChange={(e) => setRepoRef(e.target.value)} maxLength={256} autoComplete="off" spellCheck={false} placeholder="留空使用默认分支" />
+                <small className="muted-text">填写分支或标签名称；导入后固定该次解析到的提交。</small></div>
+              <div className="field"><label htmlFor="import-git-subdir">仓库内的 Skill 目录（可选）</label>
+                <input id="import-git-subdir" value={repoSubDir} onChange={(e) => setRepoSubDir(e.target.value)} maxLength={512} autoComplete="off" spellCheck={false} placeholder="例如 skills/my-skill" />
+                <small className="muted-text">SKILL.md 在仓库根层时留空。</small></div>
+              <div className="field"><label htmlFor="import-git-commit">预期提交（可选）</label>
+                <input id="import-git-commit" value={repoCommit} onChange={(e) => setRepoCommit(e.target.value)} pattern="[a-f0-9]{40}" maxLength={40} autoComplete="off" spellCheck={false} />
+                <small className="muted-text">填写 40 位小写提交 SHA；仓库该位置不是此提交时停止导入。</small></div>
             </> : <div className="field"><label htmlFor="import-path">本机绝对路径</label>
               <input id="import-path" value={path} onChange={(e) => setPath(e.target.value)} required maxLength={4096} autoComplete="off" spellCheck={false}
                 placeholder={kind === 'local_zip' ? '例如 /home/me/Downloads/skill.zip' : '例如 /home/me/skills/my-skill'} aria-describedby="import-path-help" />
@@ -128,7 +148,7 @@ export default function SkillImportsPage() {
             <div className="field"><label htmlFor="import-actor">操作者</label>
               <input id="import-actor" value={actorId} onChange={(e) => setActorId(e.target.value)} required maxLength={128} autoComplete="off" /></div>
           </fieldset>
-          {!selected ? <button type="submit" className="btn btn-primary" disabled={!!busy || !(kind === 'https_zip' ? url.trim() : path.trim()) || !actorId.trim()}>导入并检查</button> : null}
+          {!selected ? <button type="submit" className="btn btn-primary" disabled={!!busy || !(kind === 'local_dir' || kind === 'local_zip' ? path.trim() : url.trim()) || !actorId.trim()}>导入并检查</button> : null}
         </form> : null}
         {busy ? <p role="status" className="page-desc">{busy === 'create' ? '正在保存副本并检查…' : '正在读取记录并校验…'}</p> : null}
         {error ? <p role="alert" className="action-error">{error}</p> : null}
@@ -162,6 +182,7 @@ export default function SkillImportsPage() {
       {result.admission.verdict === 'quarantine' ? <p className="action-error">此候选被隔离。请检查发现项，在修复来源后重新导入。</p> : null}
       <p className="page-desc">{result.import.files.length} 个文件 · {bytesLabel(result.import.files.reduce((total, file) => total + file.bytes, 0))} · {sourceLabel(result.import.source_kind)} · {formatTime(result.import.created_at)}</p>
       {result.import.excluded_git_metadata ? <p className="page-desc">已排除 .git 元数据及钩子。</p> : null}
+      {result.import.source_kind === 'git' ? <p className="page-desc">已固定仓库 {result.import.git.url} · 提交 <code>{result.import.git.commit_sha}</code>{result.import.git.ref ? ` · ${result.import.git.ref}` : ''}{result.import.git.sub_dir ? ` · ${result.import.git.sub_dir}` : ''} · 检查新版时将重新获取此仓库。</p> : null}
       {result.import.remote ? <p className="page-desc">已固定本次下载 · {bytesLabel(result.import.remote.archive_bytes)} · Skill 目录：{result.import.remote.archive_path || 'ZIP 根层'} · {result.import.remote.expected_sha256 ? '预期 SHA256 已匹配' : '未提供预期 SHA256，发布者身份尚未确认'}</p> : null}
       <h3>声明的权限需求</h3>
       <p className="page-desc">以下是内容声明和静态检查得到的需求，尚未批准。</p>

@@ -162,3 +162,23 @@ describe('remote Skill import routing', () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('update source save and schedule view', () => {
+  beforeEach(() => { vi.resetModules(); vi.stubGlobal('fetch', vi.fn()); });
+  afterEach(() => { vi.unstubAllGlobals(); });
+  it('sends the caller URL once, reads back the redacted view and refuses mismatched installs', async () => {
+    const { localApi } = await import('./api');
+    const view = JSON.parse(readFileSync(new URL('../../../agentshield/testdata/contracts/local-skill-update-schedule-view.json', import.meta.url), 'utf8'));
+    vi.mocked(fetch).mockResolvedValueOnce(response(view));
+    const saved = await localApi.saveSkillUpdateSource(view.install_id, { schema_version: 'local-skill-update-source-save/v1', remote_url: 'https://download.example.com/repo.zip?token=private', enable: true, actor_id: 'fixture' });
+    expect(saved).toMatchObject({ source_state: 'saved', enabled: true });
+    expect(vi.mocked(fetch).mock.calls[0][0]).toBe(`/v1/skill-installations/operations/${view.install_id}/update-source`);
+    // The raw URL exists only in the request body; the returned view is redacted.
+    expect(JSON.parse(String(vi.mocked(fetch).mock.calls[0][1]?.body)).remote_url).toContain('token=private');
+    expect(JSON.stringify(saved)).not.toContain('token=');
+    expect(JSON.stringify(saved)).not.toContain('?');
+    vi.mocked(fetch).mockResolvedValueOnce(response({ ...view, install_id: 'sin-' + '0'.repeat(64) }));
+    await expect(localApi.readSkillUpdateSource(view.install_id)).rejects.toMatchObject({ status: 502 });
+    expect(vi.mocked(fetch).mock.calls[1][0]).toBe(`/v1/skill-installations/operations/${view.install_id}/update-source`);
+  });
+});

@@ -3,7 +3,7 @@ import SkillRemovalDialog from '../components/SkillRemovalDialog';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import PageHeader from '@/components/PageHeader';
-import { localApi } from '../api';
+import { localApi, LocalApiError } from '../api';
 import { skillInstallErrorText } from '../skillInstall';
 import { useLocalSession } from '../session';
 import type { SkillContentChange, SkillInstallationCatalog, SkillInstallationInspection, SkillRemovalView } from '../types';
@@ -12,6 +12,22 @@ const recordedLabel = { installed_unverified: '记录显示已安装', rolled_ba
 const stateLabel = { matched: '与安装时的内容和归属一致', changed: '检测到安装内容或归属变化', missing: '未找到原安装目标', unavailable: '本次未能完成检查' };
 const changeLabel: Record<SkillContentChange['change'], string> = { added: '新增', modified: '内容或执行权限变化', removed: '缺失', type_changed: '文件类型变化', ownership_changed: '安装归属变化' };
 const kindLabel = { file: '文件', directory: '目录', other: '其他对象' };
+
+// The status page fires several read-only installation reads at once (the
+// removal view, the content inspection and the update-source panel share one
+// backend slot). A 429 there is self-inflicted contention between the page's
+// own panels, not a state the user must see, so status reads retry briefly
+// before an error is surfaced.
+async function readWithBusyRetry<T>(op: (signal: AbortSignal) => Promise<T>, signal: AbortSignal): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await op(signal);
+    } catch (err) {
+      if (attempt >= 4 || signal.aborted || !(err instanceof LocalApiError) || err.message !== 'skill_install_busy') throw err;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+}
 
 export default function InstalledSkillsPage() {
   const { status } = useLocalSession();
@@ -59,14 +75,14 @@ export default function InstalledSkillsPage() {
       try {
         if (record.recorded_status === 'installed_unverified') {
           try {
-            const current = await localApi.skillRemoval(record.install_id, controller.signal);
+            const current = await readWithBusyRetry((s) => localApi.skillRemoval(record.install_id, s), controller.signal);
             if (current.record.plan.signature !== record.plan.signature || current.record.claim_signature !== record.claim_signature) throw new Error('skill_install_incompatible_response');
             if (!stopped) setRemoval(current);
             if (current.status === 'removed') return;
           } catch (err) { if (!stopped) setRemovalError(skillInstallErrorText(err)); }
         }
         if (stopped) return;
-        const data = await localApi.inspectSkillInstallation(record.install_id, controller.signal);
+        const data = await readWithBusyRetry((s) => localApi.inspectSkillInstallation(record.install_id, s), controller.signal);
         if (data.record.plan.signature !== record.plan.signature || data.record.claim_signature !== record.claim_signature) throw new Error('skill_install_incompatible_response');
         if (!stopped) setInspection(data);
       } catch (err) { if (!stopped) setInspectError(skillInstallErrorText(err)); }
@@ -122,7 +138,7 @@ export default function InstalledSkillsPage() {
           </div>
           {record.recorded_status === 'installed_unverified' ? <SkillRemovalDialog key={record.install_id} current={removal?.record.install_id === selected ? removal : null} disabled={checking || !visible} onOpen={setRemovalOpen} onRefresh={refreshDetails} /> : null}
           {removal?.record.install_id === selected && removal.status === 'not_requested' && !checking && !removalOpen ? <div className="import-actions"><Link className="btn" to={`/skill-updates?install_id=${encodeURIComponent(record.install_id)}`}>审阅候选并更新</Link></div> : null}
-          {record.recorded_status === 'installed_unverified' ? <SkillUpdateCheckPanel key={record.install_id + record.claim_signature} installId={record.install_id} disabled={removalOpen || !visible || !!removal?.claim} /> : null}
+          {record.recorded_status === 'installed_unverified' ? <SkillUpdateCheckPanel key={record.install_id + record.claim_signature} installId={record.install_id} importId={record.plan.source.import_id} disabled={removalOpen || !visible || !!removal?.claim} /> : null}
           <details><summary>查看安装基线</summary><dl><dt>操作编号</dt><dd><code>{record.install_id}</code></dd><dt>副本摘要</dt><dd><code>{record.plan.source.artifact_digest}</code></dd><dt>实例编号</dt><dd><code>{record.plan.instance_id}</code></dd></dl></details>
         </>}
       </section>

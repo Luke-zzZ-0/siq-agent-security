@@ -5,6 +5,7 @@ import SimpleTable, { type TableColumn } from '@/components/SimpleTable';
 import { Icon, type IconName } from '@/components/icons';
 import { localApi } from '../api';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 import {
   adapterLabel,
   adapterTag,
@@ -45,14 +46,17 @@ export default function OverviewPage() {
   const { status, error, reload } = useLocalSession();
   const [overview, setOverview] = useState<LedgerOverview | null>(null);
   const connected = status !== null;
+  const guard = useLoadGuard();
 
   useEffect(() => {
     if (!connected) return;
-    localApi
-      .assets()
-      .then((data) => setOverview(data.overview))
+    guard(() => localApi.assets())
+      .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
+        setOverview(data.overview);
+      })
       .catch(() => setOverview(null));
-  }, [connected, status?.chain.head_seq, status?.enforcement_mode]);
+  }, [connected, status?.chain.head_seq, status?.enforcement_mode, guard]);
 
   const num = (v: number | undefined): string =>
     overview ? String(v ?? 0) : connected ? '…' : '—';

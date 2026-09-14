@@ -7,6 +7,7 @@ const text = (v: unknown): v is string => typeof v === 'string';
 const count = (v: unknown, max: number): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= max;
 const time = (v: unknown): boolean => text(v) && Number.isFinite(Date.parse(v));
 const kind = (v: unknown): boolean => v === 'local_dir' || v === 'local_zip';
+const commit = /^[a-f0-9]{40}$/;
 
 export function isSkillImportList(v: unknown): v is SkillImportList {
   if (!object(v) || (v.schema_version !== 'local-skill-import-list/v1' && v.schema_version !== 'local-skill-import-list/v2') || !Array.isArray(v.items) || v.items.length > 64) return false;
@@ -16,7 +17,7 @@ export function isSkillImportList(v: unknown): v is SkillImportList {
     ids.add(item.import_id);
     if (item.record_status === 'unavailable') return item.summary === null;
     const s = item.summary;
-    return item.record_status === 'metadata_verified' && object(s) && time(s.created_at) && (kind(s.source_kind) || (v.schema_version === 'local-skill-import-list/v2' && s.source_kind === 'https_zip')) && text(s.actor_id) &&
+    return item.record_status === 'metadata_verified' && object(s) && time(s.created_at) && (kind(s.source_kind) || (v.schema_version === 'local-skill-import-list/v2' && (s.source_kind === 'https_zip' || s.source_kind === 'git'))) && text(s.actor_id) &&
       text(s.artifact_digest) && hash.test(s.artifact_digest) && count(s.file_count, 2000) && s.file_count > 0 && count(s.total_bytes, 67108864);
   });
 }
@@ -32,6 +33,13 @@ export function isSkillImportResult(v: unknown, expectedId: string): v is SkillI
         text(f.path) && text(f.sha256) && hash.test(f.sha256) && count(f.bytes, 8388608) && typeof f.executable === 'boolean')) return false;
   if (v.schema_version === 'local-skill-import-result/v1') {
     if (r.schema_version !== 'local-skill-import/v1' || !kind(r.source_kind) || r.remote !== undefined) return false;
+  } else if (r.source_kind === 'git') {
+    const g = r.git;
+    if (r.schema_version !== 'local-skill-import/v2' || !object(g) || r.remote !== undefined ||
+      !text(g.url) || g.url.length === 0 || g.url.length > 4096 || !text(g.ref) || g.ref.length > 256 ||
+      !text(g.sub_dir) || g.sub_dir.length > 512 || !text(g.expected_commit) ||
+      (g.expected_commit !== '' && !commit.test(g.expected_commit)) ||
+      !text(g.commit_sha) || !commit.test(g.commit_sha)) return false;
   } else {
     const m = r.remote;
     if (r.schema_version !== 'local-skill-import/v2' || r.source_kind !== 'https_zip' || !object(m) ||
@@ -60,6 +68,9 @@ export function skillImportErrorText(error: unknown): string {
     skill_import_permission_target_unavailable: '目标 Hermes 实例已不可用，请重新检查实例列表。',
     skill_import_invalid: '无法导入。请检查来源、归档内的 Skill 目录、预期摘要，以及 ZIP 内的路径和文件类型。所选目录须包含 SKILL.md。',
     skill_import_url_blocked: '下载链接不符合要求。请使用公网 HTTPS ZIP 链接；暂不支持内网地址、非标准端口、账号密码或重定向到这些地址。',
+    skill_import_git_transport_unavailable: '仓库导入尚未开放，请先使用 HTTPS ZIP 或本地目录导入。',
+    skill_import_git_host_unsupported: 'Git 仓库地址不受支持。目前仅支持 github.com 公开仓库，请改用仓库主分支的 HTTPS ZIP 链接或本地目录导入。',
+    skill_import_source_unavailable: '暂时无法从来源获取内容。请检查网络与代理设置，确认仓库为公开可见，然后重试。',
     skill_import_download_failed: '下载未完成。请检查链接是否直接返回 ZIP、是否需要登录，以及网络和证书是否正常，然后重试。',
     skill_import_archive_mismatch: '下载内容与预期 SHA256 不一致，未保存候选。请向来源方核实版本和摘要。',
     skill_import_limit: '导入内容或候选数量超过上限。单个文件最多 8 MiB，内容合计 64 MiB，ZIP 最多 32 MiB；最多保存 64 个候选。',

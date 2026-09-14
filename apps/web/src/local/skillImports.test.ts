@@ -34,6 +34,25 @@ describe('Skill candidate response boundaries', () => {
     expect(isSkillImportList(list)).toBe(true);
     expect(isSkillImportList({ ...list, schema_version: 'local-skill-import-list/v1' })).toBe(false);
   });
+  it('accepts v2 git records with pinned commits but refuses bad or duplicated upstream metadata', () => {
+    const remote = sample('local-skill-import-result', 2);
+    const id = remote.import.import_id;
+    const gitRecord = { ...remote.import, source_kind: 'git', remote: undefined,
+      git: { url: 'https://git.example.com/org/skill.git', ref: 'main', sub_dir: 'skill', expected_commit: '', commit_sha: 'a'.repeat(40) } };
+    const result = { ...remote, import: gitRecord };
+    expect(isSkillImportResult(result, id)).toBe(true);
+    for (const git of [{ ...gitRecord.git, commit_sha: 'z'.repeat(40) }, { ...gitRecord.git, commit_sha: 'a'.repeat(39) },
+      { ...gitRecord.git, expected_commit: 'b'.repeat(40) + 'x' }, { ...gitRecord.git, url: '' }, { ...gitRecord.git, ref: 'x'.repeat(257) },
+      { ...gitRecord.git, commit_sha: '' }]) {
+      expect(isSkillImportResult({ ...result, import: { ...gitRecord, git } }, id)).toBe(false);
+    }
+    expect(isSkillImportResult({ ...result, import: { ...gitRecord, remote: remote.import.remote } }, id)).toBe(false);
+    const list = sample('local-skill-import-list', 2);
+    const gitSummary = { ...list.items[0].summary, source_kind: 'git' };
+    expect(isSkillImportList({ ...list, items: [{ ...list.items[0], summary: gitSummary }, list.items[1]] })).toBe(true);
+    const v1List = sample('local-skill-import-list');
+    expect(isSkillImportList({ ...v1List, items: [{ ...v1List.items[0], summary: { ...v1List.items[0].summary, source_kind: 'git' } }, v1List.items[1]] })).toBe(false);
+  });
   it('generates opaque request IDs without source data', () => {
     const ids = Array.from({ length: 50 }, newImportId);
     expect(ids.every((id) => /^si-[a-f0-9]{32}$/.test(id))).toBe(true);

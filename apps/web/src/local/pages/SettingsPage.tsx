@@ -4,6 +4,7 @@ import SimpleTable, { type TableColumn } from '@/components/SimpleTable';
 import { localApi } from '../api';
 import type { PlatformInfo } from '../types';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 import { adapterLabel, adapterTag, configurationLabel, platformLabel } from '../format';
 import RuntimeCheckDialog from '../components/RuntimeCheckDialog';
 import AdapterChangeDialog, { type AdapterChangeRequest } from '../components/AdapterChangeDialog';
@@ -34,12 +35,15 @@ export default function SettingsPage() {
     if (status?.enforcement_mode) setMode(status.enforcement_mode);
   }, [status?.enforcement_mode]);
 
+  const guard = useLoadGuard();
+
   useEffect(() => {
-    localApi
-      .audit()
-      .then((res) => setAudit(res.events ?? []))
+    guard(() => localApi.audit())
+      .then((res) => {
+        if (res !== undefined) setAudit(res.events ?? []); // undefined = superseded
+      })
       .catch(() => setAudit([]));
-  }, [msg, status?.enforcement_mode]);
+  }, [msg, status?.enforcement_mode, guard]);
 
   const report = (text: string, isErr = false) => {
     setMsg(text);
