@@ -1,0 +1,27 @@
+--- a/scripts/personal-experience/n09b-openclaw-runtime-leg.py
++++ b/scripts/personal-experience/n09b-openclaw-runtime-leg.py
+@@ -66,0 +67,3 @@
++from n09_evidence import checks_complete
++
++
+@@ -120,0 +124 @@
++        self.completed = False
+@@ -737 +741 @@
+-            "console approved the hold; identical retry consumed it once (hold_approval_consumed on chain)",
++            "component/API check: approval consumed by a direct decide retry; no OpenClaw post-approval execution asserted",
+@@ -905 +909 @@
+-            "passed": all(v["passed"] for v in self.journey.values() if "passed" in v),
++            "passed": self.completed and checks_complete(self.checks, self.journey),
+@@ -913,0 +918,2 @@
++                "C6b is component/API evidence, not native approved execution",
++                "no complete J1-J11 acceptance claim",
+@@ -917 +923 @@
+-        all_passed = all(v["passed"] for v in self.journey.values() if "passed" in v)
++        all_passed = self.completed and checks_complete(self.checks, self.journey)
+@@ -979,2 +985,2 @@
+-            "- linux/openclaw may be recorded as `complete_acceptance` (runtime=native, "
+-            "classification=controlled_start) only because C1-C10 passed on this machine.",
++            "- C1-C10 are partial observations, not complete J1-J11 acceptance. C6b is a direct API check; "
++            "OpenClaw post-approval execution and side-effect count remain unverified.",
+@@ -1021,0 +1028 @@
++            self.completed = True

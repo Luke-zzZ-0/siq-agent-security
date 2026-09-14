@@ -1,0 +1,60 @@
+{
+  "schema_version": "personal-journey-browser/v1",
+  "recorded_at": "2026-09-13T23:33:07.793653+00:00",
+  "passed": true,
+  "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+  "harness_sha256": "0e43bf3c860fb8d4c380b67f0e7bc5b2b01b02a35fb384d753883e6f27d1df90",
+  "checks": {
+    "overview_before_onboarding_is_single_honest_source": true,
+    "discovery_finds_fixture_skill_without_touching_config": true,
+    "first_onboarding_completed_via_ui": true,
+    "session_refresh_restores_management_session": true,
+    "raw_content_default_off_then_explicit_enable": true,
+    "observer_enable_preserves_adapter_registration": true,
+    "allow_decided_in_console": true,
+    "approved_retry_executes_exactly_once": true,
+    "deny_decided_in_console": true,
+    "denied_retry_stays_blocked_without_file": true,
+    "activities_render_real_backend_task": true,
+    "skill_import_checked_in_ui": true,
+    "skill_update_reviewed_and_committed": true,
+    "no_browser_runtime_errors": true
+  },
+  "measurement": {
+    "first_onboarding_seconds": 4.6,
+    "api_prepared_seconds_excluded": 0.0,
+    "first_onboarding_user_steps": 16,
+    "steps": [
+      "overview:输入配对码",
+      "overview:建立管理会话",
+      "overview:确认未接入状态并前往设置",
+      "agents:打开发现页",
+      "agents:扫描本机",
+      "agents:准入发现到的 Skill",
+      "settings:打开管理实例",
+      "instance:填写操作者",
+      "instance:起草并编辑实例权限",
+      "permissions:填写允许工具与目录",
+      "permissions:保存待批准权限",
+      "api:待批准权限附加写入审批（API 准备，非 UI 步骤）",
+      "instance:刷新权限状态",
+      "permissions:核对权限范围并应用授权",
+      "instance:选择会话时长并准备接入",
+      "instance:确认应用接入",
+      "instance:查看接入诊断",
+      "console:批准本次请求",
+      "console:拒绝本次请求",
+      "skills:导入 Skill 并检查",
+      "skills:审阅候选并更新",
+      "skills:准备更新副本",
+      "skills:确认更新 Skill"
+    ],
+    "measured_on": "Linux Chromium headless, isolated daemon and profile"
+  },
+  "api_prepared_steps": [
+    "require-approval 附加到待批准的 UI 草稿（approve/deploy 仍由 UI 完成）",
+    "intent/v2 任务登记（合成任务主体，作为平台任务源替代）",
+    "更新目标 v1 导入/授权/暂存/安装与候选 v2 准备（install_id）"
+  ],
+  "scope": "Real Chromium, real daemon, real public Hermes CLI and isolated profile. UI onboarding with measured first-success, console allow/deny with native hold consumption, real backend activity trace, UI import and update commit. Synthetic model and operator; no real user configuration or model calls."
+}

@@ -1,0 +1,788 @@
+{
+  "schema_version": "personal-acceptance-baseline/v1",
+  "batch": "n09b-openclaw-runtime-20260914-090546",
+  "recorded_at": "2026-09-14T01:06:16Z",
+  "os": "Linux 6.17.0-1014-nvidia aarch64",
+  "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+  "hermes_cli_version": "Hermes Agent 0.21.0 (2026.8.31)",
+  "openclaw_version": "OpenClaw 2026.5.12 (f066dd2)",
+  "legs": [
+    {
+      "leg_id": "L1",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:32:47.726372+00:00",
+      "finished_at": "2026-09-13T23:33:07.836788+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+      "report_sha256": "7d96f9af7e27ac8ec8d47d6f52f2cf30dee7fa27fed17ab21d0f719b470f893d",
+      "checks_passed": 14
+    },
+    {
+      "leg_id": "L2",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:07.837302+00:00",
+      "finished_at": "2026-09-13T23:33:18.377403+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json",
+      "report_sha256": "c572b8bebf9cfad1b37cab47db54200d9636cd14b8eef17ef1f6a4a52e92f583",
+      "checks_passed": 12
+    },
+    {
+      "leg_id": "L3",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:18.377729+00:00",
+      "finished_at": "2026-09-13T23:33:29.969683+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-report.json",
+      "report_sha256": "cbdb6bdd55a582ae29794f66f544a4089429d4fcc95c7257883abf5cdf8abac2",
+      "checks_passed": 11
+    },
+    {
+      "leg_id": "L4",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:29.970118+00:00",
+      "finished_at": "2026-09-13T23:33:40.308828+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json",
+      "report_sha256": "63ae1b422fe8f45e261331dac945aeacf6a7b984e80bc8b81cd8f449ab811b47",
+      "checks_passed": 19
+    },
+    {
+      "leg_id": "L5",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:40.309322+00:00",
+      "finished_at": "2026-09-13T23:33:44.833292+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json",
+      "report_sha256": "77ecdade542a44992c47fe2c8edd1c07a160d48eec009f585f4d92d7d8d73da4",
+      "checks_passed": 7
+    },
+    {
+      "leg_id": "L6",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:44.833739+00:00",
+      "finished_at": "2026-09-13T23:33:55.824659+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json",
+      "report_sha256": "6e90e023748fe5a055465960d05ce2031b2320413f31979f5f7f62cbbe45de90",
+      "checks_passed": 13
+    },
+    {
+      "leg_id": "N09B",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-14T01:05:46Z",
+      "finished_at": "2026-09-14T01:06:16Z",
+      "report_ref": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json",
+      "report_sha256": "1f9eb92eb6a463a427830de12af3b2017db4fcc40504296301ea3677a2066192",
+      "checks_passed": 11
+    }
+  ],
+  "cells": [
+    {
+      "platform": "hermes",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ]
+        },
+        {
+          "item": "J2",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ]
+        },
+        {
+          "item": "J3",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ]
+        },
+        {
+          "item": "J4",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json"
+          ]
+        },
+        {
+          "item": "J5",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json"
+          ]
+        },
+        {
+          "item": "J6",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json"
+          ]
+        },
+        {
+          "item": "J7",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-report.json"
+          ]
+        },
+        {
+          "item": "J8",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ]
+        },
+        {
+          "item": "J9",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ]
+        },
+        {
+          "item": "J10",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ]
+        },
+        {
+          "item": "J11",
+          "status": "native",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J2",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J3",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J4",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J5",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J6",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J7",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J8",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J9",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J10",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        },
+        {
+          "item": "J11",
+          "status": "controlled_start",
+          "classification": "complete_acceptance",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "upstream_runtime_unconfirmed",
+          "note": "WorkBuddy 上游运行时未在本机确认可用，无法发起任何 leg"
+        }
+      ]
+    },
+    {
+      "platform": "hermes",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 macOS 实机"
+        }
+      ]
+    },
+    {
+      "platform": "hermes",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "reason": "environment_unavailable",
+          "note": "无 Windows 实机"
+        }
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json": "7d96f9af7e27ac8ec8d47d6f52f2cf30dee7fa27fed17ab21d0f719b470f893d",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json": "c572b8bebf9cfad1b37cab47db54200d9636cd14b8eef17ef1f6a4a52e92f583",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-report.json": "cbdb6bdd55a582ae29794f66f544a4089429d4fcc95c7257883abf5cdf8abac2",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json": "63ae1b422fe8f45e261331dac945aeacf6a7b984e80bc8b81cd8f449ab811b47",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json": "77ecdade542a44992c47fe2c8edd1c07a160d48eec009f585f4d92d7d8d73da4",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json": "6e90e023748fe5a055465960d05ce2031b2320413f31979f5f7f62cbbe45de90",
+    "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json": "1f9eb92eb6a463a427830de12af3b2017db4fcc40504296301ea3677a2066192"
+  },
+  "notes": [
+    "linux/hermes 11 行判定承继 n09a 基线批次（n09a-linux-baseline-20260914-072756），legs L1-L6 与其报告哈希原样复核。",
+    "linux/openclaw 11 行依 openclaw-runtime-leg 规格 §5 升级：本批 N09B leg C1-C10 全过（真实 OpenClaw 2026.5.12 + 托管安装 + 真实 gateway 会话），status=controlled_start，refs 指向本批 leg-report.json。",
+    "linux/openclaw 覆盖映射（诚实标注）：J1←C2/C3 托管安装、J3←C3/C4 真实运行时加载、J4←C5 allow+执行、J5←C6a/C6b hold→审批→一次性消费、J7←C8 回执链+runtime-identity 绑定、J8←C7 fail-closed、J9←C7 后同 state 重启 daemon 且 C8 复核通过、J10←C9 卸载恢复、J11←C10 卫生；J2（发现）与 J6（Skill 安装/更新/移除）旅程未在本 leg 单独演练，格级判定依据规格 §5 的 C1-C10 判据，缺口如实记录于此。",
+    "linux/workbuddy 与全部 macOS/Windows 格维持诚实 blocked；runtime_state 恒为 unverified（产品无执行后端 readback），机器证据为签名决策回执。"
+  ]
+}

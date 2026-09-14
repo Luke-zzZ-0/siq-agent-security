@@ -1,0 +1,57 @@
+{
+  "schema_version": "personal-skill-attribution-native/v1",
+  "passed": true,
+  "candidate_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+  "harness_sha256": "3029d4e7162b8600895373fa91fc6ea71b2b502b139e58a584c4c848f7137349",
+  "native_phase": {
+    "checks": [
+      "managed_preview_does_not_mutate_host",
+      "managed_install_uses_issued_identity",
+      "native_enable_preserves_other_profile_and_settings",
+      "diagnosis_keeps_runtime_unverified",
+      "managed_profile_product_selfcheck_uses_separate_authority",
+      "native_cli_started",
+      "native_generated_session_automatically_bound",
+      "instance_credential_used_without_manual_intent",
+      "environment_cannot_override_managed_agent",
+      "allowed_read",
+      "write_denied_before_execution",
+      "allowed_after_denial",
+      "native_raw_parameters_captured_after_explicit_task_grant",
+      "native_raw_output_captured_after_explicit_task_grant",
+      "receipt_chain_verified",
+      "revoked_identity_blocks_new_native_session",
+      "revoked_calls_record_unsigned_denials"
+    ],
+    "install_method": "managed_v3_preview_apply_and_public_cli_native_enable"
+  },
+  "checks": [
+    "product_skill_import_approval_installation",
+    "installed_content_bound_instance_permission",
+    "real_hermes_host_native_flow",
+    "product_skill_import_approval_installation",
+    "installed_content_bound_instance_permission",
+    "attribution_enforcement_via_daemon_state_config",
+    "exact_claim_verified_with_binding_grant",
+    "forged_hash_denied_skill_attribution_mismatch",
+    "unclaimed_call_denied_under_enforcement",
+    "verified_claim_cannot_widen_grant_scope",
+    "no_side_effect_from_denied_write"
+  ],
+  "enforcement_config": {
+    "intent_enforcement": "required",
+    "enforcement_mode": "block",
+    "skill_attribution_enforcement": true
+  },
+  "attribution_probes": {
+    "probe_session": "n05-attribution-probe-0001",
+    "skill_id": "local_dir:intent-fixture@32015f33555a",
+    "checks": [
+      "exact_claim_verified_with_binding_grant",
+      "forged_hash_denied_skill_attribution_mismatch",
+      "unclaimed_call_denied_under_enforcement",
+      "verified_claim_cannot_widen_grant_scope",
+      "no_side_effect_from_denied_write"
+    ]
+  }
+}

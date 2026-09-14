@@ -1,0 +1,10 @@
+{
+  "schema_version": "n09-review-verification/v1",
+  "offline_only": true,
+  "old_checker_failed_report_with_updated_hash_accepted": true,
+  "old_checker_sibling_prefix_accepted": true,
+  "new_unit_methods_passed": 7,
+  "new_schema_test_methods_passed": 1,
+  "native_runtime_rerun": false,
+  "release_acceptance": false
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "personal-hermes-hold-consume-native-smoke/v1",
+  "recorded_at": "2026-09-13T23:33:18.298316+00:00",
+  "passed": true,
+  "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+  "harness_sha256": "1a610cfd4b7ccca92b52f72a8bce14cdf385b987fa63827d910a7b6af833e09e",
+  "native_cli_sha256": "4e623fce245c1fe6e70ae0edd3248b376ceaf94d560d63f5881cc7a3415ec609",
+  "native_entrypoint": "public hermes chat --oneshot; normal Agent loop and plugin lifecycle",
+  "session_id_source": "native pre_llm_call; fixture observer only; not injected",
+  "checks": [
+    "grant_require_approval_applied",
+    "native_cli_runs_completed",
+    "hold_degrades_to_block_without_execution",
+    "block_message_points_to_console",
+    "console_approval_recorded",
+    "approved_retry_consumed_hold_and_executed_once",
+    "hold_status_reports_consumed_after_retry",
+    "no_new_pending_confirmation_after_consumption",
+    "single_execution_observation_on_consumption_receipt",
+    "retry_after_consumption_reholds_and_denial_blocks",
+    "unresolved_retry_never_executes",
+    "receipt_chain_verified"
+  ],
+  "attempts": [
+    {
+      "run": "initial",
+      "tool_call_id": "write-main",
+      "blocked": true,
+      "target_file_written": false
+    },
+    {
+      "run": "consume",
+      "tool_call_id": "write-main",
+      "blocked": false,
+      "target_file_written": true
+    },
+    {
+      "run": "replay",
+      "tool_call_id": "write-main",
+      "blocked": true,
+      "target_file_written": false
+    },
+    {
+      "run": "final",
+      "tool_call_id": "write-main",
+      "blocked": true,
+      "target_file_written": false
+    }
+  ],
+  "console_resolutions": [
+    {
+      "run": "initial",
+      "approve": true,
+      "resolve_action": "allow"
+    },
+    {
+      "run": "consume",
+      "approve": null,
+      "consumed_by_retry": true
+    },
+    {
+      "run": "replay",
+      "approve": false,
+      "resolve_action": "deny"
+    }
+  ],
+  "receipt_counts": {
+    "holds": 3,
+    "consumption_allows": 1,
+    "observations": 1,
+    "hold_resolutions": 2
+  },
+  "profile_config_unchanged": true,
+  "limitations": [
+    "each CLI retry is a fresh host session; in-process resume was not exercised",
+    "duplicate-callback dedup (several pending holds for one call before any approval) is a documented known limitation: each pending hold still needs its own approval and none of them can produce a duplicate side effect",
+    "task-scoped similar authorizations (multi-use approvals) are intentionally deferred",
+    "synthetic model, operator and target; no real user data, contacts or external services"
+  ]
+}

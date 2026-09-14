@@ -1,0 +1,101 @@
+{
+ "schema_version": "siq-leg-report/v1",
+ "leg": "N09-B linux/openclaw runtime leg",
+ "batch": "n09b-openclaw-runtime-20260914-090546",
+ "recorded_at": "2026-09-14T01:06:16Z",
+ "baseline_commit": "0720730f821373b00bb8bfd5ec870fec147e5746",
+ "runtime": {
+  "os": "linux",
+  "openclaw_mjs": "/home/maoyd/.nvm/versions/node/v22.22.1/lib/node_modules/openclaw/openclaw.mjs",
+  "openclaw_node": "/home/maoyd/.nvm/versions/node/v22.22.1/bin/node",
+  "openclaw_version": "OpenClaw 2026.5.12 (f066dd2)",
+  "agentshield_binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+  "model_channel": "local router http://127.0.0.1:8016 -> claude-sonnet-4-6 (anthropic-messages)",
+  "daemon": "real agentshield serve --mode block, intent_enforcement=required",
+  "install_method": "managed adapter install via daemon HTTP API (preview -> install)"
+ },
+ "started_at": "2026-09-14T01:05:46Z",
+ "finished_at": "2026-09-14T01:06:16Z",
+ "passed": true,
+ "checks": [
+  "C1_daemon_start_and_pair",
+  "C2_preview_no_mutation_plan_v3",
+  "C3_managed_install_lands",
+  "C4_real_runtime_loads_plugin",
+  "C5_allow_path_real_agent_turn",
+  "C6a_real_turn_held_and_blocked",
+  "C6b_console_approve_then_consume",
+  "C7_fail_closed_when_daemon_down",
+  "C8_receipts_chain_verified_runtime_identity",
+  "C9_managed_uninstall_restores",
+  "C10_hygiene"
+ ],
+ "journey_checks": {
+  "C1_daemon_start_and_pair": {
+   "passed": true,
+   "detail": "isolated daemon up, admin paired, state dir initialized"
+  },
+  "C2_preview_no_mutation_plan_v3": {
+   "passed": true,
+   "detail": "plan ap-a763594ade38b66b85ce6545bef498d0, 5 changes, host snapshot unchanged"
+  },
+  "C3_managed_install_lands": {
+   "passed": true,
+   "detail": "managed fields pinned, assets byte-identical, no installPolicy, fresh config written"
+  },
+  "C4_real_runtime_loads_plugin": {
+   "passed": true,
+   "detail": "openclaw plugins list: siq-agent-security v0.3.0 enabled+loaded from managed config root"
+  },
+  "C5": {
+   "notes": [
+    "fixture answer surfaced in visible text: True"
+   ]
+  },
+  "C5_allow_path_real_agent_turn": {
+   "passed": true,
+   "detail": "real turn executed read (toolSummary={'calls': 1, 'tools': ['read'], 'failures': 0}); allow receipt on runtime-identity envelope, grant grt-5a2b3156cd6e, authority valid; answer surfaced=True"
+  },
+  "C6": {
+   "notes": [
+    "real-turn block message: The write was blocked by the security layer: `siq-agent-security: decision service unavailable (native approval execution recheck unsupported); blocked (fail-cl"
+   ]
+  },
+  "C6a_real_turn_held_and_blocked": {
+   "passed": true,
+   "detail": "bound write turn produced hold receipt rcp-b9bb081d; write not executed"
+  },
+  "C6b_console_approve_then_consume": {
+   "passed": true,
+   "detail": "console approved the hold; identical retry consumed it once (hold_approval_consumed on chain)"
+  },
+  "C7_fail_closed_when_daemon_down": {
+   "passed": true,
+   "detail": "decision service unreachable; tool blocked with fail-closed message surfaced to model"
+  },
+  "C8_receipts_chain_verified_runtime_identity": {
+   "passed": true,
+   "detail": "8 records; chain verified=true; allow decision rcp-512143a04bd7 correlated with its observation and bound to the runtime identity envelope"
+  },
+  "C9": {
+   "notes": [
+    "plugin dir left empty after uninstall (file-level transaction restore), no files remain"
+   ]
+  },
+  "C9_managed_uninstall_restores": {
+   "passed": true,
+   "detail": "managed artifacts removed, user config kept, credential rejected after uninstall"
+  },
+  "C10_hygiene": {
+   "passed": true,
+   "detail": "fixture-only credentials, token isolated from host dir, log not exported"
+  }
+ },
+ "runtime_state_claim": "unverified (by design; no readback exists \u2014 receipts are the machine evidence)",
+ "non_goals": [
+  "no Windows/macOS claims",
+  "no linux/workbuddy claims (upstream runtime unconfirmed)",
+  "no openclaw skills install path (built-in static scan, not our seam)",
+  "no runtime_state verified claim"
+ ]
+}
