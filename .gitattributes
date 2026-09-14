@@ -11,6 +11,9 @@ apps/agentshield/cmd/agentshield/*.ps1 text eol=lf
 adapters/runtime/** -text
 skills/siq-agent-security/** -text
 docs/evidence/personal-experience/windows-sunbo/** -text
+docs/evidence/personal-experience/n09-independent-review-20260914/** -text
+docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/** -text
+docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/** -text
 apps/web/index.html text eol=lf
 apps/web/index.local.html text eol=lf
 

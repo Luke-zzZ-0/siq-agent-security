@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""Offline validator for the N09 acceptance baseline matrix.
+
+Schema `personal-acceptance-baseline/v1` per
+docs/personal-experience-n09-linux-baseline-spec.md §4-§5. Stdlib-only;
+refuses path traversal; never executes hosts or updates the matrix.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+ITEMS = ["J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8", "J9", "J10", "J11"]
+PLATFORMS = ["hermes", "openclaw", "workbuddy"]
+OS_NAMES = ["linux", "macos", "windows"]
+STATUSES = ["native", "controlled_start", "unavailable", "unverified", "blocked"]
+REASONS = ["environment_unavailable", "upstream_runtime_unconfirmed", "host_capability_missing"]
+CLASSIFICATIONS = ["static_check", "unit_test", "component_integration",
+                   "native_machine", "complete_acceptance"]
+COMPLETE = ("complete_acceptance",)
+
+
+class Invalid(ValueError):
+    pass
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise Invalid(message)
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1 << 16), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def safe_ref(repo: Path, ref: str) -> Path:
+    require(not ref.startswith("/") and ".." not in Path(ref).parts,
+            f"unsafe evidence ref: {ref}")
+    path = repo / ref
+    require(str(path.resolve()).startswith(str((repo / "docs" / "evidence").resolve())),
+            f"evidence outside docs/evidence: {ref}")
+    require(path.is_file(), f"missing evidence file: {ref}")
+    return path
+
+
+def check(matrix_path: Path, repo: Path, summary_path: Path | None) -> list[str]:
+    matrix = json.loads(matrix_path.read_text(encoding="utf-8"))
+    problems: list[str] = []
+    require(matrix.get("schema_version") == "personal-acceptance-baseline/v1",
+            "schema_version")
+    require(isinstance(matrix.get("batch"), str) and matrix["batch"], "batch")
+    require(isinstance(matrix.get("recorded_at"), str), "recorded_at")
+
+    legs = matrix.get("legs")
+    require(isinstance(legs, list) and legs, "legs")
+    leg_ids = []
+    for leg in legs:
+        leg_id = leg.get("leg_id")
+        require(isinstance(leg_id, str) and leg_id, "leg_id")
+        leg_ids.append(leg_id)
+        for field in ("binary_sha256", "started_at", "finished_at", "report_sha256"):
+            require(isinstance(leg.get(field), str) and leg[field], f"leg {leg_id} {field}")
+        require(isinstance(leg.get("checks_passed"), int), f"leg {leg_id} checks_passed")
+        ref = leg.get("report_ref")
+        require(isinstance(ref, str), f"leg {leg_id} report_ref")
+        path = safe_ref(repo, ref)
+        actual = sha256(path)
+        require(actual == leg["report_sha256"], f"leg {leg_id} report sha mismatch")
+
+    cells = matrix.get("cells")
+    require(isinstance(cells, list) and len(cells) == 9, "cells must have exactly 9 entries")
+    seen_cells = set()
+    for cell in cells:
+        key = f"{cell.get('platform')}/{cell.get('os')}"
+        require(cell.get("platform") in PLATFORMS and cell.get("os") in OS_NAMES,
+                f"unknown cell {key}")
+        require(key not in seen_cells, f"duplicate cell {key}")
+        seen_cells.add(key)
+        rows = cell.get("rows")
+        require(isinstance(rows, list) and len(rows) == len(ITEMS),
+                f"cell {key} must have exactly {len(ITEMS)} rows")
+        items = [row.get("item") for row in rows]
+        require(items == ITEMS, f"cell {key} row items must be {ITEMS}")
+        for row in rows:
+            item = row["item"]
+            status = row.get("status")
+            require(status in STATUSES, f"{key}/{item} status {status}")
+            if status == "blocked":
+                require(row.get("reason") in REASONS, f"{key}/{item} blocked needs reason")
+            else:
+                require(row.get("reason") is None, f"{key}/{item} unexpected reason")
+            refs = row.get("evidence_refs", [])
+            require(isinstance(refs, list), f"{key}/{item} evidence_refs type")
+            if status in ("native", "controlled_start"):
+                require(row.get("classification") == "complete_acceptance",
+                        f"{key}/{item} native/controlled_start needs complete_acceptance")
+                require(refs, f"{key}/{item} needs evidence")
+                leg_refs = {leg.get("report_ref") for leg in legs}
+                require(any(ref in leg_refs for ref in refs),
+                        f"{key}/{item} must cite at least one leg report")
+            if status == "unverified":
+                require(isinstance(row.get("required_evidence"), str)
+                        and row["required_evidence"],
+                        f"{key}/{item} unverified needs required_evidence")
+            for ref in refs:
+                path = safe_ref(repo, ref)
+                recorded = matrix.get("evidence_sha256", {}).get(ref)
+                if recorded is not None:
+                    require(sha256(path) == recorded, f"{ref} sha mismatch")
+
+    require(seen_cells == {f"{p}/{o}" for p in PLATFORMS for o in OS_NAMES},
+            "cells must cover all 9 combinations")
+
+    if summary_path is not None:
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        require(summary.get("schema_version") == "personal-acceptance-baseline-summary/v1",
+                "summary schema_version")
+        require(summary.get("passed") is True, "baseline summary not passed")
+        summary_legs = {leg["leg_id"]: leg for leg in summary.get("legs", [])}
+        for leg in legs:
+            sled = summary_legs.get(leg["leg_id"])
+            require(sled is not None, f"leg {leg['leg_id']} missing from summary")
+            require(sled.get("passed") is True, f"leg {leg['leg_id']} not passed in summary")
+            require(sled.get("report_sha256") == leg["report_sha256"],
+                    f"leg {leg['leg_id']} report sha differs from summary")
+    return problems
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--matrix", type=Path, required=True)
+    parser.add_argument("--repo", type=Path, default=Path.cwd())
+    parser.add_argument("--summary", type=Path)
+    args = parser.parse_args()
+    try:
+        problems = check(args.matrix, args.repo.resolve(), args.summary)
+    except Invalid as exc:
+        print(f"INVALID: {exc}")
+        raise SystemExit(1)
+    for problem in problems:
+        print(f"problem: {problem}")
+    print("baseline matrix valid")
+
+
+if __name__ == "__main__":
+    main()

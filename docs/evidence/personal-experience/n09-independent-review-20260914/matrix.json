@@ -1,0 +1,1297 @@
+{
+  "schema_version": "personal-acceptance-baseline/v2",
+  "batch": "n09-independent-review-20260914",
+  "recorded_at": "2026-09-14T02:08:32.460348+00:00",
+  "legs": [
+    {
+      "leg_id": "L1",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:32:47.726372+00:00",
+      "finished_at": "2026-09-13T23:33:07.836788+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+      "report_sha256": "7d96f9af7e27ac8ec8d47d6f52f2cf30dee7fa27fed17ab21d0f719b470f893d",
+      "checks_passed": 14,
+      "platform": "hermes",
+      "os": "linux"
+    },
+    {
+      "leg_id": "L2",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:07.837302+00:00",
+      "finished_at": "2026-09-13T23:33:18.377403+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json",
+      "report_sha256": "c572b8bebf9cfad1b37cab47db54200d9636cd14b8eef17ef1f6a4a52e92f583",
+      "checks_passed": 12,
+      "platform": "hermes",
+      "os": "linux"
+    },
+    {
+      "leg_id": "L4",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:29.970118+00:00",
+      "finished_at": "2026-09-13T23:33:40.308828+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json",
+      "report_sha256": "63ae1b422fe8f45e261331dac945aeacf6a7b984e80bc8b81cd8f449ab811b47",
+      "checks_passed": 19,
+      "platform": "hermes",
+      "os": "linux"
+    },
+    {
+      "leg_id": "L5",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:40.309322+00:00",
+      "finished_at": "2026-09-13T23:33:44.833292+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json",
+      "report_sha256": "77ecdade542a44992c47fe2c8edd1c07a160d48eec009f585f4d92d7d8d73da4",
+      "checks_passed": 7,
+      "platform": "hermes",
+      "os": "linux"
+    },
+    {
+      "leg_id": "L6",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-13T23:33:44.833739+00:00",
+      "finished_at": "2026-09-13T23:33:55.824659+00:00",
+      "report_ref": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json",
+      "report_sha256": "6e90e023748fe5a055465960d05ce2031b2320413f31979f5f7f62cbbe45de90",
+      "checks_passed": 13,
+      "platform": "hermes",
+      "os": "linux"
+    },
+    {
+      "leg_id": "N09B",
+      "binary_sha256": "fe03e7e0047f2e54db8a9ad0f4198312774e8a43255194b56495df4c47a23ea5",
+      "started_at": "2026-09-14T01:05:46Z",
+      "finished_at": "2026-09-14T01:06:16Z",
+      "report_ref": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json",
+      "report_sha256": "1f9eb92eb6a463a427830de12af3b2017db4fcc40504296301ea3677a2066192",
+      "checks_passed": 11,
+      "platform": "openclaw",
+      "os": "linux"
+    }
+  ],
+  "cells": [
+    {
+      "platform": "hermes",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "first_onboarding_completed_via_ui"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Product package installation, service start and management UI on a clean native environment."
+        },
+        {
+          "item": "J2",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "discovery_finds_fixture_skill_without_touching_config"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Complete agent and Skill discovery, including existing installations and nondefault roots."
+        },
+        {
+          "item": "J3",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "first_onboarding_completed_via_ui"
+              ]
+            },
+            {
+              "leg_id": "L6",
+              "checks": [
+                "managed_install_uses_issued_identity",
+                "native_enable_preserves_user_settings"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J4",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "allow_decided_in_console",
+                "deny_decided_in_console",
+                "denied_retry_stays_blocked_without_file"
+              ]
+            },
+            {
+              "leg_id": "L4",
+              "checks": [
+                "allowed_read",
+                "write_denied_before_execution",
+                "allowed_after_denial"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native permission allow/deny matrix for the final candidate, beyond one fixture read/write."
+        },
+        {
+          "item": "J5",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L2",
+              "checks": [
+                "grant_require_approval_applied",
+                "native_cli_runs_completed",
+                "hold_degrades_to_block_without_execution",
+                "block_message_points_to_console",
+                "console_approval_recorded",
+                "approved_retry_consumed_hold_and_executed_once",
+                "hold_status_reports_consumed_after_retry",
+                "no_new_pending_confirmation_after_consumption",
+                "single_execution_observation_on_consumption_receipt",
+                "retry_after_consumption_reholds_and_denial_blocks",
+                "unresolved_retry_never_executes",
+                "receipt_chain_verified"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native approved retry and observed exactly-once side effects, notification/failure/replay cases."
+        },
+        {
+          "item": "J6",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L4",
+              "checks": [
+                "managed_preview_does_not_mutate_host",
+                "managed_install_uses_issued_identity",
+                "native_enable_preserves_other_profile_and_settings",
+                "diagnosis_keeps_runtime_unverified",
+                "managed_profile_product_selfcheck_uses_separate_authority",
+                "native_cli_started",
+                "native_generated_session_automatically_bound",
+                "instance_credential_used_without_manual_intent",
+                "environment_cannot_override_managed_agent",
+                "allowed_read",
+                "write_denied_before_execution",
+                "allowed_after_denial",
+                "native_raw_parameters_captured_after_explicit_task_grant",
+                "native_raw_output_captured_after_explicit_task_grant",
+                "receipt_chain_verified",
+                "skill_removal_blocks_still_issued_identity_in_new_native_session",
+                "revoked_calls_record_unsigned_denials",
+                "product_skill_import_approval_installation",
+                "installed_content_bound_instance_permission"
+              ]
+            },
+            {
+              "leg_id": "L5",
+              "checks": [
+                "unapproved_candidate_is_review_only_with_content_and_permission_diff",
+                "prepared_refresh_is_read_only_and_requires_review_again",
+                "desktop_and_mobile_review_keep_confirmation_visible",
+                "lost_commit_and_read_responses_clear_execution_without_replay",
+                "query_recovers_success_with_old_revoked_and_new_not_activated",
+                "completed_refresh_and_new_permission_link_are_correct",
+                "pending_refresh_and_explicit_recovery_preserve_previous_version"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native Skill installation, confirmed update and removal including a successful production remote source."
+        },
+        {
+          "item": "J7",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "overview_before_onboarding_is_single_honest_source",
+                "discovery_finds_fixture_skill_without_touching_config",
+                "first_onboarding_completed_via_ui",
+                "session_refresh_restores_management_session",
+                "raw_content_default_off_then_explicit_enable",
+                "observer_enable_preserves_adapter_registration",
+                "allow_decided_in_console",
+                "approved_retry_executes_exactly_once",
+                "deny_decided_in_console",
+                "denied_retry_stays_blocked_without_file",
+                "activities_render_real_backend_task",
+                "skill_import_checked_in_ui",
+                "skill_update_reviewed_and_committed",
+                "no_browser_runtime_errors"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Evidence that this particular Skill caused the actual tool call, plus traceability."
+        },
+        {
+          "item": "J8",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L6",
+              "checks": [
+                "offline_fail_closed_unsigned_denials"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J9",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L6",
+              "checks": [
+                "daemon_restart_same_port_repairs_serving",
+                "recovered_session_reuses_issued_identity"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J10",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L6",
+              "checks": [
+                "uninstall_restores_config_semantically",
+                "uninstall_revokes_runtime_identity",
+                "receipt_chain_verified"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J11",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+            "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "L1",
+              "checks": [
+                "raw_content_default_off_then_explicit_enable"
+              ]
+            },
+            {
+              "leg_id": "L6",
+              "checks": [
+                "default_work_profile_untouched_throughout"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Complete privacy journey including raw-content lifecycle, revocation, expiry and export isolation."
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C2_preview_no_mutation_plan_v3",
+                "C3_managed_install_lands"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Product package installation, service start and management UI on a clean native environment."
+        },
+        {
+          "item": "J2",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Complete agent and Skill discovery, including existing installations and nondefault roots."
+        },
+        {
+          "item": "J3",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C2_preview_no_mutation_plan_v3",
+                "C3_managed_install_lands",
+                "C4_real_runtime_loads_plugin"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J4",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C5_allow_path_real_agent_turn",
+                "C6a_real_turn_held_and_blocked"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native permission allow/deny matrix for the final candidate, beyond one fixture read/write."
+        },
+        {
+          "item": "J5",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C6a_real_turn_held_and_blocked",
+                "C6b_console_approve_then_consume"
+              ]
+            }
+          ],
+          "note": "C6a is native hold/block; C6b creates and consumes a separate API hold. No native post-approval write is observed.",
+          "required_evidence": "Native approved retry and observed exactly-once side effects, notification/failure/replay cases."
+        },
+        {
+          "item": "J6",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native Skill installation, confirmed update and removal including a successful production remote source."
+        },
+        {
+          "item": "J7",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C8_receipts_chain_verified_runtime_identity"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Evidence that this particular Skill caused the actual tool call, plus traceability."
+        },
+        {
+          "item": "J8",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C7_fail_closed_when_daemon_down"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J9",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C8_receipts_chain_verified_runtime_identity"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Native task continuation after restart, permission recheck and duplicate-effect prevention."
+        },
+        {
+          "item": "J10",
+          "status": "controlled_start",
+          "classification": "native_machine",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C9_managed_uninstall_restores"
+              ]
+            }
+          ],
+          "note": "Historical native observation for this portion of the journey; not complete acceptance of the final candidate."
+        },
+        {
+          "item": "J11",
+          "status": "unverified",
+          "classification": "component_integration",
+          "evidence_refs": [
+            "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json"
+          ],
+          "coverage": [
+            {
+              "leg_id": "N09B",
+              "checks": [
+                "C10_hygiene"
+              ]
+            }
+          ],
+          "note": "Partial observations only; original green leg result does not close this journey row.",
+          "required_evidence": "Complete privacy journey including raw-content lifecycle, revocation, expiry and export isolation."
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "linux",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "upstream_runtime_unconfirmed"
+        }
+      ]
+    },
+    {
+      "platform": "hermes",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "macos",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    },
+    {
+      "platform": "hermes",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    },
+    {
+      "platform": "openclaw",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    },
+    {
+      "platform": "workbuddy",
+      "os": "windows",
+      "rows": [
+        {
+          "item": "J1",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J2",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J3",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J4",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J5",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J6",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J7",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J8",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J9",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J10",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        },
+        {
+          "item": "J11",
+          "status": "blocked",
+          "classification": "static_check",
+          "evidence_refs": [],
+          "coverage": [],
+          "note": "Native evidence not included in this reviewed batch.",
+          "reason": "environment_unavailable"
+        }
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json": "7d96f9af7e27ac8ec8d47d6f52f2cf30dee7fa27fed17ab21d0f719b470f893d",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json": "c572b8bebf9cfad1b37cab47db54200d9636cd14b8eef17ef1f6a4a52e92f583",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json": "63ae1b422fe8f45e261331dac945aeacf6a7b984e80bc8b81cd8f449ab811b47",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json": "77ecdade542a44992c47fe2c8edd1c07a160d48eec009f585f4d92d7d8d73da4",
+    "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json": "6e90e023748fe5a055465960d05ce2031b2320413f31979f5f7f62cbbe45de90",
+    "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json": "1f9eb92eb6a463a427830de12af3b2017db4fcc40504296301ea3677a2066192"
+  },
+  "notes": [
+    "This is an independent coverage review of historical GLM binary fe03e7e0, not a rerun or acceptance of current main. Original reports are preserved byte-for-byte.",
+    "No current report certifies complete J1-J11 acceptance. J1 is product installation, not adapter installation; J7 needs causal Skill execution provenance, not installed metadata.",
+    "C6b calls the decision API directly. It does not prove native OpenClaw approved execution, exactly-once side effects or recovery after response loss.",
+    "Windows/macOS and WorkBuddy remain pending native evidence. Fresh Windows collaboration branches must be reviewed separately, not assumed absent.",
+    "L3 excluded from accepted evidence: two duplicate check names inflate the reported 11 checks; its raw report remains archived. Metadata/API probes also do not establish causal Skill execution."
+  ]
+}
