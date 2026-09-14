@@ -1,0 +1,5 @@
+{
+  "schema_version": "local-skill-update-schedule-run/v1",
+  "actor_id": "daemon-scheduled-check",
+  "max_checks": 4
+}

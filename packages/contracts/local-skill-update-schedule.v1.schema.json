@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local-skill-update-schedule.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "install_id",
+    "source_kind",
+    "display",
+    "enabled",
+    "interval_seconds",
+    "install_binding_digest",
+    "last_status",
+    "saved_by",
+    "updated_at",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-skill-update-schedule/v1"
+    },
+    "install_id": {
+      "type": "string",
+      "pattern": "^sin-[a-f0-9]{64}$"
+    },
+    "source_kind": {
+      "enum": [
+        "git",
+        "https_zip"
+      ]
+    },
+    "locator": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "display": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "interval_seconds": {
+      "type": "integer",
+      "minimum": 3600,
+      "maximum": 604800
+    },
+    "install_binding_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "next_check_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_attempt_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_success_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_status": {
+      "enum": [
+        "not_checked",
+        "up_to_date",
+        "new_version",
+        "source_unavailable",
+        "unsupported"
+      ]
+    },
+    "failure_category": {
+      "enum": [
+        "source_unavailable",
+        "url_blocked",
+        "changed",
+        "limit",
+        "invalid",
+        "unavailable",
+        "canceled"
+      ]
+    },
+    "failure_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 63
+    },
+    "saved_by": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    }
+  }
+}
