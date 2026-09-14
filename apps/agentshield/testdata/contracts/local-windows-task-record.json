@@ -3,7 +3,7 @@
   "instance_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "state_directory_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
   "task_name": "\\SIQ-Agent-Security-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "xml_sha256": "3f3e49d3095a3f698857914b6e51b86a6620d60e61d8985422e99ff287adb0fe",
+  "xml_sha256": "8ace57152bda2d48244c3b38746a73f5409d4d780af6c3ddd4e8a749ba89c749",
   "user_sid": "S-1-5-21-100-200-300-1001",
-  "signature": "d7c56a073570b68577f646af244cd2d556fcae324a9228597108ae1ce8b2bc6065a4af269e089a37ed0f8b4bdf1af96329a4c346015b7f8d2d55eeca1a51c109"
+  "signature": "c65fefe10c58e5a076108254da87acbe24c543b3eaa43eaa699dd01421fdd67761a3f7041f6405eb507a8589aff879a9dafe273f162b683b4c92ffd278e3270b"
 }

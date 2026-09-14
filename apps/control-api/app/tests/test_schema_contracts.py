@@ -2075,6 +2075,7 @@ def test_windows_task_go_xml_fixture() -> None:
         "Enabled": "true",
         "Hidden": "false",
         "RunOnlyIfIdle": "false",
+        "UseUnifiedSchedulingEngine": "true",
         "WakeToRun": "false",
         "ExecutionTimeLimit": "PT0S",
         "Priority": "7",

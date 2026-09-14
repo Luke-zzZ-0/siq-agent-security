@@ -30,7 +30,7 @@ try {
     $task = $folder.GetTask($request.task_name)
     if (($null -eq $task) -or ($task.Path -cne $request.task_name)) { throw 'wrong task' }
     $expected = Read-TaskXML $request.task_xml
-    $actual = Read-TaskXML $task.Xml
+    $actual = Read-TaskXML $task.Definition.XmlText
     if ($actual -cne $expected) { throw 'task changed' }
     if (($task.State -ne 3) -or ($task.GetInstances(0).Count -ne 0) -or ($task.State -ne 3)) { throw 'task not idle' }
     $folder.DeleteTask($request.task_name, 0)

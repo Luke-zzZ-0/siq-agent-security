@@ -794,7 +794,7 @@ task-prepare 仅 Windows、无参数，持生命周期与主 Writer，先签名�
 
 ### 3.11.38 Windows 系统任务只读查询（UX-003）
 
-新增 task-query（Windows、无参数）：重建当前实例/用户的预期 XML，核对本地签名归属与源文件后，只查询精确任务名。通过 GetSystemDirectoryW 获取 schtasks.exe 绝对路径，不信任 PATH/SystemRoot，不使用 shell、远程账户或管理员提权参数。执行 /Query /TN <签名任务名> /XML，15 秒超时与有界输出；任何退出失败、stderr 内容或超限都报未确认，不能推断缺席。
+新增 task-query（Windows、无参数）：重建当前实例/用户的预期 XML，核对本地签名归属与源文件后，只查询精确任务名。通过 GetSystemDirectoryW 定位系统 WindowsPowerShell 绝对路径，不信任 PATH/SystemRoot，不使用远程账户或管理员提权参数。执行固定 COM 读回脚本，用户数据仅经 stdin JSON 传入，不拼接为脚本；15 秒超时与有界输出，任何退出失败、stderr 内容或超限都报未确认，不能推断缺席。
 
 仅接受 UTF-8（可带 BOM）或带 BOM 的 UTF-16LE/BE，严格验证代理对、奇数字节与声明一致性，转为 UTF-8 后交完整 XML 核对。成功后再次核对本地签名源，再输出已经核对的预期 XML；没有新增持久化状态或 JSON 合同。此命令证明单次配置读回匹配，不证明进程运行、健康、未来未被篡改或任务缺席。注册/启动仍待实施，查询失败不得授权覆盖未知任务。
 
@@ -806,9 +806,15 @@ task-prepare 仅 Windows、无参数，持生命周期与主 Writer，先签名�
 
 ### 3.11.40 Windows 用户任务排他注册（UX-003）
 
+Windows 原生补充（2026-09-14）：PowerShell 子进程仅抑制 progress 流，避免 Windows PowerShell 模块初始化 CLIXML 污染协议，stderr 仍严格拒绝。定点 GetTask 的 ERROR_FILE_NOT_FOUND 可由 .NET 包装为 COMException 或 FileNotFoundException；仅在该调用内且 HRESULT 精确为 0x80070002 时算 absent，连接、目录、权限与其他错误仍不确定。注册输入交给 COM 的 Unicode BSTR 前只移除生成器的精确 UTF-8 XML 声明，本地签名 XML 字节不变。完整读回仅在原 XML 缺省时接受系统补出的空 Triggers 和 DisallowStartOnRemoteAppSession=false；非默认值、属性、子节点和其他未知字段一律保留并严格比较。不改写历史签名配置，不增加登录触发器。
+
+同批原生注册补充：本机即使收到显式 false 仍将 UseUnifiedSchedulingEngine 注册为 true，因此生成器明确将 UseUnifiedSchedulingEngine=true 纳入签名 XML；该字段始终精确比对，不作为可忽略默认。历史已准备配置保持拒绝漂移，不能自动重签或迁移；实测在全新独立实例上准备新配置。先用本机 NewTask(0) 的内存定义解析输入，再将其展开 XmlText 交 TASK_CREATE。读回改为固定 PowerShell COM 脚本输出 RegisteredTask.Definition.XmlText（完整系统定义），明确使用 UTF-8 输出并移除原 BSTR 的 XML 编码声明；不猜测 schtasks 的 OEM 输出编码，也不将省略默认字段的 RegisteredTask.Xml 当作完整配置。注销前后使用相同 Definition.XmlText 快照核对；其他归属、空闲、精确删除和缺席复验规则不变。
+
+旧准备记录不兼容时保留匹配旧工具、签名源与实测证据，由维护者明确设计迁移；不将本次配置变化宣称为透明升级，也不建议删除状态或复制旧批准作为恢复。
+
 新增 task-register --confirm-register；无确认或多余参数在准备/系统操作前拒绝。复用任务签名准备并持生命周期与主 Writer；拒绝 pending 服务切换。定点查询已存在时，只在完整读回匹配后复用；缺席时再次核对本地签名源，再调用固定 PowerShell 脚本的 TaskFolder.RegisterTask，flags 仅 TASK_CREATE=2，当前 SID、空密码、TASK_LOGON_INTERACTIVE_TOKEN=3。不使用 UPDATE/CREATE_OR_UPDATE，不自动启动或创建触发器。系统创建竞争失败不升级为覆盖或删除。
 
-创建/复用后独立通过 schtasks 完整读回与本地归属复验，成功输出预期 XML。失败保留签名配置和系统现场；创建已成功但读回失败时，下一次必须重新确认归属，不能自动删除可能已变更的任务。允许该明确注册命令向当前用户根任务文件夹创建精确实例任务，为当前生命周期开发的受限外部状态写入；无 Windows 宿主时只运行模拟控制器，原生注册及账户/ACL/序列化仍待验收。
+创建/复用后独立通过固定 COM 脚本完整读回与本地归属复验，成功输出预期 XML。失败保留签名配置和系统现场；创建已成功但读回失败时，下一次必须重新确认归属，不能自动删除可能已变更的任务。允许该明确注册命令向当前用户根任务文件夹创建精确实例任务，为当前生命周期开发的受限外部状态写入；无 Windows 宿主时只运行模拟控制器，原生注册及账户/ACL/序列化仍待验收。
 
 ### 3.11.41 Windows 已注册任务按需启动（UX-003）
 

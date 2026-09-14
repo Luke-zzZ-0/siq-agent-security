@@ -90,6 +90,41 @@ func TestWindowsTaskXMLBudgets(t *testing.T) {
 	}
 }
 
+func TestWindowsTaskNativeReadbackDefaults(t *testing.T) {
+	raw, err := os.ReadFile("../../testdata/contracts/windows-task.sample.xml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := string(raw)
+	actual := strings.Replace(source, "</RegistrationInfo>", "</RegistrationInfo><Triggers />", 1)
+	actual = strings.Replace(actual, "</Settings>", "<DisallowStartOnRemoteAppSession>false</DisallowStartOnRemoteAppSession></Settings>", 1)
+	if err := verifyWindowsTaskXML([]byte(actual), raw); err != nil {
+		t.Fatal("native explicit defaults rejected", err)
+	}
+	for name, changed := range map[string]string{
+		"login trigger":                strings.Replace(actual, "<Triggers />", "<Triggers><LogonTrigger/></Triggers>", 1),
+		"trigger attribute":            strings.Replace(actual, "<Triggers />", `<Triggers enabled="true" />`, 1),
+		"trigger text":                 strings.Replace(actual, "<Triggers />", "<Triggers>unknown</Triggers>", 1),
+		"remote app changed":           strings.Replace(actual, "<DisallowStartOnRemoteAppSession>false", "<DisallowStartOnRemoteAppSession>true", 1),
+		"unified engine changed":       strings.Replace(actual, "<UseUnifiedSchedulingEngine>true", "<UseUnifiedSchedulingEngine>false", 1),
+		"setting attribute":            strings.Replace(actual, "<UseUnifiedSchedulingEngine>", `<UseUnifiedSchedulingEngine other="false">`, 1),
+		"setting child":                strings.Replace(actual, "<UseUnifiedSchedulingEngine>true", "<UseUnifiedSchedulingEngine><Unknown/>", 1),
+		"unknown default":              strings.Replace(actual, "</Settings>", "<Unknown>false</Unknown></Settings>", 1),
+		"duplicate default":            strings.Replace(actual, "</Settings>", "<UseUnifiedSchedulingEngine>false</UseUnifiedSchedulingEngine></Settings>", 1),
+		"elevation alongside defaults": strings.Replace(actual, "LeastPrivilege", "HighestAvailable", 1),
+	} {
+		t.Run(name, func(t *testing.T) {
+			if verifyWindowsTaskXML([]byte(changed), raw) == nil {
+				t.Fatal("changed native configuration accepted")
+			}
+		})
+	}
+	// An explicit setting in the source must still be present in the readback.
+	if verifyWindowsTaskXML(raw, []byte(actual)) == nil {
+		t.Fatal("missing explicitly signed settings accepted")
+	}
+}
+
 func TestWindowsTaskXMLRejectsAmbiguousNamespaceAndEncoding(t *testing.T) {
 	raw, err := os.ReadFile("../../testdata/contracts/windows-task.sample.xml")
 	if err != nil {

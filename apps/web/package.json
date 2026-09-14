@@ -6,9 +6,9 @@
   "description": "SIQ Agent Security Web 控制台（已对接 Control API 真实接口；断连时降级为占位视图）",
   "scripts": {
     "dev": "vite",
-    "dev:local": "VITE_APP=agentshield vite --open /overview",
+    "dev:local": "node scripts/vite-local.mjs --open /overview",
     "build": "tsc -b && vite build",
-    "build:local": "tsc -b && VITE_APP=agentshield vite build",
+    "build:local": "tsc -b && node scripts/vite-local.mjs build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"

@@ -16,8 +16,15 @@ launcher = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(launcher)
 
 
+@pytest.fixture
+def native_start_timeout():
+    timeout = float(os.environ.get("SIQ_TEST_START_TIMEOUT", "15"))
+    assert 0 < timeout < float("inf")
+    return timeout
+
+
 @pytest.mark.skipif(not os.environ.get("SIQ_TEST_BINARY"), reason="requires an explicitly built native binary")
-def test_native_start_command(tmp_path):
+def test_native_start_command(tmp_path, native_start_timeout):
     binary = Path(os.environ["SIQ_TEST_BINARY"]).resolve(strict=True)
     selected = tmp_path / "fresh"
     env = {**os.environ, "SIQ_AGENT_SECURITY_STATE_DIR": str(selected)}
@@ -29,14 +36,14 @@ def test_native_start_command(tmp_path):
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
     try:
-        deadline = time.monotonic() + 15
+        deadline = time.monotonic() + native_start_timeout
         while not launcher.healthy(binary, port, env):
             assert child.poll() is None, "native start exited before readiness"
             assert time.monotonic() < deadline, "native start did not become ready"
             time.sleep(0.1)
         initial = (selected / "local-instance.json").read_bytes()
         reused = subprocess.run(
-            [str(binary), "start"], env=env, capture_output=True, text=True, timeout=10, check=True,
+            [str(binary), "start"], env=env, capture_output=True, text=True, encoding="utf-8", timeout=10, check=True,
         )
         assert json.loads(reused.stdout)["schema_version"] == "local-service-instance-health/v1"
         other = tmp_path / "other"
@@ -49,6 +56,11 @@ def test_native_start_command(tmp_path):
         assert not other.exists()
         assert child.poll() is None
         assert (selected / "local-instance.json").read_bytes() == initial
+        subprocess.run(
+            [str(binary), "stop", "--confirm-stop"], env=env,
+            capture_output=True, timeout=45, check=True,
+        )
+        child.wait(timeout=10)
     finally:
         if child.poll() is None:
             child.terminate()
@@ -81,6 +93,22 @@ def test_unknown_port_owner_is_not_started_or_killed(monkeypatch, tmp_path):
             launcher.ensure_started(tmp_path / "binary", tmp_path / "state", port)
         assert listener.fileno() >= 0
         assert not (tmp_path / "state").exists()
+
+
+@pytest.mark.parametrize("network_error", [TimeoutError(), PermissionError(), OSError("unknown network error")])
+def test_unconfirmed_port_never_initializes_or_starts(monkeypatch, tmp_path, network_error):
+    monkeypatch.setattr(launcher, "healthy", lambda *args: False)
+
+    def cannot_confirm(*args, **kwargs):
+        raise network_error
+
+    monkeypatch.setattr(socket, "create_connection", cannot_confirm)
+    monkeypatch.setattr(launcher, "initialize", lambda *args: pytest.fail("unconfirmed port initialized state"))
+    monkeypatch.setattr(subprocess, "Popen", lambda *args, **kwargs: pytest.fail("unconfirmed port spawned a child"))
+    state = tmp_path / "state"
+    with pytest.raises(RuntimeError, match="无法确认本地端口可用"):
+        launcher.ensure_started(tmp_path / "binary", state, 47611)
+    assert not state.exists()
 
 
 @pytest.mark.skipif(
@@ -127,6 +155,33 @@ def test_health_requires_protocol_not_exit_code(monkeypatch, tmp_path):
     assert launcher.healthy(tmp_path / "binary", 47611, {})
 
 
+@pytest.mark.parametrize("command", ["status", "init"])
+def test_utf8_json_and_diagnostics_do_not_depend_on_console_encoding(monkeypatch, tmp_path, command):
+    response = (
+        {"schema_version": "local-service-instance-health/v1", "product": "siq-agent-security",
+         "local_mode": True, "status": "ready", "message": "就绪"}
+        if command == "status"
+        else {"schema_version": "local-client-initialization/v1", "status": "initialized",
+              "port": 47611, "instance_id": "a" * 64, "state_directory_id": "b" * 64, "message": "就绪"}
+    )
+    stdout = json.dumps(response, ensure_ascii=False).encode("utf-8")
+    stderr = "本地服务：诊断信息。\n".encode()
+    original = subprocess.run
+
+    def fixture_process(*args, **kwargs):
+        assert args[0][1] == command
+        return original(
+            [sys.executable, "-c", f"import sys; sys.stdout.buffer.write({stdout!r}); sys.stderr.buffer.write({stderr!r})"],
+            **kwargs,
+        )
+
+    monkeypatch.setattr(subprocess, "run", fixture_process)
+    if command == "status":
+        assert launcher.healthy(tmp_path / "binary", 47611, os.environ.copy())
+    else:
+        launcher.initialize(tmp_path / "binary", 47611, os.environ.copy())
+
+
 def test_legacy_health_is_not_reused(monkeypatch, tmp_path):
     legacy = {
         "schema_version": "local-service-health/v1",
@@ -141,7 +196,7 @@ def test_legacy_health_is_not_reused(monkeypatch, tmp_path):
 
 
 @pytest.mark.skipif(not os.environ.get("SIQ_TEST_BINARY"), reason="requires an explicitly built native binary")
-def test_native_instance_lifecycle(monkeypatch, tmp_path):
+def test_native_instance_lifecycle(monkeypatch, tmp_path, native_start_timeout):
     binary = Path(os.environ["SIQ_TEST_BINARY"]).resolve(strict=True)
     selected = tmp_path / "selected"
     selected.mkdir()
@@ -161,7 +216,7 @@ def test_native_instance_lifecycle(monkeypatch, tmp_path):
 
     monkeypatch.setattr(subprocess, "Popen", spawn)
     try:
-        first = launcher.ensure_started(binary, selected, port)
+        first = launcher.ensure_started(binary, selected, port, timeout=native_start_timeout)
         assert not first["reused"]
         initial_record = (selected / "local-instance.json").read_bytes()
         assert launcher.ensure_started(binary, selected, port)["reused"]
@@ -169,7 +224,7 @@ def test_native_instance_lifecycle(monkeypatch, tmp_path):
         busy = subprocess.run(
             [str(binary), "init"],
             env={**os.environ, "SIQ_AGENT_SECURITY_STATE_DIR": str(selected)},
-            capture_output=True, text=True, timeout=10, check=False,
+            capture_output=True, text=True, encoding="utf-8", timeout=10, check=False,
         )
         assert busy.returncode != 0
         assert "write lock held" in busy.stderr
@@ -186,16 +241,26 @@ def test_native_instance_lifecycle(monkeypatch, tmp_path):
             result = subprocess.run(
                 [str(binary), "pair", "--port", str(port)],
                 env={**os.environ, "SIQ_AGENT_SECURITY_STATE_DIR": str(directory)},
-                capture_output=True, text=True, timeout=10, check=False,
+                capture_output=True, text=True, encoding="utf-8", timeout=10, check=False,
             )
             assert (result.returncode == 0) is success
             if not success:
                 assert "different state directory" in result.stderr
         assert children[0].poll() is None
-        children[0].terminate()
+        subprocess.run(
+            [str(binary), "stop", "--confirm-stop"],
+            env={**os.environ, "SIQ_AGENT_SECURITY_STATE_DIR": str(selected)},
+            capture_output=True, timeout=45, check=True,
+        )
         children[0].wait(timeout=10)
-        assert not launcher.ensure_started(binary, selected, port)["reused"]
+        assert not launcher.ensure_started(binary, selected, port, timeout=native_start_timeout)["reused"]
         assert (selected / "local-instance.json").read_bytes() == initial_record
+        subprocess.run(
+            [str(binary), "stop", "--confirm-stop"],
+            env={**os.environ, "SIQ_AGENT_SECURITY_STATE_DIR": str(selected)},
+            capture_output=True, timeout=45, check=True,
+        )
+        children[-1].wait(timeout=10)
     finally:
         for child in children:
             if child.poll() is None:
@@ -229,7 +294,8 @@ def test_native_initialization_concurrency(tmp_path):
     try:
         for _ in range(2):
             children.append(subprocess.Popen(
-                [str(binary), "init"], env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                [str(binary), "init"], env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                text=True, encoding="utf-8",
             ))
         identities = []
         for child in children:
@@ -240,7 +306,7 @@ def test_native_initialization_concurrency(tmp_path):
                 assert "lock" in stderr
         assert identities
         repeated = subprocess.run(
-            [str(binary), "init"], env=env, capture_output=True, text=True, timeout=15, check=True,
+            [str(binary), "init"], env=env, capture_output=True, text=True, encoding="utf-8", timeout=15, check=True,
         )
         identity = json.loads(repeated.stdout)["instance_id"]
         assert all(item == identity for item in identities)

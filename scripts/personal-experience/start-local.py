@@ -8,6 +8,7 @@ integration is tracked separately in UX-014.
 
 import argparse
 import json
+import math
 import os
 import re
 import socket
@@ -24,12 +25,13 @@ def healthy(binary, port, env):
             [str(binary), "status", "--port", str(port)],
             env=env,
             capture_output=True,
-            text=True,
             timeout=7,
             check=False,
         )
         if result.returncode != 0:
             return False
+        # Parse the JSON bytes directly; Windows' console encoding may not be
+        # UTF-8, and localized stderr must not break the health response reader.
         data = json.loads(result.stdout)
         if not isinstance(data, dict):
             return False
@@ -47,7 +49,7 @@ def initialize(binary, port, env):
     try:
         result = subprocess.run(
             [str(binary), "init", "--port", str(port)], env=env,
-            capture_output=True, text=True, timeout=15, check=False,
+            capture_output=True, timeout=15, check=False,
         )
         data = json.loads(result.stdout) if result.returncode == 0 else None
         if (
@@ -69,7 +71,9 @@ def ensure_started(binary, state_dir, port, timeout=15):
     if healthy(binary, port, env):
         return {"status": "ready", "reused": True, "endpoint": endpoint}
     try:
-        with socket.create_connection(("127.0.0.1", port), timeout=1):
+        # Windows can take about two seconds to report WSAECONNREFUSED even on
+        # loopback. Allow that refusal to arrive; a timeout still proves nothing.
+        with socket.create_connection(("127.0.0.1", port), timeout=5 if os.name == "nt" else 1):
             raise RuntimeError(
                 "端口被其他服务、不同状态目录的 SIQ 或旧版 SIQ 占用；"
                 "请检查状态目录、端口或升级对应服务。未终止任何进程。"
@@ -110,15 +114,18 @@ def main():
     parser.add_argument("--binary", type=Path, required=True, help="explicit, trusted local build")
     parser.add_argument("--state-dir", type=Path, required=True)
     parser.add_argument("--port", type=int, default=47611)
+    parser.add_argument("--timeout", type=float, default=15, help="seconds to wait for service readiness (default: 15)")
     parser.add_argument("--open", action="store_true", help="open the local management page after readiness")
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error("port must be in 1..65535")
+    if not math.isfinite(args.timeout) or args.timeout <= 0:
+        parser.error("timeout must be a positive finite number of seconds")
     binary = args.binary.resolve()
     if not binary.is_file():
         parser.error("binary is missing")
     try:
-        result = ensure_started(binary, args.state_dir.resolve(), args.port)
+        result = ensure_started(binary, args.state_dir.resolve(), args.port, timeout=args.timeout)
         result["schema_version"] = "local-development-launch/v1"
         if args.open:
             result["browser_opened"] = webbrowser.open(result["endpoint"] + "/overview")

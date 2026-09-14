@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"strings"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
@@ -47,7 +48,7 @@ func registerOwnedWindowsTask(st *state.Store, key *signing.Key, expected []byte
 }
 
 func runWindowsTaskCreate(name, sid string, expected []byte) error {
-	input, err := json.Marshal(map[string]string{"task_name": name, "user_sid": sid, "task_xml": string(expected)})
+	input, err := windowsTaskCreationInput(name, sid, expected)
 	if err != nil {
 		return err
 	}
@@ -56,4 +57,15 @@ func runWindowsTaskCreate(name, sid string, expected []byte) error {
 		return errors.New("task-register: system creation not confirmed")
 	}
 	return nil
+}
+
+func windowsTaskCreationInput(name, sid string, expected []byte) ([]byte, error) {
+	// RegisterTask receives a Unicode BSTR rather than the signed UTF-8 bytes.
+	// Preserve that signed source and remove only its exact transport declaration;
+	// a UTF-8 declaration on a BSTR makes the native XML parser reject the task.
+	const declaration = `<?xml version="1.0" encoding="UTF-8"?>`
+	if !strings.HasPrefix(string(expected), declaration) {
+		return nil, errors.New("task-register: unsupported source encoding")
+	}
+	return json.Marshal(map[string]string{"task_name": name, "user_sid": sid, "task_xml": strings.TrimPrefix(string(expected), declaration)})
 }

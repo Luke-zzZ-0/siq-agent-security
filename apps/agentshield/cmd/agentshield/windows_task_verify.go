@@ -26,10 +26,33 @@ func verifyWindowsTaskXML(actual, expected []byte) error {
 		return errors.New("task: invalid expected configuration")
 	}
 	got, err := parseWindowsTaskXML(actual)
-	if err != nil || !reflect.DeepEqual(got, want) {
+	if err != nil {
+		return errors.New("task: system configuration does not match owned configuration")
+	}
+	removeWindowsTaskReadbackDefaults(got, want)
+	if !reflect.DeepEqual(got, want) {
 		return errors.New("task: system configuration does not match owned configuration")
 	}
 	return nil
+}
+
+// Task Scheduler serializes these exact defaults even when the signed source
+// omits them. Remove only an equivalent default absent from that source; keep
+// non-default values, attributes, children and all unknown additions for the
+// full comparison below. The saved source and its signature never change.
+func removeWindowsTaskReadbackDefaults(got, want *windowsTaskElement) {
+	name := func(local string) xml.Name { return xml.Name{Space: windowsTaskNamespace, Local: local} }
+	remove := func(actual, expected *windowsTaskElement, local, value string) {
+		if actual == nil || expected == nil || expected.Children[name(local)] != nil {
+			return
+		}
+		n := actual.Children[name(local)]
+		if n != nil && n.Text == value && len(n.Attrs) == 0 && len(n.Children) == 0 {
+			delete(actual.Children, name(local))
+		}
+	}
+	remove(got, want, "Triggers", "")
+	remove(got.Children[name("Settings")], want.Children[name("Settings")], "DisallowStartOnRemoteAppSession", "false")
 }
 
 func parseWindowsTaskXML(raw []byte) (*windowsTaskElement, error) {

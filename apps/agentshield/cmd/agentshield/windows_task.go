@@ -60,6 +60,7 @@ func renderWindowsTask(binary, directory, instanceID, sid string) (string, error
     <IdleSettings><StopOnIdleEnd>false</StopOnIdleEnd><RestartOnIdle>false</RestartOnIdle></IdleSettings>
     <AllowStartOnDemand>true</AllowStartOnDemand>
     <Enabled>true</Enabled><Hidden>false</Hidden><RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
     <WakeToRun>false</WakeToRun><ExecutionTimeLimit>PT0S</ExecutionTimeLimit><Priority>7</Priority>
   </Settings>
   <Actions Context="LocalUser"><Exec><Command>%s</Command><Arguments>%s</Arguments></Exec></Actions>

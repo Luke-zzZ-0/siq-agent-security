@@ -39,6 +39,15 @@ func cmdStateStatus(args []string, out io.Writer) error {
 		return e
 	}
 	c, e := state.CheckStateCompatibility(dir)
+	// Diagnosis must include the same ancestor barriers that protect file I/O.
+	// A compatible inner instance must not hide an incompatible outer marker.
+	if ancestorErr := stateformat.RequirePath(dir, true); e == nil && ancestorErr != nil {
+		e = ancestorErr
+		c.Status = state.CompatStatusCorrupt
+		if errors.Is(ancestorErr, stateformat.ErrFuture) {
+			c.Status = state.CompatStatusFuture
+		}
+	}
 	result := map[string]any{"schema": "local-state-status/v1", "compatible": e == nil, "status": c.Status, "format_version": c.Format, "reader_version": stateformat.ReaderVersion, "writer_version": stateformat.WriterVersion}
 	if e != nil {
 		result["recovery"] = stateformat.RecoveryMessage()

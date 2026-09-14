@@ -60,6 +60,10 @@ func runWindowsTaskScript(script string, input []byte) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 	executable := filepath.Join(filepath.Dir(taskExe), "WindowsPowerShell", "v1.0", "powershell.exe")
+	// Windows PowerShell may emit module-initialization progress as CLIXML on
+	// stderr, including in noninteractive mode. Suppress only progress in this
+	// child; actual stderr remains an unconfirmed system operation.
+	script = "$ProgressPreference = 'SilentlyContinue'\n" + script
 	cmd := exec.CommandContext(ctx, executable, "-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand", encodeWindowsPowerShell(script))
 	cmd.Stdin = bytes.NewReader(input)
 	var stdout, stderr serviceOutput

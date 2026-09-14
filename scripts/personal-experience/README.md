@@ -28,9 +28,11 @@ SIQ_AGENT_SECURITY_STATE_DIR="$HOME/.local/state/siq-agent-security-personal-dev
   .tmp/personal-experience/siq-agent-security pair --port 47612
 ```
 
-在 Windows 上使用 `python`、对应 `.exe`，并通过 `$env:SIQ_AGENT_SECURITY_STATE_DIR` 指定同一状态目录。此路径尚需 Windows 实机验收。
+在 Windows 上使用 `python`、对应 `.exe`，并通过 `$env:SIQ_AGENT_SECURITY_STATE_DIR` 指定同一状态目录。Windows 的空闲回环端口可能约两秒后才返回明确的连接拒绝；启动工具为此最多等待五秒，只有明确拒绝才继续初始化。探测超时、权限错误或其他未知网络错误仍拒绝启动，也不创建状态。真实宿主和完整系统生命周期的验收独立记录。
 
-工具会先验证健康协议。端口上的其他应用或旧版服务不会被当作启动成功，也不会被终止；正常服务会复用。后台运行不会收集配对码日志。服务未就绪时保留诊断提示，不自动清除写锁。该入口没有安装系统服务或登录启动项，关闭系统会话后的行为按系统另行验收。
+服务启动后的就绪等待默认十五秒。若本机实测启动较慢，可显式传入 `--timeout 60` 延长本次等待；超时仍报告未就绪并保留自己启动的进程供诊断，不能据此认定健康或清除写锁。该选项不改变端口探测、初始化和单次健康检查的超时。
+
+工具会先验证健康协议，直接解析子进程输出的 JSON 字节，不用 Windows 控制台代码页解码协议或诊断输出。端口上的其他应用或旧版服务不会被当作启动成功，也不会被终止；正常服务会复用。后台运行不会收集配对码日志。服务未就绪时保留诊断提示，不自动清除写锁。该入口没有安装系统服务或登录启动项，关闭系统会话后的行为按系统另行验收。
 
 配对有效期内刷新页面和打开同源新标签页会恢复管理会话；“退出管理”使对应会话及恢复 Cookie 失效。服务重启后再次运行 `pair`，无需为了获取新配对码再次重启服务。
 
@@ -50,6 +52,8 @@ python3 scripts/personal-experience/session-browser-smoke.py \
   --binary .tmp/personal-experience/siq-agent-security \
   --out-dir .tmp/personal-experience/browser
 ```
+
+原生二进制测试通过 `SIQ_TEST_BINARY` 显式指定本机自建程序；在已观察到慢启动的机器上，可为这组测试设置 `SIQ_TEST_START_TIMEOUT=60`。这只调整原生测试的就绪等待，不跳过身份复验和错误端口拒绝。正常生命周期测试使用 `stop --confirm-stop` 完成服务排空，再检查重新启动，不用 Windows 强制终止代替正常停止。
 
 浏览器脚本自行启动独立状态目录和端口，最后清理它启动的服务。输出只含检查结果、制品哈希和无凭据截图。该结果验证管理会话，不代表 OpenClaw/Hermes/WorkBuddy 真实运行时接入通过。
 
