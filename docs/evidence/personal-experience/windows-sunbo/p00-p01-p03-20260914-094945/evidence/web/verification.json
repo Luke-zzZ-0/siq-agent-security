@@ -1,0 +1,51 @@
+{
+  "schema_version": "windows-web-launcher-verification/v1",
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "recorded_at": "2026-09-14T00:57:59.631096+00:00",
+  "status": "pass",
+  "scope": "Windows Web builds and HTTP entries plus native local launcher regressions",
+  "results": {
+    "npm_ci_exit": 0,
+    "web_test_files": 22,
+    "web_tests_passed": 74,
+    "enterprise_build_exit": 0,
+    "local_build_exit": 0,
+    "dev_help_exit": 0,
+    "http_entries_passed": 6,
+    "dev_child_processes_stopped": 2,
+    "embed_blob_files_equal": 214,
+    "embed_extra_files": 0,
+    "launcher_tests_passed": 13,
+    "launcher_tests_skipped": 1
+  },
+  "skip_reason": "Existing Unix executable shebang fixture; three actual native binary test functions passed.",
+  "limits": [
+    "HTTP entry selection was tested; this batch does not claim browser rendering or Agent platform acceptance.",
+    "Lifecycle suite includes focused component tests plus three real Windows binary lifecycle/init test functions.",
+    "Python platform.machine() was empty in concurrent wrapper metadata; separate architecture-observation.json recorded AMD64, win-amd64 and 64-bit pointers. Original observations were preserved."
+  ],
+  "files_sha256": {
+    "architecture-observation.json": "9485c7da3ffa0836f4dbb41db53f31052052e840101b5990684519199479e998",
+    "build-enterprise.log": "923b3b3be72930da8a00a5d5fa226fedc927f1bf62304d7047000b0aa450e6b0",
+    "build-local.log": "75c6abdf165cccdcd4b19315b5b8d23f261915e8bf8de4d7b39eadf04f5103ef",
+    "check-dev.mjs": "aa43fe4a5c9266815d90f9e2374b9d128b9e8193203c0c1b97e7249965c4f661",
+    "check-embed.mjs": "13a1e94c38a44842e5d1cce9aa49df428ce6fb74e87b00eb0dde7e10b6dc1325",
+    "dev-enterprise.log": "3a2410b781b39c63bd20dc480c14c033ee10f57a60a5c819475ba2bd3cb160a2",
+    "dev-http-entries.log": "7617f37cbd549a24b8fd05df9cf1bf1269739e6ffc5bf27701c0e1e62a3b6a25",
+    "dev-local-help.log": "b75a96f2c1f6e54f5433176151d425c3cabfdd1a6db7437f33459e72acd14710",
+    "dev-local.log": "4c1f636ac423eb68796984ee0ddf2ff259e0b4204c1dc9275328b923e359a8ee",
+    "dev-routes.json": "a60e73787c474fa9a704b818c2a4abd7838888be1b36d74a102d6fa7c37bf3fd",
+    "embed-byte-check.json": "e6f0d0696b3aadbbc967bf2f343724f67b2ff5f31c07f8231f9be1d74b9210c9",
+    "embed-byte-check.log": "bf8725f8f497f01f00b8579b597ac2488af7b234d1ae7454b27e4b5e9b1b8651",
+    "launcher-native-tests.log": "2b57fc94e8d69e75c8fcb869adbc9476aef0b786b8d887c95f2f2628a3951c16",
+    "launcher-verification.json": "77c12415b4af365c8c394fe9de66a03b46a7382853ecfc0c1a2c88126cd09e8b",
+    "node-version.log": "a2b821afd4e4bfa296f90391e3108eca40a048dd7d6ac21bf16c0971c16e7be6",
+    "npm-ci.log": "b9c5e74d29250ad7dd3abbf2970d1f45b31aae7876ec889bed6e9343974451f2",
+    "npm-version.log": "a2b532864547b23ee12ed271317cd6fb9b0a06464d90e27f67ab9005576a9df0",
+    "run-validation.py": "dbe331d238fe0edeb00ecc7d0edd8f91133f950b2009a8c5a4a0aa4e502e2c86",
+    "web-tests.log": "e1a35094b8370c8937c0eb9fd58110964b049bfe476be7c61dc53f1740532c59",
+    "web-verification.json": "c57eaa875b11eac5726c19a69c2f42ef06a6f33ad2be9ec29767f71de273517a"
+  }
+}

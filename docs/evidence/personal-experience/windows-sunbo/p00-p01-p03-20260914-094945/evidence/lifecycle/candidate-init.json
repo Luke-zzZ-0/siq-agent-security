@@ -1,0 +1,13 @@
+{
+  "method": "native_cli",
+  "label": "candidate-init",
+  "source_dirty": false,
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "command": "siq-agent-security init --port 47623",
+  "state_directory": "<NATIVE_TEST_ROOT>\\states\\lifecycle-candidate-ebc472f2-中文 空格",
+  "exit_code": 0,
+  "duration_ms": 1586,
+  "stdout": "{\"schema_version\":\"local-client-initialization/v1\",\"status\":\"initialized\",\"instance_id\":\"8304d365495459de23b8e655ef26e8b7567fae99fe54ba1412f95990c65f9708\",\"state_directory_id\":\"0cfd913fa95132bd82b0b92b46cd873a2d7d3e78ffa2ca4b4abfd2b5c8539d99\",\"port\":47623}\n",
+  "stderr": ""
+}

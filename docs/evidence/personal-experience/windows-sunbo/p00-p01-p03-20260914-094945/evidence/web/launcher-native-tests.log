@@ -1,0 +1,25 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0 -- <WORKSPACE>\apps\control-api\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: <WORKSPACE>
+plugins: anyio-4.14.2
+collecting ... collected 14 items
+
+scripts/personal-experience/test_start_local.py::test_native_start_command PASSED [  7%]
+scripts/personal-experience/test_start_local.py::test_repeated_start_reuses_verified_service_without_spawning PASSED [ 14%]
+scripts/personal-experience/test_start_local.py::test_unknown_port_owner_is_not_started_or_killed PASSED [ 21%]
+scripts/personal-experience/test_start_local.py::test_unconfirmed_port_never_initializes_or_starts[network_error0] PASSED [ 28%]
+scripts/personal-experience/test_start_local.py::test_unconfirmed_port_never_initializes_or_starts[network_error1] PASSED [ 35%]
+scripts/personal-experience/test_start_local.py::test_unconfirmed_port_never_initializes_or_starts[network_error2] PASSED [ 42%]
+scripts/personal-experience/test_start_local.py::test_spawn_failure_preserves_writer_lock SKIPPED [ 50%]
+scripts/personal-experience/test_start_local.py::test_health_requires_protocol_not_exit_code PASSED [ 57%]
+scripts/personal-experience/test_start_local.py::test_utf8_json_and_diagnostics_do_not_depend_on_console_encoding[status] PASSED [ 64%]
+scripts/personal-experience/test_start_local.py::test_utf8_json_and_diagnostics_do_not_depend_on_console_encoding[init] PASSED [ 71%]
+scripts/personal-experience/test_start_local.py::test_legacy_health_is_not_reused PASSED [ 78%]
+scripts/personal-experience/test_start_local.py::test_native_instance_lifecycle PASSED [ 85%]
+scripts/personal-experience/test_start_local.py::test_failed_initialization_never_starts_service PASSED [ 92%]
+scripts/personal-experience/test_start_local.py::test_native_initialization_concurrency PASSED [100%]
+
+=========================== short test summary info ===========================
+SKIPPED [1] scripts\personal-experience\test_start_local.py:114: fixture uses Unix executable shebang; Windows runtime evidence tracked separately
+================== 13 passed, 1 skipped in 77.30s (0:01:17) ===================

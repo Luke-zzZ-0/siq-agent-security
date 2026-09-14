@@ -1,0 +1,10 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "method": "native_process_and_tcp_readback",
+  "expected_binary_process_count": 1,
+  "expected_state_argument_present": true,
+  "pid": 16144,
+  "listener_owned_by_same_pid": true,
+  "port": 47623
+}

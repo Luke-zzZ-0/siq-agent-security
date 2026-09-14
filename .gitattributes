@@ -1,3 +1,19 @@
+# These inputs are hashed or embedded. Keep checkout bytes independent of
+# Windows core.autocrlf; never change a signed digest to match rewritten bytes.
+*.go text eol=lf
+apps/agentshield/**/testdata/** -text
+apps/agentshield/testdata/** -text
+apps/agentshield/internal/rulepack/data/** -text
+apps/control-api/app/data/** -text
+apps/agentshield/internal/ui/embedded/** -text
+apps/agentshield/internal/adapterinstall/assets/** -text
+apps/agentshield/cmd/agentshield/*.ps1 text eol=lf
+adapters/runtime/** -text
+skills/siq-agent-security/** -text
+docs/evidence/personal-experience/windows-sunbo/** -text
+apps/web/index.html text eol=lf
+apps/web/index.local.html text eol=lf
+
 # Preserve captured verification logs byte-for-byte, including their final blank line.
 docs/hackathon/evidence/final-regression-20260908/web-tests.log whitespace=-blank-at-eof
 docs/hackathon/evidence/final-regression-20260908/web-unit-final.log whitespace=-blank-at-eof

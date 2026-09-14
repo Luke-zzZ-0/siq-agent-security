@@ -2,21 +2,24 @@ package main
 
 import (
 	"bytes"
-	"context"
+	_ "embed"
 	"encoding/binary"
+	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"io"
-	"os/exec"
+	"os/user"
 	"regexp"
 	"strings"
-	"time"
 	"unicode/utf16"
 	"unicode/utf8"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
 )
+
+//go:embed windows_task_query.ps1
+var windowsTaskQueryScript string
 
 func cmdWindowsTaskQuery(args []string, out io.Writer) error {
 	return cmdWindowsTaskRead(args, out, false)
@@ -78,20 +81,19 @@ func queryOwnedWindowsTask(st *state.Store, key *signing.Key, expected []byte, s
 }
 
 func runWindowsTaskQuery(name string) ([]byte, error) {
-	executable, err := windowsTaskExecutable()
+	current, err := user.Current()
+	if err != nil || !state.WindowsUserSIDValid(current.Uid) {
+		return nil, errors.New("task-query: current Windows user not confirmed")
+	}
+	input, err := json.Marshal(map[string]string{"task_name": name, "user_sid": current.Uid})
 	if err != nil {
 		return nil, err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	defer cancel()
-	cmd := exec.CommandContext(ctx, executable, "/Query", "/TN", name, "/XML")
-	var stdout, stderr serviceOutput
-	cmd.Stdout, cmd.Stderr = &stdout, &stderr
-	cmd.WaitDelay = time.Second
-	if err := cmd.Run(); err != nil || stderr.Len() != 0 {
-		return nil, errors.New("task-query: system command failed or timed out")
+	stdout, err := runWindowsTaskScript(windowsTaskQueryScript, input)
+	if err != nil {
+		return nil, errors.New("task-query: system query failed or timed out")
 	}
-	return []byte(stdout.String()), nil
+	return []byte(stdout), nil
 }
 
 var taskEncodingDeclaration = regexp.MustCompile(`(?i)encoding\s*=\s*["']([^"']+)["']`)

@@ -1,0 +1,78 @@
+{
+  "source_base_sha": "aac1154bd0fe25d38f451716f1b1edd385f6358a",
+  "source_dirty": true,
+  "phase": "development_reproduction_not_clean_candidate_acceptance",
+  "node": "v22.20.0",
+  "npm": "11.18.0",
+  "shell": "Windows PowerShell invoking npm.cmd",
+  "changes": [
+    "apps/web/package.json",
+    "apps/web/scripts/vite-local.mjs",
+    "apps/web/README.md"
+  ],
+  "coordinated_root_change": ".gitattributes: apps/web/index.html and apps/web/index.local.html text eol=lf",
+  "commands": [
+    {
+      "command": "npm.cmd ci",
+      "exit_code": 0,
+      "log": "npm-ci.log"
+    },
+    {
+      "command": "npm.cmd run build:local (original)",
+      "exit_code": 1,
+      "log": "baseline-build-local.log"
+    },
+    {
+      "command": "npm.cmd run dev:local -- --help (original)",
+      "exit_code": 1,
+      "log": "baseline-dev-local.log"
+    },
+    {
+      "log": "fixed-test.log",
+      "command": "npm.cmd test",
+      "test_files_passed": 22,
+      "exit_code": 0,
+      "tests_passed": 74
+    },
+    {
+      "command": "npm.cmd run build",
+      "exit_code": 0,
+      "log": "fixed-build-enterprise.log"
+    },
+    {
+      "command": "npm.cmd run dev:local -- --help",
+      "exit_code": 0,
+      "log": "fixed-dev-local-help.log"
+    },
+    {
+      "command": "npm.cmd run build:local (final launcher and LF input)",
+      "exit_code": 0,
+      "log": "final-build-local.log"
+    },
+    {
+      "limitation": "direct Vite and Node launcher processes; HTTP entry checks only; no browser rendering or SIQ pairing asserted",
+      "command": "node .tmp/windows-web/check-dev.mjs",
+      "exit_code": 0,
+      "log": "fixed-dev-routes.json"
+    },
+    {
+      "files_checked": 214,
+      "command": "node .tmp/windows-web/check-embed.mjs (after final build completed)",
+      "exit_code": 0,
+      "log": "final-embed-byte-check.json"
+    }
+  ],
+  "retained_original_failure": "Both original npm local entrypoints fail on native Windows cmd.exe because VITE_APP=agentshield is a POSIX shell assignment.",
+  "embed": "All 214 generated tracked files match current HEAD Git blob bytes exactly; no runtime resource change.",
+  "cleanup": "Both deliberately started dev processes terminated; their dynamically selected loopback ports verified closed.",
+  "excluded_intermediate_materials": [
+    "fixed-build-local-lf.log was an intermediate reverted transform experiment; use final-build-local.log",
+    "in-flight-embed-byte-check.json read old output while build was still running; use final-embed-byte-check.json"
+  ],
+  "not_claimed": [
+    "clean candidate acceptance",
+    "browser rendering",
+    "real host runtime acceptance",
+    "Linux/macOS native rerun"
+  ]
+}

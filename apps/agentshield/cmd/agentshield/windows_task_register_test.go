@@ -2,15 +2,92 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
 	"siq-agent-security/apps/agentshield/internal/signing"
 	"siq-agent-security/apps/agentshield/internal/state"
 )
+
+func TestWindowsTaskLegacyPreparedSourceIsNotRewritten(t *testing.T) {
+	st, err := state.Open(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	w, err := state.AcquireWriter(st.Dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer w.Release()
+	if _, err := st.Initialize(w, 0); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := st.ReadLocalInstance()
+	if err != nil {
+		t.Fatal(err)
+	}
+	key, _ := signing.FromSeed(bytes.Repeat([]byte{7}, 32))
+	const sid = "S-1-5-21-100-200-300-1001"
+	current, err := renderWindowsTask(`C:\SIQ\siq.exe`, `C:\SIQ\state`, instance.InstanceID, sid)
+	if err != nil {
+		t.Fatal(err)
+	}
+	legacy := strings.Replace(current, "    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>\n", "", 1)
+	if legacy == current {
+		t.Fatal("legacy fixture did not remove the newly signed setting")
+	}
+	if _, err := st.PrepareWindowsTask(w, key, []byte(legacy), sid); err != nil {
+		t.Fatal(err)
+	}
+	snapshot := func() map[string]any {
+		t.Helper()
+		result := make(map[string]any)
+		if err := filepath.WalkDir(st.Dir, func(path string, entry fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			info, err := entry.Info()
+			if err != nil {
+				return err
+			}
+			var sum [32]byte
+			if !entry.IsDir() {
+				raw, err := os.ReadFile(path)
+				if err != nil {
+					return err
+				}
+				sum = sha256.Sum256(raw)
+			}
+			result[path] = struct {
+				Mode fs.FileMode
+				Sum  [32]byte
+			}{info.Mode(), sum}
+			return nil
+		}); err != nil {
+			t.Fatal(err)
+		}
+		return result
+	}
+	before := snapshot()
+	if _, err := st.PrepareWindowsTask(w, key, []byte(current), sid); err == nil || !strings.Contains(err.Error(), "explicit migration required") {
+		t.Fatal("new preparation replaced legacy ownership", err)
+	}
+	if _, err := st.VerifyWindowsTask(key, []byte(current), sid); err == nil {
+		t.Fatal("new source accepted legacy ownership")
+	}
+	if _, err := st.VerifyWindowsTask(key, []byte(legacy), sid); err != nil {
+		t.Fatal("legacy ownership was damaged", err)
+	}
+	if !reflect.DeepEqual(before, snapshot()) {
+		t.Fatal("rejected new source changed existing files or permissions")
+	}
+}
 
 func TestWindowsTaskRegisterConfirmation(t *testing.T) {
 	for _, args := range [][]string{nil, {"--confirm-register=false"}, {"--confirm-register", "extra"}} {

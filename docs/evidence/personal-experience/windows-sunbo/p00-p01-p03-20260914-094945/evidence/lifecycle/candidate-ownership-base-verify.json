@@ -1,0 +1,13 @@
+{
+  "method": "native_cli",
+  "label": "candidate-ownership-base-verify",
+  "source_dirty": false,
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "command": "siq-agent-security task-prepare",
+  "state_directory": "<NATIVE_TEST_ROOT>\\states\\lifecycle-candidate-ebc472f2-中文 空格",
+  "exit_code": 0,
+  "duration_ms": 1645,
+  "stdout": "{\"schema_version\":\"local-windows-task-record/v1\",\"instance_id\":\"8304d365495459de23b8e655ef26e8b7567fae99fe54ba1412f95990c65f9708\",\"state_directory_id\":\"0cfd913fa95132bd82b0b92b46cd873a2d7d3e78ffa2ca4b4abfd2b5c8539d99\",\"task_name\":\"\\\\SIQ-Agent-Security-8304d365495459de23b8e655ef26e8b7567fae99fe54ba1412f95990c65f9708\",\"xml_sha256\":\"01e3b0f10d8be82e467ca454e750e8934973fa96187355e7f521dbc24f5f1e77\",\"user_sid\":\"<CURRENT_USER_SID>\",\"signature\":\"1c932c93cd124f5098ab9a8851dc4fd63986b524c4cd82b291eb38af58f9e66022e820d66ee359e54e954936931eeb430ef309e45338c6725716a068d3941b0e\"}\n",
+  "stderr": ""
+}

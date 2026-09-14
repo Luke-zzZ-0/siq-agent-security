@@ -13,7 +13,9 @@ try {
     } catch {
         $cause = $_.Exception
         while ($null -ne $cause.InnerException) { $cause = $cause.InnerException }
-        if (($cause -is [System.Runtime.InteropServices.COMException]) -and ($cause.HResult -eq -2147024894)) {
+        # .NET may map this COM HRESULT to FileNotFoundException. This catch
+        # surrounds only the exact GetTask call, never connection/root lookup.
+        if ((($cause -is [System.Runtime.InteropServices.COMException]) -or ($cause -is [System.IO.FileNotFoundException])) -and ($cause.HResult -eq -2147024894)) {
             [Console]::Out.Write('SIQ_TASK_ABSENT')
             exit 0
         }

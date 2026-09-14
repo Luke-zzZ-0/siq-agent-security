@@ -1,0 +1,53 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "method": "native_com_cim_tcp_acl_readback",
+  "checked_utc": "2026-09-14T01:10:25.0842825Z",
+  "known_test_states": [
+    {
+      "state_directory": "<PRIVATE_ROOT>\\states\\lifecycle-中文 空格",
+      "exact_task_absent": true,
+      "signed_source_and_binding_retained": true,
+      "configuration_retained": true,
+      "private_key_directory_nonempty": true,
+      "history_directory_retained": true
+    },
+    {
+      "state_directory": "<PRIVATE_ROOT>\\states\\lifecycle-fixed-中文 空格",
+      "exact_task_absent": true,
+      "signed_source_and_binding_retained": true,
+      "configuration_retained": true,
+      "private_key_directory_nonempty": true,
+      "history_directory_retained": true
+    },
+    {
+      "state_directory": "<PRIVATE_ROOT>\\states\\lifecycle-signed-中文 空格",
+      "exact_task_absent": true,
+      "signed_source_and_binding_retained": true,
+      "configuration_retained": true,
+      "private_key_directory_nonempty": true,
+      "history_directory_retained": true
+    },
+    {
+      "state_directory": "<NATIVE_TEST_ROOT>\\states\\lifecycle-probe-中文 空格",
+      "exact_task_absent": true,
+      "signed_source_and_binding_retained": true,
+      "configuration_retained": true,
+      "private_key_directory_nonempty": true,
+      "history_directory_retained": true
+    },
+    {
+      "state_directory": "<NATIVE_TEST_ROOT>\\states\\lifecycle-candidate-ebc472f2-中文 空格",
+      "exact_task_absent": true,
+      "signed_source_and_binding_retained": true,
+      "configuration_retained": true,
+      "private_key_directory_nonempty": true,
+      "history_directory_retained": true
+    }
+  ],
+  "known_test_binary_processes_remaining": 0,
+  "native_test_ports_listening": 0,
+  "native_test_root_acl_protected": true,
+  "native_test_root_acl_only_current_user_system_administrators_fullcontrol": true,
+  "unknown_tasks_or_processes_modified": false
+}

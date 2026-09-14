@@ -1,0 +1,20 @@
+{
+  "schema_version": "personal-session-smoke/v1",
+  "recorded_at": "2026-09-14T00:53:00.986267+00:00",
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "scope": "isolated daemon and real Chromium; no real agent integration claimed",
+  "discovery_fixtures": false,
+  "checks": {
+    "cli_health_identity": true,
+    "pair_without_restart": true,
+    "cookie_scope": true,
+    "no_script_credential": true,
+    "refresh_restores_session": true,
+    "second_tab_restores_session": true,
+    "logout_revokes_across_tabs": true,
+    "restart_requires_pairing": true,
+    "connection_retry_recovers": true,
+    "pairing_mobile_no_overflow": true,
+    "no_page_errors": true
+  }
+}

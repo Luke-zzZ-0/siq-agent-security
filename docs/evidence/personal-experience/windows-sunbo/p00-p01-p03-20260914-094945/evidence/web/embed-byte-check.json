@@ -1,0 +1,8 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "comparison": "raw worktree bytes against HEAD Git blobs without line-ending filters",
+  "checked_files": 214,
+  "mismatches": [],
+  "extras": [],
+  "passed": true
+}

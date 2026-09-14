@@ -1,0 +1,12 @@
+{
+  "method": "native_cli",
+  "label": "signed-after-occupied-runtime",
+  "source_dirty": true,
+  "binary_sha256": "17eb213728b941a4944166ca5582e83e9ad3654145cbb628a8d7ab6f6fdf74c6",
+  "command": "siq-agent-security task-runtime",
+  "state_directory": "<PRIVATE_ROOT>\\states\\lifecycle-signed-中文 空格",
+  "exit_code": 0,
+  "duration_ms": 12286,
+  "stdout": "state=ready instances=0 last_result=-2147024894\n",
+  "stderr": ""
+}

@@ -1,0 +1,13 @@
+
+> @siq-agent-security/web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 <WORKSPACE>/apps/web
+
+
+ Test Files  22 passed (22)
+      Tests  74 passed (74)
+   Start at  08:55:00
+   Duration  10.50s (transform 14.68s, setup 0ms, import 21.47s, tests 2.48s, environment 11ms)
+

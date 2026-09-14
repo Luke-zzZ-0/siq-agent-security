@@ -92,6 +92,7 @@ def main():
                 env=env,
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
                 timeout=10,
                 check=False,
             )
@@ -99,9 +100,30 @@ def main():
         def stop():
             nonlocal process
             if process is not None:
-                process.terminate()
-                process.wait(timeout=15)
-                process = None
+                try:
+                    if process.poll() is None:
+                        stopped = subprocess.run(
+                            [str(binary), "stop", "--confirm-stop"], env=env,
+                            capture_output=True, text=True, encoding="utf-8", timeout=45,
+                            check=False,
+                        )
+                        if stopped.returncode != 0:
+                            raise RuntimeError("graceful stop refused")
+                    process.wait(timeout=15)
+                except (subprocess.TimeoutExpired, OSError, RuntimeError) as exc:
+                    # Only clean up the child we created. Report failed graceful
+                    # shutdown; never erase its writer lock to fake a restart.
+                    if process.poll() is None:
+                        process.terminate()
+                        try:
+                            process.wait(timeout=5)
+                        except subprocess.TimeoutExpired:
+                            process.kill()
+                            process.wait(timeout=15)
+                    raise RuntimeError("isolated daemon graceful stop failed") from exc
+                finally:
+                    if process.poll() is not None:
+                        process = None
 
         def start():
             nonlocal process
@@ -129,6 +151,9 @@ def main():
             return match.group(0)
 
         try:
+            initialized = cli("init")
+            if initialized.returncode != 0:
+                raise RuntimeError("isolated daemon initialization failed")
             start()
             outcomes["cli_health_identity"] = json.loads(cli("status").stdout)["status"] == "ready"
             with sync_playwright() as playwright:

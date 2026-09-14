@@ -1,0 +1,41 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty_before": false,
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "runner_sha256": "dbe331d238fe0edeb00ecc7d0edd8f91133f950b2009a8c5a4a0aa4e502e2c86",
+  "started_at": "2026-09-14T00:52:20.557881+00:00",
+  "os": "Windows",
+  "architecture": "",
+  "python": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "mode": "launcher",
+  "commands": [
+    {
+      "label": "launcher-native-tests",
+      "argv": [
+        "<WORKSPACE>\\apps\\control-api\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "--noconftest",
+        "scripts/personal-experience/test_start_local.py",
+        "-v",
+        "-rs",
+        "--basetemp",
+        "<WORKSPACE>\\.tmp\\win-task-native\\private-launcher-_q9c9sue\\pytest"
+      ],
+      "cwd": "<WORKSPACE>",
+      "exit_code": 0,
+      "elapsed_seconds": 84.442,
+      "log": "launcher-native-tests.log",
+      "log_sha256": "2b57fc94e8d69e75c8fcb869adbc9476aef0b786b8d887c95f2f2628a3951c16"
+    }
+  ],
+  "source_files": {
+    "scripts/personal-experience/start-local.py": "c6c1a18d1a816dd3da9ed06b2bb9bb76d06034da169c09f1eef16c1f81aa906e",
+    "scripts/personal-experience/test_start_local.py": "0c84ab18247f3518087b87d100a0e254ddff82d196bbee59b7ff282d6bd9cc9d"
+  },
+  "status": "pass",
+  "finished_at": "2026-09-14T00:53:46.845430+00:00",
+  "source_dirty_after": false,
+  "candidate_after": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "binary_sha256_after": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74"
+}

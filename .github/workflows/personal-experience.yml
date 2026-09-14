@@ -10,6 +10,40 @@ permissions:
   contents: read
 
 jobs:
+  windows-build-inputs:
+    name: Windows build inputs (not native Agent acceptance)
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86
+      - name: Locked frontend dependencies
+        working-directory: apps/web
+        run: npm.cmd ci
+      - name: Frontend tests and both Windows shell build entries
+        working-directory: apps/web
+        run: |
+          npm.cmd test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd run build
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd run build:local
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd run dev:local -- --help
+          exit $LASTEXITCODE
+      - name: Locked contract validation dependencies
+        working-directory: apps/control-api
+        run: uv sync --dev --locked
+      - name: Byte-exact contract samples without the Linux API fixture
+        working-directory: apps/control-api
+        # These tests need no API fixtures. The global conftest imports the
+        # Linux-only fcntl service; this job does not claim Windows API support.
+        run: uv run pytest --noconftest app/tests/test_schema_contracts.py
   evidence-tool:
     name: evidence-tool (${{ matrix.os }})
     strategy:

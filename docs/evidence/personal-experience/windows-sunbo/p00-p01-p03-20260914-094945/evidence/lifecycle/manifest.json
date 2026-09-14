@@ -1,0 +1,179 @@
+{
+  "candidate_sha": "ebc472f2e46aa7de837afe9d6a0ed422eef51cd0",
+  "source_dirty": false,
+  "binary_sha256": "4bc3f5ae95fd00aab528363d5d91e64145e0fd75257904a9f898323de68b6f74",
+  "evidence_scope": "native Windows Task Scheduler lifecycle; partial A12 only",
+  "file_count": 34,
+  "files": [
+    {
+      "file": "candidate-after-occupied-runtime.json",
+      "sha256": "6ed60dcfd2c94fbfdce2ffcabb99a92e7cb9909a7c0ace57fb6ce425c279feda",
+      "bytes": 525
+    },
+    {
+      "file": "candidate-cleanup-observation.json",
+      "sha256": "1c2c401d5dc9739ee3e9dc999f3ffa79951857e6d959d91d07d591500bf2556f",
+      "bytes": 2054
+    },
+    {
+      "file": "candidate-final-absence.json",
+      "sha256": "7d6cd42cd35856cef855c539dfcce2546e227e9cccabc84b4bba9b8129f47958",
+      "bytes": 478
+    },
+    {
+      "file": "candidate-foreign-ownership-observation.json",
+      "sha256": "efc4e9d0ff67d21ae7731e22901cbd0bc81f16152d01efa208255b16198d4e89",
+      "bytes": 473
+    },
+    {
+      "file": "candidate-foreign-register-denied.json",
+      "sha256": "3560f192de4f9134597e2c4599bf5378c5d477f14a348e4dba5059a1699c4d8f",
+      "bytes": 583
+    },
+    {
+      "file": "candidate-foreign-start-denied.json",
+      "sha256": "ec72bcbdd3eec85f63b62473703d0479a86e8e9a3f72a2db53b9696e611c5881",
+      "bytes": 573
+    },
+    {
+      "file": "candidate-foreign-unregister-denied.json",
+      "sha256": "1a30a3ec6b8cb88a56302b95e6f32728869aed7e30c89641cafdee9a4cd8ffc3",
+      "bytes": 589
+    },
+    {
+      "file": "candidate-init.json",
+      "sha256": "09e1aae97a738e6c16ca14c1fb9b4e2c788b39dfc2d1843acfed223e2589a4c6",
+      "bytes": 741
+    },
+    {
+      "file": "candidate-normal-final-absence.json",
+      "sha256": "8a5b11f8ee06aa1417274051969cfb561c6fadfd2f0c150a0545ba96039bed5b",
+      "bytes": 485
+    },
+    {
+      "file": "candidate-normal-ready.json",
+      "sha256": "e13c3ee43e1f5fbcd7cdbcea38eae17cdbf1bc45fb24279958e5f41218e3e4dc",
+      "bytes": 513
+    },
+    {
+      "file": "candidate-normal-reregister.json",
+      "sha256": "326b6a6b5ec1c9ee18926ca2426c69b1854fa5c8b4722cf0f0168d132dbdd764",
+      "bytes": 2012
+    },
+    {
+      "file": "candidate-normal-running.json",
+      "sha256": "61b6add258b29119ca7d40de343e21e19ba7fa7507b5e1dc3044ca162d389365",
+      "bytes": 517
+    },
+    {
+      "file": "candidate-normal-start.json",
+      "sha256": "f26b9ea017591fed2195ebeaf930b122f8f8a7a3e0619e2806e2202ede25df30",
+      "bytes": 587
+    },
+    {
+      "file": "candidate-normal-stop.json",
+      "sha256": "921ab2349292fe62d02f62ced1f4dc41745fa16d486798fab91d9a579c0b205a",
+      "bytes": 569
+    },
+    {
+      "file": "candidate-normal-stopped.json",
+      "sha256": "58935a43eb516fd4ca4d49909c1e8abf83bcfd8e15e6a3fce903586c31529fd4",
+      "bytes": 510
+    },
+    {
+      "file": "candidate-normal-unregister.json",
+      "sha256": "5bb023c5bb17f328e1b18e40e24838ef61791f40c03cd3462e86ce7ef2c205df",
+      "bytes": 584
+    },
+    {
+      "file": "candidate-ownership-base-verify.json",
+      "sha256": "a26080f0def572178eb2a45d98a4efe1d4e522edd74067c952fd936f3583344a",
+      "bytes": 1082
+    },
+    {
+      "file": "candidate-port-occupied-observation.json",
+      "sha256": "2c8bf7d1506f1d9c1cc3b381a5d0ff911e9ae9b2fb71c46a7bb417df507297d6",
+      "bytes": 292
+    },
+    {
+      "file": "candidate-port-occupied-start.json",
+      "sha256": "779542eed553c3730123fbdf763da0fd0b4f04c85bf23b1d7f0dfedd0c86d82c",
+      "bytes": 595
+    },
+    {
+      "file": "candidate-process-identity.json",
+      "sha256": "b0226e014cc0cc467fcf6a8427dbb6cbf87480bf13b7d90523657f5aebf67975",
+      "bytes": 298
+    },
+    {
+      "file": "candidate-register-repeat.json",
+      "sha256": "513c6c55db9fb1d4aab865bee0ed386dc0323076deb61a1173fb770651af6737",
+      "bytes": 2010
+    },
+    {
+      "file": "candidate-register.json",
+      "sha256": "dd6ba7b70ede3850a503f71742b38e2f5608a58c98b7ae1c2d765bcf68bfc5cb",
+      "bytes": 2003
+    },
+    {
+      "file": "candidate-runtime-ready.json",
+      "sha256": "a4cbcdfbbfa3fb571e14d035e25711b064d78e0e20e29c222c250e5a8e4454e4",
+      "bytes": 514
+    },
+    {
+      "file": "candidate-runtime-running.json",
+      "sha256": "944969d442b4b85430d2801df5f4b6153d04abc9aaf4e2cb0bace3807ad9e7d1",
+      "bytes": 518
+    },
+    {
+      "file": "candidate-runtime-stopped.json",
+      "sha256": "7fb19ca74a34343989b836b2ad46b252a550fbc747243dd909b98b0a7fb0e1b3",
+      "bytes": 511
+    },
+    {
+      "file": "candidate-start-repeat.json",
+      "sha256": "0de4e9f8c3b39a5e0fe7ed3fd3819cbe3cea49b5ba5fb590018e419d33205858",
+      "bytes": 587
+    },
+    {
+      "file": "candidate-start.json",
+      "sha256": "abfc609cd5af599818044b61e2674e5d9f4c5adacbe4e56085ea33677aabf537",
+      "bytes": 580
+    },
+    {
+      "file": "candidate-stop.json",
+      "sha256": "6eff6014d5763c58ba9f4adf202a78f3747412d648fe8560395f7bc574642248",
+      "bytes": 562
+    },
+    {
+      "file": "candidate-unregister-repeat.json",
+      "sha256": "3b02e70b7b2dd280ba31dfc27646aa01d25c538a421f7cc16017c6ee1e87ee3d",
+      "bytes": 583
+    },
+    {
+      "file": "candidate-unregister-running-denied.json",
+      "sha256": "c6d3c83db6793e5283dcec8d631e73189168a14b3701051afe69a4e21054179e",
+      "bytes": 621
+    },
+    {
+      "file": "candidate-unregister.json",
+      "sha256": "ffb47eda2b2163b540a2578adcfce5898e60f8b14eb57b8f122f7b6167414742",
+      "bytes": 577
+    },
+    {
+      "file": "candidate-windows-go-tests.json",
+      "sha256": "ae5fd0e2a500e2785c0351222887245a451be7079f54228acbb4d5a201c6a5eb",
+      "bytes": 984
+    },
+    {
+      "file": "candidate-windows-go-tests.log",
+      "sha256": "73f42b232e578d9f31bb8f619f10ac9e2fc78d8673d761982328db00f377b3a7",
+      "bytes": 66
+    },
+    {
+      "file": "report.md",
+      "sha256": "8d03ae12965419a0b49d2cb85dee12efde21a720eb0dbf8bfbe5acd26f6ab597",
+      "bytes": 5832
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+test_blocked_never_native_pass (test_platform_acceptance.AcceptanceTests.test_blocked_never_native_pass) ... ok
+test_cli_exit_semantics_and_output_no_overwrite (test_platform_acceptance.AcceptanceTests.test_cli_exit_semantics_and_output_no_overwrite) ... ok
+test_codebuddy_cannot_substitute_workbuddy (test_platform_acceptance.AcceptanceTests.test_codebuddy_cannot_substitute_workbuddy) ... ok
+test_complete_synthetic_bundle_only_ready_for_review (test_platform_acceptance.AcceptanceTests.test_complete_synthetic_bundle_only_ready_for_review) ... ok
+test_component_and_source_review_are_not_native (test_platform_acceptance.AcceptanceTests.test_component_and_source_review_are_not_native) ... ok
+test_cross_candidate_evidence_rejected (test_platform_acceptance.AcceptanceTests.test_cross_candidate_evidence_rejected) ... ok
+test_digest_mismatch_is_rejected (test_platform_acceptance.AcceptanceTests.test_digest_mismatch_is_rejected) ... ok
+test_dirty_and_nonboolean_candidate_rejected (test_platform_acceptance.AcceptanceTests.test_dirty_and_nonboolean_candidate_rejected) ... ok
+test_duplicate_evidence_refused (test_platform_acceptance.AcceptanceTests.test_duplicate_evidence_refused) ... ok
+test_duplicate_target_does_not_replace_missing_target (test_platform_acceptance.AcceptanceTests.test_duplicate_target_does_not_replace_missing_target) ... ok
+test_failure_with_evidence_remains_gap (test_platform_acceptance.AcceptanceTests.test_failure_with_evidence_remains_gap) ... ok
+test_file_and_total_budgets (test_platform_acceptance.AcceptanceTests.test_file_and_total_budgets) ... ok
+test_hardlink_rejected (test_platform_acceptance.AcceptanceTests.test_hardlink_rejected) ... ok
+test_invalid_report_does_not_create_output (test_platform_acceptance.AcceptanceTests.test_invalid_report_does_not_create_output) ... ok
+test_linked_directory_rejected (test_platform_acceptance.AcceptanceTests.test_linked_directory_rejected) ... skipped 'symlink creation unavailable on this runner'
+test_linked_file_rejected (test_platform_acceptance.AcceptanceTests.test_linked_file_rejected) ... skipped 'symlink creation unavailable on this runner'
+test_manifest_duplicate_json_keys (test_platform_acceptance.AcceptanceTests.test_manifest_duplicate_json_keys) ... ok
+test_manifest_invalid_and_oversized_inputs (test_platform_acceptance.AcceptanceTests.test_manifest_invalid_and_oversized_inputs) ... ok
+test_missing_file_refused (test_platform_acceptance.AcceptanceTests.test_missing_file_refused) ... ok
+test_missing_or_extra_capability_is_rejected (test_platform_acceptance.AcceptanceTests.test_missing_or_extra_capability_is_rejected) ... ok
+test_missing_target_is_not_dropped (test_platform_acceptance.AcceptanceTests.test_missing_target_is_not_dropped) ... ok
+test_native_cannot_be_relabelled_as_guest (test_platform_acceptance.AcceptanceTests.test_native_cannot_be_relabelled_as_guest) ... ok
+test_not_run_cannot_have_results (test_platform_acceptance.AcceptanceTests.test_not_run_cannot_have_results) ... ok
+test_pass_requires_evidence (test_platform_acceptance.AcceptanceTests.test_pass_requires_evidence) ... ok
+test_pass_requires_execution_identity (test_platform_acceptance.AcceptanceTests.test_pass_requires_execution_identity) ... ok
+test_referenced_program_is_not_executed (test_platform_acceptance.AcceptanceTests.test_referenced_program_is_not_executed) ... ok
+test_relative_path_policy (test_platform_acceptance.AcceptanceTests.test_relative_path_policy) ... ok
+test_same_bytes_cannot_be_borrowed_by_other_platform (test_platform_acceptance.AcceptanceTests.test_same_bytes_cannot_be_borrowed_by_other_platform) ... ok
+test_single_native_result_cannot_close_matrix (test_platform_acceptance.AcceptanceTests.test_single_native_result_cannot_close_matrix) ... ok
+test_status_never_accepts_skip_as_pass (test_platform_acceptance.AcceptanceTests.test_status_never_accepts_skip_as_pass) ... ok
+test_template_preserves_all_candidate_targets (test_platform_acceptance.AcceptanceTests.test_template_preserves_all_candidate_targets) ... ok
+test_unknown_fields_cannot_carry_raw_data (test_platform_acceptance.AcceptanceTests.test_unknown_fields_cannot_carry_raw_data) ... ok
+test_versions_cannot_contain_paths_or_urls (test_platform_acceptance.AcceptanceTests.test_versions_cannot_contain_paths_or_urls) ... ok
+test_workbuddy_requires_own_desktop_evidence (test_platform_acceptance.AcceptanceTests.test_workbuddy_requires_own_desktop_evidence) ... ok
+test_wsl_requires_guest_and_host_identity (test_platform_acceptance.AcceptanceTests.test_wsl_requires_guest_and_host_identity) ... ok
+test_schema_and_producer_capability_names_match (test_platform_acceptance_schema.SchemaTests.test_schema_and_producer_capability_names_match) ... ok
+test_schema_rejects_pass_without_evidence (test_platform_acceptance_schema.SchemaTests.test_schema_rejects_pass_without_evidence) ... ok
+test_schema_rejects_wrong_identity_or_fields (test_platform_acceptance_schema.SchemaTests.test_schema_rejects_wrong_identity_or_fields) ... ok
+test_schemas_are_valid_and_producer_outputs_match (test_platform_acceptance_schema.SchemaTests.test_schemas_are_valid_and_producer_outputs_match) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 8.305s
+
+OK (skipped=2)

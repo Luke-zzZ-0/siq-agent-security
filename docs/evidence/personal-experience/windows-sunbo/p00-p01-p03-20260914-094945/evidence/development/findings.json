@@ -1,0 +1,29 @@
+{
+  "schema_version": "windows-development-findings/v1",
+  "source_base_sha": "aac1154bd0fe25d38f451716f1b1edd385f6358a",
+  "source_dirty": true,
+  "scope": "historical development results; not clean candidate acceptance",
+  "go_baseline": {
+    "command": "CGO_ENABLED=0 go test ./...",
+    "cwd": "apps/agentshield",
+    "exit_code": 1,
+    "failed_packages_observed": 23,
+    "top_level_test_failures_observed": 79,
+    "package_timeouts_observed": 7,
+    "not_complete_test_denominator": true,
+    "original_private_log_sha256": "3d86ecb70f7755251f583c1cfde10acfd80b08d0b174338070cdc0bbd24b995d"
+  },
+  "locale_schema_observation": {
+    "python_utf8": false,
+    "exit_code": 1,
+    "passed": 106,
+    "failed": 100,
+    "cause_observed": "GBK decoding of UTF-8 fixture content",
+    "scope": "separate development invocation; not the standard conftest fcntl failure"
+  },
+  "limits": [
+    "Original private paths, tokens, state, signing keys and startup logs are not archived",
+    "Embedded signed inputs were restored only when LF bytes matched the original Git blob",
+    "Development results are not relabeled as the final candidate"
+  ]
+}
