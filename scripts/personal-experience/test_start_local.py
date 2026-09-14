@@ -236,7 +236,14 @@ def test_native_instance_lifecycle(monkeypatch, tmp_path, native_start_timeout):
         if os.name != "nt":
             alias = tmp_path / "alias"
             alias.symlink_to(selected, target_is_directory=True)
-            assert launcher.ensure_started(binary, alias, port)["reused"]
+            # Direct callers must respect the state store's symlink barrier.
+            # The CLI resolves its explicit path before invoking this helper.
+            with pytest.raises(RuntimeError, match="端口被其他服务"):
+                launcher.ensure_started(binary, alias, port)
+            assert alias.is_symlink()
+            assert (selected / "local-instance.json").read_bytes() == initial_record
+            assert len(children) == 1 and children[0].poll() is None
+            assert launcher.ensure_started(binary, alias.resolve(), port)["reused"]
         for directory, success in [(other, False), (selected, True)]:
             result = subprocess.run(
                 [str(binary), "pair", "--port", str(port)],
