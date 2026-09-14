@@ -108,6 +108,7 @@ class EvidenceTests(unittest.TestCase):
         sibling.mkdir()
         (sibling / "leg.json").write_text("{}")
         for ref in ("docs/evidence-escape/leg.json", "docs/evidence/../evidence-escape/leg.json",
+                    "docs//evidence/leg.json", "docs/evidence/./leg.json",
                     str(self.root / self.ref), "C:/docs/evidence/leg.json", "docs\\evidence\\leg.json"):
             with self.subTest(ref=ref), self.assertRaises(Invalid):
                 safe_ref(self.root, ref)

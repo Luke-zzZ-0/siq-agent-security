@@ -53,7 +53,8 @@ def safe_ref(repo, ref):
             "invalid evidence ref")
     parts = PurePosixPath(ref).parts
     require(not PurePosixPath(ref).is_absolute() and ".." not in parts
-            and parts[:2] == ("docs", "evidence"), "unsafe evidence ref")
+            and parts[:2] == ("docs", "evidence")
+            and PurePosixPath(ref).as_posix() == ref, "unsafe evidence ref")
     root = Path(repo).resolve()
     path = root
     try:
