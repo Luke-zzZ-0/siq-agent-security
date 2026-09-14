@@ -110,11 +110,27 @@ type archiveFetcher struct {
 	roots  *x509.CertPool
 }
 
-func fetchHTTPS(ctx context.Context, source string) (downloadedArchive, error) {
+func httpsFetcher() archiveFetcher {
 	resolver := &net.Resolver{PreferGo: true, StrictErrors: true}
 	dialer := &net.Dialer{Timeout: 3 * time.Second}
-	f := archiveFetcher{lookup: resolver.LookupNetIP, dial: dialer.DialContext}
-	return f.fetch(ctx, source)
+	return archiveFetcher{lookup: resolver.LookupNetIP, dial: dialer.DialContext}
+}
+
+func fetchHTTPS(ctx context.Context, source string) (downloadedArchive, error) {
+	return httpsFetcher().fetch(ctx, source)
+}
+
+// fetchOptions only tightens the default transport policy; no option can
+// enable a proxy, relax DNS/TLS validation, or raise a limit.
+type fetchOptions struct {
+	accept       string
+	maxRedirects int
+	maxBytes     int64
+	status       func(int) error
+}
+
+func (f archiveFetcher) fetch(ctx context.Context, source string) (downloadedArchive, error) {
+	return f.fetchWith(ctx, source, fetchOptions{accept: "application/zip, application/octet-stream", maxRedirects: 3, maxBytes: maxArchiveBytes})
 }
 func (f archiveFetcher) connect(ctx context.Context, network, address string) (net.Conn, error) {
 	host, port, err := net.SplitHostPort(address)
@@ -152,14 +168,14 @@ func (f archiveFetcher) connect(ctx context.Context, network, address string) (n
 	}
 	return nil, ErrDownloadFailed
 }
-func downloadHeaders(r *http.Request) {
+func downloadHeaders(r *http.Request, accept string) {
 	r.Header = make(http.Header)
 	r.Header.Set("User-Agent", "SIQ-Skill-Importer/1")
-	r.Header.Set("Accept", "application/zip, application/octet-stream")
+	r.Header.Set("Accept", accept)
 	r.Header.Set("Accept-Encoding", "identity")
 	r.Host = ""
 }
-func (f archiveFetcher) fetch(ctx context.Context, source string) (downloadedArchive, error) {
+func (f archiveFetcher) fetchWith(ctx context.Context, source string, opts fetchOptions) (downloadedArchive, error) {
 	var none downloadedArchive
 	if ctx == nil {
 		ctx = context.Background()
@@ -178,7 +194,7 @@ func (f archiveFetcher) fetch(ctx context.Context, source string) (downloadedArc
 		TLSNextProto: map[string]func(string, *tls.Conn) http.RoundTripper{}}
 	defer transport.CloseIdleConnections()
 	client := &http.Client{Transport: transport, CheckRedirect: func(req *http.Request, via []*http.Request) error {
-		if len(via) > 3 {
+		if len(via) > opts.maxRedirects {
 			return ErrURLBlocked
 		}
 		parsed, err := downloadURL(req.URL.String())
@@ -186,14 +202,14 @@ func (f archiveFetcher) fetch(ctx context.Context, source string) (downloadedArc
 			return err
 		}
 		req.URL = parsed
-		downloadHeaders(req)
+		downloadHeaders(req, opts.accept)
 		return nil
 	}}
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
 		return none, ErrURLBlocked
 	}
-	downloadHeaders(req)
+	downloadHeaders(req, opts.accept)
 	resp, err := client.Do(req)
 	if err != nil {
 		if ctx.Err() != nil {
@@ -209,20 +225,25 @@ func (f archiveFetcher) fetch(ctx context.Context, source string) (downloadedArc
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
+		if opts.status != nil {
+			if err := opts.status(resp.StatusCode); err != nil {
+				return none, err
+			}
+		}
 		return none, ErrDownloadFailed
 	}
 	encoding := strings.TrimSpace(resp.Header.Get("Content-Encoding"))
 	if encoding != "" && !strings.EqualFold(encoding, "identity") {
 		return none, ErrDownloadFailed
 	}
-	if resp.ContentLength > maxArchiveBytes {
+	if resp.ContentLength > opts.maxBytes {
 		return none, ErrLimit
 	}
-	raw, err := io.ReadAll(io.LimitReader(resp.Body, maxArchiveBytes+1))
+	raw, err := io.ReadAll(io.LimitReader(resp.Body, opts.maxBytes+1))
 	if ctx.Err() != nil {
 		return none, ctx.Err()
 	}
-	if int64(len(raw)) > maxArchiveBytes {
+	if int64(len(raw)) > opts.maxBytes {
 		return none, ErrLimit
 	}
 	if err != nil || len(raw) == 0 || (resp.ContentLength >= 0 && resp.ContentLength != int64(len(raw))) {

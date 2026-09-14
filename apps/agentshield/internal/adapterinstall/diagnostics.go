@@ -110,15 +110,7 @@ func Inspect(opts Options) Diagnosis {
 		} else {
 			record, recordErr := newestInstanceRecord(opts)
 			current, configErr := readImage(opts.Home, filepath.Join(root, "config.yaml"))
-			if recordErr == nil && record.NativeOriginal != nil && configErr == nil && record.NativeConfigHash == imageHash(current) {
-				digest, cliErr := programDigest(record.NativeCLI)
-				if cliErr == nil && digest == record.NativeCLIHash {
-					d.check("host_registration", "pass", "原生命令已确认本实例启用配置，摘要仍一致；实际运行仍待验证")
-				} else {
-					d.check("host_registration", "unknown", "原生程序已变化，请重新检查本实例接入")
-				}
-			} else {
-				d.check("host_registration", "unknown", "Hermes 需要原生验证当前 profile 的插件启用状态")
+			if !hermesNativeEvidence(&d, record, recordErr, current, configErr) {
 				d.NextSteps = append(d.NextSteps, "在接入预览中选择目标 profile 并启用插件，再开启新会话验证正常和拒绝调用。")
 			}
 		}
@@ -147,6 +139,50 @@ func Inspect(opts Options) Diagnosis {
 		d.NextSteps = append(d.NextSteps, "配置检查不等于保护生效；在方便时重启目标会话，完成原生调用自检。")
 	}
 	return d
+}
+
+// hermesNativeEvidence splits the native registration verdict from the
+// platform-compatibility verdict: the recorded enablement (host_registration)
+// can stay trustworthy while the native program itself has changed underneath
+// it, which is a distinct diagnosis a platform upgrade needs to surface.
+// It reports whether the recorded registration is still confirmed.
+func hermesNativeEvidence(d *Diagnosis, record *Record, recordErr error, current fileImage, configErr error) bool {
+	if recordErr != nil || record == nil || record.NativeOriginal == nil || configErr != nil || record.NativeConfigHash != imageHash(current) {
+		d.check("host_registration", "unknown", "Hermes 需要原生验证当前 profile 的插件启用状态")
+		d.check("platform_compatibility", "unknown", "原生程序未确认，无法评估平台升级影响")
+		return false
+	}
+	d.check("host_registration", "pass", "原生命令已确认本实例启用配置；实际运行仍待验证")
+	digest, cliErr := programDigest(record.NativeCLI)
+	if cliErr != nil || digest != record.NativeCLIHash {
+		d.check("platform_compatibility", "unknown", "原生 CLI 程序与接入时不同，可能是平台升级；请重新执行接入验证钩子兼容性")
+		return true
+	}
+	d.check("platform_compatibility", "pass", "原生 CLI 程序摘要与接入时一致")
+	return true
+}
+
+// ConfiguredEndpoint reports the service address the installed adapter is
+// pointed at. Only the connection document is read, never credentials; ok is
+// false when no adapter configuration exists, the platform has no readable
+// connection document, or the endpoint field is absent.
+func ConfiguredEndpoint(opts Options) (string, bool) {
+	if opts.Platform != Hermes && opts.Platform != OpenClaw {
+		return "", false
+	}
+	if opts.Home == "" {
+		opts.Home, _ = os.UserHomeDir()
+	}
+	config := filepath.Join(opts.configRoot(), "plugins", product.PluginDir(), "config.json")
+	if opts.Platform == OpenClaw {
+		config = filepath.Join(opts.configRoot(), product.Name+".json")
+	}
+	doc, err := inspectJSON(opts.Home, config)
+	if err != nil {
+		return "", false
+	}
+	endpoint, _ := doc["endpoint"].(string)
+	return endpoint, endpoint != ""
 }
 
 func inspectRead(home, path string) ([]byte, error) {

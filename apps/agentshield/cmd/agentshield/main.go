@@ -630,9 +630,24 @@ func cmdServe(args []string) error {
 		defer refreshTicker.Stop()
 		rawContentPurgeTicker := time.NewTicker(15 * time.Minute)
 		defer rawContentPurgeTicker.Stop()
-		runServeMaintenance(refreshCtx, refreshTicker.C, rawContentPurgeTicker.C, func() error {
+		updateCheckTicker := time.NewTicker(5 * time.Minute)
+		defer updateCheckTicker.Stop()
+		runServeMaintenance(refreshCtx, refreshTicker.C, rawContentPurgeTicker.C, updateCheckTicker.C, func() error {
 			return srv.Refresh("")
-		}, srv.PurgeExpiredRawContent)
+		}, srv.PurgeExpiredRawContent, func(ctx context.Context) error {
+			res, err := srv.RunScheduledUpdateChecks(ctx)
+			if err != nil {
+				// Diagnosable but never fatal: the decision API is unaffected
+				// and the next tick retries.
+				fmt.Fprintf(os.Stderr, "%s: scheduled update checks skipped: %v\n", product.Name, err)
+				return err
+			}
+			if res.Due > 0 || res.Disabled > 0 {
+				// Counts only: schedule records never contribute locators.
+				fmt.Fprintf(os.Stderr, "%s: scheduled update checks: due=%d checked=%d deferred=%d not_due=%d disabled=%d stale=%d\n", product.Name, res.Due, len(res.Checked), res.Deferred, res.NotDue, res.Disabled, res.Stale)
+			}
+			return nil
+		})
 	}()
 	// UX-008 background launcher layer: opt-in desktop notifications with a
 	// count-only body; delivery failure never affects decisions or the inbox.

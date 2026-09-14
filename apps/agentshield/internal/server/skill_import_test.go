@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http/httptest"
 	"os"
@@ -429,10 +430,15 @@ func TestGitSkillImportHTTPAdminStrictAndBounds(t *testing.T) {
 	}
 }
 
-func TestGitDisabledTransportErrorIsExplicit(t *testing.T) {
+func TestGitHostedSourceErrorsAreExplicit(t *testing.T) {
 	w := httptest.NewRecorder()
-	skillImportError(w, skillimport.ErrGitTransportUnavailable)
-	if w.Code != 503 || !strings.Contains(w.Body.String(), `"error":"skill_import_git_transport_unavailable"`) {
+	skillImportError(w, skillimport.ErrGitHostUnsupported)
+	if w.Code != 400 || !strings.Contains(w.Body.String(), `"error":"skill_import_git_host_unsupported"`) {
+		t.Fatal(w.Code, w.Body.String())
+	}
+	w = httptest.NewRecorder()
+	skillImportError(w, fmt.Errorf("%w: upstream_status_404", skillimport.ErrSourceUnavailable))
+	if w.Code != 502 || !strings.Contains(w.Body.String(), `"error":"skill_import_source_unavailable"`) {
 		t.Fatal(w.Code, w.Body.String())
 	}
 }
