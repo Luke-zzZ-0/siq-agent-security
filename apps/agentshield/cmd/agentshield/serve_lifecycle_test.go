@@ -168,17 +168,22 @@ func TestServeMaintenanceRunsStartupAndTicksUntilCanceled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	refreshTicks := make(chan time.Time, 1)
 	purgeTicks := make(chan time.Time, 1)
+	updateCheckTicks := make(chan time.Time, 1)
 	refreshCalls := make(chan struct{}, 1)
 	purgeCalls := make(chan time.Time, 2)
+	updateCheckCalls := make(chan struct{}, 1)
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
-		runServeMaintenance(ctx, refreshTicks, purgeTicks, func() error {
+		runServeMaintenance(ctx, refreshTicks, purgeTicks, updateCheckTicks, func() error {
 			refreshCalls <- struct{}{}
 			return errors.New("refresh failure is isolated")
 		}, func(now time.Time) error {
 			purgeCalls <- now
 			return errors.New("purge failure is isolated")
+		}, func(ctx context.Context) error {
+			updateCheckCalls <- struct{}{}
+			return errors.New("scheduled check failure is isolated")
 		})
 	}()
 
@@ -189,6 +194,13 @@ func TestServeMaintenanceRunsStartupAndTicksUntilCanceled(t *testing.T) {
 		}
 	case <-time.After(time.Second):
 		t.Fatal("startup purge did not run")
+	}
+	// Scheduled update checks must not run at startup: booting the decision
+	// API never waits on an upstream fetch.
+	select {
+	case <-updateCheckCalls:
+		t.Fatal("scheduled update check ran at startup")
+	case <-time.After(50 * time.Millisecond):
 	}
 	refreshTicks <- time.Date(2026, 9, 13, 10, 0, 0, 0, time.UTC)
 	select {
@@ -205,6 +217,12 @@ func TestServeMaintenanceRunsStartupAndTicksUntilCanceled(t *testing.T) {
 		}
 	case <-time.After(time.Second):
 		t.Fatal("purge tick did not run")
+	}
+	updateCheckTicks <- time.Date(2026, 9, 13, 10, 20, 0, 0, time.UTC)
+	select {
+	case <-updateCheckCalls:
+	case <-time.After(time.Second):
+		t.Fatal("scheduled update check tick did not run")
 	}
 	cancel()
 	select {

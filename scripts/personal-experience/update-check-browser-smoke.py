@@ -86,7 +86,7 @@ def main():
                 mode = 'same'
                 button.click()
                 expect(panel.get_by_text('上游内容与安装记录一致。', exact=True)).to_be_visible()
-                for mode, message in [('unavailable', '暂时无法获取上游'), ('unsupported', 'Git 来源暂不支持安全获取'), ('forged', '未能确认新版检查结果')]:
+                for mode, message in [('unavailable', '暂时无法获取上游'), ('unsupported', '暂时无法从上游获取内容'), ('forged', '未能确认新版检查结果')]:
                     button.click()
                     expect(panel.get_by_role('alert')).to_contain_text(message)
                     expect(panel.get_by_text('上游内容与安装记录一致。', exact=True)).to_have_count(0)

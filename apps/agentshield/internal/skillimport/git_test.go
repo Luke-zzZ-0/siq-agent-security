@@ -76,9 +76,9 @@ func gitTestStore(t *testing.T, fixtureURL string) (*Store, *GitCreateRequest) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// Tests drive the production cloneGit path over a file:// transport with
-	// protocol.file.allow=user; production fetchGitCLI validates HTTPS and
-	// pins file transport to "never".
+	// Tests drive cloneGit over a file:// transport with
+	// protocol.file.allow=user; production git imports use the controlled
+	// hosted-source fetch (ADR-0051) and never clone.
 	store.gitFetch = func(ctx context.Context, url, ref, dst string) (string, error) {
 		return cloneGit(ctx, fixtureURL, ref, dst, "user")
 	}

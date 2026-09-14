@@ -47,6 +47,18 @@ func (s *Server) initSkillInstallations() error {
 	}
 	return err
 }
+
+// RunScheduledUpdateChecks is the daemon maintenance entry point for the
+// local update scheduler. It runs on the serve refresh cadence, is always
+// attributed to the daemon actor, and coordinates with manual checks through
+// the scheduler's own stage gate — a manual check that wins simply makes the
+// scheduled pass a no-op for that install.
+func (s *Server) RunScheduledUpdateChecks(ctx context.Context) (*skillinstall.ScheduledChecksResult, error) {
+	return s.skillInstallations.RunScheduledChecks(ctx, skillinstall.ScheduledChecksRequest{
+		SchemaVersion: skillinstall.ScheduleRunSchema,
+		ActorID:       skillinstall.DaemonScheduledCheckActor,
+	})
+}
 func skillInstallError(w http.ResponseWriter, err error) {
 	status, code := 503, "skill_install_unavailable"
 	switch {
@@ -255,6 +267,38 @@ func (s *Server) skillInstallOperation(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		writeJSON(w, 200, result)
+		return
+	}
+	if len(parts) == 2 && parts[0] != "" && parts[1] == "update-source" {
+		// POST saves (or disables) the caller-retained update source; GET
+		// answers what automatic checking currently knows. Both share
+		// CheckUpdate's slot so schedule metadata never races a check.
+		if r.Method != http.MethodPost && r.Method != http.MethodGet {
+			w.WriteHeader(405)
+			return
+		}
+		var req skillinstall.UpdateSourceRequest
+		if r.Method == http.MethodPost && !readStrictFlatRequest(w, r, &req, "skill_install_invalid", "schema_version", "remote_url", "enable", "actor_id") {
+			return
+		}
+		if !s.skillInstallSlot(w) {
+			return
+		}
+		defer s.skillImportMu.Unlock()
+		ctx, cancel := context.WithTimeout(r.Context(), 60*time.Second)
+		defer cancel()
+		if r.Method == http.MethodPost {
+			if _, err := s.skillInstallations.SaveUpdateSource(ctx, parts[0], req); err != nil {
+				skillInstallError(w, err)
+				return
+			}
+		}
+		view, err := s.skillInstallations.ReadUpdateSchedule(ctx, parts[0])
+		if err != nil {
+			skillInstallError(w, err)
+			return
+		}
+		writeJSON(w, 200, view)
 		return
 	}
 	recover := len(parts) == 2 && parts[1] == "recover"

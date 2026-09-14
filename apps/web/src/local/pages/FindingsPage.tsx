@@ -5,6 +5,7 @@ import { Icon } from '@/components/icons';
 import { localApi } from '../api';
 import type { LedgerFinding } from '../types';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 import {
   dispositionLabel,
   findingStatusLabel,
@@ -31,12 +32,13 @@ export default function FindingsPage() {
   const [msg, setMsg] = useState<string | null>(null);
   const [msgErr, setMsgErr] = useState(false);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('open');
+  const guard = useLoadGuard();
 
   const load = () => {
     setLoading(true);
-    localApi
-      .findings()
+    guard(() => localApi.findings())
       .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
         setRows(data.findings ?? []);
         setError(null);
         setLoading(false);

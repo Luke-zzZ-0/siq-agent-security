@@ -1,0 +1,24 @@
+{
+  "base_main": "df915ca21c25e04b1acbc81956e155f37ffd77e3",
+  "source_head": "0720730f821373b00bb8bfd5ec870fec147e5746",
+  "source_paths": 262,
+  "scope": "selective reviewed stage; not complete N02-N09 or native platform acceptance",
+  "go_vet": "passed",
+  "go_test": "39 packages passed; 6 without tests",
+  "race_packages": [
+    "skillimport",
+    "skillinstall",
+    "server",
+    "adapterinstall",
+    "rawcontent"
+  ],
+  "web_tests": 84,
+  "python_schema_tests": 211,
+  "ruff": "passed",
+  "enterprise_and_local_build": "passed",
+  "session_browser_checks": 28,
+  "update_browser_fixture_checks": 7,
+  "native_agent_acceptance": false,
+  "production_git": "closed pending live HTTPS acceptance",
+  "browser_binary_sha256": "7a5fbd3ba32eaf9a0a36af3da95c59ad69354d94e0b304c5f627ddcedf2d41cc"
+}

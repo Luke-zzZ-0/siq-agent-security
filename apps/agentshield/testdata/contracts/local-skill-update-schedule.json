@@ -1,0 +1,14 @@
+{
+  "schema_version": "local-skill-update-schedule/v1",
+  "install_id": "sin-f1dbe264fe077b2393378426c146dbb308d99a59d777796d2a2b5dd8536768f5",
+  "source_kind": "git",
+  "display": "https://git.example.com/org/skill.git",
+  "enabled": true,
+  "interval_seconds": 86400,
+  "install_binding_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "next_check_at": "2026-09-14T12:00:00Z",
+  "last_status": "not_checked",
+  "saved_by": "fixture-human",
+  "updated_at": "2026-09-13T12:00:00Z",
+  "signature": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+}

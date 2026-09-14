@@ -392,14 +392,30 @@ export interface RemoteSkillImportRequest {
   expected_sha256: string;
   actor_id: string;
 }
-export type SkillImportRequest = LocalSkillImportRequest | RemoteSkillImportRequest;
-export type SkillImportSourceKind = 'local_dir' | 'local_zip' | 'https_zip';
+export interface GitSkillImportRequest {
+  schema_version: 'local-skill-import-git-create/v1';
+  import_id: string;
+  url: string;
+  ref: string;
+  sub_dir: string;
+  expected_commit: string;
+  actor_id: string;
+}
+export type SkillImportRequest = LocalSkillImportRequest | RemoteSkillImportRequest | GitSkillImportRequest;
+export type SkillImportSourceKind = 'local_dir' | 'local_zip' | 'https_zip' | 'git';
 export interface SkillImportRemoteMetadata {
   archive_sha256: string;
   archive_bytes: number;
   final_locator_digest: string;
   archive_path: string;
   expected_sha256: string;
+}
+export interface SkillImportGitMetadata {
+  url: string;
+  ref: string;
+  sub_dir: string;
+  expected_commit: string;
+  commit_sha: string;
 }
 export interface SkillImportSummary {
   created_at: string;
@@ -450,6 +466,14 @@ export type SkillImportResult = SkillImportResultFields & ({
     schema_version: 'local-skill-import/v2';
     source_kind: 'https_zip';
     remote: SkillImportRemoteMetadata;
+  };
+} | {
+  schema_version: 'local-skill-import-result/v2';
+  import: SkillImportRecordFields & {
+    schema_version: 'local-skill-import/v2';
+    source_kind: 'git';
+    git: SkillImportGitMetadata;
+    remote?: never;
   };
 });
 

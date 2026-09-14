@@ -1,4 +1,4 @@
-import { isSkillUpdateCheckResult, type SkillUpdateCheckRequest } from './skillUpdateCheck';
+import { isSkillUpdateCheckResult, isSkillUpdateScheduleView, type SkillUpdateCheckRequest, type SkillUpdateSourceRequest } from './skillUpdateCheck';
 import { isActivitySources } from './taskSources';
 import { isRawContentActivation, isRawContentPurgeResult, isRawContentStatus } from './rawTaskContent';
 import {
@@ -292,6 +292,16 @@ export const localApi = {
     if (!isSkillUpdateCheckResult(data, id)) throw new LocalApiError(502, 'skill_install_incompatible_response');
     return data;
   }),
+  readSkillUpdateSource: (id: string, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/update-source`, { signal }).then((data) => {
+    if (!isSkillUpdateScheduleView(data, id)) throw new LocalApiError(502, 'skill_install_incompatible_response');
+    return data;
+  }),
+  // The caller-provided download URL is sent once and kept in memory only;
+  // afterwards the panel shows the redacted display form from the view.
+  saveSkillUpdateSource: (id: string, body: SkillUpdateSourceRequest, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/update-source`, { method: 'POST', body: JSON.stringify(body), signal }).then((data) => {
+    if (!isSkillUpdateScheduleView(data, id)) throw new LocalApiError(502, 'skill_install_incompatible_response');
+    return data;
+  }),
   inspectSkillInstallation: (id: string, signal?: AbortSignal) => request<unknown>(`/v1/skill-installations/operations/${encodeURIComponent(id)}/inspection`, { signal }).then((data) => {
     if (!isSkillInstallationInspection(data, id)) throw new LocalApiError(502, 'skill_install_incompatible_response');
     return data;
@@ -342,10 +352,15 @@ export const localApi = {
       if (!isImportPermissionResult(data, id, body)) throw new LocalApiError(502, 'skill_import_incompatible_response');
       return data;
     }),
-  createSkillImport: (body: SkillImportRequest, signal?: AbortSignal) => request<unknown>(body.schema_version === 'local-skill-import-remote-create/v1' ? '/v1/skill-imports/remote' : '/v1/skill-imports', { method: 'POST', body: JSON.stringify(body), signal }).then((data) => {
-    if (!isSkillImportResult(data, body.import_id) || data.schema_version !== (body.schema_version === 'local-skill-import-remote-create/v1' ? 'local-skill-import-result/v2' : 'local-skill-import-result/v1')) throw new LocalApiError(502, 'skill_import_incompatible_response');
-    return data;
-  }),
+  createSkillImport: (body: SkillImportRequest, signal?: AbortSignal) => {
+    const route = body.schema_version === 'local-skill-import-remote-create/v1' ? '/v1/skill-imports/remote'
+      : body.schema_version === 'local-skill-import-git-create/v1' ? '/v1/skill-imports/git' : '/v1/skill-imports';
+    const expected = body.schema_version === 'local-skill-import-create/v1' ? 'local-skill-import-result/v1' : 'local-skill-import-result/v2';
+    return request<unknown>(route, { method: 'POST', body: JSON.stringify(body), signal }).then((data) => {
+      if (!isSkillImportResult(data, body.import_id) || data.schema_version !== expected) throw new LocalApiError(502, 'skill_import_incompatible_response');
+      return data;
+    });
+  },
   discoveryStatus: () => request<DiscoveryStatus>('/v1/discovery'),
   discoveryPreview: (input: DiscoveryInput) => request<DiscoveryPreview>('/v1/discovery/preview', { method: 'POST', body: JSON.stringify(input) }),
   discoveryScan: (input: DiscoveryInput) => request<DiscoveryStatus>('/v1/discovery/scan', { method: 'POST', body: JSON.stringify(input) }),
@@ -466,8 +481,12 @@ export const localApi = {
       method: 'POST',
       body: JSON.stringify({ path, trust_level: trustLevel }),
     }),
-  admissions: () => request<{ admissions: Admission[] }>("/v1/admissions"),
-  runtimeIdentities: () => request<{ items: RuntimeIdentity[] }>("/v1/runtime-identities"),
+  admissions: () => request<{ admissions: Admission[] }>("/v1/admissions").then((data) => ({
+    admissions: data.admissions ?? [],
+  })),
+  runtimeIdentities: () => request<{ items: RuntimeIdentity[] }>("/v1/runtime-identities").then((data) => ({
+    items: data.items ?? [],
+  })),
   createRuntimeIdentity: (instanceId: string, grantId: string, revision: number, actorId: string, ttl: number) =>
     request<{ identity: RuntimeIdentity }>("/v1/runtime-identities", { method: "POST", body: JSON.stringify({
       schema_version: "local-runtime-identity-create/v1", instance_id: instanceId, grant_id: grantId,

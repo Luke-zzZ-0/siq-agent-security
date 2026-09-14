@@ -192,14 +192,31 @@ func TestUpstreamFailureAndCancellationCleanTemporaryFiles(t *testing.T) {
 	}
 }
 
-func TestProductionGitGateDoesNotInvokeTransport(t *testing.T) {
-	for _, url := range []string{"https://git.example.com/skill.git", "https://8.8.8.8/skill.git", "https://localhost.localdomain/skill.git"} {
+func TestProductionGitGateRejectsUnsupportedSourcesBeforeNetwork(t *testing.T) {
+	// Unsupported hosts and malformed repo locators are refused by URL policy
+	// alone: no DNS lookup, connection, or target directory is created.
+	for _, tc := range []struct {
+		url  string
+		want error
+	}{
+		{"https://git.example.com/skill.git", ErrGitHostUnsupported},
+		{"https://gitlab.com/o/r", ErrGitHostUnsupported},
+		{"https://8.8.8.8/skill.git", ErrGitHostUnsupported},
+		{"https://github.com.evil.com/o/r", ErrGitHostUnsupported},
+		{"https://localhost.localdomain/skill.git", ErrURLBlocked},
+		{"https://github.com/o", ErrURLBlocked},
+		{"https://github.com/o/r/tree/main", ErrURLBlocked},
+		{"https://github.com/-o/r", ErrURLBlocked},
+		{"https://github.com/o-/r", ErrURLBlocked},
+		{"https://github.com/o/../r", ErrURLBlocked},
+		{"https://github.com/o/.git", ErrURLBlocked},
+	} {
 		dst := filepath.Join(t.TempDir(), "uncreated")
-		if _, err := fetchGitCLI(context.Background(), url, "main", dst); !errors.Is(err, ErrGitTransportUnavailable) {
-			t.Fatal(url, err)
+		if _, err := fetchHostedGit(context.Background(), tc.url, "main", dst); !errors.Is(err, tc.want) {
+			t.Fatal(tc.url, err)
 		}
 		if _, err := os.Lstat(dst); !os.IsNotExist(err) {
-			t.Fatal("disabled transport created target", err)
+			t.Fatal("refused source created target", tc.url, err)
 		}
 	}
 }

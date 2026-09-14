@@ -17,10 +17,14 @@ func skillImportError(w http.ResponseWriter, err error) {
 	switch {
 	case errors.Is(err, skillimport.ErrGitTransportUnavailable):
 		status, code = 503, "skill_import_git_transport_unavailable"
+	case errors.Is(err, skillimport.ErrGitHostUnsupported):
+		status, code = 400, "skill_import_git_host_unsupported"
 	case errors.Is(err, importsource.ErrInvalid):
 		status, code = 409, "skill_import_permission_source_invalid"
 	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
 		status, code = 408, "skill_import_interrupted"
+	case errors.Is(err, skillimport.ErrSourceUnavailable):
+		status, code = 502, "skill_import_source_unavailable"
 	case errors.Is(err, skillimport.ErrURLBlocked):
 		status, code = 400, "skill_import_url_blocked"
 	case errors.Is(err, skillimport.ErrDownloadFailed):

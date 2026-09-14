@@ -29,3 +29,5 @@ site/vendor/mermaid-bundled-notices.txt whitespace=-blank-at-eol
 
 # Preserve the byte-exact legacy Pages vendor archive and its checksums.
 docs/archive/gh-pages-9a4ebdc/vendor/** -whitespace
+
+docs/evidence/personal-experience/glm-stage-review-20260914/** -text

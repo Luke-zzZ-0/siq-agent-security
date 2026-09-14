@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -89,6 +90,11 @@ type Store struct {
 	// behavior is exercised without a network. Never set from runtime
 	// configuration.
 	upstream func(context.Context, *skillimport.Record, string) (*skillimport.UpstreamSnapshot, error)
+	// Scheduling jitter seam for automatic update checks: given the check
+	// interval it returns a non-negative spread added to the next due time so
+	// a fleet of installs never fires in lockstep. Never set from runtime
+	// configuration.
+	jitter func(time.Duration) time.Duration
 }
 
 func Open(authority *state.Store, key *signing.Key, imports *skillimport.Store, resolve func(context.Context, string) (Target, error)) (*Store, error) {
@@ -103,6 +109,15 @@ func Open(authority *state.Store, key *signing.Key, imports *skillimport.Store, 
 	}
 	return &Store{dir: dir, key: key, imports: imports, authority: authority, resolve: resolve, now: time.Now,
 		boundary: func(string) error { return nil },
+		jitter: func(d time.Duration) time.Duration {
+			// Up to one eighth of the interval, drawn per write. math/rand's
+			// global source is auto-seeded in Go 1.20+.
+			spread := d / 8
+			if spread <= 0 {
+				return 0
+			}
+			return time.Duration(rand.Int63n(int64(spread) + 1))
+		},
 		upstream: func(ctx context.Context, record *skillimport.Record, remoteURL string) (*skillimport.UpstreamSnapshot, error) {
 			return imports.CheckUpstream(ctx, record.ImportID, remoteURL)
 		}}, nil

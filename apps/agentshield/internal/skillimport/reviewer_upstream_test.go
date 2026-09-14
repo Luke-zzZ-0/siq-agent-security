@@ -10,8 +10,10 @@ import (
 )
 
 // Local-only fixture: a hostname resolving exclusively to loopback must be
-// rejected before invoking git. The fake CLI performs no network requests.
-func TestReviewerGitFetchRejectsPrivateDNSBeforeGit(t *testing.T) {
+// rejected by URL policy before any transport, DNS lookup, or process
+// invocation. The fake git CLI on PATH performs no network requests and only
+// records that it was never run.
+func TestReviewerGitFetchRejectsPrivateDNSBeforeTransport(t *testing.T) {
 	ips, err := net.LookupIP("localhost.localdomain")
 	if err != nil || len(ips) == 0 {
 		t.Skip("local fixture hostname unavailable")
@@ -28,9 +30,9 @@ func TestReviewerGitFetchRejectsPrivateDNSBeforeGit(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Setenv("PATH", root)
-	_, err = fetchGitCLI(context.Background(), "https://localhost.localdomain/fixture.git", "", filepath.Join(root, "repo"))
+	_, err = fetchHostedGit(context.Background(), "https://localhost.localdomain/fixture.git", "", filepath.Join(root, "repo"))
 	if _, e := os.Stat(marker); e == nil {
-		t.Error("private DNS destination reached git CLI without being blocked")
+		t.Error("private DNS destination reached a transport without being blocked")
 	}
 	if !errors.Is(err, ErrURLBlocked) {
 		t.Errorf("want ErrURLBlocked, got %v", err)

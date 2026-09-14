@@ -3,7 +3,6 @@ package skillimport
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -16,21 +15,18 @@ import (
 	"siq-agent-security/apps/agentshield/internal/canon"
 )
 
-// Git sources import a fixed commit of a public HTTPS repository. Like every
-// skill-import source this fixes an installation candidate; it never grants
-// runtime authority and never installs into a platform directory.
+// The hosted Git component resolves a fixed public commit (ADR-0051).
+// Production remains closed by productionGitFetch pending live HTTPS acceptance.
+// Like every skill-import source this fixes an installation candidate; it
+// never grants runtime authority and never installs into a platform directory.
 //
-// git is invoked without a shell, with a scrubbed environment and an empty
-// core.hooksPath, so repository-controlled hooks cannot execute during clone
-// or checkout. Refs are a strict allowlist (no options, no "..", no leading
-// dashes) and the resolved HEAD commit is pinned into the signed record.
+// There is no git protocol and no process execution in this path: a controlled
+// HTTPS flow resolves the ref to an immutable commit and downloads the archive
+// for that exact commit. Refs are a strict allowlist (no options, no "..", no
+// leading dashes) and the resolved commit is pinned into the signed record.
 
 var gitRefPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._/-]{0,127}$`)
 var commitPattern = regexp.MustCompile(`^[a-f0-9]{40}$`)
-
-// Git's own transport does not yet satisfy our pinned public-address and
-// bounded-fetch requirements. This gate has no runtime override.
-var ErrGitTransportUnavailable = fmt.Errorf("%w: git_transport_unavailable", ErrURLBlocked)
 
 type GitCreateRequest struct {
 	SchemaVersion  string `json:"schema_version"`
@@ -99,7 +95,7 @@ func (s *Store) gitTree(ctx context.Context, source, blob, payload string, req *
 	none := emptyTree()
 	fetch := s.gitFetch
 	if fetch == nil {
-		fetch = fetchGitCLI
+		fetch = productionGitFetch
 	}
 	worktree := filepath.Join(blob, "unpacked")
 	if err := statefs.Mkdir(worktree, 0700); err != nil {
@@ -127,27 +123,10 @@ func (s *Store) gitTree(ctx context.Context, source, blob, payload string, req *
 	return snapshot, excluded, &GitMetadata{URL: source, Ref: req.Ref, SubDir: req.SubDir, ExpectedCommit: req.ExpectedCommit, CommitSHA: commit}, nil
 }
 
-// fetchGitCLI clones with the git CLI. The clone target URL has already been
-// validated to HTTPS with a public host; a scrubbed environment plus empty
-// hooksPath ensure the repository cannot run code while being read.
-func fetchGitCLI(ctx context.Context, rawURL, ref, dst string) (string, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	_, err := downloadURL(rawURL)
-	if err != nil {
-		return "", err
-	}
-	if err := ctx.Err(); err != nil {
-		return "", err
-	}
-	// Fail before LookPath, process creation or network access. HTTPS alone
-	// does not constrain DNS, redirects, or alternate object locations.
-	return "", ErrGitTransportUnavailable
-}
-
 // cloneGit runs the hardened clone; fileAllow exists only for tests driving a
-// local file:// fixture through the same argv and environment.
+// local file:// fixture through the same argv and environment. Production git
+// imports never reach it: the store's gitFetch seam is nil in production and
+// defaults to the closed productionGitFetch gate (ADR-0051).
 func cloneGit(ctx context.Context, cleanURL, ref, dst, fileAllow string) (string, error) {
 	if ctx == nil {
 		ctx = context.Background()

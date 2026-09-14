@@ -1,0 +1,1317 @@
+{
+  "source_head": "0720730f821373b00bb8bfd5ec870fec147e5746",
+  "base_main": "df915ca21c25e04b1acbc81956e155f37ffd77e3",
+  "files": [
+    {
+      "path": "apps/agentshield/cmd/agentshield/main.go",
+      "sha256": "5db17e258e8cc1218ed357f1dd1bb3f8e51cef363a0163357c2e28ccd527ef94",
+      "disposition": "review_candidate: scheduler wiring only"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_lifecycle.go",
+      "sha256": "0ab7ea11e260330cc19cafcb4276e4bcd02c5d15f9e3c95c85fb970cb5e43b78",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/cmd/agentshield/serve_lifecycle_test.go",
+      "sha256": "7ab32fcf14b0820e179d41f6a7b354ec0bd486a5efe9b2e81cb3ff4166353225",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/backup_restore_test.go",
+      "sha256": "d475eb1da6e3a7491ab89df9b7ec7fd1b1a24e435af92db18b6cb410b2f25844",
+      "disposition": "already_in_main: preserve newer Windows-aware assertions"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/diagnostics.go",
+      "sha256": "6e5265b36452ebe40a1fc3bae9d0e15853338ebb4ff6049a843059cd930667d9",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/diagnostics_test.go",
+      "sha256": "18f2fc51d7a14c2a2096cd52c281b19466ebd25f1c22ef487914c5e164fe4662",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/install_entry_test.go",
+      "sha256": "5d719b927ae0f176b9c56056f7708a66ca43279fb386f2c779c72455f2bf2788",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/instance_root.go",
+      "sha256": "a04fe51fbba5d1f7999ced000c7b289daff4161432e14c296428972e5d551731",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/instance_root_test.go",
+      "sha256": "cad4ced4e0bc68e53e8d588c3038ed4ca020e81c03f1a2825c7a4f55f4526b54",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/instance_test.go",
+      "sha256": "573d0e64fadf6599874560b655dd8706dd501c6a88ce2d19c682234e96dad014",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/plan.go",
+      "sha256": "ec41a060a68c277fa20300a45c1b94ad2019c08baa9ee9fce1b70a0e564a8074",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/plan_uninstall.go",
+      "sha256": "f6c9578457a17b43686039f765e4e0410f896d4f6d00e4da92de9e7e28c7367b",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/runtime_identity_test.go",
+      "sha256": "97fe2626c84ccda0fb77639ff00867340d856cd84632ed485ca5f0888b6bda5b",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/adapterinstall/transaction.go",
+      "sha256": "1c9b9be0f38ddd97437dc1fb5af70b89f4acd375565a5a5988b5c4572a26276f",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/hermeshome/roots_test.go",
+      "sha256": "2b47898a88bcd14c91f750a12942e75f3a210fc8df15e1322adabadaa98df26e",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "apps/agentshield/internal/rawcontent/concurrency_test.go",
+      "sha256": "d69029c1bd8357dcb8d382740b75838e3239401e2323fdc1ce92a79ee65e8b94",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/action_state.go",
+      "sha256": "89d679f44d3fe67d68cae872e7bdb82daecf4ebcc126cb710bb1dbf461f17049",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/approval_consume_test.go",
+      "sha256": "4d8817520ba4ad88fca35e71332de5ee8c7481dc9ae5fceb8df8c37b978412a5",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/engine.go",
+      "sha256": "49711ee2468346aa53cbbe9ad04512d34a7a6cdcec3407f025e71219e9ea3801",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/hold_status.go",
+      "sha256": "f50b24a493bf9a9c59675e800d4a7bf2d7983e46a2977c5fcfe5f1f3458f0739",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/runtime_identity_consume_test.go",
+      "sha256": "a1d38415a4fc9eee93cab05e4caa44e7a059c3c1cd59e5b26cc9798690f801dd",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/receipt/skill_attribution_test.go",
+      "sha256": "242bca32f50ad168f30a82336d97e1327326fdf26b69db182cff413bca5cd623",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/server/adapter_diagnostics.go",
+      "sha256": "9738310c2432c35fe993da45661c3bfdd00733b8efc4ae94104bdc8b5c84f387",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/adapter_diagnostics_test.go",
+      "sha256": "4ed91e67e740ea0312725203d83e22c949a699dff3247679c9fbca870506e6c5",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_import.go",
+      "sha256": "3090bd7d3458121ddfd6d0c62c5695f078216e57740c0c4f3b5931915588d856",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_import_test.go",
+      "sha256": "23f7ff0b27eda64bebb02dac9432b944158e6500bdf17f69eb9e969bfde693db",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_install.go",
+      "sha256": "82fffe2ae89d89e35c377a3f2c2ebed27fd562c7c96c5dd22274e5e2a3d5c4f8",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_update_schedule_daemon_test.go",
+      "sha256": "c1914a0392d06bfa2c7dbda04d077743bf7560891ecf2f74adba75f7d992f42c",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/server/skill_update_source_test.go",
+      "sha256": "dfdf326623bc2dc0997de78a9dbce062d3d21b263faae4499c36f326316e7990",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/download.go",
+      "sha256": "f85f6ca1f7dac4a6a869b5f1a0270392d5719eb0993a9075e45e9caad6ca7c5e",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/git.go",
+      "sha256": "47b0e8a0248244c8cce4ad516669235d5b22783dbea28eff55fec08a6a5f909f",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/git_test.go",
+      "sha256": "29527b3ab3971f904053dc4903309d730f70f82bbb1c38de0082a61e313378d6",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/gitsource.go",
+      "sha256": "763490c118414eaff11d606339a1380214e72fc660b252f7d7586eb0850c2b30",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/gitsource_test.go",
+      "sha256": "d8098a044e457495e5b90744ae7a7d7cd948d49f948cbd1806bf9c39c6c379ab",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/reviewer_upstream_test.go",
+      "sha256": "d389e32b4b4d36d2b96af9b641337e4883c39f19c7bed80b39663d57ed6a6571",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/upstream.go",
+      "sha256": "b50881d32104048e765e45d255626bcd6261cb1bfc98348d6f6428e158003e09",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillimport/upstream_test.go",
+      "sha256": "7202076e9d1d4ffaeca2e5b0aeaa36669ebf008437f9c379e990f79328adc56b",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/stage.go",
+      "sha256": "4b27e6aaa314a7e52903155c7e22a4f19b0e34e755316d072ecb9c26aac2f21e",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_check.go",
+      "sha256": "bdc0f83d5258e80a07c81e74f72f8a49e197450aec03b887c946b974ab4cebb5",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_check_regression_test.go",
+      "sha256": "7e1dee2d0da5df813c1bdbf90eba57e4d5c728c23b6a91feec72ca5c599a120e",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_git_loop_test.go",
+      "sha256": "711988431ff332da705811a024089b6b3d8ae2a5cc575ee12c4b9a32a5a5c5de",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_scheduler.go",
+      "sha256": "ad267e660a85638f120b94e033263ad444b99a9bed738ace62208fcce1fa599b",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_scheduler_test.go",
+      "sha256": "2847377636ab489eea01a1b254935b8c209cef5e0d5de59d627a49e58dfa76b1",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_source.go",
+      "sha256": "7644ffb8cbb2cfb15a3cc3af8e3f8024cc9c54caf37b73c50616ea810f39e83d",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_source_compatibility_test.go",
+      "sha256": "76ee36253dca7d4110837d216750b91e2a5bc73371935a8391891f2c58f3a19a",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_source_contract_test.go",
+      "sha256": "cc206f676bb59564be382ea6d376038ba0f51ef50df9ce89d8bb030bd17251ef",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/skillinstall/update_source_test.go",
+      "sha256": "465342c4ee9426265cf11bf537de8f8a4ed6118227f769be0ed5334e9d5c1552",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/internal/state/skill_attribution.go",
+      "sha256": "b6d306928d90742a174fd9406e8162f5506024fbd429d80564b91fe5ba53e54f",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/state/skill_attribution_test.go",
+      "sha256": "5e84421a5442bc6a29bc19f84c61dd90f1dc9e350e999693e24059c5e9bf1efb",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/state/state.go",
+      "sha256": "c1daa578d81bd43b669549a6a9b7fe17307cb3d4374b1fe356ff24171936677c",
+      "disposition": "held: N05 attribution / N06 consumption trust boundary"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-C_-RcoNo.js",
+      "sha256": "2cab22cf0f821f50bdac454605350f01412f85b9f899fc008a11c4a0d38dee95",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-oHb2BjJe.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-CY8Tu-Tp.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-D_lIFPC2.js",
+      "sha256": "bcfa38b5b18a8759ab57f9663f09a774d1d01121c7011c8366aa2173de9fc2f8",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-BFAZamej.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-D5P6twId.js",
+      "sha256": "bc1467ddb3dc73476aaa4de1bfc735c645474251a01f593d268bd5c39307a5aa",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-B9ipHH42.js",
+      "sha256": "0aa65c5c5d398e94363d8202b2f59c9af62abab28422059f014c1f63b053d4c3",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-BFxVuhGo.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-CMDn-aCL.js",
+      "sha256": "1b908e57399e4a4a368674468369a937766935f1bafc3543094c9f405b467415",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-CPToVhir.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-BrHDUS4b.js",
+      "sha256": "e9f9e70ec7ddc3b6a95867e1e9a53cd0a28bb062060115e3cc72e7abca36e4a6",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-CjXQ4F-3.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index.local-BPIW2RsK.js",
+      "sha256": "5fea5a0877b1c68eef4f59aa3d9dd8362f59303db246061fcabc4a6d62946210",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/assets/index.local-CiepBxi9.js",
+      "sha256": null,
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/internal/ui/embedded/index.html",
+      "sha256": "5ee2143b9c8a698093f2f6cca4a1dead152522d11b3f8e5c68f79edbb3899ae6",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/adapter-plan.json",
+      "sha256": "5fe007528099a124cdd88ec996278238e0d9a2c643a90095cfdedec7fdb88068",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/adapter-plan.v2.json",
+      "sha256": "7fabd6461b0a7578de6fb89adfae9005fc802954103ed0671028bbc4ffea14ba",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/adapter-plan.v3.json",
+      "sha256": "14d6204d5b36fee551627e003b0a8a6fc1199c1c9c0617ca20ce0bc97c421940",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/agentshield/testdata/contracts/local-skill-update-schedule-view.json",
+      "sha256": "866e5b1fedf379854f1bf48b3bac206604b4e56e2fbceec93f6ed1874ebf9427",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/package-lock.json",
+      "sha256": "636b1a0c6498dc6e4a121113a81c1eb89edaaec0bf53b27de0a5827c2b7a5aff",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "apps/web/src/local/api.test.ts",
+      "sha256": "5a75428312d93cc44d44d1f2b327d206bc4f899f87f3c0f1218b68ca54285c88",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/api.ts",
+      "sha256": "72a3b65921a5e3dbec13d8a3559da87b4710a6fad416fa3f584847335d9b4851",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/components/SkillUpdateCheckPanel.tsx",
+      "sha256": "6af43424e7db52e5d211e6520beb36b06cd8221e28ed76c73d97432af0d13394",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/BindingsPage.tsx",
+      "sha256": "a13d7c266205c1c899b3bfcfbb332f6cf9c53550ebbb77b2e3cdd45f605b5bab",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/FindingsPage.tsx",
+      "sha256": "b05c5fa537378d3ca6b1ea5eeb95dbf4991d0d6ef91353bb0f09923f74745f3b",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/GrantsPage.tsx",
+      "sha256": "3ec00d2ee01fe09aad3372e76525b7926747b1822085e55eecbdfae2f70debf5",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/InstalledSkillsPage.tsx",
+      "sha256": "775b9a1b9a7325fdad9cb86742079d79e28d668e03728c422be54e43c7787af3",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/OverviewPage.tsx",
+      "sha256": "cce16cb24fc32ecf58706d0d99215bb660a8205cee38dd4955f35138625c0d1a",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/PermissionsPage.tsx",
+      "sha256": "4f19df1e602de344db77d6f3edf9907cca79949d140bf2094f86c1109d30ffb6",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/ReceiptsPage.tsx",
+      "sha256": "640b375a8277de03bb6eba82b3f0ac776c7374314b1a173726969084d16c940c",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/SettingsPage.tsx",
+      "sha256": "8f3c39bef4f7b02d9fb5ded2dee395e848e661c814aec77ecc500dd0c302dd21",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/pages/SkillImportsPage.tsx",
+      "sha256": "2e09a265cf04907acbbceb149984078262b4feeecb67c80d0151e816beeea59c",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/skillImports.test.ts",
+      "sha256": "f42ff9168571aa0cce70da849738c742c62f974fbc9e9c93222799c22fa39ece",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/skillImports.ts",
+      "sha256": "4eea944f2dd5efb90b9a14a7dae4f0c6327acd1c9eec4c371585559e8fd07321",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/skillUpdateCheck.test.ts",
+      "sha256": "f9de9ce40c4b392113840165cf583de2bb8c1e8bd1d30ccad603e3ec7e8726ec",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/skillUpdateCheck.ts",
+      "sha256": "36db2648bc1d01870029aef50aed6b1b79f0a1bfae72dbd15b412e169d02fe7e",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/staleGuard.test.ts",
+      "sha256": "40cd555e127b27e41a280956b129d2cc9f0d817caa2ba60be55c2bfa75216ea0",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/staleGuard.ts",
+      "sha256": "aa137b9e9152fa93aaf354c87a9a3dfb410b4cc4bf0bde5b0b6aad17e220201f",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "apps/web/src/local/types.ts",
+      "sha256": "4ed566bd81dda8ff7067af5cb9bf5f32bd16ae0dcefab810e8d5fb08caf3e181",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "docs/adr/0051-controlled-hosted-git-source.md",
+      "sha256": "88fb07efc8d188addfcc3d1bcd614b88292551ccfd650d7a6b4aa9e15fa4e465",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "docs/agentshield-dev-spec-v1.md",
+      "sha256": "7a6402256912fdb9713d11a34ec97d80190d11c4a7a75458ce2037ecc055aecd",
+      "disposition": "already_in_main: reviewed main implementation retained"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/baseline-regressions.log",
+      "sha256": "cbde30815fdce8dcd329f0c0b384d239937c0e3f1fbbab02a6793f3f35278d8b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/fix-only.patch",
+      "sha256": "97f5f7b267f6927fad06a86645d09c2e71411ba8e0a3311f72d7ef19cd10e8a0",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/go-test.log",
+      "sha256": "f3a88dc885d63a8268a6cdc447dc9fab62debf82443551df4e7bbfed966cf57e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/race.log",
+      "sha256": "598bc4554564d6436e8fab3d626132ac42a73b1ebc809aadde6b90e23a53e631",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/report.md",
+      "sha256": "34419b8bba402882979922ad18bb3c285796d51f817022e86b854b03153eb8c0",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/verification.json",
+      "sha256": "6648ad2704a2ce89c9503cc792c2cea8d755cb41647f53bb8a4a3f5aacfa587f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/codex-r1-r2-fixes-20260913-235822/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02-20260913-200446/live-endpoints-raw.txt",
+      "sha256": "5a038e0ea12b51f3a2d2c3d9edd1c9a51c182246f07d1d9acfe80c122483594f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02-20260913-200446/report.md",
+      "sha256": "c5358aceaf528f45f8c8ea9cf17bd3bb8114959e1cb5692cd8674f847de48237",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02-20260913-200446/verification.json",
+      "sha256": "d840a465013668f685e5817afc3e53723a0bd997b1e990b33c697769725f8b03",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/browser-smoke-verification.json",
+      "sha256": "96045752b8b6cd426a0a13127ea39983bb4d5c52db7c935ea9fcfc6deafb6be0",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/git-changed.png",
+      "sha256": "885a1c259fcf1ff8e051b08bb195b7ebdf183b0bdf90af5df89a8df6bdf2dae7",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/git-unavailable.png",
+      "sha256": "5191cb12ca7bc25f5ee3045d809e8372dbce75ac656b4becd55b39955da19158",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/live-git-import-verification.json",
+      "sha256": "13c844194ee80b2dfee59c99de82451a8b67171fe36ea6bfd462cdca9d582402",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/local-blocked.png",
+      "sha256": "d4f78e0781202330eb705c9dd11fcd81b8a3fc7bb60d155646920f1a2e79061c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/report.md",
+      "sha256": "d402b51cea62c60a7ef335315493beb20ca4b5fa773f2622b32fba966717ab34",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n02c-20260913-211544/verification.json",
+      "sha256": "fd317b9a6f770dcdf50d720d32e86ade9c4af08e4903dec3534da1cf0aed7229",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-scheduler-20260913-153535/report.md",
+      "sha256": "5a897992f8ca64e0c825eb6bd61ecd369899cabb1a662e0452dd05cd747154ff",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-scheduler-20260913-153535/verification.json",
+      "sha256": "117de0f1a2bc63211df6690c2978cd53dad279715ab0a00da9f26c151abc3456",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-config-20260913-150130/report.md",
+      "sha256": "e738ad0858eee006a1e54254d4e818ffcf45c1e6292952f76415a566e873b2ad",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-config-20260913-150130/verification.json",
+      "sha256": "34fca484354da6f35e11a29ee9252f747513e3427e6dc179ed1fdab4f41ac59f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/changed_files_sha256.txt",
+      "sha256": "d9762afe8fbddd8ad4da498a56bc2c6deedff5dd0d628476658e5e85ceac4f41",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/01-import.json",
+      "sha256": "4ccb5cbcc8b3ab42254a9b21125eb6f43ecc256e876a950c1daa26f245dbeb20",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/02-instances.json",
+      "sha256": "88243f997f2016f5eb6d2c97f79a1bf9ed02d0ac12567f47e71856644f604a16",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/03-permission.json",
+      "sha256": "5aa2c172f5a6811337c40da9021d07d18e53a057835f5698ee120b657c1db5aa",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/04-plan.json",
+      "sha256": "6f142ba5f8a8737d85fcef6d3e909cbb7bf3fe5cedb05d06874f26adbb65955c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/05-challenge.json",
+      "sha256": "4fc00e51f41b58873d801efe787b888065c70799af9989f7c2b17ac47d3c543e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/06-approve.json",
+      "sha256": "cccbf3f39964a0597e977ec50e6c922aecc636219fea1cbdeb176e1742da0d45",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/07-apply.json",
+      "sha256": "041766fc51ecfd31036a7dad7e27dc84d555e2ac69b9735d48c9fe816b3c9370",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/08-get-view.json",
+      "sha256": "fd6c07af13a8059aaa2c276676d2628c73678f35f4812578324ac5935bdee8ab",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/09-post-unsupported.json",
+      "sha256": "6f40b346e4988ec339b3aafdb49f799238d4176d805092d04e8f7c0fba25321c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/10-get-unknown.json",
+      "sha256": "b4cbc45a1227206ddb6af3cd094017337c4d7b65e6a126abd9747a6333a9fd94",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/live/11-get-nocred.json",
+      "sha256": "7cb8f23a2d9a5291537cff8a5392f5303e4b6bb488a30c00f6a7855a99969a94",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/report.md",
+      "sha256": "c4cd0baa80f1671614e2b1b14d86e13c094d06766fd76d68f183fd9c7874cdea",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/verification.json",
+      "sha256": "d0ff61442e02849e6bc9c3425dfb7b39357cf6dfcce328f6ca78ded404e44d45",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/verify-go-race-cc.txt",
+      "sha256": "03aad9a706ad4c96cd569148ddb1b9a3bdfc56e85e72f6495407b54ebac105be",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/verify-go-static.txt",
+      "sha256": "116c4eda0a9039921d237d3788ad85268bd78608150bfac628fed92699fe3121",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/verify-go-test.txt",
+      "sha256": "56e4c1ab0a431c3cf9a583c1b420de9cf398a38cb7a8383c9bf04910696c5f79",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n03-update-source-http-20260914-004259/verify-web.txt",
+      "sha256": "6d063934d3555ffad42d8a2c29c6ba92d6152fd2af0429dafac8bc11b7612da3",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04-item5-20260913-141721/report.md",
+      "sha256": "02d951e6182dfda99f335ae915941cd94d93adfa4e8ebafbecb527ff486c0210",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04-item5-20260913-141721/verification.json",
+      "sha256": "f29b7d0fd517be6c4941d10e729e71ccc534b3ff89d6e3da2ba27fb0a68cb093",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04-item6-20260913-143443/report.md",
+      "sha256": "dc610bea8b2cd4e8f1fcfae118ff2ef9778b71c05941a4b8b4d281ccc33105f5",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04-item6-20260913-143443/verification.json",
+      "sha256": "b8021e55a75574f0b68190281f9974df49c2b1cdd6663a495b83e7eb93fc599d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04a-20260913-212810/capability-matrix.json",
+      "sha256": "507e039131d5f9ca34b169373b5c7d60138723e2102843167a846f3c6b444ff3",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04a-20260913-212810/report.md",
+      "sha256": "16a20d6c0b439c8a061b8a9a9d964c0bed2c5c1488c0911c904ba5d7d49b9099",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04a-20260913-212810/verification.json",
+      "sha256": "9cea1722572aeb0cf8389ea76e7db2b0a60bb8c7bb236ce57e6e7039c0228042",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04b-20260913-215500/report.md",
+      "sha256": "88703481dfcb930ee963c040daf33afb89d1f18f9d69653034f9e17809da285b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04b-20260913-215500/verification.json",
+      "sha256": "5a37e4573cc6b5239fb11851f67d5b9dfe4956ab68c26bcf5689db0fe436aa17",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04c-config-backup-restore-native-journey-20260913-180933/journey-report.json",
+      "sha256": "c0070e8454930cf5107dc89966a561e811d0ccb1791b4d8e385a443746a87702",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04c-config-backup-restore-native-journey-20260913-180933/report.md",
+      "sha256": "e1db5d9fb7b1f05410aa629e5caed787ac7b299edc68971fdf9a14ea6ff131e8",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n04c-config-backup-restore-native-journey-20260913-180933/verification.json",
+      "sha256": "4f3d226bcc65cbb4b81e42e8c97b0f9f3047e596de63ac5d768e8518c14fd863",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190133/report.md",
+      "sha256": "cea6886396624b4dd19ff92c9eaf6ac63f09cc5bdd5f7b4f217874c973abb7c8",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190133/verification.json",
+      "sha256": "99996f242135dc83fd04268778083921c8d8e297b83db70bb9da73b6f87406c8",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/cross-compile.log",
+      "sha256": "a019a645946caad5def7084abbece3fee8bb992cecb2aa3ad80a4b3a0a7ae852",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/go-test.log",
+      "sha256": "1e3204d11ea10ba1dea4bc082b735ea99096864c3ff365dfdbfeb08b4f834801",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/journey-report.json",
+      "sha256": "559e1a61e03e5a118d46191a7d3eefcd71942d45d4bf8b2e8d3db351af674300",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/race.log",
+      "sha256": "3184901290c8a8cd78a7e15beeaf022335dc9c459303c23cb644a20600cd0d3d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n05-skill-attribution-20260913-190201/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/cross-compile.log",
+      "sha256": "a019a645946caad5def7084abbece3fee8bb992cecb2aa3ad80a4b3a0a7ae852",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/go-test.log",
+      "sha256": "27d73fdc020517445a7595508975f4789ad804f252f0e7e2720de23b6b6e4e8a",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/journey-report.json",
+      "sha256": "622d5572a59ab22b873929dbf04748852361d4b2f1b771970db5565e5ff0d657",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/race.log",
+      "sha256": "f3a4759939cd3c18114f8f82e8bd3e9b1a829aacb8540017086b6f2985675028",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/report.md",
+      "sha256": "0061e75a86d33f9aafb20a7720df6cfb1cee6e8a8497fb82a31e10d02db60bbf",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/verification.json",
+      "sha256": "a07dd395ccdddfc5a53f8c5f90714180d4a09da804408b8b589024a056b5ba63",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n06-approval-once-retry-20260914-040130/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/changed_files_sha256.txt",
+      "sha256": "d44c204e31c2290d02176bc13c16bb3a6d535a0dcfc38d905e0892818a8f700f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/cross-compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/go-test.log",
+      "sha256": "39d8b3e26768288ce843725d3105f25ca70a73bee94ccd74f836b063b66b42d6",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/journey-report.json",
+      "sha256": "60db6a3818c32baa4d9dba7ddf3d22b9d3188de6861110c17943a720174f4697",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/race.log",
+      "sha256": "928704d6ffee5a159f1d95aca0e43ffcaf977a66612666186cbf8095e7011c66",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/report.md",
+      "sha256": "ba177bf171aae8a04db21a819cc450c44da36e5e51a698877528ed0e5925f6b6",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/verification.json",
+      "sha256": "774ea8c728ccaaaab8502164ef762b00bb401e664d9c54b827ae2b487272d9df",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08a-journey-green-20260914-062913/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/changed_files_sha256.txt",
+      "sha256": "b93556da6c67fd9c54f5f3bb0f56ac13cd1b4d62528c7c990cb0486138ee564f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/cross-compile.log",
+      "sha256": "86e23923e8fc99bd257ca522ca3e952701d2d179c52997f09dd66ccfc91a95f1",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/go-test.log",
+      "sha256": "56e4c1ab0a431c3cf9a583c1b420de9cf398a38cb7a8383c9bf04910696c5f79",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/gofmt.log",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/race.log",
+      "sha256": "ebbca436fc6d63d798e648da5a47baa4efe9e7331fd0cc60ea4ea650adfa45fc",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/report.md",
+      "sha256": "9c85724b5152f3dafc3fba552210c73452fae79ba295c741965512c2a6ef3d0a",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/verification.json",
+      "sha256": "325165d41c28b8252d167e3ca1cab287ee1bd7021d89d6998fdedd244f9ff08d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08b-rawcontent-concurrency-20260914-064726/vet.log",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/agents-long-label.png",
+      "sha256": "6dbbfb4b31bc951d0df03864fdb3fc12316189c66267cca7dc6f5c2e9397b7cb",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/build-local.log",
+      "sha256": "dfbebf8562efc8548005a52cb61c2121cf4cbd36e4dfb9e91d8287424414648f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/changed_files_sha256.json",
+      "sha256": "ffce5192495fb3876ed24dcbc7317be44f9b99673a089ecf5e72d04209cb587d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/changed_files_sha256.txt",
+      "sha256": "cafd760e6b6b598741ccffa687df3557e87a9adfb1e038108fde9251b172b007",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/cross-compile.log",
+      "sha256": "86e23923e8fc99bd257ca522ca3e952701d2d179c52997f09dd66ccfc91a95f1",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/findings-empty.png",
+      "sha256": "093e8a57c107e4754aa13b1025c1e30e3c4f624909c00b53b8b789cc50ca8e0a",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/findings-failure.png",
+      "sha256": "47f728f2a9316cbd84830f2c003aff35d073c42f624881f3ded0e609b56e1cae",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/go-test.log",
+      "sha256": "abf7a120d27ccc6131e49bc735a33b37a03db6fe5261e3112186b5a6b2311357",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/gofmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/race.log",
+      "sha256": "0dab576b6f428c5acf4da36e0d8172027c312f7f5cb0cd713ec455384121ad4f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/report.md",
+      "sha256": "27450c5d30a424d26752e64876b26abafddbd1c7910f08962f412c11a1c6ad18",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/sha256-verify.log",
+      "sha256": "a3be4322fb3fafa07f4d5ce78740c5fb861d78ea0648baa39624a806ff3b681f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/small-overview.png",
+      "sha256": "bc1901bd4183fe65ae0514c5057d94bd3c276b0f77fdd42355d013249bb14486",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/smoke-stdout.log",
+      "sha256": "d65d120dd36be30581d0d94850a4ba3f1f823944ffdd7922d8c2fdabcad38312",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/verification.json",
+      "sha256": "e83ec38cf1c767b43234c9ffe4216291f1a02c3de13802c4397f7c070bb3c87f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n08c-ui-behavior-20260914-071139/vitest.log",
+      "sha256": "1cd92880599c9ff1c9f1b03a6ea03a487955ee4b478d3dbe4e068b22a676f2d4",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/matrix.json",
+      "sha256": "e4b4b425d2f7f36438de70f0a76dcebf97ad111f62cd2aa0334887ddb650d17f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/n09a-linux-baseline-20260914-072756-original-matrix.json",
+      "sha256": "bc7ea722b009de8c5a0c86d12f5f794af80f541230d9728515e98ba60fd0f7bb",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/n09b-openclaw-runtime-20260914-090546-original-matrix.json",
+      "sha256": "86bb97154228ea134a9751ead4f6f095989fab517a9f60580e82a0cc6f364b90",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/original-checker.py.txt",
+      "sha256": "49256fbe43077eedaf22a92f15c7150af4523132661f7fddbdc56b0945fd39cf",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/report.md",
+      "sha256": "a57e59c8a4c1e1776f1ec6d7f159440e539eee466c2e8b9de00b99c2793f5b3b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/review-sha256.txt",
+      "sha256": "0125bc305b6db52c2b4cf664ff45479eefe3ca070aff52c28258df13d1051b87",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/runtime-completion.patch",
+      "sha256": "a1bced86c7107c3ff20ed5c7b41cf13137a5983e4734563e31d6d4d7782dd14d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09-independent-review-20260914/verification.json",
+      "sha256": "40f4a602c3b06d6fd62b8445326685e30991e85bcf9e6440c879041cde63acbd",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/baseline-summary.json",
+      "sha256": "ec5f9e3d46ebeebdd7296b53ba8a56143a1b07ad7e813476baa05e1bcd9012f7",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-result.json",
+      "sha256": "7d96f9af7e27ac8ec8d47d6f52f2cf30dee7fa27fed17ab21d0f719b470f893d",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-server.log",
+      "sha256": "11d92d67874dd8022dab4293b0a7169cade06dfda82d1cbbc574f2886a10de2a",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L1-stdout.log",
+      "sha256": "3f54216ee820ac6efed8e0d8c4954c5daba7fce70355f9bcef2e186d422ef220",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-report.json",
+      "sha256": "c572b8bebf9cfad1b37cab47db54200d9636cd14b8eef17ef1f6a4a52e92f583",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L2-stdout.log",
+      "sha256": "5798c2f61552a64f56c866b3e28718c902ddfdd2803cfe6b4f243c510dbca8f0",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-report.json",
+      "sha256": "cbdb6bdd55a582ae29794f66f544a4089429d4fcc95c7257883abf5cdf8abac2",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L3-stdout.log",
+      "sha256": "c0541f5ccce8b219fdd1650ff4a95d52fade7946f3cb5f43a078f5e3f624197c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-report.json",
+      "sha256": "63ae1b422fe8f45e261331dac945aeacf6a7b984e80bc8b81cd8f449ab811b47",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L4-stdout.log",
+      "sha256": "a59e92fb609c63a8922d5aa91b38ab4237dfdecd88df669c30dc224b19dcaaa1",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-result.json",
+      "sha256": "77ecdade542a44992c47fe2c8edd1c07a160d48eec009f585f4d92d7d8d73da4",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L5-stdout.log",
+      "sha256": "d186aa1f839a35a2ddb32f02343de1c534cea5b7b9c09ccdac3751b96742356e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-report.json",
+      "sha256": "6e90e023748fe5a055465960d05ce2031b2320413f31979f5f7f62cbbe45de90",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-L6-stdout.log",
+      "sha256": "ca2f4e0b7573e99bb747e938346017c6e69c417d23aac1d489b4a43dc1d944c0",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/leg-sha256.txt",
+      "sha256": "8158aca6f3f5c89622af374bf10e3ddd12b7643468fd30ede3a720d73e1c1d2f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/logs/verification-suite.log",
+      "sha256": "e859b70c70462762f382e03542093a4ad453152247095fdf4b884bb490215860",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/matrix.json",
+      "sha256": "bc7ea722b009de8c5a0c86d12f5f794af80f541230d9728515e98ba60fd0f7bb",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/report.md",
+      "sha256": "dcbf9d849d4a7d522aa9cfc0856de77a3c4d8cec66f7fef7dd2ec32f6d172752",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/stability-rerun-L1-result.json",
+      "sha256": "49df5d05eb8a6e747b231a120528c45efa08a066660ac4eb7b7176baa8d03f1f",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/stability-rerun-L6-report.json",
+      "sha256": "4cc23d7b44f4ed981827cc869d9a6f176b674fda400f1f145b6eaf3b1ac211ab",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09a-linux-baseline-20260914-072756/verification.json",
+      "sha256": "db7dd7b66ff88dd020e451cd9150ea9bd6070c10874beddb48db9cff3c1dc43e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/decide-receipts.json",
+      "sha256": "a8ea007657fbde03dce143860a7e51a49a471cb920f9e08fd7f84c129be32955",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-report.json",
+      "sha256": "1f9eb92eb6a463a427830de12af3b2017db4fcc40504296301ea3677a2066192",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/leg-sha256.txt",
+      "sha256": "6436ed9706b2d2aad13956880e05ff00de4c1b87972278e2c73b1b1b1779b212",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/matrix.json",
+      "sha256": "86bb97154228ea134a9751ead4f6f095989fab517a9f60580e82a0cc6f364b90",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/openclaw-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/openclaw-stdout.log",
+      "sha256": "88ed46aa4f4b709fd778b61fb79b744254934aa9b028accd26e6fe8d247f4a57",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/report.md",
+      "sha256": "6c6da0ac6d8f34a81949c30204377df624d7d7a127b435932604aaccd3747029",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/turn-leg-allow.json",
+      "sha256": "d971efa3ecad8742f3d80099f100160cffc697334b58209593f0bd095e791cd8",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/turn-leg-failclosed.json",
+      "sha256": "87f215c262cceeab401635ed03f2c00c164218fcbea9e0eda4beb4e28aba4f1c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/turn-leg-hold.json",
+      "sha256": "e67fbf52b3cd7b1e5007299ccd634a5010e94ca12f8b34933401b40ec4a85fe6",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/evidence/personal-experience/n09b-openclaw-runtime-20260914-090546/verification.json",
+      "sha256": "6b7f257de0798d2ade21e5bea79c212a02f9d18bc0743c0d74c96cc781afa5a4",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-closure-progress-20260913.md",
+      "sha256": "6bac4a537d2d74eaf85e7f686627527cd4b54e471a134d123e23abf58e97f890",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-current.md",
+      "sha256": "84903ce73415034685e588f73945f2f0634ec79ecdb1fc9a51b9abdd7a8cc623",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-n03-update-source-spec.md",
+      "sha256": "8d6680533c6552f5626d0d8244af4ba91a57ee01ec8469df53b0d2f00703eb78",
+      "disposition": "review_candidate"
+    },
+    {
+      "path": "docs/personal-experience-n05-skill-attribution-spec.md",
+      "sha256": "638deeed28fc8f78db3cf2b914a3654529a75d725dcbff8845ea2f8f93aee52c",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-n06-approval-once-retry-spec.md",
+      "sha256": "56ddc9b668f7c85dec7267248514a09bd2eafbae58ba9148cda18a28e3381b15",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-n09-evidence-review-spec-v2.md",
+      "sha256": "a92b9b9bb5661c5ca7bb409205ad31cf01b08c87f031f4c9f4c55a1e91e6314b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-n09-linux-baseline-spec.md",
+      "sha256": "86eb796d2c35d71f73a5fba100d87f831244ab7f584f8079bb4bdf14002d5e9b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-experience-n09-openclaw-runtime-leg-spec.md",
+      "sha256": "aa4c58c76585fadfe37bbf9d566cd667e78f1e913db9ceb9aec1671c04abe670",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "docs/personal-platform-capability-matrix-n04a.md",
+      "sha256": "db8dcc4c03ebc8efdc26be210e96fac0374b889f4784b50a33b67050946f6ffe",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "packages/contracts/personal-acceptance-baseline.v2.schema.json",
+      "sha256": "ca0d0e22953e0ba8e0a248cc39492480f18b2a20b56c36f084596a258763de6a",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/config-restore-journey-smoke.py",
+      "sha256": "9bd71bbdbf32b388eb3a2a5eb1f74f251a18b801791c6979c07cedd4e79338f5",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/hold-consume-native-smoke.py",
+      "sha256": "1a610cfd4b7ccca92b52f72a8bce14cdf385b987fa63827d910a7b6af833e09e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/installed-skill-runtime-native-smoke.py",
+      "sha256": "4b8a6b86d6f1892fb547aa51d701a011da9c79baa168f4cd8d0f086defa51986",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/n04a_matrix_check.py",
+      "sha256": "ba348fe2e3ecf2a64cadf9e182fd8bed63f89de3c04ece2ffb5d81e03ff98c37",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/n09-baseline-check.py",
+      "sha256": "b5178093d2fb3244fc0a71b0c6e8c94a35b442a3ef997d31cb17e513dccf5872",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/n09-baseline-runner.py",
+      "sha256": "3e2c7220ad962ddefdb4f2368aaec56f90ff0ad96069590c969eca7f9208672e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/n09_evidence.py",
+      "sha256": "0ba4eb86820dd949ad531f170bcda6a5f00f9176e2e6693c04e1bf1864acace2",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/n09b-openclaw-runtime-leg.py",
+      "sha256": "343a47b6bf6ad269bad53083ed1db1cd669afe2cf2e79c8f2c87da13129c9a2b",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/personal-journey-browser-smoke.py",
+      "sha256": "0e43bf3c860fb8d4c380b67f0e7bc5b2b01b02a35fb384d753883e6f27d1df90",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/skill-attribution-native-smoke.py",
+      "sha256": "3029d4e7162b8600895373fa91fc6ea71b2b502b139e58a584c4c848f7137349",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/skill-import-git-live-smoke.py",
+      "sha256": "1685c5901953d4b8013b80be752ce34505e7a5f8908ff89af50afa447faca5e1",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/test_n09_evidence.py",
+      "sha256": "0cfda69bb9c14480881af58d468c0eb427e4fed21bc0ac947de09bd7f80cb705",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/ui-behavior-smoke.py",
+      "sha256": "8b3416a4567a781f0928e96fd68ae0f9acb6c797c915711a5842e9e1a2accf2e",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    },
+    {
+      "path": "scripts/personal-experience/update-check-git-browser-smoke.py",
+      "sha256": "ec5e185875f8bc315415eab8ee15ac1bebf139581cda4d9a37653411da23f908",
+      "disposition": "held: historical evidence, runner or progress requires separate review"
+    }
+  ],
+  "note": "Frozen source inventory; source sha256 identifies GLM bytes, not the reviewed/repaired output. Review candidates were selectively integrated; held files remain in original worktree."
+}

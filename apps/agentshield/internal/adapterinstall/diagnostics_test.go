@@ -149,3 +149,62 @@ func TestCodeBuddyDiagnosticRejectsTextOutsideHooks(t *testing.T) {
 		t.Fatal("unrelated string accepted as installed hooks")
 	}
 }
+
+func TestHermesNativeEvidenceSeparatesRegistrationFromCompatibility(t *testing.T) {
+	dir := t.TempDir()
+	cli := filepath.Join(dir, "hermes-cli")
+	if err := os.WriteFile(cli, []byte("cli v1"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	digest, err := programDigest(cli)
+	if err != nil {
+		t.Fatal(err)
+	}
+	current := fileImage{Exists: true, Data: []byte("model: fixture\n"), Mode: 0o600}
+	registered := func() *Record {
+		return &Record{NativeOriginal: &NativeRegistration{Enabled: true}, NativeConfigHash: imageHash(current),
+			NativeCLI: cli, NativeCLIHash: digest}
+	}
+	d := Diagnosis{}
+	if hermesNativeEvidence(&d, nil, errNoInstallRecord, current, nil) {
+		t.Fatal("missing record claimed registered")
+	}
+	if checkStatus(d, "host_registration") != "unknown" || checkStatus(d, "platform_compatibility") != "unknown" {
+		t.Fatalf("unregistered evidence mislabelled: %+v", d)
+	}
+	d = Diagnosis{}
+	if !hermesNativeEvidence(&d, registered(), nil, current, nil) || checkStatus(d, "host_registration") != "pass" || checkStatus(d, "platform_compatibility") != "pass" {
+		t.Fatalf("confirmed registration mislabelled: %+v", d)
+	}
+	if err := os.WriteFile(cli, []byte("cli v2 upgraded"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	d = Diagnosis{}
+	if !hermesNativeEvidence(&d, registered(), nil, current, nil) || checkStatus(d, "host_registration") != "pass" || checkStatus(d, "platform_compatibility") != "unknown" {
+		t.Fatalf("platform upgrade not diagnosed separately: %+v", d)
+	}
+}
+
+func TestConfiguredEndpointReadsConnectionDocumentOnly(t *testing.T) {
+	for _, platform := range []string{Hermes, OpenClaw} {
+		opts := testOpts(t, platform)
+		endpoint, ok := ConfiguredEndpoint(opts)
+		if ok || endpoint != "" {
+			t.Fatalf("fresh %s claimed a configured endpoint", platform)
+		}
+		if _, err := Install(opts); err != nil {
+			t.Fatal(err)
+		}
+		endpoint, ok = ConfiguredEndpoint(opts)
+		if !ok || endpoint != opts.Endpoint {
+			t.Fatalf("%s endpoint mismatch: %q %v", platform, endpoint, ok)
+		}
+	}
+	opts := testOpts(t, CodeBuddy)
+	if _, err := Install(opts); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := ConfiguredEndpoint(opts); ok {
+		t.Fatal("codebuddy has no readable connection document")
+	}
+}

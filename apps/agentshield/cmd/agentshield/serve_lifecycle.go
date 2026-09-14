@@ -99,12 +99,16 @@ func closeLocalRuntimeChecks(closeChecks func(context.Context) error, grace time
 // runServeMaintenance keeps optional housekeeping within the serve lifetime.
 // Maintenance failures are isolated from the decision API; each operation
 // performs its own authenticated state validation and gets another chance on
-// the next tick.
+// the next tick. Scheduled update checks deliberately do not run at startup:
+// booting the decision API must never wait on an upstream fetch, and the
+// scheduler's deterministic re-stagger already spreads due work over the
+// interval instead of letting a restart herd re-form.
 func runServeMaintenance(
 	ctx context.Context,
-	refreshTicks, rawContentPurgeTicks <-chan time.Time,
+	refreshTicks, rawContentPurgeTicks, updateCheckTicks <-chan time.Time,
 	refresh func() error,
 	purgeRawContent func(time.Time) error,
+	runScheduledChecks func(context.Context) error,
 ) {
 	_ = purgeRawContent(time.Now())
 	for {
@@ -121,6 +125,12 @@ func runServeMaintenance(
 				continue
 			}
 			_ = purgeRawContent(now)
+		case _, ok := <-updateCheckTicks:
+			if !ok {
+				updateCheckTicks = nil
+				continue
+			}
+			_ = runScheduledChecks(ctx)
 		case <-ctx.Done():
 			return
 		}

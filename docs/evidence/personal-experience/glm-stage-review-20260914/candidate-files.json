@@ -1,0 +1,314 @@
+[
+  {
+    "path": "apps/agentshield/cmd/agentshield/main.go",
+    "sha256": "5db17e258e8cc1218ed357f1dd1bb3f8e51cef363a0163357c2e28ccd527ef94"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/serve_lifecycle.go",
+    "sha256": "0ab7ea11e260330cc19cafcb4276e4bcd02c5d15f9e3c95c85fb970cb5e43b78"
+  },
+  {
+    "path": "apps/agentshield/cmd/agentshield/serve_lifecycle_test.go",
+    "sha256": "7ab32fcf14b0820e179d41f6a7b354ec0bd486a5efe9b2e81cb3ff4166353225"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/diagnostics.go",
+    "sha256": "6e5265b36452ebe40a1fc3bae9d0e15853338ebb4ff6049a843059cd930667d9"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/diagnostics_test.go",
+    "sha256": "18f2fc51d7a14c2a2096cd52c281b19466ebd25f1c22ef487914c5e164fe4662"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/install_entry_test.go",
+    "sha256": "5d719b927ae0f176b9c56056f7708a66ca43279fb386f2c779c72455f2bf2788"
+  },
+  {
+    "path": "apps/agentshield/internal/adapterinstall/plan.go",
+    "sha256": "ec41a060a68c277fa20300a45c1b94ad2019c08baa9ee9fce1b70a0e564a8074"
+  },
+  {
+    "path": "apps/agentshield/internal/rawcontent/concurrency_test.go",
+    "sha256": "d69029c1bd8357dcb8d382740b75838e3239401e2323fdc1ce92a79ee65e8b94"
+  },
+  {
+    "path": "apps/agentshield/internal/server/adapter_diagnostics.go",
+    "sha256": "d65ff72d8f5c392f33b187f1e3596ae3ca4ed3121bace31753c5543e9be4f607"
+  },
+  {
+    "path": "apps/agentshield/internal/server/adapter_diagnostics_test.go",
+    "sha256": "ff4bbb2d8841a2ae9b60c3960dedbeaefa715d00cbca5926a564def537ece889"
+  },
+  {
+    "path": "apps/agentshield/internal/server/skill_import.go",
+    "sha256": "d25b989ddef6176448d40793aa324d61a9fd14ae85d9b8804e5b203600e83e22"
+  },
+  {
+    "path": "apps/agentshield/internal/server/skill_import_test.go",
+    "sha256": "23f7ff0b27eda64bebb02dac9432b944158e6500bdf17f69eb9e969bfde693db"
+  },
+  {
+    "path": "apps/agentshield/internal/server/skill_install.go",
+    "sha256": "82fffe2ae89d89e35c377a3f2c2ebed27fd562c7c96c5dd22274e5e2a3d5c4f8"
+  },
+  {
+    "path": "apps/agentshield/internal/server/skill_update_schedule_daemon_test.go",
+    "sha256": "c1914a0392d06bfa2c7dbda04d077743bf7560891ecf2f74adba75f7d992f42c"
+  },
+  {
+    "path": "apps/agentshield/internal/server/skill_update_source_test.go",
+    "sha256": "dfdf326623bc2dc0997de78a9dbce062d3d21b263faae4499c36f326316e7990"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/download.go",
+    "sha256": "f85f6ca1f7dac4a6a869b5f1a0270392d5719eb0993a9075e45e9caad6ca7c5e"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/git.go",
+    "sha256": "3a452e0be44e6f1ea7415bdc16f3dc67aa600a96abdbc7522614aeb3402765b9"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/git_test.go",
+    "sha256": "29527b3ab3971f904053dc4903309d730f70f82bbb1c38de0082a61e313378d6"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/gitsource.go",
+    "sha256": "853d4290b01f968367d18fea3020bb1f8854212641345b0dfb46e3cbb1e40ff7"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/gitsource_test.go",
+    "sha256": "d8098a044e457495e5b90744ae7a7d7cd948d49f948cbd1806bf9c39c6c379ab"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/production_git_gate_test.go",
+    "sha256": "d09e16284bd35ab87297b8b27b9e66029ef24a5ff158f7bd914203147df1fdf0"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/reviewer_upstream_test.go",
+    "sha256": "d389e32b4b4d36d2b96af9b641337e4883c39f19c7bed80b39663d57ed6a6571"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/upstream.go",
+    "sha256": "b50881d32104048e765e45d255626bcd6261cb1bfc98348d6f6428e158003e09"
+  },
+  {
+    "path": "apps/agentshield/internal/skillimport/upstream_test.go",
+    "sha256": "7202076e9d1d4ffaeca2e5b0aeaa36669ebf008437f9c379e990f79328adc56b"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/stage.go",
+    "sha256": "4b27e6aaa314a7e52903155c7e22a4f19b0e34e755316d072ecb9c26aac2f21e"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_check.go",
+    "sha256": "2e00971faf6e5764db2ab28b68e5aebd0120478e351ce7cb3f90ed66721e4313"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_check_regression_test.go",
+    "sha256": "7e1dee2d0da5df813c1bdbf90eba57e4d5c728c23b6a91feec72ca5c599a120e"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_git_loop_test.go",
+    "sha256": "711988431ff332da705811a024089b6b3d8ae2a5cc575ee12c4b9a32a5a5c5de"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_schedule_race_test.go",
+    "sha256": "9ce0e3c6343c4a7855980f5d3000ea6da09e77403601b7e78817bad865964796"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_scheduler.go",
+    "sha256": "589270b9067253461cdf18eb6d6f53236249129a33351fa52f8a9f8f4a192cff"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_scheduler_test.go",
+    "sha256": "2847377636ab489eea01a1b254935b8c209cef5e0d5de59d627a49e58dfa76b1"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_source.go",
+    "sha256": "9838bd997eefc9bf9541e1188f1644a40ec9d05733c21634ec2108d629919789"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_source_compatibility_test.go",
+    "sha256": "76ee36253dca7d4110837d216750b91e2a5bc73371935a8391891f2c58f3a19a"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_source_contract_test.go",
+    "sha256": "cc206f676bb59564be382ea6d376038ba0f51ef50df9ce89d8bb030bd17251ef"
+  },
+  {
+    "path": "apps/agentshield/internal/skillinstall/update_source_test.go",
+    "sha256": "465342c4ee9426265cf11bf537de8f8a4ed6118227f769be0ed5334e9d5c1552"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/DemoPage-i4fSePcB.js",
+    "sha256": "de30f9ce135a8df8c8f727b101db11eb3211fb4f19c779276e84486d51904b9f"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/InstalledSkillsPage-DC3yB-ub.js",
+    "sha256": "31ba779878c3c1cd487351d5542da0002b9f859f7e0262cd3c9f8ca6037e684f"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillImportsPage-Bitb3AQi.js",
+    "sha256": "5a8e9643169da1218881da3c380e237f710840299f8c47ec6663de6c66594f46"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/SkillUpdatesPage-BD-X-DhB.js",
+    "sha256": "7fec3bc5112425024dc858beb652533c8f4be46e669deb4cd39cdee31109e900"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivitiesPage-DymeExBP.js",
+    "sha256": "2edb58f8f772622933c270f5d07654137b1d99125ce9c2022f8d695cca0f20b7"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/TaskActivityDetailPage-BKZoaKw4.js",
+    "sha256": "5ef1a3e07d79ea41a9692dda7380594ce4dde6c65f73386a38a766f688842527"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/assets/index.local-DsbWIw6z.js",
+    "sha256": "d9d2f8888fa4c6ea2f0ac97bdbfd6b016b72e54f11d6ee77ce37fe1f650a3b39"
+  },
+  {
+    "path": "apps/agentshield/internal/ui/embedded/index.html",
+    "sha256": "9eaf59af8be6563ee1b16a94f9451ba84cb2d12d203a17b8891b6f0358169067"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/adapter-plan.json",
+    "sha256": "5fe007528099a124cdd88ec996278238e0d9a2c643a90095cfdedec7fdb88068"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/adapter-plan.v2.json",
+    "sha256": "7fabd6461b0a7578de6fb89adfae9005fc802954103ed0671028bbc4ffea14ba"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/adapter-plan.v3.json",
+    "sha256": "14d6204d5b36fee551627e003b0a8a6fc1199c1c9c0617ca20ce0bc97c421940"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-skill-update-schedule-run-result.json",
+    "sha256": "af683ae6836833e0caa294fb5d4164238dd6a8f5480f19ac42bf4bcb8553e2aa"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-skill-update-schedule-run.json",
+    "sha256": "02cc8439a062b5e5992c93aa35812a4700b886cc8200008664b5cab1d037c904"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-skill-update-schedule-view.json",
+    "sha256": "866e5b1fedf379854f1bf48b3bac206604b4e56e2fbceec93f6ed1874ebf9427"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-skill-update-schedule.json",
+    "sha256": "f93aeac40d0897c3a8a2872a2d1b8d161b63aec105348b821a7a500f66709377"
+  },
+  {
+    "path": "apps/agentshield/testdata/contracts/local-skill-update-source-save.json",
+    "sha256": "7a460b20e2ef269f977ae2a4bdd685d4bb49077e5543d8b21b371c2351bbab70"
+  },
+  {
+    "path": "apps/control-api/app/tests/test_update_schedule_contracts.py",
+    "sha256": "231f55aff5c7f48757e39dd34894e19bac9a464b5df10c5eaa92d21be65bf55a"
+  },
+  {
+    "path": "apps/web/src/local/api.test.ts",
+    "sha256": "5a75428312d93cc44d44d1f2b327d206bc4f899f87f3c0f1218b68ca54285c88"
+  },
+  {
+    "path": "apps/web/src/local/api.ts",
+    "sha256": "72a3b65921a5e3dbec13d8a3559da87b4710a6fad416fa3f584847335d9b4851"
+  },
+  {
+    "path": "apps/web/src/local/components/SkillUpdateCheckPanel.tsx",
+    "sha256": "720d70361491b0e7cb18d16be57f37bbfcfb4b1a5286c9162db263acb79f4ea0"
+  },
+  {
+    "path": "apps/web/src/local/pages/BindingsPage.tsx",
+    "sha256": "acd078881b6b28eeaada5c4d6539781b0186be7eb43837c8e6b52041a4675bc6"
+  },
+  {
+    "path": "apps/web/src/local/pages/FindingsPage.tsx",
+    "sha256": "b05c5fa537378d3ca6b1ea5eeb95dbf4991d0d6ef91353bb0f09923f74745f3b"
+  },
+  {
+    "path": "apps/web/src/local/pages/GrantsPage.tsx",
+    "sha256": "3ec00d2ee01fe09aad3372e76525b7926747b1822085e55eecbdfae2f70debf5"
+  },
+  {
+    "path": "apps/web/src/local/pages/InstalledSkillsPage.tsx",
+    "sha256": "775b9a1b9a7325fdad9cb86742079d79e28d668e03728c422be54e43c7787af3"
+  },
+  {
+    "path": "apps/web/src/local/pages/OverviewPage.tsx",
+    "sha256": "cce16cb24fc32ecf58706d0d99215bb660a8205cee38dd4955f35138625c0d1a"
+  },
+  {
+    "path": "apps/web/src/local/pages/PermissionsPage.tsx",
+    "sha256": "4f19df1e602de344db77d6f3edf9907cca79949d140bf2094f86c1109d30ffb6"
+  },
+  {
+    "path": "apps/web/src/local/pages/ReceiptsPage.tsx",
+    "sha256": "640b375a8277de03bb6eba82b3f0ac776c7374314b1a173726969084d16c940c"
+  },
+  {
+    "path": "apps/web/src/local/pages/SettingsPage.tsx",
+    "sha256": "8f3c39bef4f7b02d9fb5ded2dee395e848e661c814aec77ecc500dd0c302dd21"
+  },
+  {
+    "path": "apps/web/src/local/pages/SkillImportsPage.tsx",
+    "sha256": "87b0a19ac98e1df4da1a93d27406c2890e3ba5e1e070e93ee1ab45a7e34f53e5"
+  },
+  {
+    "path": "apps/web/src/local/skillImports.test.ts",
+    "sha256": "f42ff9168571aa0cce70da849738c742c62f974fbc9e9c93222799c22fa39ece"
+  },
+  {
+    "path": "apps/web/src/local/skillImports.ts",
+    "sha256": "c5de208a61eafc4e4a3b915544db74d13bdcf39eba1dddfebd117f69ebcf37c4"
+  },
+  {
+    "path": "apps/web/src/local/skillUpdateCheck.test.ts",
+    "sha256": "f9de9ce40c4b392113840165cf583de2bb8c1e8bd1d30ccad603e3ec7e8726ec"
+  },
+  {
+    "path": "apps/web/src/local/skillUpdateCheck.ts",
+    "sha256": "36db2648bc1d01870029aef50aed6b1b79f0a1bfae72dbd15b412e169d02fe7e"
+  },
+  {
+    "path": "apps/web/src/local/staleGuard.test.ts",
+    "sha256": "5f313fd6a347ae2f4fbce6c2c0bb4333fffdb2f4f8f60c5a10a3b57769c96523"
+  },
+  {
+    "path": "apps/web/src/local/staleGuard.ts",
+    "sha256": "b61714c78a0abe38247f547974d788c1acab6a529bc324d4b7544068d818b6d2"
+  },
+  {
+    "path": "apps/web/src/local/types.ts",
+    "sha256": "4ed566bd81dda8ff7067af5cb9bf5f32bd16ae0dcefab810e8d5fb08caf3e181"
+  },
+  {
+    "path": "packages/contracts/local-skill-update-schedule-run-result.v1.schema.json",
+    "sha256": "dd4086bfe6e084d84f4984ea1f70e92ce2fce7004b9bc12f9e65cfb3cdf0862c"
+  },
+  {
+    "path": "packages/contracts/local-skill-update-schedule-run.v1.schema.json",
+    "sha256": "6e2fe805b24ed25afc7a1f2bfe9d3fb3a789655b975ca78c21d5bf62fe9b276c"
+  },
+  {
+    "path": "packages/contracts/local-skill-update-schedule-view.v1.schema.json",
+    "sha256": "3e144f4532dd6e2ee9b51227b4dbe9a28db78793efcd4d3a3522903a31318cad"
+  },
+  {
+    "path": "packages/contracts/local-skill-update-schedule.v1.schema.json",
+    "sha256": "34e480cb17fc45e75307ac8c4d8a256ad770fc51d1c4c87e8b4ab0eed377582a"
+  },
+  {
+    "path": "packages/contracts/local-skill-update-source-save.v1.schema.json",
+    "sha256": "688b5bbcb628c5d2be36410790bb4c8e1a69446de630483cace0bb19ca8a3435"
+  },
+  {
+    "path": "scripts/personal-experience/session-browser-smoke.py",
+    "sha256": "75a2db7d2515dd29af4663ce0af7b4718c0874dff0d01dfb0d2fa6d5cbcbe7f0"
+  },
+  {
+    "path": "scripts/personal-experience/update-check-browser-smoke.py",
+    "sha256": "ae2963d37cfae9931a2560357f7c441fb98eecf796850ea2ec9d90b37fd8316d"
+  }
+]

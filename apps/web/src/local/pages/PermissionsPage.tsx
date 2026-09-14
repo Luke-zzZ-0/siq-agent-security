@@ -7,6 +7,7 @@ import { localApi } from '../api';
 import type { PermissionFact } from '../types';
 import { domainLabel, factStateLabel, factStateTag, hasOpenShellL3 } from '../format';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 
 const STATE_ORDER = ['effective', 'observed', 'inferred', 'declared', 'unknown'];
 
@@ -20,12 +21,13 @@ export default function PermissionsPage() {
   const [subject, setSubject] = useState(params.get('subject_id') ?? '');
   const [domain, setDomain] = useState('');
   const [stateFilter, setStateFilter] = useState('');
+  const guard = useLoadGuard();
 
   const load = (subjectId?: string) => {
     setLoading(true);
-    localApi
-      .permissions(subjectId?.trim() || undefined)
+    guard(() => localApi.permissions(subjectId?.trim() || undefined))
       .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
         setRows(data.facts ?? []);
         setError(null);
         setLoading(false);

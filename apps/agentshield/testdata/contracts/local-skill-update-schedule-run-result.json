@@ -1,0 +1,12 @@
+{
+  "schema_version": "local-skill-update-schedule-run-result/v1",
+  "started_at": "2026-09-13T12:00:00Z",
+  "finished_at": "2026-09-13T12:00:00Z",
+  "total": 0,
+  "disabled": 0,
+  "due": 0,
+  "not_due": 0,
+  "stale": 0,
+  "deferred": 0,
+  "checked": []
+}

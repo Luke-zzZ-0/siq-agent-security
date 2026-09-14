@@ -333,6 +333,9 @@ func Prepare(opts Options, action string) (*Plan, error) {
 	if opts.Platform == Hermes && action == "install" && !opts.NativeEnable {
 		p.payload.View.NextSteps = append(p.payload.View.NextSteps, "仍需在目标 Hermes profile 启用插件；本次不自动重启会话。")
 	}
+	if action == "install" {
+		p.payload.View.NextSteps = append(p.payload.View.NextSteps, installEntryStep(opts))
+	}
 	p.payload.View.NextSteps = append(p.payload.View.NextSteps, "配置应用后检查诊断，并在方便时重启目标会话、验证实际调用；此操作不产生运行验证结论。")
 	if err := p.verifyInstanceRoot(); err != nil {
 		return nil, err
@@ -506,6 +509,39 @@ func sameOpenClawLegacyPolicy(value any, binary string) bool {
 	var expected any
 	_ = json.Unmarshal(encodePlanJSON(openClawInstallPolicy(Options{Binary: binary})), &expected)
 	return binary != "" && reflect.DeepEqual(value, expected)
+}
+
+// shownPath renders paths under the user's home with a "~" prefix, matching
+// how planned change paths are displayed, so previews stay stable across
+// machines and never leak absolute home paths.
+func (o Options) shownPath(path string) string {
+	home := filepath.ToSlash(o.Home)
+	shown := filepath.ToSlash(path)
+	if home != "" && strings.HasPrefix(shown, strings.TrimSuffix(home, "/")+"/") {
+		return "~" + strings.TrimPrefix(shown, strings.TrimSuffix(home, "/"))
+	}
+	return shown
+}
+
+// installEntryStep states the install-entry boundary in every reviewed
+// preview: the platform's own install entry is only ever taken over when a
+// real pre-install interception exists, which no supported platform provides
+// today. Until then the reviewed view names either the controlled install
+// path (Hermes wrapper, which checks before invoking the native installer) or
+// the post-hoc discovery/diagnosis route, and never claims host-wide
+// protection from an install action.
+func installEntryStep(o Options) string {
+	switch o.Platform {
+	case Hermes:
+		if runtime.GOOS != "windows" {
+			return "平台安装入口未被接管；需要先检查后安装时使用受控安装命令 " + o.shownPath(o.wrapperPath()) + "，原生命令不经过检查。"
+		}
+		return "平台安装入口未被接管，Windows 暂无受控安装命令；通过发现与诊断做事后检查。"
+	case Trae:
+		return "平台没有工具钩子，安装入口未被接管；通过静态检查、盘点与诊断做事后检查。"
+	default:
+		return "平台安装入口未被接管，也不注入其不支持的安装拦截配置；通过发现与诊断做事后检查。"
+	}
 }
 
 func hermesWrapper(o Options) []byte {

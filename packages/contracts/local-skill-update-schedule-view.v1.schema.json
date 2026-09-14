@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local-skill-update-schedule-view.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "install_id",
+    "source_kind",
+    "display",
+    "enabled",
+    "source_state",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-skill-update-schedule-view/v1"
+    },
+    "install_id": {
+      "type": "string",
+      "pattern": "^sin-[a-f0-9]{64}$"
+    },
+    "source_kind": {
+      "enum": [
+        "git",
+        "https_zip",
+        "local_dir",
+        "local_zip"
+      ]
+    },
+    "display": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "source_state": {
+      "enum": [
+        "saved",
+        "needs_source",
+        "unsupported",
+        "stale"
+      ]
+    },
+    "status": {
+      "enum": [
+        "not_checked",
+        "checking",
+        "up_to_date",
+        "new_version",
+        "source_unavailable",
+        "unsupported"
+      ]
+    },
+    "failure_category": {
+      "enum": [
+        "source_unavailable",
+        "url_blocked",
+        "changed",
+        "limit",
+        "invalid",
+        "unavailable",
+        "canceled"
+      ]
+    },
+    "next_check_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_attempt_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_success_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

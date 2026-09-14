@@ -97,7 +97,8 @@ func TestUpdateCheckSampleAndNoPersistentWrites(t *testing.T) {
 
 func TestUpdateFetchErrorCategories(t *testing.T) {
 	for _, tc := range []struct{ input, want error }{
-		{skillimport.ErrGitTransportUnavailable, ErrUpdateSourceUnavailable},
+		{skillimport.ErrSourceUnavailable, ErrUpdateSourceUnavailable},
+		{skillimport.ErrGitHostUnsupported, ErrUpdateURLBlocked},
 		{skillimport.ErrURLBlocked, ErrUpdateURLBlocked}, {skillimport.ErrChanged, ErrChanged},
 		{skillimport.ErrLimit, ErrLimit}, {context.DeadlineExceeded, context.DeadlineExceeded},
 		{skillimport.ErrDownloadFailed, ErrUnavailable}, {skillimport.ErrUnavailable, ErrUnavailable},

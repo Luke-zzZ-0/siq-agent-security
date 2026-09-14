@@ -6,6 +6,7 @@ import { Icon } from '@/components/icons';
 import { localApi } from '../api';
 import type { Receipt } from '../types';
 import { actionLabel, actionTag, platformLabel, shortHash } from '../format';
+import { useLoadGuard } from '../staleGuard';
 
 function shortTime(iso: string): string {
   return iso.length >= 19 ? iso.slice(0, 19).replace('T', ' ') : iso;
@@ -17,12 +18,13 @@ export default function ReceiptsPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<string | null>(null);
+  const guard = useLoadGuard();
 
   const load = (announce = false) => {
     setLoading(true);
-    localApi
-      .receipts()
+    guard(() => localApi.receipts())
       .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
         setRows([...(data.receipts ?? [])].reverse());
         setVerified(Boolean(data.verified));
         setError(null);

@@ -32,6 +32,29 @@ func (s *Store) ReadRecord(ctx context.Context, id string) (*Record, error) {
 	return s.readRecord(ctx, id)
 }
 
+// ZipSourceBinding canonicalizes remoteURL exactly the way the original
+// import did and reports whether it still reproduces the record's source
+// locator digest. A URL that does not bind is ErrChanged, so a saved update
+// source can never redirect a later check to unbound content. The returned
+// string is the canonical URL a caller may persist.
+func ZipSourceBinding(record *Record, remoteURL string) (string, error) {
+	if record == nil || record.SourceKind != "https_zip" || record.Remote == nil {
+		return "", ErrInvalid
+	}
+	parsed, err := downloadURL(remoteURL)
+	if err != nil {
+		return "", err
+	}
+	canonical, err := canon.Marshal(map[string]any{"url": parsed.String(), "archive_path": record.Remote.ArchivePath, "expected_sha256": record.Remote.ExpectedSHA256})
+	if err != nil {
+		return "", ErrInvalid
+	}
+	if sum(canonical) != record.SourceLocatorDigest {
+		return "", ErrChanged
+	}
+	return parsed.String(), nil
+}
+
 // CheckUpstream re-fetches the source of an existing import. Git sources are
 // re-fetched from the URL recorded in the signed record; the resolved commit
 // is reported but NOT pinned, so a moved upstream is an answer, not an error.

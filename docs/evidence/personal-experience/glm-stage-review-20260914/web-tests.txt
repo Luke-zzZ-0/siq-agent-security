@@ -1,0 +1,12 @@
+
+> @siq-agent-security/web@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /home/maoyd/siq/worktrees/siq-glm-stage-integration-20260914/apps/web
+
+
+ Test Files  23 passed (23)
+      Tests  84 passed (84)
+   Start at  11:00:46
+   Duration  344ms (transform 1.38s, setup 0ms, import 1.83s, tests 246ms, environment 1ms)

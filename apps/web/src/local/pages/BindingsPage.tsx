@@ -6,6 +6,7 @@ import { Icon } from '@/components/icons';
 import { localApi } from '../api';
 import type { PlatformInfo } from '../types';
 import { useLocalSession } from '../session';
+import { useLoadGuard } from '../staleGuard';
 import RuntimeCheckDialog from '../components/RuntimeCheckDialog';
 import AdapterChangeDialog, { type AdapterChangeRequest } from '../components/AdapterChangeDialog';
 import AdapterDiagnosisPanel from '../components/AdapterDiagnosisPanel';
@@ -26,12 +27,17 @@ export default function BindingsPage() {
   const [probeErr, setProbeErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<string | null>(null);
+  const guard = useLoadGuard();
   const [msgErr, setMsgErr] = useState(false);
 
   const load = () => {
     setLoading(true);
-    Promise.all([localApi.adapterStatus(), localApi.openshellProbe().catch((err: unknown) => err)])
-      .then(([st, os]) => {
+    guard(() =>
+      Promise.all([localApi.adapterStatus(), localApi.openshellProbe().catch((err: unknown) => err)]),
+    )
+      .then((data) => {
+        if (data === undefined) return; // superseded by a newer load
+        const [st, os] = data;
         setPlatforms(st.platforms ?? []);
         if (os instanceof Error) {
           setProbe(null);
@@ -52,7 +58,7 @@ export default function BindingsPage() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [guard]);
 
   const l3 = hasOpenShellL3(platforms);
 

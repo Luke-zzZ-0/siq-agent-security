@@ -1,0 +1,10 @@
+{
+  "schema_version": "local-skill-update-schedule-view/v1",
+  "install_id": "sin-f1dbe264fe077b2393378426c146dbb308d99a59d777796d2a2b5dd8536768f5",
+  "source_kind": "git",
+  "display": "https://git.example.com/org/skill.git",
+  "enabled": true,
+  "source_state": "saved",
+  "status": "not_checked",
+  "next_check_at": "2026-09-14T12:00:00Z"
+}

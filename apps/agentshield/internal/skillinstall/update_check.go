@@ -38,7 +38,7 @@ func updateFetchError(ctx context.Context, err error) error {
 	switch {
 	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
 		return err
-	case errors.Is(err, skillimport.ErrGitTransportUnavailable):
+	case errors.Is(err, skillimport.ErrSourceUnavailable):
 		return ErrUpdateSourceUnavailable
 	case errors.Is(err, skillimport.ErrURLBlocked):
 		return ErrUpdateURLBlocked
@@ -81,7 +81,45 @@ func (s *Store) CheckUpdate(ctx context.Context, id string, req UpdateCheckReque
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
-	return s.checkUpdate(ctx, id, req)
+	saved, err := s.readUpdateSchedule(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	signature := ""
+	if saved != nil {
+		signature = saved.Signature
+	}
+	result, err := s.checkUpdate(ctx, id, req)
+	if err != nil {
+		// A manual failure is recorded best-effort: the caller already sees
+		// the real error, and schedule metadata must never mask it.
+		if status, category, recordable := updateFailureOf(err); recordable {
+			_ = s.writeScheduleUpdate(ctx, id, func(m *UpdateSchedule, now time.Time) {
+				m.LastAttemptAt = now.Format(time.RFC3339Nano)
+				m.LastStatus = status
+				m.FailureCategory = category
+				if m.FailureCount < 63 {
+					m.FailureCount++
+				}
+			}, signature)
+		}
+		return nil, err
+	}
+	// A successful manual check satisfies the current due slot: it records
+	// its outcome and pushes next_check_at out, so the scheduler will not
+	// re-fetch the same source right after the user just did.
+	if werr := s.writeScheduleUpdate(ctx, id, func(m *UpdateSchedule, now time.Time) {
+		m.LastAttemptAt = now.Format(time.RFC3339Nano)
+		m.LastSuccessAt = now.Format(time.RFC3339Nano)
+		m.LastStatus = result.Status
+		m.FailureCategory = ""
+		m.FailureCount = 0
+		interval := time.Duration(m.IntervalSeconds) * time.Second
+		m.NextCheckAt = now.Add(interval + s.jitter(interval/8)).Format(time.RFC3339Nano)
+	}, signature); werr != nil && ctx.Err() == nil {
+		return nil, werr
+	}
+	return result, nil
 }
 
 func (s *Store) checkUpdate(ctx context.Context, id string, req UpdateCheckRequest) (*UpdateCheckResult, error) {

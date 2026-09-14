@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local-skill-update-schedule-run-result.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "started_at",
+    "finished_at",
+    "total",
+    "disabled",
+    "due",
+    "not_due",
+    "stale",
+    "deferred",
+    "checked"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "local-skill-update-schedule-run-result/v1"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "disabled": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "due": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "not_due": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "stale": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "deferred": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "checked": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "install_id",
+          "status",
+          "requires_confirmation"
+        ],
+        "properties": {
+          "install_id": {
+            "type": "string",
+            "pattern": "^sin-[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "not_checked",
+              "checking",
+              "up_to_date",
+              "new_version",
+              "source_unavailable",
+              "unsupported"
+            ]
+          },
+          "failure_category": {
+            "enum": [
+              "source_unavailable",
+              "url_blocked",
+              "changed",
+              "limit",
+              "invalid",
+              "unavailable",
+              "canceled"
+            ]
+          },
+          "requires_confirmation": {
+            "type": "boolean"
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
