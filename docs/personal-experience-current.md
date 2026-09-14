@@ -1,5 +1,7 @@
 # 个人体验当前交接
 
+> **当前执行入口：[personal-experience-lan-team-next-development-taskbook-20260914-112027.md](personal-experience-lan-team-next-development-taskbook-20260914-112027.md)（v4.0）。** PR #45 已合入 main `4464dfbc8e66c8ec1fb2590b286351595fcd9667`，最终 HEAD 的 38 项 CI 通过、3 项按配置跳过。后续从新 main 新建 GLM 工作树，优先 R01 可信归属和 R02 审批重试；原 GLM 目录保留，不整体导入。下方旧入口均为历史。
+
 > 2026-09-14：GLM 未提交成果已完成选择性独立复核，接受与暂缓范围见 [报告](evidence/personal-experience/glm-stage-review-20260914/report.md) 和 [台账](personal-experience-closure-progress-20260913.md)。N05/N06 源实现未通过，N09 未完成；下方旧阶段表述保留为历史。合并后由新任务书固定后续执行基线。
 
 # 个人体验当前交接（K002，2026-09-11）
